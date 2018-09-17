@@ -1,48 +1,24 @@
 // using ES6 modules
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { HashRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Switch } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 
 import App from './App';
-import Bottom from './components/Bottom';
-import Left from './components/Left';
-import Main from './components/Main';
-import Right from './components/Right';
-import Top from './components/Top';
-
-import './index.css';
-
-function NoMatch() {
-  return (
-    <div className="not-found">
-      <h2>Not Found</h2>
-      <p>Please one of links on the left.</p>
-    </div>
-  );
-}
-
 class Index extends Component {
   constructor(props) {
     super(props);
+    console.log("running")
   }
 
   render() {
     return(
-      <HashRouter>
+    <HashRouter>
       <CookiesProvider>
-      <App>
         <Switch>
-          <Route exact path="/"/>
-          <Route path="/top" component={Top} />
-          <Route path="/right" component={Right} />
-          <Route path="/left" component={Left} />
-          <Route path="/main" component={Main} color={'test'}/>
-          <Route path="/bottom" component={Bottom} />
-          <Route path="*" component={NoMatch} />
+        <App />
         </Switch>
-      </App>
-    </CookiesProvider>
+      </CookiesProvider>
     </HashRouter>        
     );
   }
@@ -54,4 +30,28 @@ render(
 );
 
 /*
+import Bottom from './components/Bottom';
+import Left from './components/Left';
+import Main from './components/Main';
+import Right from './components/Right';
+import Top from './components/Top';
+
+
+function NoMatch() {
+  return (
+    <div className="not-found">
+      <h2>Not Found</h2>
+      <p>Please one of links on the left.</p>
+    </div>
+  );
+}
+
+  <Route exact path="/"/>
+  <Route path="/top" component={Top} />
+  <Route path="/right" component={Right} />
+  <Route path="/left" component={Left} />
+  <Route path="/main" component={Main} color={'test'}/>
+  <Route path="/bottom" component={Bottom} />
+  <Route path="*" component={NoMatch} />
+
 */

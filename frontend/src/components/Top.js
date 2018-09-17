@@ -4,7 +4,7 @@ class Top extends Component {
 	render() {
         return (
             <div>
-                test component
+                Top component
             </div>
 		);
   	}

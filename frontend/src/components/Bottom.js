@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import SplitterLayout from 'react-splitter-layout';
 
 export default function() {
