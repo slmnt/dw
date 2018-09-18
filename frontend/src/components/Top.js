@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TablePagination from '@material-ui/core/TablePagination';
 import {Controlled as CodeMirror} from 'react-codemirror2'
+import ReactPaginate from 'react-paginate'
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/lib/codemirror.css');
@@ -18,7 +18,7 @@ class Top extends Component {
 	render() {
         return (
             <div>
-                <TablePagination></TablePagination>
+                <ReactPaginate></ReactPaginate>
                 <br/>
                 <br/>
                 <CodeMirror

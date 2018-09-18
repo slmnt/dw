@@ -22,6 +22,7 @@ import Right from './components/Right';
 import Top from './components/Top';
 import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
+import Test from './components/Test';
 
 const drawerWidth = 200;
 
@@ -168,6 +169,8 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('/main')}><Typography>main</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/bottom')}><Typography>bottom</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('/test')}><Typography>tets</Typography></ListItem></List>
       </Drawer>
     );
 
@@ -222,6 +225,7 @@ class App extends React.Component {
             <Route path="/left" component={Left} />
             <Route path="/main" component={Main}/>
             <Route path="/bottom" component={Bottom} />
+            <Route path="/test" component={Test} />
           </Scrollbars>
           </main>
           {after}
