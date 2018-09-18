@@ -24,5 +24,5 @@ router.register(r'stuffs', api.views.StuffViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
+    path('api/', include('api.urls'))
 ]

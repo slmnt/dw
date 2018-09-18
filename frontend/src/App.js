@@ -179,6 +179,7 @@ class App extends React.Component {
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <AppBar
+            sition='sticky'
             className={classNames(classes.appBar, {
               [classes.appBarShift]: open,
               [classes[`appBarShift-${anchor}`]]: open,
