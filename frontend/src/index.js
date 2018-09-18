@@ -1,8 +1,9 @@
 // using ES6 modules
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { HashRouter, Switch } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
+
 
 import App from './App';
 class Index extends Component {
@@ -13,19 +14,20 @@ class Index extends Component {
 
   render() {
     return(
-    <HashRouter>
       <CookiesProvider>
         <Switch>
         <App />
         </Switch>
       </CookiesProvider>
-    </HashRouter>        
     );
   }
 }
 
 render(
-  <Index />,
+  <BrowserRouter >
+  <Index />
+  </BrowserRouter>
+  ,
   document.getElementById('root')
 );
 

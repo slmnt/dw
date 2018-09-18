@@ -130,6 +130,10 @@ class App extends React.Component {
       anchor: event.target.value,
     });
   };
+  componentDidCatch(error, info){
+    console.log('error')
+  }
+
 
   clicked(e){
     this.props.history.push(e)
