@@ -21,6 +21,7 @@ import Main from './components/Main';
 import Right from './components/Right';
 import Top from './components/Top';
 import { ListItem } from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const drawerWidth = 200;
 
@@ -180,6 +181,7 @@ class App extends React.Component {
     }
 
     return (
+      <div>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <AppBar
@@ -210,16 +212,22 @@ class App extends React.Component {
               [classes[`contentShift-${anchor}`]]: open,
             })}
           >
-            <div className={classes.drawerHeader} />
+          <Scrollbars universal>
+            <br/>
+            <br/>
+            <br/>
             <Route exact path="/" component={Main}/>
             <Route path="/top" component={Top} />
             <Route path="/right" component={Right} />
             <Route path="/left" component={Left} />
             <Route path="/main" component={Main}/>
             <Route path="/bottom" component={Bottom} />
+          </Scrollbars>
           </main>
           {after}
         </div>
+      <footer>Licensed under MIT</footer>
+      </div>
       </div>
     );
   }
@@ -235,26 +243,4 @@ export default withStyles(styles, { withTheme: true })(App);
 
 
 /*
-<Route path="*" component={} />
-<div>
-    <header>
-      <h1>React Splitter Layout</h1>
-      <p>A split layout for React and modern browsers.</p>
-    </header>
-    <div className="main">
-      <nav className="navigation-bar">
-        <ul className="navigation">
-          <li><NavLink to="/bottom">bottom </NavLink></li>
-          <li><NavLink to="/top">top</NavLink></li>
-          <li><NavLink to="/right">right</NavLink></li>
-          <li><NavLink to="/left">left</NavLink></li>
-          <li><NavLink to="/main">main</NavLink></li>
-        </ul>
-      </nav>
-      <div className="child-content">
-        {this.props.children}
-      </div>
-    </div>
-  <footer>Licensed under MIT</footer>
-  </div>
  */

@@ -32,28 +32,4 @@ render(
 );
 
 /*
-import Bottom from './components/Bottom';
-import Left from './components/Left';
-import Main from './components/Main';
-import Right from './components/Right';
-import Top from './components/Top';
-
-
-function NoMatch() {
-  return (
-    <div className="not-found">
-      <h2>Not Found</h2>
-      <p>Please one of links on the left.</p>
-    </div>
-  );
-}
-
-  <Route exact path="/"/>
-  <Route path="/top" component={Top} />
-  <Route path="/right" component={Right} />
-  <Route path="/left" component={Left} />
-  <Route path="/main" component={Main} color={'test'}/>
-  <Route path="/bottom" component={Bottom} />
-  <Route path="*" component={NoMatch} />
-
 */
