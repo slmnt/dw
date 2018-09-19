@@ -33,7 +33,7 @@ class Main extends Component {
     alert('A name was submitted: ' + this.state.value);
     event.preventDefault();
 
-    axios.post('/api/addboard/',{contents: this.state.value}).then(response => {
+    axios.post('/api/python/',{contents: this.state.value}).then(response => {
       console.log(response)
       this.setState({value: ''})
     }).catch(e => {

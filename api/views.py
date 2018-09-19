@@ -1,6 +1,6 @@
 from api import models as m
 from api import serializers as s
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import *
 from .serializers import *
 
@@ -24,9 +24,9 @@ from django.http import HttpResponse
 
 from datetime import datetime
 import subprocess
-import os
-
+from back.settings import BASE_DIR
 # Create your views here.
+STATIC = BASE_DIR + '\\static\\'
 
 class StuffViewSet(viewsets.ModelViewSet):
     queryset = m.Stuff.objects.all()
@@ -55,7 +55,6 @@ class TestUserFViewset(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
         #return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
 
-
 @schema(None)
 class TestUserViewset(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
@@ -81,7 +80,6 @@ class TestUserViewset(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
-
 class TestUserLiveViewset(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = TestUserLive.objects.all()
@@ -93,7 +91,8 @@ class TestUserLiveViewset(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         return Response(data=result)
 
-
+#required data
+# 'uid'
 class TestDropUserLiveViewset(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     queryset = TestUserLive.objects.all()
@@ -113,6 +112,8 @@ class TestDropUserLiveViewset(viewsets.ModelViewSet):
         result = TestUserLive.objects.filter(live=True).count()
         return Response(data=result,status=status.HTTP_200_OK)
 
+#required data
+# 'uid' 'pwd'
 class UserAuthentic(APIView):
 
     def post(self, request):
@@ -151,6 +152,8 @@ class UserAuthentic(APIView):
         else:
             return Response(data="1")
 
+#required data
+# 'uid' 'pwd' 'email' 'fname' 'lname
 class CreateUser(APIView):
 
     def post(self, request):
@@ -200,9 +203,6 @@ class CreateMUser(APIView):
         new_user.is_staff = True
         new_user.save()
         return Response(data=uname,status=status.HTTP_200_OK)
-
-
-
         #print(request.session.get_expiry_date())
         #sesion = Session.objects.get(session_key=request.session.session_key)
         #print(auth_user.last_login)        
@@ -213,6 +213,8 @@ class CreateMUser(APIView):
         #        response.set_cookie('cookie','deliceous cookie')
         #        return response
 
+#required data
+# 'contents'
 class Addboard(viewsets.ModelViewSet):
 
     def post(self, request):
@@ -228,11 +230,16 @@ class Getboard(viewsets.ModelViewSet):
 
     def get(self, request):
         boards = Testboard.objects.all().order_by('-id')
+        select = request.META['HTTP_ACCEPT'].split(',')[0]
+        #print(select)
+        if select == 'application/json':
+            serializer = TestBoardSerializer(boards, many=True)                    
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return redirect("http://localhost:3000")
+        #print(STATIC)
         #cut section
         #boards = Testboard.objects.all().order_by('-id')[start:end]
-        serializer = TestBoardSerializer(boards, many=True)                    
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 #Need Security policy 
 #one client multi users?
@@ -272,3 +279,162 @@ class CookieAuthTest(viewsets.ModelViewSet):
 #        if request.session.test_cookie_worked() == False:
 #            request.session.set_test_cookie()
 #            return request
+
+class Python(viewsets.ModelViewSet):
+
+    def post(self, request):
+        #check username
+        ctext = request.data['contents']
+        new_board = Testboard(text=ctext)
+        new_board.save()
+        #create dump file
+        #open stdin stderr file
+        output = open(STATIC + 'output.txt', 'w')
+        inn = open(STATIC + 'output.txt', 'r')
+        pin = open(STATIC + 'p1.py', 'w')
+        pin.write(ctext)
+        pin.close()
+        #build subprocess 
+        cmd = "python " + STATIC + 'p1.py'
+        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        dump = ''
+        flag = True
+        #excete 
+        try:
+            #timeout value setting is service level
+            out, err = p.communicate(timeout=0.2)
+        except subprocess.TimeoutExpired:
+            p.kill()
+            out, err = p.communicate()
+            dump += 'timeout error'
+            flag = False
+        finally:
+            while flag:
+                temp = inn.readline()
+                if not temp:
+                    break
+                dump += str(temp)
+        inn.close()
+        output.close()
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)
+
+class Java(viewsets.ModelViewSet):
+
+    def post(self, request):
+        #check username
+        ctext = request.data['contents']
+        new_board = Testboard(text=ctext)
+        new_board.save()
+        #create dump file
+        #open stdin stderr file
+        output = open(STATIC + 'output.txt', 'w')
+        inn = open(STATIC + 'output.txt', 'r')
+        pin = open(STATIC + 'main.java', 'w')
+        pin.write(ctext)
+        pin.close()
+        #build subprocess 
+        cmd1 = "javac " + STATIC + 'main.java'
+        cmd2 = "java " + STATIC + 'main'
+        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        dump = ''
+        flag = True
+        #excete 
+        try:
+            #timeout value setting is service level
+            out, err = p.communicate(timeout=0.2)
+        except subprocess.TimeoutExpired:
+            p.kill()
+            out, err = p.communicate()
+            dump += 'timeout error'
+            flag = False
+        finally:
+            while flag:
+                temp = inn.readline()
+                if not temp:
+                    break
+                dump += str(temp)
+        inn.close()
+        output.close()
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)
+
+class Clang(viewsets.ModelViewSet):
+
+    def post(self, request):
+        #check username
+        ctext = request.data['contents']
+        new_board = Testboard(text=ctext)
+        new_board.save()
+        #create dump file
+        #open stdin stderr file
+        output = open(STATIC + 'output.txt', 'w')
+        inn = open(STATIC + 'output.txt', 'r')
+        pin = open(STATIC + 'test.c', 'w')
+        pin.write(ctext)
+        pin.close()
+        #build subprocess 
+        cmd1 = "gcc " + STATIC + 'test.c'
+        cmd2 = "./a.out"
+        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        dump = ''
+        flag = True
+        #excete 
+        try:
+            #timeout value setting is service level
+            out, err = p.communicate(timeout=0.2)
+        except subprocess.TimeoutExpired:
+            p.kill()
+            out, err = p.communicate()
+            dump += 'timeout error'
+            flag = False
+        finally:
+            while flag:
+                temp = inn.readline()
+                if not temp:
+                    break
+                dump += str(temp)
+        inn.close()
+        output.close()
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)
+
+class Cpplang(viewsets.ModelViewSet):
+
+    def post(self, request):
+        #check username
+        ctext = request.data['contents']
+        new_board = Testboard(text=ctext)
+        new_board.save()
+        #create dump file
+        #open stdin stderr file
+        output = open(STATIC + 'output.txt', 'w')
+        inn = open(STATIC + 'output.txt', 'r')
+        pin = open(STATIC + 'test.cpp', 'w')
+        pin.write(ctext)
+        pin.close()
+        #build subprocess 
+        cmd1 = "gcc " + STATIC + 'test.cpp'
+        cmd2 = "./a.out"
+        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        dump = ''
+        flag = True
+        #excete 
+        try:
+            #timeout value setting is service level
+            out, err = p.communicate(timeout=0.2)
+        except subprocess.TimeoutExpired:
+            p.kill()
+            out, err = p.communicate()
+            dump += 'timeout error'
+            flag = False
+        finally:
+            while flag:
+                temp = inn.readline()
+                if not temp:
+                    break
+                dump += str(temp)
+        inn.close()
+        output.close()
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)

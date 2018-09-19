@@ -26,6 +26,10 @@ cokkie = CookieAuthTest.as_view({
     'get': 'get'
 })
 
+python = Python.as_view({
+    'post': 'post'
+})
+
 urlpatterns = [
     path('todo/', todo_list),
     path('enter/', enter_list),
@@ -36,5 +40,6 @@ urlpatterns = [
     path('createmuser/',CreateMUser.as_view()),
     path('addboard/',board_list),
     path('getboard/',getboard),
-    path('cookieauth/',cokkie)
+    path('cookieauth/',cokkie),
+    path('python/',python)
 ]
