@@ -229,6 +229,7 @@ class App extends React.Component {
           </Scrollbars>
           </main>
           {after}
+
         </div>
       <footer>Licensed under MIT</footer>
       </div>

@@ -3,6 +3,13 @@ import {Controlled as CodeMirror} from 'react-codemirror2'
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import {saveAs} from 'file-saver'
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
@@ -28,16 +35,22 @@ const styles = theme => ({
       },    
   });
 
-
 class Top extends Component {
     state = {
-        value: ''
+        value: '',
+        open: false,
+        filename: '',
+        type: '.py'
     };
 
     constructor(props){
         super(props)
 
         this.clicked = this.clicked.bind(this)
+        this.savelocal = this.savelocal.bind(this)        
+        this.handleClickOpen = this.handleClickOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.handleChanged = this.handleChanged.bind(this)
     }
 
     clicked(e){
@@ -47,8 +60,28 @@ class Top extends Component {
             this.setState({value: response.data})
           }).catch(e => {
             // console.log(e)
-          })
-      
+          })      
+    }
+    handleChanged = name => event => {
+        this.setState({
+          [name]: event.target.value,
+        });
+      };
+    
+    handleClickOpen(){
+        this.setState({ open: true });
+      };
+    
+    handleClose(){
+    this.setState({ open: false });
+    };
+
+    savelocal(){
+        console.log(this.state.value)
+        var blob = new Blob([this.state.value], {type:"text/plain;charset=utf-8"});
+        saveAs(blob,this.state.filename + this.state.type)
+        this.handleClose()
+
     }
 
 	render() {
@@ -77,6 +110,39 @@ class Top extends Component {
                 <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked} small="true">
                     Submit
                 </Button>
+                <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.handleClickOpen} small="true">
+                    Save
+                </Button>
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                    >
+                    <DialogTitle id="form-dialog-title">Save</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                        please conform your file name.
+                        </DialogContentText>
+                        <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="file name"
+                        type="text"
+                        fullWidth
+                        value={this.state.filename}
+                        onChange={this.handleChanged('filename')}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.handleClose} color="primary">
+                        Cancel
+                        </Button>
+                        <Button onClick={this.savelocal} color="primary">
+                        Subscribe
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
 		);
   	}
