@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "C:\Users\dlstj\gitrepo\2018DW\static\p1.py", line 1, in <module>
-    fafds
-NameError: name 'fafds' is not defined

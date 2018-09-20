@@ -54,6 +54,8 @@ class Top extends Component {
     }
 
     clicked(e){
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
         // console.log(this.state.value)
         axios.post('/api/python/',{contents: this.state.value}).then(response => {
             console.log(response)

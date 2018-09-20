@@ -14,13 +14,16 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router'
+import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
 import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';
 import Right from './components/Right';
 import Top from './components/Top';
-import { ListItem } from '@material-ui/core';
+import Login from './components/Login';
+import { ListItem, Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Test from './components/Test';
 
@@ -61,6 +64,10 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
+    justifyContent: 'flex-end',
+  },
+  logoutButton:{
+    justifyContent: 'flex-end',
   },
   hide: {
     display: 'none',
@@ -109,13 +116,70 @@ class App extends React.Component {
   state = {
     open: false,
     anchor: 'left',
+    login: false,
+    uid: ''
   };
 
   constructor(props){
     super(props)
     this.clicked = this.clicked.bind(this);
+    this.statecallback = this.statecallback.bind(this)
+    this.drop = this.drop.bind(this)
   }
 
+  drop(){
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    console.log(this.state.uid)
+
+    axios.post('/api/dropliveuser/',{
+      uid: this.state.uid,
+      }).then(response => {
+      console.log(response)
+      this.setState({
+        login: false
+      })
+      this.clicked('/') 
+    }).catch(e => {
+      // console.log(e)
+    })              
+  }
+  
+  componentWillMount(){
+    axios.defaults.xsrfCookieName = 'csrftoken';
+    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    axios.get('/api/cookieauth/').then((response) => {
+      console.log(response.data)
+      if (response.status === 200){
+        this.setState({
+          uid: response.data,
+          login: true
+        })
+
+        this.clicked('main') 
+      } else {
+        this.clicked('/') 
+      }
+    }).catch((e) => {
+
+    })
+
+  }
+
+  statecallback = (datafromchild) => {
+    this.setState({
+      login: datafromchild.login,
+      uid:  datafromchild.uid
+    })
+    if(datafromchild.login === true){
+      this.clicked('main') 
+    } 
+
+
+    console.log(datafromchild)
+  }
 
   handleDrawerOpen = () => {
     console.log('open')
@@ -135,8 +199,6 @@ class App extends React.Component {
   componentDidCatch(error, info){
     console.log('error')
   }
-
-
   clicked(e){
     this.props.history.push(e)
   }
@@ -144,6 +206,35 @@ class App extends React.Component {
   render() {
     const { classes, theme } = this.props;
     const { anchor, open } = this.state;
+
+    const contents = (
+      <div>
+      <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
+      <Route path="/top" component={Top} />
+      <Route path="/right" component={Right} />
+      <Route path="/left" component={Left} />
+      <Route path="/main" component={Main}/>
+      <Route path="/bottom" component={Bottom} />
+      <Route path="/test" component={Test} />                      
+      </div>
+    );
+
+    const planed = (
+      <Drawer
+        variant="persistent"
+        anchor={anchor}
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={this.handleDrawerClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+      </Drawer>
+    );
 
     const drawer = (
       <Drawer
@@ -178,9 +269,16 @@ class App extends React.Component {
     let after = null;
 
     if (anchor === 'left') {
-      before = drawer;
+      if(this.state.login)
+        before = drawer;
+      else
+        before = planed;    
+
     } else {
-      after = drawer;
+      if(this.state.login)
+        after = drawer;
+      else
+        after = planed;
     }
 
     return (
@@ -206,6 +304,7 @@ class App extends React.Component {
               <Typography variant="title" color="inherit" noWrap>
                 our service
               </Typography>
+              <Button color="secondary" onClick={this.drop}>Logout</Button>              
             </Toolbar>
           </AppBar>
           {before}
@@ -216,19 +315,21 @@ class App extends React.Component {
             })}
           >
           <Scrollbars universal>
-            <br/>
-            <br/>
-            <br/>
-            <Route exact path="/" component={Main}/>
-            <Route path="/top" component={Top} />
-            <Route path="/right" component={Right} />
-            <Route path="/left" component={Left} />
-            <Route path="/main" component={Main}/>
-            <Route path="/bottom" component={Bottom} />
-            <Route path="/test" component={Test} />
+            <div style={{ display: 'flex', margin: 40}}>
+              <Grid container spacing={24} direction="column">
+                <Grid container item spacing={0} justify="center" >
+                  <Grid item xs={6}>
+                  <br/>
+                  <br/>
+                  <br/>
+                  {contents}                                  
+                  </Grid>
+                </Grid>
+              </Grid>
+            </div>
           </Scrollbars>
           </main>
-          {after}
+        {after}
 
         </div>
       <footer>Licensed under MIT</footer>
