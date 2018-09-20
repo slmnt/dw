@@ -17,3 +17,7 @@ createdb -E UTF-8 -O django -U postgres djangodb
 psql -U django -W -h localhost djangodb   
    
    
+      
+         
+#FIX List   
+Backend use Docker   
