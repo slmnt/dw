@@ -1,2 +1,1 @@
-  File "C:\Users\dlstjq7685\git\2018DW\static\p1.py", line 1
-SyntaxError: Non-UTF-8 code starting with '\x82' in file C:\Users\dlstjq7685\git\2018DW\static\p1.py on line 1, but no encoding declared; see http://python.org/dev/peps/pep-0263/ for details
+test

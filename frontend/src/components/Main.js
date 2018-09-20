@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 
@@ -22,24 +21,33 @@ class Main extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    navigator.geolocation.getCurrentPosition(this.showposition,this.rejctpermission)
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
-    console.log(this.temp)
+    this.props.test(event.target.value)
   }
-
+  showposition(position){
+    console.log(position.coords.latitude +':' + position.coords.longitude)
+  }
+  rejctpermission(error){
+    console.log(error.message)
+  }
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
-    event.preventDefault();
+    // alert('A name was submitted: ' + this.state.value);
+    // event.preventDefault();
 
-    axios.post('/api/python/',{contents: this.state.value}).then(response => {
-      console.log(response)
-      this.setState({value: ''})
-    }).catch(e => {
-      console.log(e)
-    })
+    //axios.defaults.xsrfCookieName = 'csrftoken';
+    // axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+    //axios.post('/api/python/',{contents: this.state.value}).then(response => {
+      //console.log(response)
+      //this.setState({value: ''})
+    //}).catch(e => {
+      //console.log(e)
+    //})
   }
   
 	getInitialState() {
@@ -51,11 +59,6 @@ class Main extends Component {
 
   }
   componentWillUnmount(){
-    axios.get('/api/').then(resp => {
-      console.log('Response', resp)
-      }).catch(err => {
-      console.log('Error', err.response.status)
-    });          
   }
   componentDidCatch(){
 

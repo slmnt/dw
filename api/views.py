@@ -247,11 +247,6 @@ class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
         print(request.user)
-        #Running users script
-        filename = "\\dump\\code\\" + "out.py"
-        cmd = "python " + str(os.getcwd()) + filename
-        check = subprocess.call(cmd.split(), shell=True)
-        print(check)        
         if str(request.user) == 'AnonymousUser':
             return Response(status=status.HTTP_201_CREATED)
 

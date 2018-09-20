@@ -1,1 +1,1 @@
-print('‚Å‚·‚Æ')
+print('test')
