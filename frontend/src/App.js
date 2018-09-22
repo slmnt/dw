@@ -262,6 +262,8 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('/bottom')}><Typography>bottom</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/test')}><Typography>tets</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button><Typography>help</Typography></ListItem></List>
       </Drawer>
     );
 
@@ -346,7 +348,6 @@ App.propTypes = {
 
 App = withRouter(App);
 export default withStyles(styles, { withTheme: true })(App);
-
 
 /*
  */

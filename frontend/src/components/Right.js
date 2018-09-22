@@ -3,8 +3,11 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import { Grid } from '@material-ui/core';
 
+// react-paginatge is crash react meterial-ui
 const styles = ({
     card: {
       minWidth: 'auto',
@@ -22,26 +25,43 @@ const styles = ({
   class Right extends Component {
     state = {
         data: [],
-        activePage: 1,
+        activePage: 0,
+        pagelimit: 0
     };
 
-    constructor(props) {
-        super(props);
 
-        this.handlePageChange = this._handlePageChange.bind(this);
+    constructor(props){
+        super(props)
+
+        this.handlePageClick = this.handlePageClick.bind(this)
     }
-
 
     componentDidMount(){
-        axios.get('/api/getboard/').then(response => {
-            this.setState({data: response.data})
-            console.log(this.state.data)
+        axios.get('/api/getboardnum/').then(response => {
+            this.setState({pagelimit: response.data})
         })
+        axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+            this.setState({data: response.data})
+        }).catch(e => {            
+            // console.log(e)
+        })      
+        this.setState({activePage: 1})
     }
 
-    _handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
-        this.setState({activePage: pageNumber});
+    handlePageClick() {
+        axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+            var dum = this.state.data
+            var now = this.state.data.length
+            for(var i = 0; i < response.data.length; i++){
+                dum[now + i] = response.data[i]
+            }
+            this.setState({data: dum})
+            // this.setState({data: response.data})
+        }).catch(e => {
+        // console.log(e)
+        })      
+        this.setState({activePage: this.state.activePage+1})
+
     }
     
     render() {
@@ -76,9 +96,26 @@ const styles = ({
                 }
             })()}
         <br/>
+        <br/>      
+            <div style={{ display: 'flex', margin: 40}}>
+            <Grid container direction="column">
+                <Grid container item justify="center" >
+                <Grid item xs={3}>
+                <CardActionArea onClick={this.handlePageClick}>
+                <Card className={this.props.classes.card}>
+                    <CardContent>
+                        <Typography align='center' color='secondary'>
+                        Add more...
+                        </Typography>
+                        </CardContent>
+                    </Card>
+                        </CardActionArea>
+                </Grid>
+                </Grid>
+            </Grid>
+            </div>
         <br/>
-        <br/>
-    </div>        
+        </div>        
 		);
   	}
 }

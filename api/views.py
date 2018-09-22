@@ -136,6 +136,7 @@ class UserAuthentic(APIView):
 
     def post(self, request):
         select = request.META['HTTP_ACCEPT'].split(',')[0]
+        print(select)
         if select == 'application/json':
             #sended username check
             try:
@@ -159,17 +160,11 @@ class UserAuthentic(APIView):
             if v_user is not None:
                 login(request,v_user)
                 #check live user moedls
-                try:
-                    live = TestUserLive.objects.get(uid=auth_user)
-                except:
-                    live = TestUserLive(uid=auth_user)
-                live.live = True
-                live.save()
-                result = TestUserLive.objects.filter(live=True).count()
                 #cookie login expiry set
                 request.session.set_expiry(432000)
-                return Response(data=result,status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK)
             else:
+                #now
                 return Response(data="1")
         else:
             return redirect("http://localhost:3000")
@@ -274,6 +269,38 @@ class Getboard(viewsets.ModelViewSet):
         #print(STATIC)
         #cut section
         #boards = Testboard.objects.all().order_by('-id')[start:end]
+
+class Getboardnum(viewsets.ModelViewSet):
+
+    def get(self, request):
+        select = request.META['HTTP_ACCEPT'].split(',')[0]
+        #print(select)
+        if select == 'application/json':
+            boards = Testboard.objects.all().count()                   
+            boards = int(boards / 7)
+            return Response(data=boards, status=status.HTTP_200_OK)
+        else:
+            return redirect("http://localhost:3000")
+
+class GetboardPage(viewsets.ModelViewSet):
+
+    def post(self, request):
+        select = request.META['HTTP_ACCEPT'].split(',')[0]
+        #print(select)
+        if select == 'application/json':
+            num = request.data['num']
+            #error
+            start = num * 7
+            end = (num + 1) * 7
+            print(start,end)
+            boards = Testboard.objects.all().order_by('-id')[start:end]
+            serializer = TestBoardSerializer(boards, many=True)                                      
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return redirect("http://localhost:3000")
+
+
+
 
 #Need Security policy 
 #one client multi users?
