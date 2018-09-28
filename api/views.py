@@ -294,8 +294,12 @@ class GetboardPage(viewsets.ModelViewSet):
             end = (num + 1) * 7
             print(start,end)
             boards = Testboard.objects.all().order_by('-id')[start:end]
-            serializer = TestBoardSerializer(boards, many=True)                                      
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            if boards.count() > 0:
+                serializer = TestBoardSerializer(boards, many=True)                                      
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
         else:
             return redirect("http://localhost:3000")
 
@@ -307,13 +311,12 @@ class GetboardPage(viewsets.ModelViewSet):
 class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
-        print(request.user)
+        #print(request.user)
         if str(request.user) == 'AnonymousUser':
             return Response(status=status.HTTP_201_CREATED)
 
         else:            
-            if request.session.get_expiry_date().date().day > datetime.now().day:
-                print(request.session.get_expiry_date())
+            if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
                 return HttpResponse(str(request.user),status=status.HTTP_200_OK)
             else:
                 try:

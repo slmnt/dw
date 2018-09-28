@@ -21,7 +21,7 @@ import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';
 import Right from './components/Right';
-import Top from './components/Top';
+import Py from './components/code/python';
 import Login from './components/Login';
 import { ListItem, Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -125,6 +125,7 @@ class App extends React.Component {
     this.clicked = this.clicked.bind(this);
     this.statecallback = this.statecallback.bind(this)
     this.drop = this.drop.bind(this)
+    this.drawercloseer = this.drawercloseer.bind(this)
   }
 
   drop(){
@@ -150,15 +151,15 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+    // user platform check
+    console.log(window.navigator.platform)
+
     axios.get('/api/cookieauth/').then((response) => {
-      console.log(response.data)
       if (response.status === 200){
         this.setState({
           uid: response.data,
           login: true
         })
-
-        this.clicked('main') 
       } else {
         this.clicked('/') 
       }
@@ -176,18 +177,22 @@ class App extends React.Component {
     if(datafromchild.login === true){
       this.clicked('main') 
     } 
+    // console.log(datafromchild)
+  }
 
-
-    console.log(datafromchild)
+  drawercloseer(){
+    if(this.state.open){
+      this.handleDrawerClose()
+    }
   }
 
   handleDrawerOpen = () => {
-    console.log('open')
+    // console.log('open')
     this.setState({ open: true });
   };
 
   handleDrawerClose = () => {
-    console.log('close')
+    // console.log('close')
     this.setState({ open: false });
   };
 
@@ -210,7 +215,7 @@ class App extends React.Component {
     const contents = (
       <div>
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-      <Route path="/top" component={Top} />
+      <Route path="/py" component={Py} />
       <Route path="/right" component={Right} />
       <Route path="/left" component={Left} />
       <Route path="/main" component={Main}/>
@@ -251,7 +256,7 @@ class App extends React.Component {
           </IconButton>
         </div>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/top')}><Typography>top</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('/py')}><Typography>python</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/right')}><Typography>right</Typography></ListItem></List>
         <Divider />
@@ -317,7 +322,7 @@ class App extends React.Component {
             })}
           >
           <Scrollbars universal>
-            <div style={{ display: 'flex', margin: 40}}>
+            <div style={{ display: 'flex', margin: 40}} onClick={this.drawercloseer}>
               <Grid container spacing={24} direction="column">
                 <Grid container item spacing={0} justify="center" >
                   <Grid item xs={6}>

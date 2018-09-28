@@ -5,6 +5,10 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { Grid } from '@material-ui/core';
 
 // react-paginatge is crash react meterial-ui
@@ -26,14 +30,16 @@ const styles = ({
     state = {
         data: [],
         activePage: 0,
-        pagelimit: 0
+        pagelimit: 0,
+        open: false,
     };
-
 
     constructor(props){
         super(props)
 
         this.handlePageClick = this.handlePageClick.bind(this)
+        this.handleClickOpen = this.handleClickOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
     }
 
     componentDidMount(){
@@ -50,20 +56,32 @@ const styles = ({
 
     handlePageClick() {
         axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
-            var dum = this.state.data
-            var now = this.state.data.length
-            for(var i = 0; i < response.data.length; i++){
-                dum[now + i] = response.data[i]
+            if(response.status === 200){
+                var dum = this.state.data
+                var now = this.state.data.length
+                for(var i = 0; i < response.data.length; i++){
+                    dum[now + i] = response.data[i]
+                }
+                this.setState({data: dum})
             }
-            this.setState({data: dum})
+            else{
+                this.handleClickOpen()
+            }
             // this.setState({data: response.data})
         }).catch(e => {
         // console.log(e)
         })      
         this.setState({activePage: this.state.activePage+1})
+    }
 
+    handleClickOpen = () => {
+        this.setState({ open: true });
     }
     
+    handleClose = () => {
+    this.setState({ open: false });
+    }       
+
     render() {
 
         return (
@@ -109,7 +127,21 @@ const styles = ({
                         </Typography>
                         </CardContent>
                     </Card>
-                        </CardActionArea>
+                </CardActionArea>
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    >
+                    <DialogTitle id="alert-dialog-title">{"Sorry"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            No more content
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
                 </Grid>
                 </Grid>
             </Grid>

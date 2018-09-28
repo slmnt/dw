@@ -15,7 +15,7 @@ class Main extends Component {
     const { cookies } = props;
     
     cookies.set('test',100)
-    console.log(cookies.get('test'))
+    // console.log(cookies.get('test'))
 
     this.state = {value: '', color: 'green'};
 
@@ -30,7 +30,7 @@ class Main extends Component {
     this.props.test(event.target.value)
   }
   showposition(position){
-    console.log(position.coords.latitude +':' + position.coords.longitude)
+    // console.log(position.coords.latitude +':' + position.coords.longitude)
   }
   rejctpermission(error){
     console.log(error.message)
