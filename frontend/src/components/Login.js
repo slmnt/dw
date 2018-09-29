@@ -105,7 +105,6 @@ class Login extends Component {
                         required
                         id="outlined-required"
                         label="Required"
-                        className={this.props.classes.textField}
                         value={this.state.name}
                         onChange={this.handleChange('name')}
                         variant="outlined"
@@ -132,6 +131,7 @@ class Login extends Component {
                             ),
                         }}
                         />
+                        <br/>
                         <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked}>
                             Submit
                         </Button>

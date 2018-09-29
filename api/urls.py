@@ -38,6 +38,11 @@ getboardpage = GetboardPage.as_view({
     'post': 'post'
 })
 
+codesec = CodeSerial.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+
 urlpatterns = [
     path('todo/', todo_list),
     path('enter/', enter_list),
@@ -51,5 +56,6 @@ urlpatterns = [
     path('getboardnum/',getboardnum),
     path('getboardpage/',getboardpage),
     path('cookieauth/',cokkie),
-    path('python/',python)
+    path('python/',python),
+    path('code/',codesec)
 ]

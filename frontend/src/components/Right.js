@@ -43,15 +43,23 @@ const styles = ({
     }
 
     componentDidMount(){
-        axios.get('/api/getboardnum/').then(response => {
-            this.setState({pagelimit: response.data})
-        })
-        axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+        /*
+            axios.get('/api/getboardnum/').then(response => {
+                this.setState({pagelimit: response.data})
+            })
+            
+            axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+                this.setState({data: response.data})
+            }).catch(e => {            
+                // console.log(e)
+            })      
+            this.setState({activePage: 1})
+        
+        */
+        axios.get('/api/code/').then(response => {
             this.setState({data: response.data})
-        }).catch(e => {            
-            // console.log(e)
-        })      
-        this.setState({activePage: 1})
+        })
+
     }
 
     handlePageClick() {
@@ -94,16 +102,16 @@ const styles = ({
                                 <Card className={this.props.classes.card}>
                                 <CardContent>
                                 <Typography className={this.props.classes.title} color="textSecondary">
-                                    subtitle
+                                    {el.auth}
                                 </Typography>
                                 <Typography variant="headline" component="h2">
-                                    {el.id}
+                                    {el.codetype}
                                 </Typography>
                                 <Typography className={this.props.classes.pos} color="textSecondary">
-                                    adjective
+                                    {el.createat}
                                 </Typography>
                                 <Typography component="p">
-                                    {el.text}
+                                    {el.source}
                                 </Typography>
                                 </CardContent>
                                 </Card>

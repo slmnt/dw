@@ -25,7 +25,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 SECRET_KEY = ')u&(cpzra5edf=o1qh&#m_lyhho#gwj#_0*ytp4qgmk6h-a@4)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -86,24 +86,16 @@ WSGI_APPLICATION = 'back.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-if DEBUG == True:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'djangodb',
-            'USER': 'django',
-            'PASSWORD' : 'xsi123456',
-            'HOST' : 'localhost',
-            'PORT' : 5432,
-        }
-    }
+DATABASES = {
+    'default': {
+         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'NAME': 'djangodb',
+         'USER': 'django',
+         'PASSWORD' : 'xsi123456',
+         'HOST' : 'localhost',
+         'PORT' : 5432,
+     }
+}
 
 
 # Password validation

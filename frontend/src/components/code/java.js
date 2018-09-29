@@ -17,7 +17,6 @@ require('codemirror/lib/codemirror.css');
 require('codemirror/lib/codemirror.js');
 require('codemirror/theme/material.css');
 require('codemirror/theme/neat.css');
-require('codemirror/mode/python/python')
 require('codemirror/mode/clike/clike')
 
 const styles = theme => ({
@@ -35,12 +34,12 @@ const styles = theme => ({
       },    
   });
 
-class Py extends Component {
+class Java extends Component {
     state = {
         value: '',
         open: false,
         filename: '',
-        type: '.py'
+        type: '.java'
     };
 
     constructor(props){
@@ -51,43 +50,19 @@ class Py extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.handleChanged = this.handleChanged.bind(this)
-
-        console.log(props.parent)
-    }
-
-    componentWillMount(){
-        axios.get('/api/code/').then(response => {
-            // console.log(response)
-        }).catch(e => {
-            // console.log(e)
-        })      
-
     }
 
     clicked(e){
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
         // console.log(this.state.value)
-        /*
-            axios.post('/api/python/',{contents: this.state.value}).then(response => {
-                console.log(response)
-                this.setState({value: response.data})
-            }).catch(e => {
-                // console.log(e)
-            })              
-        */
-
-        axios.post('/api/code/',{
-            code: this.state.value,
-            type: 'python'
-        }).then(response => {
+        axios.post('/api/python/',{contents: this.state.value}).then(response => {
             console.log(response)
-        }).catch(e => {
+            this.setState({value: response.data})
+          }).catch(e => {
             // console.log(e)
-        })      
-
+          })      
     }
-
     handleChanged = name => event => {
         this.setState({
           [name]: event.target.value,
@@ -120,9 +95,9 @@ class Py extends Component {
                 options={{
                     //mode: 'xml',
                     //mode: 'text/x-csrc',
-                    // mode: 'text/x-java',
+                     mode: 'text/x-java',
                     // mode: 'text/x-c++src',
-                     mode: 'text/x-python',
+                    // mode: 'text/x-python',
                     theme: 'material',
                     lineNumbers: true
                 }}
@@ -174,4 +149,4 @@ class Py extends Component {
   	}
 }
 
-export default withStyles(styles)(Py);
+export default withStyles(styles)(Java);

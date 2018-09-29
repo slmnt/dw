@@ -15,7 +15,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
 
 import Bottom from './components/Bottom';
 import Left from './components/Left';
@@ -311,7 +310,9 @@ class App extends React.Component {
               <Typography variant="title" color="inherit" noWrap>
                 our service
               </Typography>
-              <Button color="secondary" onClick={this.drop}>Logout</Button>              
+              <Typography onClick={this.drop}>
+                Logout
+              </Typography>
             </Toolbar>
           </AppBar>
           {before}

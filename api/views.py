@@ -303,6 +303,21 @@ class GetboardPage(viewsets.ModelViewSet):
         else:
             return redirect("http://localhost:3000")
 
+class CodeSerial(viewsets.ModelViewSet):
+
+    def post(self, request):
+        authe = User.objects.get(username=str(request.user))
+        code = request.data['code']
+        ty = Codetype.objects.get(description=request.data['type'])        
+        #Code models create
+        cd = Code(auth=authe,codetype=ty,source=code)
+        cd.save()
+        serializer = CodeSerializer(Code.objects.all(), many=True) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        serializer = CodeSerializer(Code.objects.all(), many=True) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 
 
