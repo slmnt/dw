@@ -69,6 +69,13 @@ class Py extends Component {
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
         // console.log(this.state.value)
         /*
+        */
+       axios.post('/api/python/',{contents: this.state.value}).then(response => {
+           console.log(response)
+           this.setState({value: response.data})
+       }).catch(e => {
+           // console.log(e)
+       })              
         axios.post('/api/code/',{
             code: this.state.value,
             type: 'python'
@@ -77,14 +84,7 @@ class Py extends Component {
         }).catch(e => {
             // console.log(e)
         })      
-        */
-       axios.post('/api/python/',{contents: this.state.value}).then(response => {
-           console.log(response)
-           this.setState({value: response.data})
-       }).catch(e => {
-           // console.log(e)
-       })              
-       
+   
 
     }
 

@@ -26,7 +26,7 @@ from datetime import datetime
 import subprocess
 from back.settings import BASE_DIR
 # Create your views here.
-STATIC = BASE_DIR + '\\static\\'
+STATIC = BASE_DIR + '//static//'
 
 class StuffViewSet(viewsets.ModelViewSet):
     queryset = m.Stuff.objects.all()
@@ -382,7 +382,7 @@ class Python(viewsets.ModelViewSet):
         pin.close()
         #build subprocess 
         cmd = "python " + STATIC + 'p1.py'
-        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        p = subprocess.Popen(cmd.split(), stdout=output, stderr=output)
         dump = ''
         flag = True
         #excete 
