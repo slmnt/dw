@@ -40,3 +40,8 @@ class CodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Code
         fields = ('__all__')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('last_login', 'email', 'username')

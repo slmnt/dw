@@ -316,7 +316,19 @@ class CodeSerial(viewsets.ModelViewSet):
         return Response(serializer.data,status=status.HTTP_200_OK)
 
     def get(self, request):
-        serializer = CodeSerializer(Code.objects.all(), many=True) 
+        uid = User.objects.get(username=str(request.user))
+        # get user auth
+        selected = Code.objects.all().filter(auth=uid)
+        selected = selected.order_by('-id')
+        serializer = CodeSerializer(selected, many=True) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class userinfo(viewsets.ModelViewSet):
+
+    def get(self, request):
+        uid = User.objects.get(username=str(request.user))
+        # get user auth
+        serializer = UserSerializer(uid) 
         return Response(serializer.data,status=status.HTTP_200_OK)
 
 

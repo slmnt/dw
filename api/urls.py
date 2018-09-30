@@ -43,6 +43,10 @@ codesec = CodeSerial.as_view({
     'post': 'post'
 })
 
+user = userinfo.as_view({
+    'get': 'get'
+})
+
 urlpatterns = [
     path('todo/', todo_list),
     path('enter/', enter_list),
@@ -57,5 +61,6 @@ urlpatterns = [
     path('getboardpage/',getboardpage),
     path('cookieauth/',cokkie),
     path('python/',python),
-    path('code/',codesec)
+    path('code/',codesec),
+    path('user/',user)
 ]

@@ -15,6 +15,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import axios from 'axios';
+import { ListItem, Grid } from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Bottom from './components/Bottom';
 import Left from './components/Left';
@@ -22,9 +24,9 @@ import Main from './components/Main';
 import Right from './components/Right';
 import Py from './components/code/python';
 import Login from './components/Login';
-import { ListItem, Grid } from '@material-ui/core';
-import { Scrollbars } from 'react-custom-scrollbars';
 import Test from './components/Test';
+import Mypage from './components/mypage';
+import Codemain from './components/codemain';
 
 const drawerWidth = 200;
 
@@ -125,6 +127,9 @@ class App extends React.Component {
     this.statecallback = this.statecallback.bind(this)
     this.drop = this.drop.bind(this)
     this.drawercloseer = this.drawercloseer.bind(this)
+
+    console.log(props.history.location.pathname)
+
   }
 
   drop(){
@@ -159,6 +164,7 @@ class App extends React.Component {
           uid: response.data,
           login: true
         })
+        this.clicked('mypage')
       } else {
         this.clicked('/') 
       }
@@ -174,7 +180,7 @@ class App extends React.Component {
       uid:  datafromchild.uid
     })
     if(datafromchild.login === true){
-      this.clicked('main') 
+      this.clicked('mypage') 
     } 
     // console.log(datafromchild)
   }
@@ -213,6 +219,9 @@ class App extends React.Component {
 
     const contents = (
       <div>
+      {/*
+      setting react router route
+      */}
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
       <Route path="/py" component={Py} />
       <Route path="/right" component={Right} />
@@ -220,6 +229,8 @@ class App extends React.Component {
       <Route path="/main" component={Main}/>
       <Route path="/bottom" component={Bottom} />
       <Route path="/test" component={Test} />                      
+      <Route path="/mypage" component={Mypage} />                      
+      <Route path="/codemain" component={Codemain} />                      
       </div>
     );
 
@@ -266,6 +277,10 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('/bottom')}><Typography>bottom</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/test')}><Typography>tets</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('/mypage')}><Typography>mypage</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('/codemain')}><Typography>codemain</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
       </Drawer>
