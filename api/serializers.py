@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from api import models as m
+from django.contrib.auth.models import User
 from .models import *
 
 class StuffSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = m.Stuff
+        model = Stuff
         fields = '__all__'
 
 class TotestSerializer(serializers.ModelSerializer):
@@ -31,3 +31,17 @@ class TestBoardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testboard
         fields = ('__all__')
+
+
+class CodeSerializer(serializers.ModelSerializer):
+    codetype = serializers.SlugRelatedField(read_only=True,slug_field='description')
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Code
+        fields = ('__all__')
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('last_login', 'email', 'username')

@@ -26,7 +26,7 @@ from datetime import datetime
 import subprocess
 from back.settings import BASE_DIR
 # Create your views here.
-STATIC = BASE_DIR + '\\static\\'
+STATIC = BASE_DIR + '//static//'
 
 class StuffViewSet(viewsets.ModelViewSet):
     queryset = m.Stuff.objects.all()
@@ -136,6 +136,7 @@ class UserAuthentic(APIView):
 
     def post(self, request):
         select = request.META['HTTP_ACCEPT'].split(',')[0]
+        print(select)
         if select == 'application/json':
             #sended username check
             try:
@@ -159,17 +160,11 @@ class UserAuthentic(APIView):
             if v_user is not None:
                 login(request,v_user)
                 #check live user moedls
-                try:
-                    live = TestUserLive.objects.get(uid=auth_user)
-                except:
-                    live = TestUserLive(uid=auth_user)
-                live.live = True
-                live.save()
-                result = TestUserLive.objects.filter(live=True).count()
                 #cookie login expiry set
                 request.session.set_expiry(432000)
-                return Response(data=result,status=status.HTTP_200_OK)
+                return Response(status=status.HTTP_200_OK)
             else:
+                #now
                 return Response(data="1")
         else:
             return redirect("http://localhost:3000")
@@ -275,18 +270,80 @@ class Getboard(viewsets.ModelViewSet):
         #cut section
         #boards = Testboard.objects.all().order_by('-id')[start:end]
 
+class Getboardnum(viewsets.ModelViewSet):
+
+    def get(self, request):
+        select = request.META['HTTP_ACCEPT'].split(',')[0]
+        #print(select)
+        if select == 'application/json':
+            boards = Testboard.objects.all().count()                   
+            boards = int(boards / 7)
+            return Response(data=boards, status=status.HTTP_200_OK)
+        else:
+            return redirect("http://localhost:3000")
+
+class GetboardPage(viewsets.ModelViewSet):
+
+    def post(self, request):
+        select = request.META['HTTP_ACCEPT'].split(',')[0]
+        #print(select)
+        if select == 'application/json':
+            num = request.data['num']
+            #error
+            start = num * 7
+            end = (num + 1) * 7
+            print(start,end)
+            boards = Testboard.objects.all().order_by('-id')[start:end]
+            if boards.count() > 0:
+                serializer = TestBoardSerializer(boards, many=True)                                      
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            return redirect("http://localhost:3000")
+
+class CodeSerial(viewsets.ModelViewSet):
+
+    def post(self, request):
+        authe = User.objects.get(username=str(request.user))
+        code = request.data['code']
+        ty = Codetype.objects.get(description=request.data['type'])        
+        #Code models create
+        cd = Code(auth=authe,codetype=ty,source=code)
+        cd.save()
+        serializer = CodeSerializer(Code.objects.all(), many=True) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        uid = User.objects.get(username=str(request.user))
+        # get user auth
+        selected = Code.objects.all().filter(auth=uid)
+        selected = selected.order_by('-id')
+        serializer = CodeSerializer(selected, many=True) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+class userinfo(viewsets.ModelViewSet):
+
+    def get(self, request):
+        uid = User.objects.get(username=str(request.user))
+        # get user auth
+        serializer = UserSerializer(uid) 
+        return Response(serializer.data,status=status.HTTP_200_OK)
+
+
+
 #Need Security policy 
 #one client multi users?
 class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
-        print(request.user)
+        #print(request.user)
         if str(request.user) == 'AnonymousUser':
             return Response(status=status.HTTP_201_CREATED)
 
         else:            
-            if request.session.get_expiry_date().date().day > datetime.now().day:
-                print(request.session.get_expiry_date())
+            if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
                 return HttpResponse(str(request.user),status=status.HTTP_200_OK)
             else:
                 try:
@@ -325,7 +382,7 @@ class Python(viewsets.ModelViewSet):
         pin.close()
         #build subprocess 
         cmd = "python " + STATIC + 'p1.py'
-        p = subprocess.Popen(cmd, stdout=output, stderr=output)
+        p = subprocess.Popen(cmd.split(), stdout=output, stderr=output)
         dump = ''
         flag = True
         #excete 

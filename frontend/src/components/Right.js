@@ -3,9 +3,15 @@ import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
-import ReactPaginate from 'react-paginate';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Grid } from '@material-ui/core';
 
+// react-paginatge is crash react meterial-ui
 const styles = ({
     card: {
       minWidth: 'auto',
@@ -23,25 +29,67 @@ const styles = ({
   class Right extends Component {
     state = {
         data: [],
-        pageCount: 5
+        activePage: 0,
+        pagelimit: 0,
+        open: false,
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props){
+        super(props)
 
+        this.handlePageClick = this.handlePageClick.bind(this)
+        this.handleClickOpen = this.handleClickOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
     }
 
     componentDidMount(){
-        axios.get('/api/getboard/').then(response => {
+        /*
+            axios.get('/api/getboardnum/').then(response => {
+                this.setState({pagelimit: response.data})
+            })
+            
+            axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+                this.setState({data: response.data})
+            }).catch(e => {            
+                // console.log(e)
+            })      
+            this.setState({activePage: 1})
+        
+        */
+        axios.get('/api/code/').then(response => {
             this.setState({data: response.data})
-            console.log(this.state.data)
         })
+
     }
 
-    handlePageClick = (data) => {
-        console.log(data)
-    };
+    handlePageClick() {
+        axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
+            if(response.status === 200){
+                var dum = this.state.data
+                var now = this.state.data.length
+                for(var i = 0; i < response.data.length; i++){
+                    dum[now + i] = response.data[i]
+                }
+                this.setState({data: dum})
+            }
+            else{
+                this.handleClickOpen()
+            }
+            // this.setState({data: response.data})
+        }).catch(e => {
+        // console.log(e)
+        })      
+        this.setState({activePage: this.state.activePage+1})
+    }
+
+    handleClickOpen = () => {
+        this.setState({ open: true });
+    }
     
+    handleClose = () => {
+    this.setState({ open: false });
+    }       
+
     render() {
 
         return (
@@ -55,41 +103,61 @@ const styles = ({
                                 <Card className={this.props.classes.card}>
                                 <CardContent>
                                 <Typography className={this.props.classes.title} color="textSecondary">
-                                    subtitle
+                                    {el.auth}
                                 </Typography>
                                 <Typography variant="headline" component="h2">
-                                    {el.id}
+                                    {el.codetype}
                                 </Typography>
                                 <Typography className={this.props.classes.pos} color="textSecondary">
-                                    adjective
+                                    {el.createat}
                                 </Typography>
                                 <Typography component="p">
-                                    {el.text}
+                                    {el.source}
                                 </Typography>
                                 </CardContent>
                                 </Card>
                                 <br/>
                             </div>
                         ))}   
-                        <ReactPaginate previousLabel={"<"}
-                            nextLabel={">"}
-                            breakLabel={<a href="">...</a>}
-                            breakClassName={"break-me"}
-                            pageCount={this.state.pageCount}
-                            marginPagesDisplayed={2}
-                            pageRangeDisplayed={5}
-                            onPageChange={this.handlePageClick}
-                            containerClassName={"pagination"}
-                            subContainerClassName={"pages pagination"}
-                            activeClassName={"active"} />                    
                         </div>
                     )
                 }
             })()}
         <br/>
+        <br/>      
+            <div style={{ display: 'flex', margin: 40}}>
+            <Grid container direction="column">
+                <Grid container item justify="center" >
+                <Grid item xs={3}>
+                <CardActionArea onClick={this.handlePageClick}>
+                <Card className={this.props.classes.card}>
+                    <CardContent>
+                        <Typography align='center' color='secondary'>
+                        Add more...
+                        </Typography>
+                        </CardContent>
+                    </Card>
+                </CardActionArea>
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    >
+                    <DialogTitle id="alert-dialog-title">{"Sorry"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            No more content
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+
+                </Grid>
+                </Grid>
+            </Grid>
+            </div>
         <br/>
-        <br/>
-    </div>
+        </div>        
 		);
   	}
 }

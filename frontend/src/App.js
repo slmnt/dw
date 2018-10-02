@@ -15,17 +15,18 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
+import { ListItem, Grid } from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';
 import Right from './components/Right';
-import Top from './components/Top';
+import Py from './components/code/python';
 import Login from './components/Login';
-import { ListItem, Grid } from '@material-ui/core';
-import { Scrollbars } from 'react-custom-scrollbars';
 import Test from './components/Test';
+import Mypage from './components/mypage';
+import Codemain from './components/codemain';
 
 const drawerWidth = 200;
 
@@ -125,6 +126,10 @@ class App extends React.Component {
     this.clicked = this.clicked.bind(this);
     this.statecallback = this.statecallback.bind(this)
     this.drop = this.drop.bind(this)
+    this.drawercloseer = this.drawercloseer.bind(this)
+
+    console.log(props.history.location.pathname)
+
   }
 
   drop(){
@@ -150,15 +155,16 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+    // user platform check
+    console.log(window.navigator.platform)
+
     axios.get('/api/cookieauth/').then((response) => {
-      console.log(response.data)
       if (response.status === 200){
         this.setState({
           uid: response.data,
           login: true
         })
-
-        this.clicked('main') 
+        this.clicked('mypage')
       } else {
         this.clicked('/') 
       }
@@ -174,20 +180,24 @@ class App extends React.Component {
       uid:  datafromchild.uid
     })
     if(datafromchild.login === true){
-      this.clicked('main') 
+      this.clicked('mypage') 
     } 
+    // console.log(datafromchild)
+  }
 
-
-    console.log(datafromchild)
+  drawercloseer(){
+    if(this.state.open){
+      this.handleDrawerClose()
+    }
   }
 
   handleDrawerOpen = () => {
-    console.log('open')
+    // console.log('open')
     this.setState({ open: true });
   };
 
   handleDrawerClose = () => {
-    console.log('close')
+    // console.log('close')
     this.setState({ open: false });
   };
 
@@ -209,13 +219,18 @@ class App extends React.Component {
 
     const contents = (
       <div>
+      {/*
+      setting react router route
+      */}
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-      <Route path="/top" component={Top} />
+      <Route path="/py" component={Py} />
       <Route path="/right" component={Right} />
       <Route path="/left" component={Left} />
       <Route path="/main" component={Main}/>
       <Route path="/bottom" component={Bottom} />
       <Route path="/test" component={Test} />                      
+      <Route path="/mypage" component={Mypage} />                      
+      <Route path="/codemain" component={Codemain} />                      
       </div>
     );
 
@@ -251,7 +266,7 @@ class App extends React.Component {
           </IconButton>
         </div>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/top')}><Typography>top</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('/py')}><Typography>python</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/right')}><Typography>right</Typography></ListItem></List>
         <Divider />
@@ -262,6 +277,12 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('/bottom')}><Typography>bottom</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('/test')}><Typography>tets</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('/mypage')}><Typography>mypage</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('/codemain')}><Typography>codemain</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button><Typography>help</Typography></ListItem></List>
       </Drawer>
     );
 
@@ -304,7 +325,9 @@ class App extends React.Component {
               <Typography variant="title" color="inherit" noWrap>
                 our service
               </Typography>
-              <Button color="secondary" onClick={this.drop}>Logout</Button>              
+              <Typography onClick={this.drop}>
+                Logout
+              </Typography>
             </Toolbar>
           </AppBar>
           {before}
@@ -315,7 +338,7 @@ class App extends React.Component {
             })}
           >
           <Scrollbars universal>
-            <div style={{ display: 'flex', margin: 40}}>
+            <div style={{ display: 'flex', margin: 40}} onClick={this.drawercloseer}>
               <Grid container spacing={24} direction="column">
                 <Grid container item spacing={0} justify="center" >
                   <Grid item xs={6}>
@@ -346,7 +369,6 @@ App.propTypes = {
 
 App = withRouter(App);
 export default withStyles(styles, { withTheme: true })(App);
-
 
 /*
  */

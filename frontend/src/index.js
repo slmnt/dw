@@ -9,7 +9,7 @@ import App from './App';
 class Index extends Component {
   constructor(props) {
     super(props);
-    console.log("running")
+    // console.log("running")
   }
 
   render() {

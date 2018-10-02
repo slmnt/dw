@@ -30,6 +30,23 @@ python = Python.as_view({
     'post': 'post'
 })
 
+getboardnum = Getboardnum.as_view({
+    'get': 'get'
+})
+
+getboardpage = GetboardPage.as_view({
+    'post': 'post'
+})
+
+codesec = CodeSerial.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+
+user = userinfo.as_view({
+    'get': 'get'
+})
+
 urlpatterns = [
     path('todo/', todo_list),
     path('enter/', enter_list),
@@ -40,6 +57,10 @@ urlpatterns = [
     path('createmuser/',CreateMUser.as_view()),
     path('addboard/',board_list),
     path('getboard/',getboard),
+    path('getboardnum/',getboardnum),
+    path('getboardpage/',getboardpage),
     path('cookieauth/',cokkie),
-    path('python/',python)
+    path('python/',python),
+    path('code/',codesec),
+    path('user/',user)
 ]
