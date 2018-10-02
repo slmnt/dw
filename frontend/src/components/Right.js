@@ -93,7 +93,7 @@ const styles = ({
     render() {
 
         return (
-            <div>
+            <div >
             {(() => {
                 if(this.state.data.length > 0){
                     return(

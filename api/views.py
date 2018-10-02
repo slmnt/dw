@@ -377,7 +377,7 @@ class Python(viewsets.ModelViewSet):
         #open stdin stderr file
         output = open(STATIC + 'output.txt', 'w')
         inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + 'p1.py', 'w')
+        pin = open(STATIC + 'p1.py', 'w', encoding='utf-8')
         pin.write(ctext)
         pin.close()
         #build subprocess 

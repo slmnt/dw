@@ -86,7 +86,6 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -331,13 +330,13 @@ class App extends React.Component {
             </Toolbar>
           </AppBar>
           {before}
+          <Scrollbars universal>
           <main
             className={classNames(classes.content, classes[`content-${anchor}`], {
               [classes.contentShift]: open,
               [classes[`contentShift-${anchor}`]]: open,
             })}
           >
-          <Scrollbars universal>
             <div style={{ display: 'flex', margin: 40}} onClick={this.drawercloseer}>
               <Grid container spacing={24} direction="column">
                 <Grid container item spacing={0} justify="center" >
@@ -350,8 +349,8 @@ class App extends React.Component {
                 </Grid>
               </Grid>
             </div>
-          </Scrollbars>
           </main>
+          </Scrollbars>
         {after}
 
         </div>
