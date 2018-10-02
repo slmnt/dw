@@ -40,7 +40,7 @@ class Py extends Component {
         value: '',
         open: false,
         filename: '',
-        type: '.py'
+        type: '.py',
     };
 
     constructor(props){
@@ -51,8 +51,7 @@ class Py extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.handleChanged = this.handleChanged.bind(this)
-
-        console.log(props.parent)
+        this.fixtext = this.fixtext.bind(this)
     }
 
     componentWillMount(){
@@ -63,7 +62,10 @@ class Py extends Component {
         })      
 
     }
-
+    fixtext(editor,data,value){
+        console.log(data.text[0])
+        console.log(data.from)
+    }
     clicked(e){
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -103,7 +105,6 @@ class Py extends Component {
     };
 
     savelocal(){
-        console.log(this.state.value)
         var blob = new Blob([this.state.value], {type:"text/plain;charset=utf-8"});
         saveAs(blob,this.state.filename + this.state.type)
         this.handleClose()
@@ -130,8 +131,7 @@ class Py extends Component {
                 onBeforeChange={(editor, data, value) => {
                     this.setState({value});
                 }}
-                onChange={(editor, data, value) => {
-                }}
+                onChange={(editor, data, value) => this.fixtext(editor,data,value)}
                 />
                 <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked} small="true">
                     Submit

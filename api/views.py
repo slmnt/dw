@@ -373,15 +373,17 @@ class Python(viewsets.ModelViewSet):
         ctext = request.data['contents']
         new_board = Testboard(text=ctext)
         new_board.save()
+        filename = Code.objects.all().count()
+        filename += 1
         #create dump file
         #open stdin stderr file
         output = open(STATIC + 'output.txt', 'w')
         inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + 'p1.py', 'w', encoding='utf-8')
+        pin = open(STATIC + str(filename) + '.py', 'w', encoding='utf-8')
         pin.write(ctext)
         pin.close()
         #build subprocess 
-        cmd = "python " + STATIC + 'p1.py'
+        cmd = "python " + STATIC + str(filename) + '.py'
         p = subprocess.Popen(cmd.split(), stdout=output, stderr=output)
         dump = ''
         flag = True

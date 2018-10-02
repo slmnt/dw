@@ -17,6 +17,7 @@ import { withRouter } from 'react-router'
 import axios from 'axios';
 import { ListItem, Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
+import Button from '@material-ui/core/Button';
 
 import Bottom from './components/Bottom';
 import Left from './components/Left';
@@ -44,8 +45,8 @@ const styles = theme => ({
     top: '0%'
   },
   appBar: {
-    backgroundColor: '#212121',
     position: 'absolute',
+    backgroundColor: '#212121',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -110,6 +111,11 @@ const styles = theme => ({
   'contentShift-right': {
     marginRight: 3,
   },
+  test: {
+    position: 'absolute',
+    left: '85%'
+    
+  }
 });
 
 class App extends React.Component {
@@ -117,7 +123,8 @@ class App extends React.Component {
     open: false,
     anchor: 'left',
     login: false,
-    uid: ''
+    uid: '',
+    current: '',
   };
 
   constructor(props){
@@ -127,7 +134,7 @@ class App extends React.Component {
     this.drop = this.drop.bind(this)
     this.drawercloseer = this.drawercloseer.bind(this)
 
-    console.log(props.history.location.pathname)
+    // console.log(props.history.location.pathname)
 
   }
 
@@ -155,21 +162,34 @@ class App extends React.Component {
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
     // user platform check
-    console.log(window.navigator.platform)
+    // console.log(window.navigator.platform)
+    if(this.props.history.location.pathname === '/'){
+      axios.get('/api/cookieauth/').then((response) => {
+        if (response.status === 200){
+          this.setState({
+            uid: response.data,
+            login: true
+          })
+          this.clicked('mypage')
+        } else {
+          this.clicked('/') 
+        }
+      }).catch((e) => {
+  
+      })
+    }
+    else {
+      axios.get('/api/cookieauth/').then((response) => {
+        if (response.status === 200){
+          this.setState({
+            uid: response.data,
+            login: true
+          })
+        }
+      }).catch((e) => {
+      })      
+    }
 
-    axios.get('/api/cookieauth/').then((response) => {
-      if (response.status === 200){
-        this.setState({
-          uid: response.data,
-          login: true
-        })
-        this.clicked('mypage')
-      } else {
-        this.clicked('/') 
-      }
-    }).catch((e) => {
-
-    })
 
   }
 
@@ -209,6 +229,7 @@ class App extends React.Component {
     console.log('error')
   }
   clicked(e){
+    this.setState({current: e})
     this.props.history.push(e)
   }
 
@@ -265,29 +286,38 @@ class App extends React.Component {
           </IconButton>
         </div>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/py')}><Typography>python</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('py')}><Typography>python</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/right')}><Typography>right</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/left')}><Typography>left</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('left')}><Typography>left</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/main')}><Typography>main</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/bottom')}><Typography>bottom</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('bottom')}><Typography>bottom</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/test')}><Typography>tets</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('test')}><Typography>tets</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/mypage')}><Typography>mypage</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('mypage')}><Typography>mypage</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('/codemain')}><Typography>codemain</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.clicked('codemain')}><Typography>codemain</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
       </Drawer>
     );
 
+    const logout = (
+      <Button color="inherit" onClick={this.drop}>Logout</Button>
+    )
     let before = null;
     let after = null;
+    let log = null
 
+    if(this.state.login){
+      log = logout
+    } else{
+      log = null
+    }
     if (anchor === 'left') {
       if(this.state.login)
         before = drawer;
@@ -312,7 +342,7 @@ class App extends React.Component {
               [classes[`appBarShift-${anchor}`]]: open,
             })}
           >
-            <Toolbar disableGutters={!open}>
+            <Toolbar disableGutters={!open} >
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
@@ -322,11 +352,11 @@ class App extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Typography variant="title" color="inherit" noWrap>
-                our service
+                {this.state.current}
               </Typography>
-              <Typography onClick={this.drop}>
-                Logout
-              </Typography>
+              <div className={classes.test}>
+                {log}
+              </div>
             </Toolbar>
           </AppBar>
           {before}
@@ -354,7 +384,6 @@ class App extends React.Component {
         {after}
 
         </div>
-      <footer>Licensed under MIT</footer>
       </div>
       </div>
     );

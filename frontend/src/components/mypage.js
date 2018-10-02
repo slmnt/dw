@@ -6,34 +6,39 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const styles = theme => ({
     root: {
         flexGrow: 1,
-      },
-      paper: {
-        height: window.innerHeight / 7,
-        width: window.innerWidth / 7,
-      },
-      sub: {
-        height: window.innerHeight / 7,
-        width: window.innerWidth / 4,
-      },
-      one:{
-        width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
-      },
-      control: {
-        padding: theme.spacing.unit * 2,
-      },    
-      action: {
-        borderRadius: 5
-      }
+    },
+    test:{
+        position: 'relative',
+    },
+    paper: {
+    height: window.innerHeight / 7,
+    width: window.innerWidth / 7,
+    },
+    sub: {
+    height: window.innerHeight / 7,
+    width: window.innerWidth / 4,
+    },
+    one:{
+    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
+    },
+    control: {
+    padding: theme.spacing.unit * 2,
+    },    
+    action: {
+    borderRadius: 5
+    }
 })
 // react-paginatge is crash react meterial-ui
   class Mypage extends Component {
     state = {
         spacing: '16',
-        userinfo: {}
+        userinfo: {},
+        c: 10/26 * 100,
     };
 
     constructor(props){
@@ -57,7 +62,7 @@ const styles = theme => ({
         const { spacing } = this.state;
 
         return (
-            <div>
+            <div className={this.props.classes.test}>
                 <Grid container className={this.props.classes.root} spacing={16}>
                     <Grid container spacing={Number(spacing)}>
                         <Grid item>
@@ -89,7 +94,9 @@ const styles = theme => ({
                         <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('c')}>
                         <Card className={this.props.classes.one}>
                                 <CardContent>
-                                    c
+                                    <Typography>c </Typography>
+                                    <LinearProgress variant="determinate" value={this.state.c} />       
+                                    <Typography align='right'>10/26</Typography>                             
                                 </CardContent>
                         </Card>
                         </CardActionArea>

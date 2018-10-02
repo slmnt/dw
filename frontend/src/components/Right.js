@@ -112,7 +112,7 @@ const styles = ({
                                     {el.createat}
                                 </Typography>
                                 <Typography component="p">
-                                    {el.source}
+                                    { el.source}
                                 </Typography>
                                 </CardContent>
                                 </Card>
