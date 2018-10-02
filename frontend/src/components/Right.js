@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import ReactPaginate from 'react-paginate';
 
 const styles = ({
     card: {
@@ -22,15 +23,13 @@ const styles = ({
   class Right extends Component {
     state = {
         data: [],
-        activePage: 1,
+        pageCount: 5
     };
 
     constructor(props) {
         super(props);
 
-        this.handlePageChange = this._handlePageChange.bind(this);
     }
-
 
     componentDidMount(){
         axios.get('/api/getboard/').then(response => {
@@ -39,10 +38,9 @@ const styles = ({
         })
     }
 
-    _handlePageChange(pageNumber) {
-        console.log(`active page is ${pageNumber}`);
-        this.setState({activePage: pageNumber});
-    }
+    handlePageClick = (data) => {
+        console.log(data)
+    };
     
     render() {
 
@@ -51,7 +49,8 @@ const styles = ({
             {(() => {
                 if(this.state.data.length > 0){
                     return(
-                        this.state.data.map(el => (
+                        <div>
+                        {this.state.data.map(el => (
                             <div key={el.id}>
                                 <Card className={this.props.classes.card}>
                                 <CardContent>
@@ -69,16 +68,28 @@ const styles = ({
                                 </Typography>
                                 </CardContent>
                                 </Card>
-                                <br/>                                                
+                                <br/>
                             </div>
-                        ))
-                    )                    
+                        ))}   
+                        <ReactPaginate previousLabel={"<"}
+                            nextLabel={">"}
+                            breakLabel={<a href="">...</a>}
+                            breakClassName={"break-me"}
+                            pageCount={this.state.pageCount}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={this.handlePageClick}
+                            containerClassName={"pagination"}
+                            subContainerClassName={"pages pagination"}
+                            activeClassName={"active"} />                    
+                        </div>
+                    )
                 }
             })()}
         <br/>
         <br/>
         <br/>
-    </div>        
+    </div>
 		);
   	}
 }

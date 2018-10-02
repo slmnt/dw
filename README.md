@@ -1,7 +1,7 @@
 # 2018DW   
 react - django   
    
-#REFERENCE PAGE   
+# REFERENCE PAGE   
 https://reactjs.org/tutorial/tutorial.html   
 https://v0.material-ui.com/#/   
 https://react-bootstrap.github.io/   
@@ -19,5 +19,5 @@ psql -U django -W -h localhost djangodb
    
       
          
-#FIX List   
+# FIX List   
 Backend use Docker   
