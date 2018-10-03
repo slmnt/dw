@@ -27,7 +27,7 @@ import Py from './components/code/python';
 import Login from './components/Login';
 import Test from './components/Test';
 import Mypage from './components/mypage';
-import Codemain from './components/codemain';
+import codeman from './components/code/codeman';
 
 const drawerWidth = 200;
 
@@ -251,7 +251,7 @@ class App extends React.Component {
       <Route path="/bottom" component={Bottom} />
       <Route path="/test" component={Test} />                      
       <Route path="/mypage" component={Mypage} />                      
-      <Route path="/codemain" component={Codemain} />                      
+      <Route path="/codemain" component={codeman} />                      
       </div>
     );
 

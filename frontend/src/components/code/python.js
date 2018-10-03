@@ -10,7 +10,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/lib/codemirror.css');
@@ -30,9 +29,13 @@ const styles = theme => ({
     margin: {
         margin: theme.spacing.unit,
       },
-      textField: {
+    textField: {
         flexBasis: 280,
-      },    
+    },    
+    test4: {
+        width: window.innerWidth * 0.5,
+        height: window.innerHeight * 0.5
+    }, 
   });
 
 class Py extends Component {
@@ -63,8 +66,6 @@ class Py extends Component {
 
     }
     fixtext(editor,data,value){
-        console.log(data.text[0])
-        console.log(data.from)
     }
     clicked(e){
         axios.defaults.xsrfCookieName = 'csrftoken';
@@ -73,7 +74,6 @@ class Py extends Component {
         /*
         */
        axios.post('/api/python/',{contents: this.state.value}).then(response => {
-           console.log(response)
            this.setState({value: response.data})
        }).catch(e => {
            // console.log(e)
@@ -113,7 +113,7 @@ class Py extends Component {
 
 	render() {
         return (
-            <div>
+            <div className={this.props.classes.test4}>
                 <CodeMirror
                 value={this.state.value}
                 options={{
@@ -121,7 +121,7 @@ class Py extends Component {
                     //mode: 'text/x-csrc',
                     // mode: 'text/x-java',
                     // mode: 'text/x-c++src',
-                     mode: 'text/x-python',
+                    mode: 'text/x-python',
                     theme: 'material',
                     lineNumbers: true
                 }}
