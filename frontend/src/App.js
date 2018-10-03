@@ -15,7 +15,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Route } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import axios from 'axios';
-import { ListItem, Grid } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
