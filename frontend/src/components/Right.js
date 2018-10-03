@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Grid } from '@material-ui/core';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 // react-paginatge is crash react meterial-ui
 const styles = ({
@@ -43,23 +44,18 @@ const styles = ({
     }
 
     componentDidMount(){
-        /*
-            axios.get('/api/getboardnum/').then(response => {
-                this.setState({pagelimit: response.data})
-            })
-            
-            axios.post('/api/getboardpage/',{num: this.state.activePage}).then(response => {
-                this.setState({data: response.data})
-            }).catch(e => {            
-                // console.log(e)
-            })      
-            this.setState({activePage: 1})
-        
-        */
         axios.get('/api/code/').then(response => {
             this.setState({data: response.data})
         })
+    }
 
+    componentWillUnmount(){
+        this.setState({
+            data: null,
+            activePage: null,
+            pagelimit: null,
+            open: null,    
+        })
     }
 
     handlePageClick() {
@@ -92,9 +88,13 @@ const styles = ({
 
     render() {
 
-        return (
-            <div >
-            {(() => {
+        const contxt = (
+            <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
+            <Grid container spacing={24} direction="column">
+              <Grid container item spacing={8} justify="center" >
+                <Grid item xs={6}>
+                <br/>
+                {(() => {
                 if(this.state.data.length > 0){
                     return(
                         <div>
@@ -122,14 +122,12 @@ const styles = ({
                         </div>
                     )
                 }
-            })()}
-        <br/>
-        <br/>      
+                })()}
             <div style={{ display: 'flex', margin: 40}}>
             <Grid container direction="column">
                 <Grid container item justify="center" >
                 <Grid item xs={3}>
-                <CardActionArea onClick={this.handlePageClick}>
+                <CardActionArea  onClick={this.handlePageClick}>
                 <Card className={this.props.classes.card}>
                     <CardContent>
                         <Typography align='center' color='secondary'>
@@ -151,12 +149,21 @@ const styles = ({
                         </DialogContentText>
                     </DialogContent>
                 </Dialog>
-
                 </Grid>
                 </Grid>
             </Grid>
             </div>
         <br/>
+        </Grid>
+        </Grid>
+        </Grid>
+        </Scrollbars>
+
+        )
+
+        return (
+        <div>
+            {contxt}
         </div>        
 		);
   	}

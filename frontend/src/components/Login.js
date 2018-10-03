@@ -62,10 +62,13 @@ class Login extends Component {
             pwd: this.state.password
             }).then(response => {
             // console.log(response)
-            this.props.test({
-                login: true,
-                uid: this.state.name
-            })
+            if(response.data === 1){                
+            }else{
+                this.props.test({
+                    login: true,
+                    uid: this.state.name
+                })
+            }
           }).catch(e => {
             // console.log(e)
           })              
@@ -143,8 +146,6 @@ class Login extends Component {
                 </Grid>
                 </Grid>
             </Grid>
-
-
             </div>
 		);
   	}
