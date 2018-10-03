@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {Controlled as CodeMirror} from 'react-codemirror2'
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
@@ -10,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {Controlled as CodeMirror} from 'react-codemirror2'
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 require('codemirror/lib/codemirror.css');
@@ -34,7 +34,7 @@ const styles = theme => ({
     },    
     test4: {
         width: window.innerWidth * 0.5,
-        height: window.innerHeight * 0.5
+        height: window.innerHeight * 0.3
     }, 
   });
 
@@ -48,7 +48,16 @@ class Py extends Component {
 
     constructor(props){
         super(props)
-
+/**
+                <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked} small="true">
+                    Submit
+                </Button>
+                <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.handleClickOpen} small="true">
+                    Save
+                </Button>
+ * 
+ * 
+ */
         this.clicked = this.clicked.bind(this)
         this.savelocal = this.savelocal.bind(this)        
         this.handleClickOpen = this.handleClickOpen.bind(this)
@@ -58,12 +67,6 @@ class Py extends Component {
     }
 
     componentWillMount(){
-        axios.get('/api/code/').then(response => {
-            // console.log(response)
-        }).catch(e => {
-            // console.log(e)
-        })      
-
     }
     fixtext(editor,data,value){
     }
@@ -115,6 +118,7 @@ class Py extends Component {
         return (
             <div className={this.props.classes.test4}>
                 <CodeMirror
+                id="code"
                 value={this.state.value}
                 options={{
                     //mode: 'xml',
@@ -123,20 +127,13 @@ class Py extends Component {
                     // mode: 'text/x-c++src',
                     mode: 'text/x-python',
                     theme: 'material',
-                    lineNumbers: true
+                    lineNumbers: true,
                 }}
-
                 onBeforeChange={(editor, data, value) => {
                     this.setState({value});
                 }}
                 onChange={(editor, data, value) => this.fixtext(editor,data,value)}
                 />
-                <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked} small="true">
-                    Submit
-                </Button>
-                <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.handleClickOpen} small="true">
-                    Save
-                </Button>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
