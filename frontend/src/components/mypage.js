@@ -95,6 +95,7 @@ const styles = theme => ({
                         <Card className={this.props.classes.one}>
                                 <CardContent>
                                     <Typography>c </Typography>
+                                    <br/>
                                     <LinearProgress variant="determinate" value={this.state.c} />       
                                     <Typography align='right'>10/26</Typography>                             
                                 </CardContent>
