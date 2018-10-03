@@ -37,12 +37,13 @@ const styles = theme => ({
   },
   appFrame: {
     height: '100%',
+    zIndex: 1,
     overflow: 'hidden',
     position: 'absolute',
     display: 'flex',
     width: '100%',
-    left: '0%',
-    top: '0%'
+    left: 0,
+    top: 0,
   },
   appBar: {
     position: 'absolute',
@@ -66,10 +67,8 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
-    justifyContent: 'flex-end',
-  },
-  logoutButton:{
-    justifyContent: 'flex-end',
+    marginLeft: 12,
+    marginRight: 20,
   },
   hide: {
     display: 'none',
@@ -82,12 +81,12 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: '1px',
+    padding: '0 8px',
     ...theme.mixins.toolbar,
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -106,15 +105,17 @@ const styles = theme => ({
     }),
   },
   'contentShift-left': {
-    marginLeft: 3,
+    marginLeft: 0,
   },
   'contentShift-right': {
-    marginRight: 3,
+    marginRight: 0,
+  },  
+  logoutButton: {
+    position: 'absolute',
+    left: '85%'    
   },
   test: {
-    position: 'absolute',
-    left: '85%'
-    
+    backgroundColor: 'red'
   }
 });
 
@@ -135,7 +136,6 @@ class App extends React.Component {
     this.drawercloseer = this.drawercloseer.bind(this)
 
     // console.log(props.history.location.pathname)
-
   }
 
   drop(){
@@ -234,6 +234,7 @@ class App extends React.Component {
   }
 
   render() {
+    // update rendering
     const { classes, theme } = this.props;
     const { anchor, open } = this.state;
 
@@ -280,6 +281,7 @@ class App extends React.Component {
           paper: classes.drawerPaper,
         }}
       >
+        <Scrollbars>        
         <div className={classes.drawerHeader}>
           <IconButton onClick={this.handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -303,12 +305,14 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('codemain')}><Typography>codemain</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
+        </Scrollbars>
       </Drawer>
     );
 
     const logout = (
       <Button color="inherit" onClick={this.drop}>Logout</Button>
-    )
+    );
+
     let before = null;
     let after = null;
     let log = null
@@ -322,7 +326,7 @@ class App extends React.Component {
       if(this.state.login)
         before = drawer;
       else
-        before = planed;    
+        before = null;    
 
     } else {
       if(this.state.login)
@@ -332,7 +336,6 @@ class App extends React.Component {
     }
 
     return (
-      <div>
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <AppBar
@@ -342,7 +345,7 @@ class App extends React.Component {
               [classes[`appBarShift-${anchor}`]]: open,
             })}
           >
-            <Toolbar disableGutters={!open} >
+            <Toolbar disableGutters={!open}>
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
@@ -354,37 +357,24 @@ class App extends React.Component {
               <Typography variant="title" color="inherit" noWrap>
                 {this.state.current}
               </Typography>
-              <div className={classes.test}>
+              <div className={classes.logoutButton}>
                 {log}
               </div>
             </Toolbar>
           </AppBar>
           {before}
-          <Scrollbars universal>
           <main
+            onClick={this.drawercloseer}
             className={classNames(classes.content, classes[`content-${anchor}`], {
               [classes.contentShift]: open,
               [classes[`contentShift-${anchor}`]]: open,
             })}
           >
-            <div style={{ display: 'flex', margin: 40}} onClick={this.drawercloseer}>
-              <Grid container spacing={24} direction="column">
-                <Grid container item spacing={0} justify="center" >
-                  <Grid item xs={6}>
-                  <br/>
-                  <br/>
-                  <br/>
+            <div className={classes.drawerHeader} />
                   {contents}                                  
-                  </Grid>
-                </Grid>
-              </Grid>
-            </div>
           </main>
-          </Scrollbars>
-        {after}
-
+          {after}
         </div>
-      </div>
       </div>
     );
   }

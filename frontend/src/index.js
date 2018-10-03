@@ -25,7 +25,7 @@ class Index extends Component {
 
 render(
   <BrowserRouter >
-  <Index />
+      <Index />
   </BrowserRouter>
   ,
   document.getElementById('root')

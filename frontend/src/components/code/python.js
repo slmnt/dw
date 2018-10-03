@@ -114,8 +114,6 @@ class Py extends Component {
 	render() {
         return (
             <div>
-                <br/>
-                <br/>
                 <CodeMirror
                 value={this.state.value}
                 options={{

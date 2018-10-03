@@ -13,7 +13,7 @@ const styles = theme => ({
         flexGrow: 1,
     },
     test:{
-        position: 'relative',
+        position: 'static',
     },
     paper: {
     height: window.innerHeight / 7,
@@ -63,7 +63,7 @@ const styles = theme => ({
 
         return (
             <div className={this.props.classes.test}>
-                <Grid container className={this.props.classes.root} spacing={16}>
+                <Grid container className={this.props.classes.root}>
                     <Grid container spacing={Number(spacing)}>
                         <Grid item>
                             <Card className={this.props.classes.paper}>

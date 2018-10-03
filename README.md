@@ -22,3 +22,4 @@ dropdb -U django djangodb
 # FIX List   
 Backend use Docker   
 Api request error fix solution-> js timer api request 5times   
+react route scrollbar error cant rendering   
