@@ -3,7 +3,7 @@ import { GoldenLayoutComponent } from "./goldenLayoutComponent";
 import Left from '../Left'
 import python from './python'
 import PropTypes from 'prop-types';
-
+import right from '../Right'
 // react-paginatge is crash react meterial-ui
 class Codeman extends Component {
     state = { 
@@ -22,7 +22,7 @@ class Codeman extends Component {
                     {
                         title: "Main contents",
                         type: "react-component",
-                        component: "testItem",
+                        component: "right",
                     },
                     {
                         type: "column",
@@ -41,6 +41,7 @@ class Codeman extends Component {
               ]
             }}
             registerComponents={myLayout => {
+                myLayout.registerComponent("right", right);
               myLayout.registerComponent("testItem", Left);
               myLayout.registerComponent("python", python);
             }}
