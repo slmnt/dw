@@ -27,7 +27,6 @@ class Main extends Component {
 
   handleChange(event) {
     this.setState({value: event.target.value});
-    this.props.test(event.target.value)
   }
   showposition(position){
     // console.log(position.coords.latitude +':' + position.coords.longitude)

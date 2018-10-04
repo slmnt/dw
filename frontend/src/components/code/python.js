@@ -118,7 +118,6 @@ class Py extends Component {
         return (
             <div className={this.props.classes.test4}>
                 <CodeMirror
-                id="code"
                 value={this.state.value}
                 options={{
                     //mode: 'xml',

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   test: {
@@ -13,11 +14,25 @@ class left extends React.Component {
     open: false,
     anchor: 'left',
   };
+  
+  constructor(props){
+    super(props)
+
+    this.test = props.test
+    this.handleChange = this.handleChange.bind(this);
+
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
   render() {
 
     return (
       <div>
-        test
+
+        <Button onClick={this.test}>test</Button>
       </div>
     );
   }

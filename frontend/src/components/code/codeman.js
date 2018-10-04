@@ -7,11 +7,25 @@ import right from '../Right'
 // react-paginatge is crash react meterial-ui
 class Codeman extends Component {
     state = { 
-        contextValue: "default value" 
+        contextValue: "default value",
+        val: 'init'
     };
+
+    constructor(props){
+        super(props)
+
+        this.test = this.test.bind(this)
+    }
+
+    test(){ 
+        this.setState({val: 'change'})
+        console.log(this.state.val)
+    }
     render() {
 
         return (
+            <div>
+                {this.state.val}
             <GoldenLayoutComponent //config from simple react example: https://golden-layout.com/examples/#qZXEyv
             htmlAttrs={{ style: { height: window.innerHeight, width: window.innerWidth } }}
             config={{
@@ -33,7 +47,8 @@ class Codeman extends Component {
                         },{
                             title: "Main result",
                             type: "react-component",
-                            component: "testItem"
+                            component: "testItem",
+                            props: { test: this.test, val: this.state.val }
                         }]
                     }
                   ]
@@ -42,10 +57,12 @@ class Codeman extends Component {
             }}
             registerComponents={myLayout => {
                 myLayout.registerComponent("right", right);
-              myLayout.registerComponent("testItem", Left);
-              myLayout.registerComponent("python", python);
+                myLayout.registerComponent("testItem", Left);
+                myLayout.registerComponent("python", python);
             }}
             />        
+            </div>
+
         );
   	}
 }
