@@ -1,45 +1,54 @@
 import React, { Component } from 'react';   
-import { withStyles } from '@material-ui/core/styles';
-import GoldenLayout from 'golden-layout';
-
-const styles = theme => ({
-    test: {
-        height: window.innerHeight
-    },
-})
+import { GoldenLayoutComponent } from "./goldenLayoutComponent";
+import Left from '../Left'
+import python from './python'
+import PropTypes from 'prop-types';
 
 // react-paginatge is crash react meterial-ui
-  class Codeman extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    /* you can pass config as prop, or use a predefined one */
-    // const instance = new GoldenLayout(this.props.config);
-    /* register components or bind events to your new instance here */
-    // instance.init();
-        console.log(this.props)
-    }    
-    getInitialState(){
-        return { value: this.props.value || 'bla' };
-    }
-
-    setValue(e){
-        this.setState({ value: e.target.value });
-    }
-    setContainerTitle(){
-        this.props.glContainer.setTitle( this.state.value );
-    }
+class Codeman extends Component {
+    state = { 
+        contextValue: "default value" 
+    };
     render() {
-        const { classes, theme } = this.props;
 
         return (
-            <div>
-                test
-            </div>
+            <GoldenLayoutComponent //config from simple react example: https://golden-layout.com/examples/#qZXEyv
+            htmlAttrs={{ style: { height: window.innerHeight, width: window.innerWidth } }}
+            config={{
+              content: [
+                {
+                type: "row",
+                content: [
+                    {
+                        title: "Main contents",
+                        type: "react-component",
+                        component: "testItem",
+                    },
+                    {
+                        type: "column",
+                        content: [{
+                            title: "Main Code",
+                            type: "react-component",
+                            component: "python"
+                        },{
+                            title: "Main result",
+                            type: "react-component",
+                            component: "testItem"
+                        }]
+                    }
+                  ]
+                }
+              ]
+            }}
+            registerComponents={myLayout => {
+              myLayout.registerComponent("testItem", Left);
+              myLayout.registerComponent("python", python);
+            }}
+            />        
         );
   	}
 }
 
-export default withStyles(styles)(Codeman);
+Codeman.PropTypes = PropTypes;
+
+export default Codeman;
