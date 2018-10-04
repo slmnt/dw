@@ -32,7 +32,7 @@ class left extends React.Component {
     return (
       <div>
 
-        <Button onClick={this.test}>test</Button>
+        <Button onClick={e => this.test('test')}>test</Button>
       </div>
     );
   }

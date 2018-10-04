@@ -17,8 +17,8 @@ class Codeman extends Component {
         this.test = this.test.bind(this)
     }
 
-    test(){ 
-        this.setState({val: 'change'})
+    test(e){ 
+        this.setState({val: e})
         console.log(this.state.val)
     }
     render() {
