@@ -1,14 +1,14 @@
 import React, { Component } from 'react';   
 import { GoldenLayoutComponent } from "./goldenLayoutComponent";
-import Left from '../Left'
 import python from './python'
 import PropTypes from 'prop-types';
-import right from '../Right'
+import pycource1 from './course/python/course1'
+import result from './result'
 // react-paginatge is crash react meterial-ui
 class Codeman extends Component {
     state = { 
         contextValue: "default value",
-        val: 'init'
+        val: ''
     };
 
     constructor(props){
@@ -16,20 +16,24 @@ class Codeman extends Component {
         
         document.addEventListener('keypress', this.event)
         this.test = this.test.bind(this)
+        this.getval = this.getval.bind(this)
     }
 
     event(){
-        console.log('evnet')
+        // console.log('evnet')
     }
+    getval(){
+        return this.state.val
+    }
+    
     test(e){ 
+        // console.log(e)
         this.setState({val: e})
-        console.log(this.state.val)
     }
     render() {
 
         return (
             <div>
-                {this.state.val}
             <GoldenLayoutComponent //config from simple react example: https://golden-layout.com/examples/#qZXEyv
             htmlAttrs={{ style: { height: window.innerHeight, width: window.innerWidth } }}
             config={{
@@ -40,7 +44,7 @@ class Codeman extends Component {
                     {
                         title: "Main contents",
                         type: "react-component",
-                        component: "right",
+                        component: "main",
                         isClosable: false,
                     },
                     {
@@ -48,14 +52,15 @@ class Codeman extends Component {
                         content: [{
                             title: "Main Code",
                             type: "react-component",
-                            component: "python",
-                            isClosable: false
+                            component: "code",
+                            isClosable: false,
+                            props: { set: this.test }
                         },{
                             title: "Main result",
                             type: "react-component",
-                            component: "testItem",
+                            component: "result",
                             isClosable: false,
-                            props: { test: this.test }
+                            props: { get: this.getval }
                         }]
                     }
                   ]
@@ -63,9 +68,9 @@ class Codeman extends Component {
               ]
             }}
             registerComponents={myLayout => {
-                myLayout.registerComponent("right", right);
-                myLayout.registerComponent("testItem", Left);
-                myLayout.registerComponent("python", python);
+                myLayout.registerComponent("main", pycource1);
+                myLayout.registerComponent("result", result);
+                myLayout.registerComponent("code", python);
             }}
             />        
             </div>
