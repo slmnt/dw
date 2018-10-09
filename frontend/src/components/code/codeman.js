@@ -13,10 +13,14 @@ class Codeman extends Component {
 
     constructor(props){
         super(props)
-
+        
+        document.addEventListener('keypress', this.event)
         this.test = this.test.bind(this)
     }
 
+    event(){
+        console.log('evnet')
+    }
     test(e){ 
         this.setState({val: e})
         console.log(this.state.val)
@@ -37,18 +41,21 @@ class Codeman extends Component {
                         title: "Main contents",
                         type: "react-component",
                         component: "right",
+                        isClosable: false,
                     },
                     {
                         type: "column",
                         content: [{
                             title: "Main Code",
                             type: "react-component",
-                            component: "python"
+                            component: "python",
+                            isClosable: false
                         },{
                             title: "Main result",
                             type: "react-component",
                             component: "testItem",
-                            props: { test: this.test, val: this.state.val }
+                            isClosable: false,
+                            props: { test: this.test }
                         }]
                     }
                   ]

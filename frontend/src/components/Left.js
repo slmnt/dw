@@ -41,11 +41,12 @@ class left extends React.Component {
         <AceEditor
       mode="python"
       theme="monokai"
-      onChange={e => this.onChange}
+      value={this.state.val}
+      onChange={(e) => this.onChange(e)}
       name="UNIQUE_ID_OF_DIV"
       fontSize={18}
       height={100}
-      editorProps={{$blockScrolling: false}}
+      editorProps={{$blockScrolling: Infinity}}
       setOptions={{
         enableBasicAutocompletion: false,
         enableLiveAutocompletion: true,
@@ -54,8 +55,8 @@ class left extends React.Component {
         tabSize: 4,
         }}      
       />
-      <Button onClick={e => this.test('test')}>test</Button>
-
+      <Button onClick={e => this.test(this.state.val)}>test</Button>
+      {this.state.val}
       </div>
     );
   }
