@@ -189,8 +189,6 @@ class App extends React.Component {
       }).catch((e) => {
       })      
     }
-
-
   }
 
   statecallback = (datafromchild) => {
