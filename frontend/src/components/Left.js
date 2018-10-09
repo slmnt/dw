@@ -18,7 +18,9 @@ const styles = theme => ({
 
 class left extends React.Component {
   state = {
-    val: ''
+    val: '',
+    h: 0,
+    w: 0
   };
   
   constructor(props){
@@ -26,16 +28,21 @@ class left extends React.Component {
 
     this.test = props.test
     this.onChange = this.onChange.bind(this)
-    console.log(window.innerHeight)
-    console.log(window.innerWidth)
+    console.log(props.glContainer.height)
+    console.log(props.glContainer.width)
+    this.setState({
+      h: props.glContainer.height,
+      w: props.glContainer.width
+    })
   }
+  
 
   onChange(newValue) {
     this.setState({val: newValue})
   }
   
   render() {
-
+    console.log(this.state)
     return (
       <div>
         <AceEditor
