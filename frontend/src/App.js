@@ -242,9 +242,7 @@ class App extends React.Component {
       setting react router route
       */}
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-      <Route path="/py" component={Py} />
       <Route path="/right" component={Right} />
-      <Route path="/left" component={Left} />
       <Route path="/main" component={Main}/>
       <Route path="/bottom" component={Bottom} />
       <Route path="/test" component={Test} />                      
@@ -286,11 +284,7 @@ class App extends React.Component {
           </IconButton>
         </div>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('py')}><Typography>python</Typography></ListItem></List>
-        <Divider />
         <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('left')}><Typography>left</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
         <Divider />

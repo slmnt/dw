@@ -13,11 +13,16 @@ class Codeman extends Component {
 
     constructor(props){
         super(props)
+
         
         document.addEventListener('keypress', this.event)
         this.test = this.test.bind(this)
         this.getval = this.getval.bind(this)
     }
+    componentDidCatch(error, info){
+        console.log('error')
+      }
+    
 
     event(){
         // console.log('evnet')
@@ -46,6 +51,7 @@ class Codeman extends Component {
                         type: "react-component",
                         component: "main",
                         isClosable: false,
+                        props: {location: this.props.location}
                     },
                     {
                         type: "column",
