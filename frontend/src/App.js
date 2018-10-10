@@ -19,11 +19,12 @@ import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
+
 import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';
 import Right from './components/Right';
-import Py from './components/code/python';
+import three from './components/three';
 import Login from './components/Login';
 import Test from './components/Test';
 import Mypage from './components/mypage';
@@ -248,6 +249,7 @@ class App extends React.Component {
       <Route path="/test" component={Test} />                      
       <Route path="/mypage" component={Mypage} />                      
       <Route path="/codemain" component={codeman} />                      
+      <Route path="/three" component={three} />                      
       </div>
     );
 
@@ -283,6 +285,8 @@ class App extends React.Component {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
         <Divider />
