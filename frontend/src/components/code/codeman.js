@@ -14,8 +14,6 @@ class Codeman extends Component {
     constructor(props){
         super(props)
 
-        
-        document.addEventListener('keypress', this.event)
         this.test = this.test.bind(this)
         this.getval = this.getval.bind(this)
     }
@@ -23,10 +21,6 @@ class Codeman extends Component {
         console.log('error')
       }
     
-
-    event(){
-        // console.log('evnet')
-    }
     getval(){
         return this.state.val
     }

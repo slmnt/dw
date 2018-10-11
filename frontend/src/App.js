@@ -229,6 +229,7 @@ class App extends React.Component {
   }
   clicked(e){
     this.setState({current: e})
+    this.props.location.pathname = '/' + e
     this.props.history.push(e)
   }
 

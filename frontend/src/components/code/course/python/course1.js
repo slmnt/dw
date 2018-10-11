@@ -1,5 +1,6 @@
 import React, { Component } from 'react';   
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars';
 
 class course1 extends Component {
 
@@ -11,7 +12,8 @@ class course1 extends Component {
 
     render() {
 
-        return (
+      return (
+           <Scrollbars style={{ width: this.props.glContainer.width, height:  this.props.glContainer.height}}>
             <Router>
             <div>
               <ul>
@@ -27,12 +29,13 @@ class course1 extends Component {
               </ul>
         
               <hr />
-        
+
               <Route exact path="/codemain/home" component={Home} />
               <Route path="/codemain/about" component={About} />
               <Route path="/codemain/topics" component={Topics} />
             </div>
             </Router>
+            </Scrollbars>
         );
   	}
 }
@@ -76,6 +79,28 @@ const Topics = ({ match }) => (
 const Topic = ({ match }) => (
   <div>
     <h3>{match.params.topicId}</h3>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
+    test<br/>
   </div>
 );
 
