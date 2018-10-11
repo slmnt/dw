@@ -24,11 +24,11 @@ import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';
 import Right from './components/Right';
-import three from './components/three';
+import Three from './components/three';
 import Login from './components/Login';
 import Test from './components/Test';
 import Mypage from './components/mypage';
-import codeman from './components/code/codeman';
+import Codeman from './components/code/codeman';
 
 const drawerWidth = 200;
 
@@ -135,6 +135,7 @@ class App extends React.Component {
     this.statecallback = this.statecallback.bind(this)
     this.drop = this.drop.bind(this)
     this.drawercloseer = this.drawercloseer.bind(this)
+    this.testprops = this.testprops.bind(this)
 
     // console.log(props.history.location.pathname)
   }
@@ -233,6 +234,11 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
+  testprops(){
+    console.log(this.state.current)
+  }
+
+
   render() {
     // update rendering
     const { classes, theme } = this.props;
@@ -246,11 +252,9 @@ class App extends React.Component {
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
       <Route path="/right" component={Right} />
       <Route path="/main" component={Main}/>
-      <Route path="/bottom" component={Bottom} />
-      <Route path="/test" component={Test} />                      
-      <Route path="/mypage" component={Mypage} />                      
-      <Route path="/codemain" component={codeman} />                      
-      <Route path="/three" component={three} />                      
+      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops}/>} />                      
+      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} />}/>                      
+      <Route path="/three" render={(props) => <Three {...props}/>} />                      
       </div>
     );
 
@@ -293,13 +297,7 @@ class App extends React.Component {
         <Divider />
         <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('bottom')}><Typography>bottom</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('test')}><Typography>tets</Typography></ListItem></List>
-        <Divider />
         <List><ListItem button onClick={e => this.clicked('mypage')}><Typography>mypage</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('codemain')}><Typography>codemain</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>
