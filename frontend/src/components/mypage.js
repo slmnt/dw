@@ -45,11 +45,13 @@ const styles = theme => ({
         super(props)
         // return backpage
         // props.history.goBack()
-        console.log()
+        console.log(props)
+        // props.gogo()
     }
 
     onclicked(e){
-        console.log(e)
+        var base = '/codemain/'
+        this.props.history.push(base + e)
     }
 
     componentDidMount(){
@@ -95,7 +97,7 @@ const styles = theme => ({
                     <Grid container>
                         <Grid item>
                         <br/>
-                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('c')}>
+                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('C')}>
                         <Card className={this.props.classes.one}>
                                 <CardContent>
                                     <Typography>c </Typography>
@@ -110,7 +112,7 @@ const styles = theme => ({
                     <Grid container>
                         <Grid item>
                         <br/>
-                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('cpp')}>
+                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Cpp')}>
                         <Card className={this.props.classes.one}>
                                 <CardContent>
                                     cpp
@@ -122,7 +124,7 @@ const styles = theme => ({
                     <Grid container>
                         <Grid item>
                         <br/>
-                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('java')}>
+                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Java')}>
                         <Card className={this.props.classes.one}>
                                 <CardContent>
                                     java
@@ -134,7 +136,7 @@ const styles = theme => ({
                     <Grid container>
                         <Grid item>
                         <br/>
-                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('python')}>
+                        <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Python')}>
                         <Card className={this.props.classes.one}>
                                 <CardContent>
                                     python

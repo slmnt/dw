@@ -13,14 +13,14 @@ class Codeman extends Component {
 
     constructor(props){
         super(props)
-
+        console.log(props)
         this.test = this.test.bind(this)
         this.getval = this.getval.bind(this)
     }
     componentDidCatch(error, info){
         console.log('error')
-      }
-    
+    }
+
     getval(){
         return this.state.val
     }
