@@ -52,7 +52,6 @@ const styles = theme => ({
         console.log(e)
     }
 
-
     componentDidMount(){
         axios.get('/api/user/').then(response => {
             this.setState({userinfo: response.data})
