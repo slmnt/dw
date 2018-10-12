@@ -19,7 +19,6 @@ import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
-
 import Bottom from './components/Bottom';
 import Left from './components/Left';
 import Main from './components/Main';

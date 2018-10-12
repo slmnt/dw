@@ -64,6 +64,10 @@ const styles = theme => ({
 
         return (
             <div className={this.props.classes.test}>
+            <br/>
+                <Grid container spacing={24} direction="column">
+                <Grid container item  justify="center" >
+                <Grid item xs={6}>
                 <Grid container className={this.props.classes.root}>
                     <Grid container spacing={Number(spacing)}>
                         <Grid item>
@@ -140,7 +144,11 @@ const styles = theme => ({
                         </CardActionArea>
                         </Grid>
                     </Grid>                    
+                    </Grid>
                 </Grid>
+                </Grid>
+                </Grid>
+
             </div>        
 		);
   	}
