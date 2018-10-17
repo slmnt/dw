@@ -13,8 +13,9 @@ class course1 extends Component {
            <Scrollbars style={{ width: this.props.glContainer.width, height:  this.props.glContainer.height}}>
             <Router>
             <div>
-              <Route exact path="/codemain/home" component={c2} />
+              <Route path="/codemain/home" component={c2} />
               <Route path="/codemain/C" component={c2} />
+              <Route path="/codemain/C/:id" component={c2} />
               <Route path="/codemain/Cpp" component={c2} />
               <Route path="/codemain/Python" component={c2} />
               <Route path="/codemain/Ruby" component={c2} />

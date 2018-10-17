@@ -33,11 +33,12 @@ const styles = theme => ({
     borderRadius: 5
     }
 })
+
 // react-paginatge is crash react meterial-ui
-  class Mypage extends Component {
+class Mypage extends Component {
     state = {
         spacing: '16',
-        userinfo: {},
+        userinfo: {},        
         c: 10/26 * 100,
     };
 
@@ -50,7 +51,7 @@ const styles = theme => ({
     }
 
     onclicked(e){
-        var base = '/codemain/'
+        const base = '/codemain/'
         this.props.history.push(base + e)
     }
 
@@ -149,7 +150,6 @@ const styles = theme => ({
                 </Grid>
                 </Grid>
                 </Grid>
-
             </div>        
 		);
   	}

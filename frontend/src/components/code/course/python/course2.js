@@ -5,11 +5,12 @@ class course2 extends Component {
 
     constructor(props){
         super(props)
+        console.log(props.match.params)
         this.onclick = this.onclick.bind(this)
     }
 
     onclick(){
-        this.props.history.push('/codemain')
+        this.props.history.push('/codemain/C')
     }
 
     render() {
