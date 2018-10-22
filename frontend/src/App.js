@@ -132,6 +132,7 @@ class App extends React.Component {
     this.drop = this.drop.bind(this)
     this.drawercloseer = this.drawercloseer.bind(this)
     this.testprops = this.testprops.bind(this)
+    this.gomypage = this.gomypage.bind(this)
 
     // console.log(props.history.location.pathname)
   }
@@ -230,6 +231,21 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
+  gomypage(e){
+
+    if(this.state.login){
+      e = 'mypage'      
+    }
+    else{
+      e = 'login'
+    }
+
+    this.setState({current: e})
+    this.props.location.pathname = '/' + e
+    this.props.history.push(e)
+  }
+
+
   testprops(){
     console.log(this.state.current)
   }
@@ -244,13 +260,15 @@ class App extends React.Component {
       <div>
       {/*
       setting react router route
-      */}
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
+      */}
+      <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/main" component={Main}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops}/>} />                      
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} />}/>                      
       <Route path="/three" render={(props) => <Three {...props}/>} />                      
+      <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
       </div>
     );
 
@@ -314,16 +332,10 @@ class App extends React.Component {
       log = null
     }
     if (anchor === 'left') {
-      if(this.state.login)
         before = drawer;
-      else
-        before = null;    
 
     } else {
-      if(this.state.login)
         after = drawer;
-      else
-        after = planed;
     }
 
     return (
