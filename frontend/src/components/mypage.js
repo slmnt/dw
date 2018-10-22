@@ -58,7 +58,10 @@ class Mypage extends Component {
     componentDidMount(){
         axios.get('/api/user/').then(response => {
             this.setState({userinfo: response.data})
+        }).catch((e) => {
+            this.props.history.push('login')
         })
+        
     }
 
     render() {

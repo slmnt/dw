@@ -311,7 +311,7 @@ class App extends React.Component {
         <Divider />
         <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
         <Divider />
-        <List><ListItem button onClick={e => this.clicked('mypage')}><Typography>mypage</Typography></ListItem></List>
+        <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>
