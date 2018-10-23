@@ -21,7 +21,7 @@ class Main extends Component {
   render() {
     return (
       <div>
-        website wellcome page
+        wellcome mini program main page
       </div>
     )
   }
