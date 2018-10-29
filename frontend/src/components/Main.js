@@ -25,7 +25,7 @@ class Main extends Component {
 
     return (
       <div>
-        website wellcome page
+        wellcome mini program main page
       </div>
     )
   }
