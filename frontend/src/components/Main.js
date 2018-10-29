@@ -16,9 +16,13 @@ class Main extends Component {
     // console.log(cookies.get('test'))
     // navigator.geolocation.getCurrentPosition(this.showposition,this.rejctpermission)
     this.state = {value: '', color: 'green'};
+    console.log(props)
   }
 
+
+
   render() {
+
     return (
       <div>
         website wellcome page
