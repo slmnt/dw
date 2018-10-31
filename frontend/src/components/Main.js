@@ -6,9 +6,12 @@ import { withCookies, Cookies } from 'react-cookie';
 const styles = theme => ({
   body: {
     fontFamily:"sans-serif",
+    color:"#191970",
+    fontSize:"20px"
   },
 // header
   header: {
+    //backgroundImage:`url(${bridge.jpeg})`,
     textAlign:"center",
     borderBottom: "solid 1px #eeeeee",
     padding:"50px"
@@ -16,17 +19,16 @@ const styles = theme => ({
   header_title: {
     color: "#99ff33",
     fontSize: "70px",
-    padding: "30px"
+    padding: "30px",
   },
   header_sub_title: {
-    color: "#000000",
     fontSize: "30px",
     paddingBottom:"30px"
   },
 // main
   main: {
     backgroundColor:"#f0fff8",
-    padding:"10px",
+    padding:"30px",
     textAlign:"center"
   },
 
@@ -66,7 +68,7 @@ class Main extends Component {
 
         <div className = {classes.main}>
           <div className = {classes.main_title}>
-            <h2>幅広い年齢層を対象にプログラミング教育を行えるシステム。</h2>
+            <p>幅広い年齢層を対象にプログラミング教育を行えるシステム。</p>
             <h2>『<span>Mini Prog</span>』</h2>
           </div>
         </div>
