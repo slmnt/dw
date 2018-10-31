@@ -5,23 +5,32 @@ import { withCookies, Cookies } from 'react-cookie';
 
 const styles = theme => ({
   body: {
-    padding:"10px",
-    backgroundColor: "#ffffff",
-    height:"100vh",
-    width:"100vw"
+    fontFamily:"sans-serif",
   },
+// header
   header: {
     textAlign:"center",
+    borderBottom: "solid 1px #eeeeee",
+    padding:"50px"
   },
-  title: {
+  header_title: {
     color: "#99ff33",
-    fontSize: "100px",
-    padding: "50px"
+    fontSize: "70px",
+    padding: "30px"
   },
-  sub_title: {
+  header_sub_title: {
     color: "#000000",
-    fontSize: "50px"
-  }
+    fontSize: "30px",
+    paddingBottom:"30px"
+  },
+// main
+  main: {
+    backgroundColor:"#f0fff8",
+    padding:"10px",
+    textAlign:"center"
+  },
+
+// footer
 })
 
 class Main extends Component {
@@ -47,13 +56,20 @@ class Main extends Component {
     return (
       <body className = {classes.body}>
         <header className = {classes.header}>
-          <h1 className = {classes.title}>
+          <h1 className = {classes.header_title}>
             Mini Prog
           </h1>
-          <h2 className = {classes.sub_title}>
+          <p className = {classes.header_sub_title}>
             For all people who study programming.
-          </h2> 
+          </p> 
         </header>
+
+        <div className = {classes.main}>
+          <div className = {classes.main_title}>
+            <h2>幅広い年齢層を対象にプログラミング教育を行えるシステム。</h2>
+            <h2>『<span>Mini Prog</span>』</h2>
+          </div>
+        </div>
       </body>
       
       
