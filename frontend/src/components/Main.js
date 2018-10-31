@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
+import bridge from './bridge.jpeg';
 
 const styles = theme => ({
   body: {
@@ -11,7 +12,9 @@ const styles = theme => ({
   },
 // header
   header: {
-    //backgroundImage:`url(${bridge.jpeg})`,
+    backgroundImage: `url(${bridge})`,
+    backgroundSize:"cover",
+    backgroundPosition:"0px -250px",
     textAlign:"center",
     borderBottom: "solid 1px #eeeeee",
     padding:"50px"
