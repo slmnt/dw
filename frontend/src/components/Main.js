@@ -19,8 +19,6 @@ class Main extends Component {
     console.log(props)
   }
 
-
-
   render() {
 
     return (
