@@ -127,6 +127,7 @@ class App extends React.Component {
 
   constructor(props){
     super(props)
+    
     this.clicked = this.clicked.bind(this);
     this.statecallback = this.statecallback.bind(this)
     this.drop = this.drop.bind(this)
