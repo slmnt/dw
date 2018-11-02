@@ -374,7 +374,7 @@ class App extends React.Component {
             })}
           >
             <div className={classes.drawerHeader} />
-                  {contents}                                  
+              {contents}                                  
           </main>
           {after}
         </div>
