@@ -366,6 +366,9 @@ class CookieAuthTest(viewsets.ModelViewSet):
 #            request.session.set_test_cookie()
 #            return request
 
+#   Stdin Memo
+#   python3 input.py 0< stdin (input file)
+#   required stdin file
 class Python(viewsets.ModelViewSet):
 
     def post(self, request):
@@ -375,7 +378,7 @@ class Python(viewsets.ModelViewSet):
         new_board.save()
         filename = Code.objects.all().count()
         filename += 1
-        #create dump file
+        #create dump file   
         #open stdin stderr file
         output = open(STATIC + 'output.txt', 'w')
         inn = open(STATIC + 'output.txt', 'r')
