@@ -1,1 +1,2 @@
-print('てす')
+while True:
+    print('test')
