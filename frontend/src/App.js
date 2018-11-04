@@ -19,7 +19,7 @@ import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
-import Main from './components/Main';
+import Main from './components/Main'; 
 import Right from './components/Right';
 import Three from './components/three';
 import Login from './components/Login';

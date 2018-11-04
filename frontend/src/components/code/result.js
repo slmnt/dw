@@ -22,6 +22,7 @@ class Result extends React.Component {
         open: false,
         filename: '',
         type: '.py',
+        result: ''
     };
 
 
@@ -44,6 +45,7 @@ class Result extends React.Component {
       /*
       */
      axios.post('/api/python/',{contents: dump}).then(response => {
+        this.setState({ result: response.data})
         console.log(response.data)
      }).catch(e => {
          // console.log(e)
@@ -84,9 +86,18 @@ class Result extends React.Component {
     render() {
     return (
       <div>
-      <Button onClick={e => this.onClick()}>submit</Button>
-      <Button onClick={e => this.handleClickOpen()}>save</Button>
-      <Dialog
+        <TextField
+        disabled
+        multiline
+        id="outlined-disabled"
+        value={this.state.result}
+        variant="outlined"
+        />
+        <br/>
+        <Button onClick={e => this.onClick()}>submit</Button>
+        <Button onClick={e => this.handleClickOpen()}>save</Button>
+        <Dialog
+            disable
             open={this.state.open}
             onClose={this.handleClose}
             aria-labelledby="form-dialog-title"
