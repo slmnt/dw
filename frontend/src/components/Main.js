@@ -32,28 +32,39 @@ const styles = theme => ({
   main: {
     backgroundColor:"#f0fff8",
     padding:"40px",
+    textAlign:"center"
   },
   main_title: {
-    padding:"20px",
-    textAlign:"center",
+    fontSize:"30px",
+    padding:"100px",
     borderBottom: "solid 1px #eeeeee",
   },
+  main_contents_title: {
+    paddingTop:"20px"
+  },
   main_contents_1: {
+    color:"white",
     backgroundColor:"#2fcdb4",
-    padding:"20px",
-    width:"50%",
+    padding:"50px",
+    margin:"70px",
   },
   main_contents_2: {
+    color:"white",
     backgroundColor:"#2fcdb4",
-    padding:"20px",
+    padding:"50px",
+    margin:"70px"
   },
   main_contents_3: {
+    color:"white",
     backgroundColor:"#2fcdb4",
-    padding:"20px",
+    padding:"50px",
+    margin:"70px"
   },
   main_contents_4: {
+    color:"white",
     backgroundColor:"#2fcdb4",
-    padding:"20px",
+    padding:"50px",
+    margin:"70px"
   },
 
 // footer
@@ -101,9 +112,9 @@ class Main extends Component {
             <h2>『<span>Mini Prog</span>』</h2>
           </div>
           <div className = {classes.main_contents}>
-            <h3>サービスの特徴</h3>
+            <h3 className = {classes.main_contents_title}>サービスの特徴</h3>
             <div className = {classes.main_contents_1}>
-              <h4>幅広いご利用可能年齢層</h4>
+             <h4>幅広いご利用可能年齢層</h4>
               <p>興味があれば、誰でも簡単にプログラミングが学べるよう、わかりやすい解説、見易い、そして、学ぶ意欲を掻き立てるようなデザインを心がけて作成しております。</p>
             </div>
             <div className = {classes.main_contents_2}>
