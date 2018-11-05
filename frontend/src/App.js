@@ -44,7 +44,7 @@ const styles = theme => ({
   },
   appBar: {
     position: 'absolute',
-    backgroundColor: '#212121',
+    backgroundColor: '#B2EBF2',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -397,4 +397,4 @@ App = withRouter(App);
 export default withStyles(styles, { withTheme: true })(App);
 
 /*
- */
+*/
