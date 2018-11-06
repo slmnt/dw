@@ -8,16 +8,16 @@ const styles = theme => ({
   body: {
     fontFamily:"arial black,Yu Gothic",
     color:"#191970",
-    fontSize:"20px"
+    fontSize:"20px",
+    width:"100%",
   },
 // header
   header: {
-    //fontFamily:"sans-serif",
     color: "#e7e8e2",
     backgroundColor:"#2fcdb4",
     textAlign:"center",
     borderBottom: "solid 1px #eeeeee",
-    padding:"50px"
+    padding:"50px",
   },
   header_title: {
     fontSize: "70px",
@@ -31,8 +31,7 @@ const styles = theme => ({
 // main
   main: {
     backgroundColor:"#f0fff8",
-    padding:"40px",
-    textAlign:"center"
+    textAlign:"center",
   },
   main_title: {
     fontSize:"30px",
@@ -41,6 +40,8 @@ const styles = theme => ({
   },
   main_contents_title: {
     paddingTop:"20px"
+  },
+  main_contents:{
   },
   main_contents_1: {
     color:"white",
@@ -52,7 +53,7 @@ const styles = theme => ({
     color:"white",
     backgroundColor:"#2fcdb4",
     padding:"50px",
-    margin:"70px"
+    margin:"70px",
   },
   main_contents_3: {
     color:"white",
@@ -70,7 +71,11 @@ const styles = theme => ({
 // footer
   footer: {
     borderTop: "solid 1px #eeeeee",
-    padding:"30px",
+    height:"100px",
+    padding:"50px",
+    textAlign:"right",
+    clear:"left",
+
   }
 })
 
@@ -111,8 +116,8 @@ class Main extends Component {
             <p>幅広い年齢層を対象にプログラミング教育を行えるシステム。</p>
             <h2>『<span>Mini Prog</span>』</h2>
           </div>
+          <h3 className = {classes.main_contents_title}>サービスの特徴</h3>
           <div className = {classes.main_contents}>
-            <h3 className = {classes.main_contents_title}>サービスの特徴</h3>
             <div className = {classes.main_contents_1}>
              <h4>幅広いご利用可能年齢層</h4>
               <p>興味があれば、誰でも簡単にプログラミングが学べるよう、わかりやすい解説、見易い、そして、学ぶ意欲を掻き立てるようなデザインを心がけて作成しております。</p>
@@ -133,7 +138,7 @@ class Main extends Component {
         </div>
 
         <footer className = {classes.footer}>
-          <p>footer</p>
+          <p>Comming soon</p>
         </footer>
       </body>
       </Scrollbars>            
