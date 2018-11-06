@@ -25,40 +25,38 @@ class Result extends React.Component {
         result: ''
     };
 
+    constructor(props){
+        super(props)
 
-  constructor(props){
-    super(props)
-
-    this.get = props.get
-    this.onClick = this.onClick.bind(this)
-    this.handleClickOpen = this.handleClickOpen.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleChanged = this.handleChanged.bind(this)
-    this.savelocal = this.savelocal.bind(this)
-  }
+        this.get = props.get
+        this.onClick = this.onClick.bind(this)
+        this.handleClickOpen = this.handleClickOpen.bind(this)
+        this.handleClose = this.handleClose.bind(this)
+        this.handleChanged = this.handleChanged.bind(this)
+        this.savelocal = this.savelocal.bind(this)
+    }
   
     onClick(){
-      var dump = this.get()
-      axios.defaults.xsrfCookieName = 'csrftoken';
-      axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-      // console.log(this.state.value)
-      /*
-      */
-     axios.post('/api/python/',{contents: dump}).then(response => {
-        this.setState({ result: response.data})
-        console.log(response.data)
-     }).catch(e => {
-         // console.log(e)
-     })              
-      axios.post('/api/code/',{
+        var dump = this.get()
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+        // console.log(this.state.value)
+        /*
+        */
+        axios.post('/api/python/',{contents: dump}).then(response => {
+            this.setState({ result: response.data})
+            console.log(response.data)
+        }).catch(e => {
+            // console.log(e)
+        })              
+        axios.post('/api/code/',{
           code: dump,
           type: 'python'
-      }).then(response => {
-          console.log(response)
-      }).catch(e => {
-          // console.log(e)
-      })      
-
+        }).then(response => {
+            console.log(response)
+        }).catch(e => {
+            // console.log(e)
+        })
     }
      
     handleClickOpen(){
@@ -75,13 +73,11 @@ class Result extends React.Component {
         });
     };
 
-
     savelocal(){
         var blob = new Blob([this.get()], {type:"text/plain;charset=utf-8"});
         saveAs(blob,this.state.filename + this.state.type)
         this.handleClose()
     }
-
     
     render() {
     return (

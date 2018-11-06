@@ -44,7 +44,7 @@ const styles = theme => ({
   },
   appBar: {
     position: 'absolute',
-    backgroundColor: '#212121',
+    backgroundColor: '#B2EBF2',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -323,6 +323,10 @@ class App extends React.Component {
       <Button color="inherit" onClick={this.drop}>Logout</Button>
     );
 
+    const login = (
+      <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
+    );
+
     let before = null;
     let after = null;
     let log = null
@@ -330,7 +334,7 @@ class App extends React.Component {
     if(this.state.login){
       log = logout
     } else{
-      log = null
+      log = login
     }
     if (anchor === 'left') {
         before = drawer;
@@ -393,4 +397,4 @@ App = withRouter(App);
 export default withStyles(styles, { withTheme: true })(App);
 
 /*
- */
+*/

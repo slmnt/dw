@@ -63,18 +63,19 @@ class Java extends Component {
             // console.log(e)
           })      
     }
+
     handleChanged = name => event => {
         this.setState({
           [name]: event.target.value,
         });
-      };
+    };
     
     handleClickOpen(){
         this.setState({ open: true });
-      };
+    };
     
     handleClose(){
-    this.setState({ open: false });
+        this.setState({ open: false });
     };
 
     savelocal(){

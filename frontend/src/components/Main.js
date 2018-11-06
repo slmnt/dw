@@ -51,7 +51,7 @@ const styles = theme => ({
   },
   main_contents_2: {
     color:"white",
-    backgroundColor:"#2fcdb4",
+    backgroundColor:"#69F0AE",
     padding:"50px",
     margin:"70px",
   },
