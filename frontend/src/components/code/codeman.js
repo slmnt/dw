@@ -1,9 +1,10 @@
 import React, { Component } from 'react';   
 import { GoldenLayoutComponent } from "./goldenLayoutComponent";
-import python from './python'
 import PropTypes from 'prop-types';
-import pycource1 from './course/python/course1'
+import coursemain from './course/context'
+import python from './python'
 import result from './result'
+
 // react-paginatge is crash react meterial-ui
 class Codeman extends Component {
     state = { 
@@ -16,6 +17,7 @@ class Codeman extends Component {
         this.test = this.test.bind(this)
         this.getval = this.getval.bind(this)
     }
+
     componentDidCatch(error, info){
         console.log('error')
     }
@@ -28,6 +30,7 @@ class Codeman extends Component {
         // console.log(e)
         this.setState({val: e})
     }
+
     render() {
 
         return (
@@ -67,13 +70,12 @@ class Codeman extends Component {
               ]
             }}
             registerComponents={myLayout => {
-                myLayout.registerComponent("main", pycource1);
+                myLayout.registerComponent("main", coursemain);
                 myLayout.registerComponent("result", result);
                 myLayout.registerComponent("code", python);
             }}
             />        
             </div>
-
         );
   	}
 }

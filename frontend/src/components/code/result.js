@@ -81,50 +81,49 @@ class Result extends React.Component {
     
     render() {
     return (
-      <div>
-        <TextField
-        disabled
-        multiline
-        id="outlined-disabled"
-        value={this.state.result}
-        variant="outlined"
-        />
-        <br/>
-        <Button onClick={e => this.onClick()}>submit</Button>
-        <Button onClick={e => this.handleClickOpen()}>save</Button>
-        <Dialog
-            disable
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="form-dialog-title"
-            >
-            <DialogTitle id="form-dialog-title">Save</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                please conform your file name.
-                </DialogContentText>
-                <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="file name"
-                type="text"
-                fullWidth
-                value={this.state.filename}
-                onChange={this.handleChanged('filename')}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                Cancel
-                </Button>
-                <Button onClick={this.savelocal} color="primary">
-                Save
-                </Button>
-            </DialogActions>
-        </Dialog>
-
-      </div>
+        <div>
+            <TextField
+            multiline
+            disabled
+            id="outlined-disabled"
+            value={this.state.result}
+            variant="outlined"
+            />
+            <br/>
+            <Button onClick={e => this.onClick()}>submit</Button>
+            <Button onClick={e => this.handleClickOpen()}>save</Button>
+            <Dialog
+                disable
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="form-dialog-title"
+                >
+                <DialogTitle id="form-dialog-title">Save</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                    please conform your file name.
+                    </DialogContentText>
+                    <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="file name"
+                    type="text"
+                    fullWidth
+                    value={this.state.filename}
+                    onChange={this.handleChanged('filename')}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                    Cancel
+                    </Button>
+                    <Button onClick={this.savelocal} color="primary">
+                    Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
     );
   }
 }

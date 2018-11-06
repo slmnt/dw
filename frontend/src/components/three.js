@@ -52,7 +52,7 @@ class three extends Component {
         //this.controls.update()
         //ADD RENDERER
         this.renderer = new THREE.WebGLRenderer({ antialias: true })
-        this.renderer.setClearColor('#FFFFFF')
+        this.renderer.setClearColor('#000000')
         this.renderer.setSize(width, height)
         this.mount.appendChild(this.renderer.domElement)
         //ADD CUBE

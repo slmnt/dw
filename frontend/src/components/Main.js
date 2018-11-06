@@ -21,7 +21,6 @@ const styles = theme => ({
   },
   header_title: {
     fontSize: "70px",
-    padding: "30px",
   },
   header_sub_title: {
     fontSize: "30px",
