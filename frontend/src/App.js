@@ -44,7 +44,7 @@ const styles = theme => ({
   },
   appBar: {
     position: 'absolute',
-    backgroundColor: '#B2EBF2',
+    backgroundColor: '#0b409c',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,

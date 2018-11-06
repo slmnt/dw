@@ -6,17 +6,17 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
   body: {
+    backgroundColor:"#f2f7ff",
     fontFamily:"arial black,Yu Gothic",
-    color:"#191970",
+    color:"#ffe867",
     fontSize:"20px",
     width:"100%",
   },
 // header
   header: {
-    color: "#e7e8e2",
-    backgroundColor:"#2fcdb4",
+    color: "#10316b",
+    backgroundColor:"#ffe867",
     textAlign:"center",
-    borderBottom: "solid 1px #eeeeee",
     padding:"50px",
   },
   header_title: {
@@ -30,46 +30,49 @@ const styles = theme => ({
 
 // main
   main: {
-    backgroundColor:"#f0fff8",
     textAlign:"center",
   },
   main_title: {
+    backgroundColor:"#10316b",
     fontSize:"30px",
     padding:"100px",
     borderBottom: "solid 1px #eeeeee",
   },
   main_contents_title: {
+    color:"#10316b",
     paddingTop:"20px"
   },
   main_contents:{
+    flexDirection:"row",
   },
   main_contents_1: {
     color:"white",
-    backgroundColor:"#2fcdb4",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px",
   },
   main_contents_2: {
     color:"white",
-    backgroundColor:"#69F0AE",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px",
   },
   main_contents_3: {
     color:"white",
-    backgroundColor:"#2fcdb4",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px"
   },
   main_contents_4: {
     color:"white",
-    backgroundColor:"#2fcdb4",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px"
   },
 
 // footer
   footer: {
+    backgroundColor:"#10316b",
     borderTop: "solid 1px #eeeeee",
     height:"100px",
     padding:"50px",
