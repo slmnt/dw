@@ -1,6 +1,8 @@
 import React, { Component } from 'react';   
-
-class course1 extends Component {
+/*
+    Must change class name
+*/
+class template extends Component {
 
     constructor(props){
       super(props)
@@ -15,4 +17,4 @@ class course1 extends Component {
   	}
 }
 
-export default course1;
+export default template;

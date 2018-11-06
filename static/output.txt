@@ -1,5 +1,4 @@
-test
-test
-test
-test
-test
+  File "C:\Users\dlstjq7685\git\2018DW\static\37.py", line 2
+    
+                ^
+SyntaxError: unexpected EOF while parsing

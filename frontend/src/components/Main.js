@@ -17,11 +17,9 @@ const styles = theme => ({
     backgroundColor:"#2fcdb4",
     textAlign:"center",
     borderBottom: "solid 1px #eeeeee",
-    padding:"50px"
   },
   header_title: {
     fontSize: "70px",
-    padding: "30px",
   },
   header_sub_title: {
     fontSize: "30px",

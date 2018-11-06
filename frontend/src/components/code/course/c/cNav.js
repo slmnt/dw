@@ -1,18 +1,19 @@
 import React, { Component } from 'react';   
 
-class course1 extends Component {
+class cNav extends Component {
 
     constructor(props){
       super(props)
+
     }
 
     render() {
       return (
         <div>
-          course1
+          cNav
         </div>
         );
   	}
 }
 
-export default course1;
+export default cNav;

@@ -1,18 +1,19 @@
 import React, { Component } from 'react';   
 
-class course1 extends Component {
+class Lobby extends Component {
 
     constructor(props){
       super(props)
+
     }
 
     render() {
       return (
         <div>
-          course1
+          {this.props.match.params['id']}
         </div>
         );
   	}
 }
 
-export default course1;
+export default Lobby;

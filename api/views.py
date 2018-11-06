@@ -26,7 +26,7 @@ from datetime import datetime
 import subprocess
 from back.settings import BASE_DIR
 # Create your views here.
-STATIC = BASE_DIR + '//static//'
+STATIC = BASE_DIR + '\\static\\'
 
 class StuffViewSet(viewsets.ModelViewSet):
     queryset = m.Stuff.objects.all()
@@ -404,7 +404,10 @@ class Python(viewsets.ModelViewSet):
                 temp = inn.readline()
                 if not temp:
                     break
-                dump += str(temp)
+
+                temp = str(temp).replace(STATIC,"filepath/")
+
+                dump += temp
         inn.close()
         output.close()
         #return response
