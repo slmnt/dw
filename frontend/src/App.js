@@ -20,7 +20,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
 import Main from './components/Main'; 
-import Right from './components/Right';
+import Right from './components/Left';
+import Left from './components/Left';
 import Three from './components/three';
 import Login from './components/Login';
 import Mypage from './components/mypage';
