@@ -124,7 +124,7 @@ class App extends React.Component {
     login: false,
     uid: '',
     current: '',
-    lenguage: 'python'
+    language: 'python'
   };
 
   constructor(props){
@@ -136,17 +136,17 @@ class App extends React.Component {
     this.drawercloseer = this.drawercloseer.bind(this)
     this.testprops = this.testprops.bind(this)
     this.gomypage = this.gomypage.bind(this)
-    this.setlen = this.setlen.bind(this)
-    this.getlen = this.getlen.bind(this)
+    this.setlen = this.setlan.bind(this)
+    this.getlen = this.getlan.bind(this)
     // console.log(props.history.location.pathname)
   }
 
-  setlen(l){
-    this.setState({ lenguage: l})
+  setlan(l){
+    this.setState({ language: l})
   }
 
-  getlen(){
-    return this.state.lenguage
+  getlan(){
+    return this.state.language
   }
 
   drop(){
