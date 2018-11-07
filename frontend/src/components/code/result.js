@@ -27,6 +27,8 @@ class Result extends React.Component {
 
     constructor(props){
         super(props)
+        // sucess
+        // console.log(props.getlen())
 
         this.get = props.get
         this.onClick = this.onClick.bind(this)
@@ -45,7 +47,7 @@ class Result extends React.Component {
         */
         axios.post('/api/python/',{contents: dump}).then(response => {
             this.setState({ result: response.data})
-            console.log(response.data)
+            // console.log(response.data)
         }).catch(e => {
             // console.log(e)
         })              
@@ -53,7 +55,6 @@ class Result extends React.Component {
           code: dump,
           type: 'python'
         }).then(response => {
-            console.log(response)
         }).catch(e => {
             // console.log(e)
         })

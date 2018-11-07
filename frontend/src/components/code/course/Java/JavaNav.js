@@ -1,19 +1,20 @@
 import React, { Component } from 'react';   
 
-class pyNav extends Component {
+class jNav extends Component {
 
     constructor(props){
       super(props)
-      props.set('python')
+      props.set('java')
+
     }
 
     render() {
       return (
         <div>
-          pyNav
+          jNav
         </div>
         );
   	}
 }
 
-export default pyNav;
+export default jNav;

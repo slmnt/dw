@@ -45,6 +45,7 @@ const styles = theme => ({
   appBar: {
     position: 'absolute',
     backgroundColor: '#0b409c',
+    color: '#ffe867',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -123,6 +124,7 @@ class App extends React.Component {
     login: false,
     uid: '',
     current: '',
+    lenguage: 'python'
   };
 
   constructor(props){
@@ -134,8 +136,17 @@ class App extends React.Component {
     this.drawercloseer = this.drawercloseer.bind(this)
     this.testprops = this.testprops.bind(this)
     this.gomypage = this.gomypage.bind(this)
-
+    this.setlen = this.setlen.bind(this)
+    this.getlen = this.getlen.bind(this)
     // console.log(props.history.location.pathname)
+  }
+
+  setlen(l){
+    this.setState({ lenguage: l})
+  }
+
+  getlen(){
+    return this.state.lenguage
   }
 
   drop(){
@@ -266,9 +277,9 @@ class App extends React.Component {
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/main" component={Main}/>
-      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops}/>} />                      
-      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} />}/>                      
-      <Route path="/three" render={(props) => <Three {...props}/>} />                      
+      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
+      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
+      <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
       </div>
     );

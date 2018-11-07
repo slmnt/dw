@@ -16,6 +16,8 @@ class Codeman extends Component {
         super(props)
         this.test = this.test.bind(this)
         this.getval = this.getval.bind(this)
+        this.set = props.set
+        this.get = props.get
     }
 
     componentDidCatch(error, info){
@@ -47,7 +49,7 @@ class Codeman extends Component {
                         type: "react-component",
                         component: "main",
                         isClosable: false,
-                        props: {location: this.props.location}
+                        props: {location: this.props.location, set: this.set}
                     },
                     {
                         type: "column",
@@ -56,13 +58,13 @@ class Codeman extends Component {
                             type: "react-component",
                             component: "code",
                             isClosable: false,
-                            props: { set: this.test }
+                            props: { set: this.test, get: this.get }
                         },{
                             title: "Main result",
                             type: "react-component",
                             component: "result",
                             isClosable: false,
-                            props: { get: this.getval }
+                            props: { get: this.getval, getlen: this.get}
                         }]
                     }
                   ]

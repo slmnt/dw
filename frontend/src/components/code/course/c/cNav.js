@@ -4,7 +4,7 @@ class cNav extends Component {
 
     constructor(props){
       super(props)
-
+      props.set('c_cpp')
     }
 
     render() {

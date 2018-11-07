@@ -17,7 +17,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
@@ -82,9 +81,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'back.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+#/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -96,7 +94,6 @@ DATABASES = {
          'PORT' : 5432,
      }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
