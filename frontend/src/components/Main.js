@@ -95,7 +95,7 @@ class Main extends Component {
     // console.log(cookies.get('test'))
     // navigator.geolocation.getCurrentPosition(this.showposition,this.rejctpermission)
     this.state = {value: '', color: 'green'};
-    console.log(props)
+    // console.log(props)
   }
 
 
@@ -103,7 +103,7 @@ class Main extends Component {
     const { classes } = this.props;
     return (
       <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
-      <body className = {classes.body}>
+      <div className = {classes.body}>
         <header className = {classes.header}>
           <h1 className = {classes.header_title}>
             Mini Prog
@@ -142,7 +142,7 @@ class Main extends Component {
         <footer className = {classes.footer}>
           <p>Comming soon</p>
         </footer>
-      </body>
+      </div>
       </Scrollbars>            
     )
   }

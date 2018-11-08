@@ -89,6 +89,8 @@ class three extends Component {
     componentWillUnmount(){
         this.stop()
         this.mount.removeChild(this.renderer.domElement)
+        document.removeEventListener('keypress', e => this.event(e))
+
     }
     
     renderScene = () => {

@@ -19,6 +19,10 @@ class Interf extends Component {
 
     }
 
+    componentWillUnmount(){
+        document.removeEventListener('keypress', e => this.event(e))
+    }
+
     event(e){
         if(e.key === 'Enter'){
             if(this.state.cmd === 'cls'){
@@ -42,11 +46,11 @@ class Interf extends Component {
             <div className="form">
                 <pre className="print">{this.state.log}</pre>
                 <div className="in">
-                <label for="textInput">>>>
+                <label>>>>
                 <input 
                     type="text" 
                     className="custom"
-                    maxlength={100}
+                    maxLength={100}
                     value={this.state.cmd} 
                     onChange={this.handleChange}
                     autoFocus
