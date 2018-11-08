@@ -1,22 +1,25 @@
 input.custom {
     color: white;
     caret-color: white;
-    font: 12px "Helvetica", "Arial", "sans-serif";
+    font: 12px "Helvetica", "Arial", "sans-serif" 12px;
     border: 0px;
     background-color: black;
+    padding: 0px;
+    letter-spacing: 0.1em;
 }
 label{
     font: 12px "Helvetica", "Arial", "sans-serif";
+    letter-spacing: 0.1em;
     color: white;
+    display:inline-block;
 }
 .print{
     overflow-y: hidden;    
-    resize: none;
     font: 12px "Helvetica", "Arial", "sans-serif";
     background-color: black;
     color: white;
-    border: 0px;
-    outline: 0;
+    letter-spacing: 0.1em;
+    line-height: 1.5em
 }
 .form{
     background-color: black;
@@ -27,4 +30,7 @@ input:focus {
     border: 0px;
 }
   
-  
+.in{
+    position: relative;
+    top: -10px;
+}
