@@ -1,0 +1,30 @@
+input.custom {
+    color: white;
+    caret-color: white;
+    font: 12px "Helvetica", "Arial", "sans-serif";
+    border: 0px;
+    background-color: black;
+}
+label{
+    font: 12px "Helvetica", "Arial", "sans-serif";
+    color: white;
+}
+.print{
+    overflow-y: hidden;    
+    resize: none;
+    font: 12px "Helvetica", "Arial", "sans-serif";
+    background-color: black;
+    color: white;
+    border: 0px;
+    outline: 0;
+}
+.form{
+    background-color: black;
+}
+
+input:focus {
+    outline: 0;
+    border: 0px;
+}
+  
+  
