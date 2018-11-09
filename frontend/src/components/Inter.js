@@ -1,5 +1,6 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
+import Interpreter from './Interpreter'
 import './inter.css'
 
 
@@ -15,6 +16,7 @@ class Interf extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.event = this.event.bind(this)
 
+        this.Int = new Interpreter()
         document.addEventListener('keypress', e => this.event(e))
 
     }
@@ -29,6 +31,7 @@ class Interf extends Component {
                 this.setState({log: ''})
                 this.setState({cmd: ''})    
             }else{
+                this.Int.run(this.state.cmd)
                 this.setState({log: this.state.log +'>>>' +this.state.cmd + '\n'})
                 this.setState({cmd: ''})
             }

@@ -139,6 +139,15 @@ class App extends React.Component {
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
     // console.log(props.history.location.pathname)
+
+    // window.addEventListener('beforeunload',e => this.closewindows(e))
+  }
+
+  closewindows(){
+    axios.get('/api/cookieauth/').then((response) => {
+    }).catch((e) => {
+    })
+    return 'test'
   }
 
   setlan(l){
