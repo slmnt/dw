@@ -35,7 +35,6 @@ class Interf extends Component {
                 this.setState({log: this.state.log +'>>>' +this.state.cmd + '\n'})
                 this.setState({cmd: ''})
             }
-
         }
     }
 

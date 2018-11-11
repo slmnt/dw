@@ -3,7 +3,7 @@ import Parser from './parser'
 class Lexer{
     
     constructor(){
-        this.parse = new Parser()   
+        this.parse = new Parser()
     }
 
     numberic(c){
@@ -42,38 +42,88 @@ class Lexer{
         }
     }
 
+
+    spellcheck(str){
+
+        var flag = true
+        for(var i = 0; i < str.length;i++){
+            if(this.numberic(str.charAt(i))){
+            }else{
+                flag = false
+            }
+        }
+        return flag
+    }
+
+
     decode(cmd){
 
-        var cmds = cmd.split(" ")
+        var cmds = ''
         var prepro = []
+        var flags = []
         var pf = true;
 
-        for(var i = 0; i < cmds.length;i++){
-            if(cmds[i].charAt(0) === ""){
+        for(var i = 0;i < cmd.length;i++){
+            if(cmd.charAt(i) === " "){
             }else{
-                prepro.push(cmds[i])
+                cmds += cmd.charAt(i)
+            }
+        }
+    
+        var dump = '';
+        for(i = 0;i < cmds.length;i++){
+            var temp = cmds.charAt(i)
+            switch(temp){
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                case '(':
+                case ')':
+                    prepro.push(dump)
+                    flags.push(true)
+                    prepro.push(temp)
+                    flags.push(true)
+                    dump = ''
+                    break
+                case "":
+                    break;
+                default:
+                    dump += temp                    
+                    break
+            }
+        }
+        if(dump.length > 0){
+            prepro.push(dump)
+            flags.push(true)
+        }
+
+        dump = []
+        var ddump = []
+        for(i = 0; i < prepro.length;i++){
+            if(prepro[i] === ""){
+            }else{
+                dump.push(prepro[i])
+                ddump.push(flags[i])
+            }
+        }
+        prepro = dump
+        flags = ddump
+
+        for(i = 0; i < prepro.length;i++){
+            if(this.numberic(prepro[i].charAt(0))){
+                if(this.spellcheck(prepro[i])){
+                }else{
+                    pf = false;
+                }
+            }else{
+                flags[i] = false
             }
         }
 
-        for(var i = 0; i < prepro.length;i++){
-            if(this.numberic(prepro[i].charAt(0))){
-                var flag = true
-                for(var j = 0; j < prepro[i].length;j++){
-                    if(this.numberic(prepro[i].charAt(j))){
-                    }else{
-                        flag = false
-                    }
-                }
-                if(flag){
-                }
-                else{
-                    pf = false;
-                }            
-            }
-        }        
+        
         if(pf){
-            console.log(prepro)
-            return prepro
+            return [ { prepro, flags}]
         }
     }
 }

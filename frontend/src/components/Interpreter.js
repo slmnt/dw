@@ -5,7 +5,10 @@ class Interpreter{
 
     stack = []
     heap = []
-
+    cmd = [
+        { cmds : [], nums: [], names: [] },
+    ];
+      
     constructor(){
         this.lexer = new Lexer()
         this.parser = new Parser();
@@ -13,10 +16,16 @@ class Interpreter{
 
     run(cmd){
         var pre = this.lexer.decode(cmd)
-        if(pre)
-            this.parser.parsing(pre)
+        if(pre){
+            console.log(pre[0].prepro)
+            var parse = this.parser.parsing(pre[0])
+            //this.parser.make(parse)
+        }
     }
 
+    excute(){
+
+    }
 }
 
 export default Interpreter
