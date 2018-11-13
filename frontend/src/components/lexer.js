@@ -42,7 +42,6 @@ class Lexer{
         }
     }
 
-
     spellcheck(str){
 
         var flag = true
@@ -55,12 +54,10 @@ class Lexer{
         return flag
     }
 
-
     decode(cmd){
 
         var cmds = ''
         var prepro = []
-        var flags = []
         var pf = true;
 
         for(var i = 0;i < cmd.length;i++){
@@ -74,16 +71,24 @@ class Lexer{
         for(i = 0;i < cmds.length;i++){
             var temp = cmds.charAt(i)
             switch(temp){
+                case '=':
+                case '!':
+                case '==':
+                case '>=':
+                case '<=':
+                case '!=':
+                case '>':
+                case '<':
                 case '+':
+                case '++':
                 case '-':
+                case '--':
                 case '*':
                 case '/':
                 case '(':
                 case ')':
                     prepro.push(dump)
-                    flags.push(true)
                     prepro.push(temp)
-                    flags.push(true)
                     dump = ''
                     break
                 case "":
@@ -93,37 +98,92 @@ class Lexer{
                     break
             }
         }
+
         if(dump.length > 0){
             prepro.push(dump)
-            flags.push(true)
         }
 
         dump = []
-        var ddump = []
         for(i = 0; i < prepro.length;i++){
             if(prepro[i] === ""){
             }else{
                 dump.push(prepro[i])
-                ddump.push(flags[i])
             }
         }
         prepro = dump
-        flags = ddump
+        for(i = 0; i < prepro.length;i++){
+            if(Number(prepro[i])){
+                prepro[i] = Number(prepro[i])
+            }
+        }
 
         for(i = 0; i < prepro.length;i++){
-            if(this.numberic(prepro[i].charAt(0))){
+            if(typeof prepro[i] === "number"){
+            }
+            else if(this.numberic(prepro[i].charAt(0))){
                 if(this.spellcheck(prepro[i])){
                 }else{
                     pf = false;
                 }
-            }else{
-                flags[i] = false
             }
         }
-
-        
         if(pf){
-            return [ { prepro, flags}]
+            dump = []
+            for(i = 0; i< prepro.length;i++){
+                switch(prepro[i]){
+                    case '!':
+                        if(prepro[i + 1] === '='){
+                            dump.push('!=')
+                        }
+                        break
+                    case '<':
+                        if(prepro[i + 1] === '='){
+                            dump.push('<=')
+                            i++
+                        }else{
+                            dump.push(prepro[i])
+                        }
+                        break
+                    case '>':
+                        if(prepro[i + 1] === '='){
+                            dump.push('>=')
+                            i++
+                        }else{
+                            dump.push(prepro[i])
+                        }
+                        break
+                    case '=':
+                        if(prepro[i + 1] === '='){
+                            dump.push('==')
+                            i++
+                        }else{
+                            dump.push(prepro[i])
+                        }
+                        break
+                    case '+':
+                        if(prepro[i + 1] === '+'){
+                            dump.push('++')
+                            i++
+                        }else{
+                            dump.push(prepro[i])
+                        }
+                        break
+                    case '-':
+                        if(prepro[i + 1] === '-'){
+                            dump.push('--')
+                            i++
+                        }else{
+                            dump.push(prepro[i])
+                        }
+                        break
+                    default:
+                        dump.push(prepro[i])
+                        break
+                }
+            }
+            prepro = dump
+
+            return prepro
         }
     }
 }

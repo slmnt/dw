@@ -1,10 +1,11 @@
 const keywords = [
-    '+','-','*','/','%','=','++','--'
+    '+','-','*','/','%','=','++','--',
+    '!=','==','>','<','>=','<='
 ];
 
 const func = [
-    'left','right','up','down',
-    'for','if'
+    'for','if',
+    'left','right','up','down'
 ]
 
 class Parser{
@@ -29,84 +30,107 @@ class Parser{
         return false;
     }
 
+    func_check(cmd){
+
+        for(var i=0;i < cmd.length;i++){
+            if(this.func_matach(cmd[i])){
+                var dump = []
+                for(var j = i + 2;j<cmd.length-1;j++){
+                    dump.push(cmd[j])
+                }
+                return [cmd[i],dump]
+            }
+        }
+
+        return false
+    }
+
     parsing(cmd){
-    // syntax decode: reverse borland
-    var keyflag = false
-    var keydump = ''
 
-    var storeflag = false
-
-    var blocks = cmd.prepro
-    var f_block = cmd.flags
-
-    // ( flag
+    var blocks = cmd
     var depth = 0
     var ds = []
 
-
     var temp = []
-    var ftemp = []
 
     var stack = []
 
     for(var i = 0; i < blocks.length;i++){
         switch(blocks[i]){
-            case '+':
+            case '>':
+            case '<':
+            case '>=':
+            case '<=':
+            case '==':
+            case '!=':
+            case '=':
                 if(depth >0){
-                    ds[depth -1].push('+')
+                    ds[depth -1].push(blocks[i])
                 }else{
-                    stack.push('+')
+                    stack.push(blocks[i])
                 }
-                break;
+                break
+            case '+':
             case '-':
-                if(depth > 0){
-                    ds[depth -1].push('-')
-                }
-                else{
-                    stack.push('-')
-                }
-                break;
-            case '*':
-                if(depth > 0){
+                if(depth >0){
                     var d = temp.pop()
                     var dump = d.pop()
-                    if(dump === '+'){
+                    if(dump === '='){
                         ds[depth -1].push(dump)
-                    }else if(dump === '-'){
-                        ds[depth -1].push(dump)
-                    }else{
+                    }{
                         d.push(dump)
                     }
                     temp.push(d)
-                    ds[depth-1].push('*')
+                    ds[depth-1].push(blocks[i])
                 }else{
                     if(temp.length > 0){
                         var dump = temp.pop()
-                        if(dump === '+'){
-                            stack.push(dump)
-                        }else if(dump === '-'){
+                        if(dump === '='){
                             stack.push(dump)
                         }else{
                             temp.push(dump)
                         }
                     }
-                    stack.push('*')
+                    stack.push(blocks[i])
                 }
                 break;
+            case '*':
             case '/':
-                stack.push('/')
+                if(depth > 0){
+                    var d = temp.pop()
+                    var dump = d.pop()
+                    if(dump === '+' || dump === '=' || dump === '-'){
+                        ds[depth -1].push(dump)
+                    }else{
+                        d.push(dump)
+                    }
+                    temp.push(d)
+                    ds[depth-1].push(blocks[i])
+                }else{
+                    if(temp.length > 0){
+                        var dump = temp.pop()
+                        if(dump === '+' || dump === '=' || dump === '-'){
+                            stack.push(dump)
+                        }else{
+                            temp.push(dump)
+                        }
+                    }
+                    stack.push(blocks[i])
+                }
                 break;
             case '(':
                 depth += 1;
                 ds.push([])
                 temp.push([])
-                ftemp.push('S')
                 break
             case ')':
                 if(ds[depth-1].length > 0){
+                    var d = temp.pop()
+
                     for(var j = 0; j < ds[depth-1].length;j++){
-                        temp.push(ds[depth-1].pop())
+                        d.push(ds[depth-1].pop())
                     }
+                    temp.push(d)
                 }
                 depth -= 1;
                 ds.pop()
@@ -123,11 +147,9 @@ class Parser{
                     temp.push(d)
                 }else{
                     temp.push(blocks[i])
-                    ftemp.push(f_block[i])
                     if(stack.length > 0){
                         for(var j = 0;j < stack.length;j++){
                             temp.push(stack.pop())
-                            ftemp.push('None')
                         }
                     }
                 }
@@ -138,58 +160,82 @@ class Parser{
     if(stack.length > 0){
         for(i = 0; i < stack.length;i++){
             temp.push(stack.pop())
-            ftemp.push('None')
         }
     }
 
-    console.log(temp)
-    return [{temp, ftemp}]
-
+    ds = []
+    for(i = 0; i < temp.length;i++){
+        if(typeof temp[i] === "object"){
+            stack = temp[i]
+            for(j = 0; j < stack.length;j++){
+                ds.push(stack[j])                
+            }            
+        }else{
+            ds.push(temp[i])
+        }
+    }
+    temp = ds
+    return temp
     }
 
     make(cmd){
-        var flags = cmd[0].ftemp
-        var block = cmd[0].temp
-        
-
+        var block = cmd
         var cmds = []
         var vals = []
         var names = []
 
         for(var i = 0; i < block.length;i++){
-            if(flags[i]){
-                cmds.push(['LOAD_VAL',vals.length])
-                vals.push(block[i])
-            }else{
+            if(typeof block[i] === "string"){
                 if(this.key_match(block[i])){
                     switch(block[i]){
                         case '+':
-                            cmds.push('ADD_VALS')
+                            cmds.push(['ADD_VALS', 'none'])
                             break;
                         case '-':
-                            cmds.push('SUB_VALS')
+                            cmds.push(['SUB_VALS', 'none'])
                             break;
                         case '*':
-                            cmds.push('MUL_VALS')
+                            cmds.push(['MUL_VALS', 'none'])
                             break;
                         case '/':
-                            cmds.push('DIV_VALS')
+                            cmds.push(['DIV_VALS', 'none'])
                             break;
                         case '%':
-                            cmds.push('REM_VALS')
+                            cmds.push(['REM_VALS', 'none'])
                             break;
                         case '=':
-                            cmds.push('STORE_VAL')
+                            cmds.push(['STORE_VAL', 'none'])
+                            break;
+                        case '==':
+                            cmds.push(['COMPARE_E', 'none'])
+                            break;
+                        case '!=':
+                            cmds.push(['COMPARE_NE', 'none'])
+                            break;
+                        case '>=':
+                            cmds.push(['COMPARE_BE', 'none'])
+                            break;
+                        case '<=':
+                            cmds.push(['COMPARE_SE', 'none'])
+                            break;
+                        case '>':
+                            cmds.push(['COMPARE_B', 'none'])
+                            break;
+                        case '<':
+                            cmds.push(['COMPARE_S', 'none'])
                             break;
                     }
                 }else{
                     cmds.push(['LOAD_NAME',names.length])
                     names.push(block[i])
                 }
+            }else{
+                cmds.push(['LOAD_VAL',vals.length])
+                vals.push(block[i])
             }
         }
 
-        console.log([{cmds,vals,names}])
+        return {cmds,vals,names}
     }
 }
 

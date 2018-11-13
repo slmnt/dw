@@ -1,5 +1,5 @@
 import React, { Component } from 'react';   
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Scrollbars } from 'react-custom-scrollbars';
 import c2 from './python/course1'
 import pl from './python/pythonlobby'
