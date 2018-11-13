@@ -8,6 +8,8 @@ class Interpreter{
     cmd = [
         { cmds : [], nums: [], names: [] },
     ];
+    fp = []
+    indent = 0
 
     constructor(){
         this.lexer = new Lexer()
@@ -16,13 +18,46 @@ class Interpreter{
 
     run(cmd){
         var pre = this.lexer.decode(cmd)
+        if(this.indent > 0){
+            if(cmd === ""){
+                this.indent--;
+                for(var i = 0;i<this.fp.length;i++){
+                    this.excute(this.fp[i])                
+                }
+                if(this.stack.length > 0)
+                    return this.stack.pop()
+            }else{
+                var parse = this.parser.parsing(pre)
+                pre = this.parser.make(parse)
+                console.log(pre)
+                this.fp.push(pre)
+            }
+        }
+
         if(pre){
-            var parse = this.parser.parsing(pre)
-            pre = this.parser.make(parse)
-            this.excute(pre)
-            if(this.stack.length > 0){
-                console.log(this.stack)
-                return this.stack.pop()
+            var checker = this.parser.func_check(pre)
+            if(checker){
+                this.indent++
+                if(checker[0] === 'if'){
+                    var parse = this.parser.parsing(checker[1])
+                    pre = this.parser.make(parse)
+                    this.excute(pre)
+                    var f = this.stack.pop()
+                    if(f === 'true'){
+                    }else{
+                        this.indent--;
+                    }
+                }                
+            }else{
+                var parse = this.parser.parsing(pre)
+                pre = this.parser.make(parse)
+                this.excute(pre)
+                if(this.stack.length > 0)
+                    return this.stack.pop()
+            }
+
+            if(this.indent > 0){
+                return '...'
             }
         }else{
             console.log("error")

@@ -4,8 +4,8 @@ const keywords = [
 ];
 
 const func = [
-    'left','right','up','down',
-    'for','if'
+    'for','if',
+    'left','right','up','down'
 ]
 
 class Parser{
@@ -28,6 +28,21 @@ class Parser{
                 return func[i];
         }
         return false;
+    }
+
+    func_check(cmd){
+
+        for(var i=0;i < cmd.length;i++){
+            if(this.func_matach(cmd[i])){
+                var dump = []
+                for(var j = i + 2;j<cmd.length-1;j++){
+                    dump.push(cmd[j])
+                }
+                return [cmd[i],dump]
+            }
+        }
+
+        return false
     }
 
     parsing(cmd){
