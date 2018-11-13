@@ -17,7 +17,7 @@ class Interpreter{
     run(cmd){
         var pre = this.lexer.decode(cmd)
         if(pre){
-            console.log(pre[0].prepro)
+            // console.log(typeof [])
             var parse = this.parser.parsing(pre[0])
             //this.parser.make(parse)
         }
