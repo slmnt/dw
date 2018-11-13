@@ -1,5 +1,6 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
+import { Scrollbars } from 'react-custom-scrollbars';
 import Interpreter from './Interpreter'
 import './inter.css'
 
@@ -31,9 +32,12 @@ class Interf extends Component {
                 this.setState({log: ''})
                 this.setState({cmd: ''})    
             }else{
-                this.Int.run(this.state.cmd)
+                var r = this.Int.run(this.state.cmd)
                 this.setState({log: this.state.log +'>>>' +this.state.cmd + '\n'})
                 this.setState({cmd: ''})
+                if(r){
+                    this.setState({log: this.state.log  + r + '\n'})
+                }
             }
         }
     }
@@ -43,8 +47,8 @@ class Interf extends Component {
     }
     
     render() {
-
         return (
+            <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
             <div className="form">
                 <pre className="print">{this.state.log}</pre>
                 <div className="in">
@@ -59,9 +63,8 @@ class Interf extends Component {
                 />
                 </label>
                 </div>
-
             </div>
-
+            </Scrollbars> 
         );
   	}
 }
