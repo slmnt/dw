@@ -71,6 +71,7 @@ const styles = theme => ({
     display: 'none',
   },
   drawerPaper: {
+    backgroundColor:"#f2f7ff",
     position: 'relative',
     width: drawerWidth,
   },

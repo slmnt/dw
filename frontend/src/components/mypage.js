@@ -14,6 +14,7 @@ const styles = theme => ({
     },
     test:{
         position: 'static',
+        backgroundColor:"#f2f7ff",
     },
     paper: {
     height: window.innerHeight / 7,

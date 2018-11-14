@@ -17,7 +17,7 @@ const styles = theme => ({
     color: "#10316b",
     backgroundColor:"#ffe867",
     textAlign:"center",
-    padding:"50px",
+    padding:"150px 50px",
   },
   header_title: {
     fontSize: "70px",
@@ -35,36 +35,33 @@ const styles = theme => ({
     backgroundColor:"#10316b",
     fontSize:"30px",
     padding:"100px",
+    margin:"70px",
     borderBottom: "solid 1px #eeeeee",
   },
   main_contents_title: {
     color:"#10316b",
-    paddingTop:"20px"
+    paddingTop:"40px"
   },
-  main_contents:{
-    flexDirection:"row",
+  main_contents: {
+    color:"#10316b",
   },
   main_contents_1: {
-    color:"white",
-    backgroundColor:"#F26964",
+    backgroundColor:"#ffe867",
     padding:"50px",
     margin:"70px",
   },
   main_contents_2: {
-    color:"white",
-    backgroundColor:"#F26964",
+    backgroundColor:"#ffe867",
     padding:"50px",
     margin:"70px",
   },
   main_contents_3: {
-    color:"white",
-    backgroundColor:"#F26964",
+    backgroundColor:"#ffe867",
     padding:"50px",
     margin:"70px"
   },
   main_contents_4: {
-    color:"white",
-    backgroundColor:"#F26964",
+    backgroundColor:"#ffe867",
     padding:"50px",
     margin:"70px"
   },
@@ -103,7 +100,7 @@ class Main extends Component {
     const { classes } = this.props;
     return (
       <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
-      <body className = {classes.body}>
+      <div className = {classes.body}>
         <header className = {classes.header}>
           <h1 className = {classes.header_title}>
             Mini Prog
@@ -142,7 +139,7 @@ class Main extends Component {
         <footer className = {classes.footer}>
           <p>Comming soon</p>
         </footer>
-      </body>
+      </div>
       </Scrollbars>            
     )
   }
