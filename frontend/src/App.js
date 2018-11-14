@@ -20,7 +20,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
 import Main from './components/Main'; 
-import Right from './components/Right';
+import Right from './components/Inter';
 import Three from './components/three';
 import Login from './components/Login';
 import Mypage from './components/mypage';
@@ -45,6 +45,7 @@ const styles = theme => ({
   appBar: {
     position: 'absolute',
     backgroundColor: '#0b409c',
+    color: '#ffe867',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -124,6 +125,7 @@ class App extends React.Component {
     login: false,
     uid: '',
     current: '',
+    language: 'python'
   };
 
   constructor(props){
@@ -135,8 +137,26 @@ class App extends React.Component {
     this.drawercloseer = this.drawercloseer.bind(this)
     this.testprops = this.testprops.bind(this)
     this.gomypage = this.gomypage.bind(this)
-
+    this.setlen = this.setlan.bind(this)
+    this.getlen = this.getlan.bind(this)
     // console.log(props.history.location.pathname)
+
+    // window.addEventListener('beforeunload',e => this.closewindows(e))
+  }
+
+  closewindows(){
+    axios.get('/api/cookieauth/').then((response) => {
+    }).catch((e) => {
+    })
+    return 'test'
+  }
+
+  setlan(l){
+    this.setState({ language: l})
+  }
+
+  getlan(){
+    return this.state.language
   }
 
   drop(){
@@ -267,9 +287,9 @@ class App extends React.Component {
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/main" component={Main}/>
-      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops}/>} />                      
-      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} />}/>                      
-      <Route path="/three" render={(props) => <Three {...props}/>} />                      
+      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
+      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
+      <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
       </div>
     );

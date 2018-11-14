@@ -47,12 +47,18 @@ class Mypage extends Component {
         super(props)
         // return backpage
         // props.history.goBack()
-        console.log(props)
+        this.set = props.set
         // props.gogo()
     }
 
     onclicked(e){
         const base = '/codemain/'
+        if(e === 'Python')
+            this.set('python')
+        else if(e === 'Java')
+            this.set('java')
+        else
+            this.set('c_cpp')
         this.props.history.push(base + e)
     }
 

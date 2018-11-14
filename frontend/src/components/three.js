@@ -9,8 +9,6 @@ class three extends Component {
 
         this.event = this.event.bind(this)
         document.addEventListener('keypress', e => this.event(e))
-        
-
     }
 
     event(e){
@@ -91,6 +89,8 @@ class three extends Component {
     componentWillUnmount(){
         this.stop()
         this.mount.removeChild(this.renderer.domElement)
+        document.removeEventListener('keypress', e => this.event(e))
+
     }
     
     renderScene = () => {

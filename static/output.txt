@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 test
+=======
+  File "C:\Users\dlstjq7685\git\2018DW//static//41.py", line 2
+    
+                ^
+SyntaxError: unexpected EOF while parsing
+>>>>>>> c64cf82f6dd60ba125da3489c25e076acd4e5d3f
