@@ -14,7 +14,6 @@ const styles = theme => ({
     },
     test:{
         position: 'static',
-        backgroundColor:"#f2f7ff",
     },
     paper: {
     height: window.innerHeight / 7,
@@ -77,7 +76,7 @@ class Mypage extends Component {
         return (
             <div className={this.props.classes.test}>
             <br/>
-                <Grid container spacing={24} direction="column">
+            <Grid container spacing={24} direction="column">
                 <Grid container item  justify="center" >
                 <Grid item xs={6}>
                 <Grid container className={this.props.classes.root}>

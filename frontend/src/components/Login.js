@@ -46,6 +46,10 @@ class Login extends Component {
         document.addEventListener('keypress', this.key, false)
     }
 
+    componentWillUnmount(){
+        document.removeEventListener('keypress', this.key)
+    }
+
     key(e){
         if(e.key === 'Enter'){
             this.clicked()

@@ -17,7 +17,7 @@ const styles = theme => ({
     color: "#10316b",
     backgroundColor:"#ffe867",
     textAlign:"center",
-    padding:"150px 50px",
+    padding:"50px",
   },
   header_title: {
     fontSize: "70px",
@@ -35,33 +35,36 @@ const styles = theme => ({
     backgroundColor:"#10316b",
     fontSize:"30px",
     padding:"100px",
-    margin:"70px",
     borderBottom: "solid 1px #eeeeee",
   },
   main_contents_title: {
     color:"#10316b",
-    paddingTop:"40px"
+    paddingTop:"20px"
   },
-  main_contents: {
-    color:"#10316b",
+  main_contents:{
+    flexDirection:"row",
   },
   main_contents_1: {
-    backgroundColor:"#ffe867",
+    color:"white",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px",
   },
   main_contents_2: {
-    backgroundColor:"#ffe867",
+    color:"white",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px",
   },
   main_contents_3: {
-    backgroundColor:"#ffe867",
+    color:"white",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px"
   },
   main_contents_4: {
-    backgroundColor:"#ffe867",
+    color:"white",
+    backgroundColor:"#F26964",
     padding:"50px",
     margin:"70px"
   },
