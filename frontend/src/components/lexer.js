@@ -71,22 +71,23 @@ class Lexer{
         for(i = 0;i < cmds.length;i++){
             var temp = cmds.charAt(i)
             switch(temp){
+                case '!=':
+                case '==':
+                case '<=':
+                case '>=':
+                case '++':
+                case '--':
                 case '=':
                 case '!':
-                case '==':
-                case '>=':
-                case '<=':
-                case '!=':
                 case '>':
                 case '<':
                 case '+':
-                case '++':
                 case '-':
-                case '--':
                 case '*':
                 case '/':
                 case '(':
                 case ')':
+                case ';':
                     prepro.push(dump)
                     prepro.push(temp)
                     dump = ''
@@ -116,7 +117,6 @@ class Lexer{
                 prepro[i] = Number(prepro[i])
             }
         }
-
         for(i = 0; i < prepro.length;i++){
             if(typeof prepro[i] === "number"){
             }
@@ -134,6 +134,7 @@ class Lexer{
                     case '!':
                         if(prepro[i + 1] === '='){
                             dump.push('!=')
+                            i++
                         }
                         break
                     case '<':
@@ -182,7 +183,36 @@ class Lexer{
                 }
             }
             prepro = dump
-
+            for(i = 0;i<prepro.length;i++){
+                if(prepro[i] === '++' || prepro[i] === '--'){
+                    if(prepro[i + 1]){
+                        switch(prepro[i + 1]){
+                            case '!=':
+                            case '==':
+                            case '<=':
+                            case '>=':
+                            case '++':
+                            case '--':
+                            case '=':
+                            case '!':
+                            case '>':
+                            case '<':
+                            case '+':
+                            case '-':
+                            case '*':
+                            case '/':
+                            case '(':
+                            case ')':
+                            case ';':
+                                break
+                            default:
+                                prepro[i] =  prepro[i].charAt(0) + '>'
+                                ++i;
+                                break
+                        }
+                    }
+                }
+            }
             return prepro
         }
     }

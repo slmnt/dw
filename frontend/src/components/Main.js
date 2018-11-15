@@ -14,7 +14,7 @@ const styles = theme => ({
     fontSize:"20px",
     width:"100%",
   },
-// header
+  // header
   header: {
     color:"#f2f7ff",
     backgroundColor:"#1abc9c",
@@ -62,17 +62,6 @@ const styles = theme => ({
     borderBottom: "solid 1px #eeeeee",
   },
   main_contents_title: {
-<<<<<<< HEAD
-    color:"#10316b",
-    paddingTop:"20px"
-  },
-  main_contents:{
-    flexDirection:"row",
-  },
-  main_contents_1: {
-    color:"white",
-    backgroundColor:"#F26964",
-=======
     color:"#f2f7ff",
     backgroundColor:"#1abc9c",
     padding:"40px",
@@ -83,37 +72,21 @@ const styles = theme => ({
   },
   main_contents_1: {
     backgroundColor:"#e74c3c",
->>>>>>> 6d999c41d5482c0dc21a466d46e453bd47cf7d2c
     padding:"50px",
     margin:"50px",
   },
   main_contents_2: {
-<<<<<<< HEAD
-    color:"white",
-    backgroundColor:"#F26964",
-=======
     backgroundColor:"#3498db",
->>>>>>> 6d999c41d5482c0dc21a466d46e453bd47cf7d2c
     padding:"50px",
     margin:"50px",
   },
   main_contents_3: {
-<<<<<<< HEAD
-    color:"white",
-    backgroundColor:"#F26964",
-=======
     backgroundColor:"#f1c40f",
->>>>>>> 6d999c41d5482c0dc21a466d46e453bd47cf7d2c
     padding:"50px",
     margin:"50px"
   },
   main_contents_4: {
-<<<<<<< HEAD
-    color:"white",
-    backgroundColor:"#F26964",
-=======
     backgroundColor:"#2ecc71",
->>>>>>> 6d999c41d5482c0dc21a466d46e453bd47cf7d2c
     padding:"50px",
     margin:"50px"
   },

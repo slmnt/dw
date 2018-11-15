@@ -53,7 +53,6 @@ class Interpreter{
      */
     run(cmd){
         var pre = this.lexer.decode(cmd)
-
         if(this.indent > 0){
             // execute section
             if(cmd === ""){
@@ -71,6 +70,8 @@ class Interpreter{
                                 }
                                 console.log(this.stack)
                             }
+                        }else{
+                            this.for_execute(temp[1])                            
                         }
                     }
                 }
@@ -79,22 +80,28 @@ class Interpreter{
             else{
                 var checker = this.parser.func_check(pre)
                 if(checker[0] === 'if'){
+                    var parse = this.parser.parsing(checker[1])
+                    pre = this.parser.make(parse)
                     this.blockinfo.push('if')
                     var dump = this.fp.pop()
                     this.fp.push(dump)
                     if(dump[0] === 'IF_BLOCK'){
-                        var parse = this.parser.parsing(checker[1])
-                        pre = this.parser.make(parse)
                         this.i_block.push({if_cmd: pre, body_cmd: []})
                         temp = {cmds:[['IF_BLOCK',this.indent]],vals:[],names:[]}
                         this.i_block[dump[1]]['body_cmd'].push(temp)
                         this.indent++
+                    }else{
+                        // for insert if
                     }
+                }else if(checker[0] === 'for'){
+                    var parse = this.parser.parsing(checker[1])
+                    pre = this.parser.make(parse)
+                    //if insert for
+                    //for insert for
                 }else{
                     parse = this.parser.parsing(pre)
                     pre = this.parser.make(parse)//-> make body cmd
 
-                    console.log(this.blockinfo)
                     if(this.blockinfo.pop() === 'if'){
                         this.blockinfo.push('if')
                         this.i_block[this.i_block.length - 1]['body_cmd'].push(pre)
@@ -107,20 +114,38 @@ class Interpreter{
         }
         //normal insert section
         else{
-            var checker = this.parser.func_check(pre)
+            checker = this.parser.func_check(pre)
             if(checker){
                 if(checker[0] === 'if'){
                     this.blockinfo.push('if')
-                    this.fp.push(['IF_BLOCK', this.indent])
-                    var parse = this.parser.parsing(checker[1])
+                    this.fp.push(['IF_BLOCK',this.i_block.length])
+                    parse = this.parser.parsing(checker[1])
                     pre = this.parser.make(parse)
                     this.i_block.push({if_cmd: pre, body_cmd: []})
                 }else if(checker[0] === 'for'){
+                    this.fp.push(['FOR_BLOCK', this.f_block.length])
                     this.blockinfo.push('for')
+                    var temp1 = [[]]
+                    for(var i = 0; i < checker[1].length;i++){
+                        if(checker[1][i] === ";"){
+                            temp1.push([])
+                        }else{
+                            temp1[temp1.length - 1].push(checker[1][i])
+                        }
+                    }
+                    // parse = this.parser.parsing(checker[1])
+                    var dump1 = this.parser.parsing(temp1[0])//init
+                    dump1 = this.parser.make(dump1)
+                    var dump2 = this.parser.parsing(temp1[1])//compare
+                    dump2 = this.parser.make(dump2)
+                    var dump3 = this.parser.parsing(temp1[2])//after
+                    dump3 = this.parser.make(dump3)
+                    this.f_block.push({init_cmd:dump1, compare_cmd: dump2,
+                                        body_cmd:[], after_cmd:dump3})
                 }
                 this.indent++
             }else{
-                var parse = this.parser.parsing(pre)
+                parse = this.parser.parsing(pre)
                 pre = this.parser.make(parse)
                 this.excute(pre)
                 if(this.stack.length > 0)
@@ -134,7 +159,14 @@ class Interpreter{
         var temp = this.f_block[num]
         this.excute(temp['init_cmd'])
 
+        var infinate = 0
         while(true){
+            infinate++;
+            if(infinate > 100000){
+                console.log("infinate loop error")
+                break
+            }
+
             this.excute(temp['compare_cmd'])
             var flag = this.stack.pop()
             if(flag === 'true'){
@@ -146,6 +178,7 @@ class Interpreter{
                 break
             }
         }
+        console.log(this.stack)
     }
 
     if_execute(num){
@@ -171,83 +204,301 @@ class Interpreter{
                     this.stack.push(val[cmd[i][1]])
                     break
                 case 'LOAD_NAME':
-                    this.heap.push(name[cmd[i][1]])
+                    this.stack.push(name[cmd[i][1]])
+                    break
+                case 'ADD_O':
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                this.heap[i3][1]++;
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }else{
+                        this.stack.push(++tar1)                        
+                    }
+                    break
+                case 'SUB_O':
+                    tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                this.heap[i3][1]--;
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }else{
+                        this.stack.push(--tar1)
+                    }
                     break
                 case 'ADD_VALS':
                     var tar2 = this.stack.pop()
-                    var tar1 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     var re = tar1 + tar2
                     this.stack.push(re)
                     break
                 case 'SUB_VALS':
                     tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     re = tar1 - tar2
                     this.stack.push(re)
                     break
                 case 'MUL_VALS':
                     tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     re = tar1 * tar2
                     this.stack.push(re)
                     break
                 case 'DIV_VALS':
                     tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     re = tar1 / tar2
                     this.stack.push(re)
                     break
                 case 'REM_VALS':
                     tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     re = tar1 % tar2
                     this.stack.push(re)
                     break
                 case 'STORE_VAL':
-                    break
-                case 'COMPARE_E':
                     tar2 = this.stack.pop()
                     tar1 = this.stack.pop()
+                    var flag = false
+                    for(var i3 = 0;i3 < this.heap.length;i3++){
+                        if(this.heap[i3][0] === tar1){
+                            this.heap[i3][1] = tar2
+                            flag = true
+                            break
+                        }
+                    }
+                    if(flag)
+                        break
+                    else
+                        this.heap.push([tar1,tar2])
+                    break
+                case 'COMPARE_E':
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 === tar2)
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_NE':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 !== tar2)
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_BE':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 >= tar2)
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_SE':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 <= tar2)
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_B':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 > tar2)
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_S':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    if(typeof tar2 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar2){
+                                tar2 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
+                    var tar1 = this.stack.pop()
+                    if(typeof tar1 === 'string'){
+                        for(var i3 = 0;i3 < this.heap.length;i3++){
+                            if(this.heap[i3][0] === tar1){
+                                tar1 = this.heap[i3][1]
+                                break
+                            }
+                        }
+                    }
                     if(tar1 < tar2)
                         this.stack.push('true')
                     else

@@ -1,6 +1,6 @@
 const keywords = [
-    '+','-','*','/','%','=','++','--',
-    '!=','==','>','<','>=','<='
+    '+','-','*','/','%','=','++','--',';',
+    '!=','==','>','<','>=','<=', '+>', '->'
 ];
 
 const func = [
@@ -47,6 +47,7 @@ class Parser{
 
     parsing(cmd){
 
+    var j = 0
     var blocks = cmd
     var depth = 0
     var ds = []
@@ -57,6 +58,9 @@ class Parser{
 
     for(var i = 0; i < blocks.length;i++){
         switch(blocks[i]){
+            case '++':
+            case '--':
+                break
             case '>':
             case '<':
             case '>=':
@@ -77,14 +81,14 @@ class Parser{
                     var dump = d.pop()
                     if(dump === '='){
                         ds[depth -1].push(dump)
-                    }{
+                    }else{
                         d.push(dump)
                     }
                     temp.push(d)
                     ds[depth-1].push(blocks[i])
                 }else{
                     if(temp.length > 0){
-                        var dump = temp.pop()
+                        dump = temp.pop()
                         if(dump === '='){
                             stack.push(dump)
                         }else{
@@ -97,8 +101,8 @@ class Parser{
             case '*':
             case '/':
                 if(depth > 0){
-                    var d = temp.pop()
-                    var dump = d.pop()
+                    d = temp.pop()
+                    dump = d.pop()
                     if(dump === '+' || dump === '=' || dump === '-'){
                         ds[depth -1].push(dump)
                     }else{
@@ -108,7 +112,7 @@ class Parser{
                     ds[depth-1].push(blocks[i])
                 }else{
                     if(temp.length > 0){
-                        var dump = temp.pop()
+                        dump = temp.pop()
                         if(dump === '+' || dump === '=' || dump === '-'){
                             stack.push(dump)
                         }else{
@@ -118,6 +122,32 @@ class Parser{
                     stack.push(blocks[i])
                 }
                 break;
+            case '+>':
+            case '->':
+                if(depth > 0){
+                    d = temp.pop()
+                    dump = d.pop()
+                    if(dump === '+' || dump === '=' || dump === '-' || dump === '*' || dump === '/'){
+                        ds[depth -1].push(dump)
+                    }else{
+                        if(blocks[i - 1] !== '(')
+                            d.push(dump)
+                    }
+                    temp.push(d)
+                    ds[depth-1].push(blocks[i])
+                }else{
+                    if(temp.length > 0){
+                        dump = temp.pop()
+                        if(dump === '+' || dump === '=' || dump === '-' || dump === '*' || dump === '/'){
+                            stack.push(dump)
+                        }else{
+                            if(dump)
+                                temp.push(dump)
+                        }
+                    }
+                    stack.push(blocks[i])
+                }
+                break
             case '(':
                 depth += 1;
                 ds.push([])
@@ -125,9 +155,9 @@ class Parser{
                 break
             case ')':
                 if(ds[depth-1].length > 0){
-                    var d = temp.pop()
+                    d = temp.pop()
 
-                    for(var j = 0; j < ds[depth-1].length;j++){
+                    for(j = 0; j < ds[depth-1].length;j++){
                         d.push(ds[depth-1].pop())
                     }
                     temp.push(d)
@@ -137,10 +167,10 @@ class Parser{
                 break
             default:
                 if(depth > 0){
-                    var d = temp.pop()
+                    d = temp.pop()
                     d.push(blocks[i])
                     if(ds[0].length > 0){
-                        for(var j = 0; j < ds[0].length;j++){
+                        for(j = 0; j < ds[0].length;j++){
                             d.push(ds[0].pop())
                         }
                     }
@@ -148,7 +178,7 @@ class Parser{
                 }else{
                     temp.push(blocks[i])
                     if(stack.length > 0){
-                        for(var j = 0;j < stack.length;j++){
+                        for(j = 0;j < stack.length;j++){
                             temp.push(stack.pop())
                         }
                     }
@@ -224,6 +254,15 @@ class Parser{
                         case '<':
                             cmds.push(['COMPARE_S', 'none'])
                             break;
+                        case '+>':
+                            cmds.push(['ADD_O', 'none'])
+                            break
+                        case '->':
+                            cmds.push(['SUB_O', 'none'])
+                            break
+                        case ';':
+                            break
+
                     }
                 }else{
                     cmds.push(['LOAD_NAME',names.length])
@@ -234,7 +273,6 @@ class Parser{
                 vals.push(block[i])
             }
         }
-
         return {cmds,vals,names}
     }
 }

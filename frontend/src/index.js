@@ -20,7 +20,7 @@ class Index extends Component {
 }
 
 render(
-  <BrowserRouter >
+  <BrowserRouter>
       <Index />
   </BrowserRouter>
   ,
