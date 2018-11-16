@@ -68,12 +68,12 @@ class Interpreter{
                                 for(var j = 0;j<this.i_block[temp[1]]['body_cmd'].length;j++){
                                     this.excute(this.i_block[temp[1]]['body_cmd'][j])
                                 }
-                                console.log(this.stack)
                             }
                         }else{
                             this.for_execute(temp[1])                            
                         }
                     }
+                    console.log(this.stack)
                 }
             }
             // insert section
@@ -83,21 +83,47 @@ class Interpreter{
                     var parse = this.parser.parsing(checker[1])
                     pre = this.parser.make(parse)
                     this.blockinfo.push('if')
+
                     var dump = this.fp.pop()
                     this.fp.push(dump)
+
+                    this.i_block.push({if_cmd: pre, body_cmd: []})
+                    temp = {cmds:[['IF_BLOCK',this.i_block.length - 1]],vals:[],names:[]}
                     if(dump[0] === 'IF_BLOCK'){
-                        this.i_block.push({if_cmd: pre, body_cmd: []})
-                        temp = {cmds:[['IF_BLOCK',this.indent]],vals:[],names:[]}
                         this.i_block[dump[1]]['body_cmd'].push(temp)
-                        this.indent++
                     }else{
-                        // for insert if
+                        this.f_block[dump[1]]['body_cmd'].push(temp)
                     }
+                    this.indent++
                 }else if(checker[0] === 'for'){
-                    var parse = this.parser.parsing(checker[1])
-                    pre = this.parser.make(parse)
-                    //if insert for
-                    //for insert for
+                    var temp1 = [[]]
+                    for(var i = 0; i < checker[1].length;i++){
+                        if(checker[1][i] === ";"){
+                            temp1.push([])
+                        }else{
+                            temp1[temp1.length - 1].push(checker[1][i])
+                        }
+                    }
+                    // parse = this.parser.parsing(checker[1])
+                    var dump1 = this.parser.parsing(temp1[0])//init
+                    dump1 = this.parser.make(dump1)
+                    var dump2 = this.parser.parsing(temp1[1])//compare
+                    dump2 = this.parser.make(dump2)
+                    var dump3 = this.parser.parsing(temp1[2])//after
+                    dump3 = this.parser.make(dump3)
+                    this.f_block.push({init_cmd:dump1, compare_cmd: dump2,
+                                        body_cmd:[], after_cmd:dump3})
+
+                    this.blockinfo.push('for')
+                    var dump = this.fp.pop()
+                    this.fp.push(dump)
+                    temp = {cmds:[['FOR_BLOCK',this.f_block.length - 1]],vals:[],names:[]}
+                    if(dump[0] === 'IF_BLOCK'){
+                        this.i_block[dump[1]]['body_cmd'].push(temp)
+                    }else{
+                        this.f_block[dump[1]]['body_cmd'].push(temp)
+                    }
+                    this.indent++
                 }else{
                     parse = this.parser.parsing(pre)
                     pre = this.parser.make(parse)//-> make body cmd
@@ -178,7 +204,6 @@ class Interpreter{
                 break
             }
         }
-        console.log(this.stack)
     }
 
     if_execute(num){
