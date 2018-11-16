@@ -218,10 +218,36 @@ class Interpreter{
         }
     }
 
+    load_val(){
+        var i3 = 0;
+        var tar2 = this.stack.pop()
+        if(typeof tar2 === 'string'){
+            for(i3 = 0;i3 < this.heap.length;i3++){
+                if(this.heap[i3][0] === tar2){
+                    tar2 = this.heap[i3][1]
+                    break
+                }
+            }
+        }
+        var tar1 = this.stack.pop()
+        if(typeof tar1 === 'string'){
+            for(i3 = 0;i3 < this.heap.length;i3++){
+                if(this.heap[i3][0] === tar1){
+                    tar1 = this.heap[i3][1]
+                    break
+                }
+            }
+        }
+        return [tar1, tar2]
+    }    
+
     excute(cmds){
         var cmd = cmds.cmds
         var val = cmds.vals
         var name = cmds.names
+
+        var temp = []
+        
 
         for(var i = 0; i < cmd.length;i++){
             switch(cmd[i][0]){
@@ -260,118 +286,33 @@ class Interpreter{
                     }
                     break
                 case 'ADD_VALS':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var re = tar1 + tar2
+                    temp = this.load_val()
+                    var re = temp[0] + temp[1]
                     this.stack.push(re)
                     break
                 case 'SUB_VALS':
-                    tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    re = tar1 - tar2
+                    temp = this.load_val()
+                    var re = temp[0] - temp[1]
                     this.stack.push(re)
                     break
                 case 'MUL_VALS':
-                    tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    re = tar1 * tar2
+                    temp = this.load_val()
+                    var re = temp[0] * temp[1]
                     this.stack.push(re)
                     break
                 case 'DIV_VALS':
-                    tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    re = tar1 / tar2
+                    temp = this.load_val()
+                    var re = temp[0] / temp[1]
                     this.stack.push(re)
                     break
                 case 'REM_VALS':
-                    tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    re = tar1 % tar2
+                    temp = this.load_val()
+                    var re = temp[0] % temp[1]
                     this.stack.push(re)
                     break
                 case 'STORE_VAL':
-                    tar2 = this.stack.pop()
-                    tar1 = this.stack.pop()
+                    var tar2 = this.stack.pop()
+                    var tar1 = this.stack.pop()
                     var flag = false
                     for(var i3 = 0;i3 < this.heap.length;i3++){
                         if(this.heap[i3][0] === tar1){
@@ -386,145 +327,48 @@ class Interpreter{
                         this.heap.push([tar1,tar2])
                     break
                 case 'COMPARE_E':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 === tar2)
+                    temp = this.load_val()
+                    if(temp[0] === temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_NE':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 !== tar2)
+                    temp = this.load_val()
+
+                    if(temp[0] !== temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_BE':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 >= tar2)
+                    temp = this.load_val()
+
+                    if(temp[0] >= temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_SE':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 <= tar2)
+                    temp = this.load_val()
+
+                    if(temp[0] <= temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_B':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 > tar2)
+                    temp = this.load_val()
+
+                    if(temp[0] > temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
                     break
                 case 'COMPARE_S':
-                    var tar2 = this.stack.pop()
-                    if(typeof tar2 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar2){
-                                tar2 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    var tar1 = this.stack.pop()
-                    if(typeof tar1 === 'string'){
-                        for(var i3 = 0;i3 < this.heap.length;i3++){
-                            if(this.heap[i3][0] === tar1){
-                                tar1 = this.heap[i3][1]
-                                break
-                            }
-                        }
-                    }
-                    if(tar1 < tar2)
+                    temp = this.load_val()
+
+                    if(temp[0] < temp[1])
                         this.stack.push('true')
                     else
                         this.stack.push('false')
