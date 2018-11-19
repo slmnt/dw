@@ -25,23 +25,11 @@ const styles = theme => ({
     fontSize: "70px",
   },
   m:{
-    //color:"#e74c3c",
     fontSize:"100px",
   },
-  /*
-  i:{
-    color:"#9b59b6",
-  },
-  */
   p:{
-    //color:"#3498db",
     fontSize:"100px",
   },
-  /*
-  g:{
-    color:"#f1c40f",
-  },
-  */
   header_sub_title: {
     fontSize: "30px",
     paddingBottom:"30px"
@@ -55,7 +43,6 @@ const styles = theme => ({
     color:"#f2f7ff",
     background: `linear-gradient(to top, rgba(217, 175, 217, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
     backgroundRepeat:"no-repeat", 
-    //backgroundImage:`url(${bridge})`,
     backgroundSize:"cover",
     fontSize:"30px",
     padding:"100px",
@@ -64,8 +51,8 @@ const styles = theme => ({
   main_contents_title: {
     color:"#f2f7ff",
     backgroundColor:"#1abc9c",
-    padding:"40px",
-    // border:"medium solid",
+    padding:"50px",
+    //margin:"50px 100px 0px 100px",
   },
   main_contents: {
     color:"#f2f7ff",
@@ -73,22 +60,22 @@ const styles = theme => ({
   main_contents_1: {
     backgroundColor:"#e74c3c",
     padding:"50px",
-    margin:"50px",
+    margin:"50px 25px 25px 50px",
   },
   main_contents_2: {
     backgroundColor:"#3498db",
     padding:"50px",
-    margin:"50px",
+    margin:"50px 50px 25px 25px",
   },
   main_contents_3: {
     backgroundColor:"#f1c40f",
     padding:"50px",
-    margin:"50px"
+    margin:"25px 25px 100px 50px"
   },
   main_contents_4: {
     backgroundColor:"#2ecc71",
     padding:"50px",
-    margin:"50px"
+    margin:"25px 50px 100px 25px "
   },
 
 // footer
