@@ -72,6 +72,44 @@ class Myprogram extends Component {
                         Comment2
                     </Typography>
                 </CardContent>
+                
+                {/*stack overflow layout  */}
+                <Divider/>
+                <CardContent>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>Box1</td>
+                                <td>Box2</td>
+                                <td>Box3</td>
+                                <td>body</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </CardContent>
+
+                <Divider/>
+                <CardContent>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>left</td>
+                                <td>
+                                    <tr>
+                                        title
+                                    </tr>
+                                    <tr>
+                                        <td>body</td>
+                                        <td>right</td>
+                                    </tr>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </CardContent>
+
+
                 </Card>                
                 </Grid>
             </div>
