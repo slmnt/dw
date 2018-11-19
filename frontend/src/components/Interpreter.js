@@ -11,6 +11,7 @@ class Interpreter{
 
     indent = 0
     blockinfo = []
+
     /**
      * IF_BLOCK
      * CMD: ['IF_BLOCK',0]
@@ -73,6 +74,7 @@ class Interpreter{
                             this.for_execute(temp[1])                            
                         }
                     }
+                    this.fp = []
                     console.log(this.stack)
                 }
             }
@@ -96,23 +98,7 @@ class Interpreter{
                     }
                     this.indent++
                 }else if(checker[0] === 'for'){
-                    var temp1 = [[]]
-                    for(var i = 0; i < checker[1].length;i++){
-                        if(checker[1][i] === ";"){
-                            temp1.push([])
-                        }else{
-                            temp1[temp1.length - 1].push(checker[1][i])
-                        }
-                    }
-                    // parse = this.parser.parsing(checker[1])
-                    var dump1 = this.parser.parsing(temp1[0])//init
-                    dump1 = this.parser.make(dump1)
-                    var dump2 = this.parser.parsing(temp1[1])//compare
-                    dump2 = this.parser.make(dump2)
-                    var dump3 = this.parser.parsing(temp1[2])//after
-                    dump3 = this.parser.make(dump3)
-                    this.f_block.push({init_cmd:dump1, compare_cmd: dump2,
-                                        body_cmd:[], after_cmd:dump3})
+                    this.new_forblock(checker)
 
                     this.blockinfo.push('for')
                     var dump = this.fp.pop()
@@ -151,23 +137,7 @@ class Interpreter{
                 }else if(checker[0] === 'for'){
                     this.fp.push(['FOR_BLOCK', this.f_block.length])
                     this.blockinfo.push('for')
-                    var temp1 = [[]]
-                    for(var i = 0; i < checker[1].length;i++){
-                        if(checker[1][i] === ";"){
-                            temp1.push([])
-                        }else{
-                            temp1[temp1.length - 1].push(checker[1][i])
-                        }
-                    }
-                    // parse = this.parser.parsing(checker[1])
-                    var dump1 = this.parser.parsing(temp1[0])//init
-                    dump1 = this.parser.make(dump1)
-                    var dump2 = this.parser.parsing(temp1[1])//compare
-                    dump2 = this.parser.make(dump2)
-                    var dump3 = this.parser.parsing(temp1[2])//after
-                    dump3 = this.parser.make(dump3)
-                    this.f_block.push({init_cmd:dump1, compare_cmd: dump2,
-                                        body_cmd:[], after_cmd:dump3})
+                    this.new_forblock(checker)
                 }
                 this.indent++
             }else{
@@ -177,8 +147,28 @@ class Interpreter{
                 if(this.stack.length > 0)
                     return this.stack.pop()
             }
-
         }
+    }
+
+    new_forblock(checker){
+        var temp1 = [[]]
+        for(var i = 0; i < checker[1].length;i++){
+            if(checker[1][i] === ";"){
+                temp1.push([])
+            }else{
+                temp1[temp1.length - 1].push(checker[1][i])
+            }
+        }
+        // parse = this.parser.parsing(checker[1])
+        var dump1 = this.parser.parsing(temp1[0])//init
+        dump1 = this.parser.make(dump1)
+        var dump2 = this.parser.parsing(temp1[1])//compare
+        dump2 = this.parser.make(dump2)
+        var dump3 = this.parser.parsing(temp1[2])//after
+        dump3 = this.parser.make(dump3)
+        this.f_block.push({init_cmd:dump1, compare_cmd: dump2,
+                            body_cmd:[], after_cmd:dump3})
+
     }
 
     for_execute(num){
@@ -247,7 +237,6 @@ class Interpreter{
         var name = cmds.names
 
         var temp = []
-        
 
         for(var i = 0; i < cmd.length;i++){
             switch(cmd[i][0]){
@@ -367,7 +356,6 @@ class Interpreter{
                     break
                 case 'COMPARE_S':
                     temp = this.load_val()
-
                     if(temp[0] < temp[1])
                         this.stack.push('true')
                     else

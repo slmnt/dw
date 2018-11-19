@@ -10,7 +10,7 @@ class three extends Component {
         this.event = this.event.bind(this)
         document.addEventListener('keypress', e => this.event(e))
     }
-
+    
     event(e){
         switch(e.key){
             case 'a':

@@ -21,7 +21,8 @@ import Button from '@material-ui/core/Button';
 
 import Main from './components/Main'; 
 //import Right from './components/Inter';
-import Right from './components/CreateUser';
+//import Right from './components/CreateUser';
+import Right from './components/MyProgram';
 import Three from './components/three';
 import Login from './components/Login';
 import Mypage from './components/mypage';
