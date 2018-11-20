@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import $ from "jquery";
 
 const styles = theme => ({
     layout: {
@@ -26,14 +27,47 @@ const styles = theme => ({
     pos: {
       marginBottom: 12,
     },
+    table:{
+        width: window.innerWidth * 0.7,
+        backgroundColor:"#00FF00",
+        textAlign:"center",
+        border: 10
+
+    },
+    table_title:{
+        backgroundColor:"#FF0000",
+
+    },
 });
   
 class Myprogram extends Component {
-    
+    state = {
+        width: 0,
+        height: 0
+    }
     constructor(props) {
         super(props);
+
+        this.update = this.update.bind(this)
     }
     
+    update(){
+        this.setState({
+            width: $(window).width(),
+            height: $(window).height()
+        })
+        console.log(this.state.width, this.state.height)
+    }
+
+    componentDidMount(){
+        window.addEventListener('resize',this.update)
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener('resize',this.update)
+
+    }
+
     render() {
 
         const { classes } = this.props;
@@ -42,12 +76,12 @@ class Myprogram extends Component {
             <div>
                 <br/>
                 <Grid container justify="center">
-                <Card className={classes.card} center>
+                <Card className={classes.card} center={"true"}>
                 <CardContent>
                     <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Number, tag section
                     </Typography>
-                    <Typography variant="h5" component="h2">
+                    <Typography component="h2">
                     Title section
                     </Typography>
                     <Typography className={classes.pos} color="textSecondary">
@@ -89,26 +123,25 @@ class Myprogram extends Component {
                 </CardContent>
 
                 <Divider/>
+                <Grid container justify="center">
                 <CardContent>
-                    <table>
+                    <table className={classes.table}>
                         <tbody>
-                            <tr>
-                                <td>left</td>
-                                <td>
-                                    <tr>
-                                        title
-                                    </tr>
-                                    <tr>
-                                        <td>body</td>
-                                        <td>right</td>
-                                    </tr>
-
+                            <tr className={classes.table_title}>
+                                <td colSpan="2">
+                                title
                                 </td>
+                            </tr>
+                            <tr>
+                                {/** */}
+                                <td width={window.innerWidth * 0.5}>body</td>
+                                {/** */}
+                                <td>right</td>
                             </tr>
                         </tbody>
                     </table>
                 </CardContent>
-
+                </Grid>
 
                 </Card>                
                 </Grid>
