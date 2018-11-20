@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,6 +8,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
   main: {
@@ -36,6 +37,7 @@ const styles = theme => ({
     width:"100%",
     textAlign:"center",
     padding:"5px",
+    fontSize: 20,
   },
   form: {
     width: '100%',
@@ -47,50 +49,115 @@ const styles = theme => ({
   },
 });
 
-function SignIn(props) {
-  const { classes } = props;
 
-  return (
-    <main className={classes.main}>
+class SignIn extends Component {
+
+  constructor(props){
+    super(props)
+
+    this.state = {
+      username: '',
+      password: '',
+      email: '',
+      firstname: '',
+      lastname: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.showparam = this.showparam.bind(this)
+    this.submit = this.submit.bind(this)
+
+    document.addEventListener('submit',(e) => this.submit(e))
+  }
+
+  submit(e){    
+    console.log("clicked")
+    e.preventDefault()
+  }
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
+  showparam(){
+    console.log(this.state)
+
+    return false
+  }
+
+  componentWillUnmount(){
+    document.removeEventListener('submit', (e) => this.submit(e))
+  }
+
+  render() {
+
+    const { classes } = this.props;
+
+    return (
+      <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
+      <div className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
-        <Typography component="h2" variant="h5" className={classes.signup}>
+        <Typography component="h2" className={classes.signup}>
           Mini Prog 会員登録
         </Typography>
         <form className={classes.form}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="id">ID(半角英数字)</InputLabel>
-            <Input name="id" type="text" id="id" autoComplete="username" />
+            <Input 
+            name="id" type="text" id="id" autoComplete="username" 
+            autoFocus
+            value={this.state.username} 
+            onChange={this.handleChange('username')}/>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">パスワード</InputLabel>
             <Input name="password" type="password" id="password" autoComplete="new-password" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">パスワード確認</InputLabel>
+            <Input name="password" type="password" id="password_c" autoComplete="new-password" />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">メールアドレス</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
+            <Input id="email" name="email" autoComplete="email" 
+            value={this.state.email}
+            onChange={this.handleChange('email')} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="first">名(例:太郎)</InputLabel>
-            <Input name="first" type="text" id="first" autoComplete="given-name" />
+            <Input name="first" type="text" id="first" 
+            autoComplete="given-name" value={this.state.firstname}
+            onChange={this.handleChange('firstname')}/>
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="last">性(例:山田)</InputLabel>
-            <Input name="last" type="text" id="last" autoComplete="family-name" />
+            <Input name="last" type="text" id="last" 
+            autoComplete="family-name" value={this.state.lastname}
+            onChange={this.handleChange('lastname')}/>
           </FormControl>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            type="submit"
           >
             登録
           </Button>
         </form>
       </Paper>
-    </main>
-  );
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+    </div>
+    </Scrollbars>
+    );
+  }
 }
 
 SignIn.propTypes = {
