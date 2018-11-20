@@ -1,18 +1,31 @@
 import React, { Component } from 'react';   
 import C1 from './course1'
+import C2 from './course2'
+import C3 from './course3'
 class Lobby extends Component {
 
-    c;
+    course;
 
     constructor(props){
       super(props)
 
+      window.addEventListener('resize',(e) => console.log(e))
 
     }
 
     componentDidMount(){
       console.log(this.props.match.params['id'])
-      this.c = <C1/>
+      switch(this.props.match.params['id']){
+        case "1":
+          this.course = <C1/>
+          break;
+        case "2":
+          this.course = <C2/>
+          break;
+        case "3":
+          this.course = <C3/>
+          break;
+      }
     }
     
     render() {
@@ -20,7 +33,7 @@ class Lobby extends Component {
       return (
         <div>
           {this.props.match.params['id']}
-          {this.c}
+          {this.course}
         </div>
         );
   	}

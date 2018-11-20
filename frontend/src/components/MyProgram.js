@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import $ from "jquery";
 
 const styles = theme => ({
     layout: {
@@ -40,11 +41,33 @@ const styles = theme => ({
 });
   
 class Myprogram extends Component {
-    
+    state = {
+        width: 0,
+        height: 0
+    }
     constructor(props) {
         super(props);
+
+        this.update = this.update.bind(this)
     }
     
+    update(){
+        this.setState({
+            width: $(window).width(),
+            height: $(window).height()
+        })
+        console.log(this.state.width, this.state.height)
+    }
+
+    componentDidMount(){
+        window.addEventListener('resize',this.update)
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener('resize',this.update)
+
+    }
+
     render() {
 
         const { classes } = this.props;
