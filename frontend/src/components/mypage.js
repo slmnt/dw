@@ -66,8 +66,7 @@ class Mypage extends Component {
             this.setState({userinfo: response.data})
         }).catch((e) => {
             this.props.history.push('login')
-        })
-        
+        })        
     }
 
     render() {

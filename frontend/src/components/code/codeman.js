@@ -38,7 +38,7 @@ class Codeman extends Component {
         return (
             <div>
             <GoldenLayoutComponent //config from simple react example: https://golden-layout.com/examples/#qZXEyv
-            htmlAttrs={{ style: { height: window.innerHeight, width: window.innerWidth } }}
+            htmlAttrs={{ style: { height: "100vh", width: "100vw" } }}
             config={{
               content: [
                 {

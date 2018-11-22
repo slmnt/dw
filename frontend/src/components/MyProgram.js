@@ -16,7 +16,7 @@ const styles = theme => ({
     },
 
     card: {
-        width: window.innerWidth * 0.8,
+        width: "80%",
     },
     button: {
         fontSize: 10,
@@ -29,15 +29,31 @@ const styles = theme => ({
     },
     table:{
         width: window.innerWidth * 0.7,
-        backgroundColor:"#00FF00",
+        // backgroundColor:"#00FF00",
         textAlign:"center",
         border: 10
 
     },
     table_title:{
-        backgroundColor:"#FF0000",
-
+        //backgroundColor:"#FF0000",
+        textAlign:"auto",
     },
+    table_body:{
+        textAlign:"auto",
+        //backgroundColor:"#FF00FF",
+        width: window.innerWidth * 0.5    
+    },
+    table_extention:{
+        textAlign:"auto",
+        //backgroundColor:"#F0F0F0",
+    },
+    table_right:{
+        //backgroundColor:"#FFFFFF",
+    },
+    table_info:{
+        textAlign:"right",
+    }
+
 });
   
 class Myprogram extends Component {
@@ -76,37 +92,7 @@ class Myprogram extends Component {
             <div>
                 <br/>
                 <Grid container justify="center">
-                <Card className={classes.card} center={"true"}>
-                <CardContent>
-                    <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    Number, tag section
-                    </Typography>
-                    <Typography component="h2">
-                    Title section
-                    </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                    username, create by, update by
-                    </Typography>
-                    <Typography component="p">
-                    body section
-                    </Typography>
-                </CardContent>
-                <CardActions>
-                    <Button className={classes.button} size="small" mini >comment</Button>
-                </CardActions>
-                <Divider/>
-                <CardContent>
-                    <Typography component="p">
-                        Comment1
-                    </Typography>
-                </CardContent>
-                <Divider/>
-                <CardContent>
-                    <Typography component="p">
-                        Comment2
-                    </Typography>
-                </CardContent>
-                
+                <Card className={classes.card} center={"true"}>                
                 {/*stack overflow layout  */}
                 <Divider/>
                 <CardContent>
@@ -129,14 +115,40 @@ class Myprogram extends Component {
                         <tbody>
                             <tr className={classes.table_title}>
                                 <td colSpan="2">
-                                title
+                                    <Typography>
+                                        title
+                                        <Divider/>
+                                        <div className={classes.table_info}>
+                                            createby
+                                            createat
+                                            updateat
+                                        </div>
+                                    </Typography>
                                 </td>
                             </tr>
                             <tr>
                                 {/** */}
-                                <td width={window.innerWidth * 0.5}>body</td>
+                                <td className={classes.table_body}>
+                                <Typography>
+                                    body
+                                    <Divider/>
+                                    comment
+                                </Typography>
+                                </td>
                                 {/** */}
-                                <td>right</td>
+                                <td className={classes.table_right} rowSpan="2">
+                                <Typography>
+                                    right
+                                </Typography>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className={classes.table_extention}>
+                                <Typography>
+                                    <Divider/>
+                                    extention comments
+                                </Typography>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -147,7 +159,7 @@ class Myprogram extends Component {
                 </Grid>
             </div>
         );
-  	}
+  	}   
 }
 
 Myprogram.PropTypes = PropTypes;

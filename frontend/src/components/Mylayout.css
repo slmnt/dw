@@ -1,0 +1,17 @@
+table{
+    table-layout: fixed;
+    width: 100vw;
+    height: 100vh;
+    overflow:scroll;
+    color: white;
+    background-color: rgba(20, 20, 20, 0.774);    
+}
+table:hover{
+}
+a{
+    text-decoration: none;
+    color: white;
+}
+.item:focus{
+    background-color: rgb(167, 167, 243);
+}
