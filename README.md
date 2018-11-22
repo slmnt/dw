@@ -10,7 +10,8 @@ https://ant.design/docs/react/introduce
 https://blueprintjs.com/   
 https://github.com/JedWatson/react-codemirror   
 https://reactjs.org/docs/events.html   
-   
+https://www.google.com/doodles/celebrating-50-years-of-kids-coding   
+      
    
 createuser -U postgres -P -I -E django *user-django-password:xsi123456*   
 createdb -E UTF-8 -O django -U postgres djangodb   
