@@ -5,6 +5,7 @@ import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import AceEditor from 'react-ace';
+import axios from 'axios';
 import 'brace/mode/python';
 import 'brace/mode/java';
 import 'brace/mode/c_cpp';
@@ -16,18 +17,15 @@ const styles = theme => ({
         minWidth: '10%',
         maxWidth: 100,
         width: "10%",
-        //backgroundColor:"#00FF00",
+        textAlign: "left",
     },
     table_tab:{
-        //backgroundColor:"#FF0000",
         height: "5%",
     },
     table_body:{
-        //backgroundColor:"#00FFF0",
         height: "70%",
     },
     table_result:{
-        // backgroundColor:"#000000",
     }
 });
   
@@ -35,12 +33,14 @@ class Mylayout extends Component {
     state = {
         flag: false,
         val: '',
+        result: ''
     }
 
     constructor(props) {
         super(props);
 
         this.select = this.select.bind(this)
+        this.run_code = this.run_code.bind(this)
         this.onChange = this.onChange.bind(this)
     }
 
@@ -49,13 +49,16 @@ class Mylayout extends Component {
     }    
 
     componentDidMount(){
-      
+    }
+
+    componentWillUnmount(){
+
     }
 
     dragStart(e) {
         // Update our state with the item that is being dragged
-        // e.dataTransfer.effectAllowed = 'move'
-        e.dataTransfer.setData("text", e.target.id);
+        e.dataTransfer.effectAllowed = 'copy'
+        e.dataTransfer.setData("tab", e.target.id);
     }
     
     dragOver(e) {
@@ -68,19 +71,35 @@ class Mylayout extends Component {
     allowdrop(e){
         e.preventDefault();
     }
-    drop(e){
+    tabdrop(e){
         e.preventDefault();
-        var data = e.dataTransfer.getData("text");
-        e.target.appendChild(document.getElementById(data));
+        var data = e.dataTransfer.getData("tab");
+        var dump = document.getElementById(data).cloneNode(true)
+        e.target.appendChild(dump);
     }
 
     select(e){
-        console.log(e.target.id)
+        // console.log(e.target.id)
 
         if(this.state.flag)
             this.setState({flag: false})
         else
             this.setState({flag: true})
+    }
+
+    run_code(){
+
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+        // console.log(this.state.value)
+        /*
+        */
+        axios.post('/api/python/',{contents: this.state.val}).then(response => {
+            this.setState({ result: response.data})
+            // console.log(response.data)
+        }).catch(e => {
+            // console.log(e)
+        })
 
     }
     
@@ -121,8 +140,6 @@ class Mylayout extends Component {
                         <tr onDragOver={this.dragOver}>
                             <td rowSpan="3" 
                             className={classes.table_view}
-                            onDrop={this.drop}
-                            onDragOver={this.allowdrop}
                             >
                                 <a
                                 href="#1"
@@ -136,7 +153,7 @@ class Mylayout extends Component {
                                     itme1
                                     {con}
                                 </a>
-                                <br/>
+                                <div></div>
                                 <a
                                 href="#2"
                                 className="item"
@@ -148,7 +165,7 @@ class Mylayout extends Component {
                                 >
                                     itme2
                                 </a>
-                                <br/>
+                                <div></div>
                                 <a
                                 href="#3"
                                 className="item"
@@ -160,10 +177,11 @@ class Mylayout extends Component {
                                 >
                                     itme3
                                 </a>
+                                <div></div>
                             </td>
                             <td className={classes.table_tab}
                             draggable="true" 
-                            onDrop={this.drop}
+                            onDrop={this.tabdrop}
                             onDragOver={this.allowdrop}
                             >
                                 tab
@@ -176,7 +194,10 @@ class Mylayout extends Component {
                         </tr>
                         <tr>
                             <td className={classes.table_result}>
-                            result
+                                <a href="#" className="run" onClick={this.run_code} >execute</a>
+                                <br/>
+                                <br/>
+                                <textarea value={this.state.result} disabled/>
                             </td>
                         </tr>
                     </tbody>
