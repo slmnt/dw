@@ -1,14 +1,11 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import $ from "jquery";
+import axios from 'axios';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
     layout: {
@@ -16,7 +13,7 @@ const styles = theme => ({
     },
 
     card: {
-        width: "80%",
+        width: "80vw",
     },
     button: {
         fontSize: 10,
@@ -28,7 +25,7 @@ const styles = theme => ({
       marginBottom: 12,
     },
     table:{
-        width: window.innerWidth * 0.7,
+        width: "70vw",
         // backgroundColor:"#00FF00",
         textAlign:"center",
         border: 10
@@ -41,7 +38,8 @@ const styles = theme => ({
     table_body:{
         textAlign:"auto",
         //backgroundColor:"#FF00FF",
-        width: window.innerWidth * 0.5    
+        width: "50vw"
+        
     },
     table_extention:{
         textAlign:"auto",
@@ -52,15 +50,20 @@ const styles = theme => ({
     },
     table_info:{
         textAlign:"right",
+    },
+    table_code:{
+        width: "50vw"
     }
 
 });
-  
+
 class Myprogram extends Component {
     state = {
-        width: 0,
-        height: 0
-    }
+        data: [],
+        activePage: 0,
+        pagelimit: 0,
+        open: false,
+        }
     constructor(props) {
         super(props);
 
@@ -68,20 +71,16 @@ class Myprogram extends Component {
     }
     
     update(){
-        this.setState({
-            width: $(window).width(),
-            height: $(window).height()
-        })
-        console.log(this.state.width, this.state.height)
     }
 
     componentDidMount(){
-        window.addEventListener('resize',this.update)
+        axios.get('/api/code/').then(response => {
+            this.setState({data: response.data})
+            console.log(this.state.data)
+        })
     }
 
     componentWillUnmount(){
-        window.removeEventListener('resize',this.update)
-
     }
 
     render() {
@@ -89,75 +88,69 @@ class Myprogram extends Component {
         const { classes } = this.props;
 
         return (
-            <div>
+            <Scrollbars  disablehorizontalscrolling={true} style={{ width: "100vw", height: "95vh" }}>
                 <br/>
                 <Grid container justify="center">
-                <Card className={classes.card} center={"true"}>                
-                {/*stack overflow layout  */}
-                <Divider/>
-                <CardContent>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Box1</td>
-                                <td>Box2</td>
-                                <td>Box3</td>
-                                <td>body</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </CardContent>
-
-                <Divider/>
-                <Grid container justify="center">
-                <CardContent>
-                    <table className={classes.table}>
-                        <tbody>
-                            <tr className={classes.table_title}>
-                                <td colSpan="2">
+                {(() => {
+                if(this.state.data.length > 0){
+                    return(
+                        <div>
+                        {this.state.data.map(el => (
+                        <div key={el.id}>
+                            <table className={classes.table}>
+                            <tbody>
+                                <tr className={classes.table_title}>
+                                    <td colSpan="2">
+                                        <Typography>
+                                            {el.title}|
+                                            {el.codetype}
+                                            <Divider/>
+                                            <div className={classes.table_info}>
+                                                {el.auth}|
+                                                {el.createat}|
+                                                {el.updateat}
+                                            </div>
+                                        </Typography>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {/** */}
+                                    <td className={classes.table_body}>
+                                    <xmp className={classes.table_code}>
+                                        { el.source}
+                                    </xmp>
+                                    <Divider/>
                                     <Typography>
-                                        title
-                                        <Divider/>
-                                        <div className={classes.table_info}>
-                                            createby
-                                            createat
-                                            updateat
-                                        </div>
+                                        comment
                                     </Typography>
-                                </td>
-                            </tr>
-                            <tr>
-                                {/** */}
-                                <td className={classes.table_body}>
-                                <Typography>
-                                    body
-                                    <Divider/>
-                                    comment
-                                </Typography>
-                                </td>
-                                {/** */}
-                                <td className={classes.table_right} rowSpan="2">
-                                <Typography>
-                                    right
-                                </Typography>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className={classes.table_extention}>
-                                <Typography>
-                                    <Divider/>
-                                    extention comments
-                                </Typography>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </CardContent>
-                </Grid>
+                                    </td>
+                                    {/** */}
+                                    <td className={classes.table_right} rowSpan="2">
+                                    <Typography>
+                                        right
+                                    </Typography>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className={classes.table_extention}>
+                                    <Typography>
+                                        <Divider/>
+                                        extention comments
+                                    </Typography>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        </div>
+                        ))}   
+                        </div>
+                    )
+                }
+                })()}
 
-                </Card>                
                 </Grid>
-            </div>
+            </Scrollbars>
         );
   	}   
 }

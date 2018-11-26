@@ -111,7 +111,7 @@ class Main extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
+      <Scrollbars  disablehorizontalscrolling={true} style={{ width: "100vw", height: "95vh" }}>
       <div className = {classes.body}>
         <header className = {classes.header}>
           <h1 className = {classes.header_title}>

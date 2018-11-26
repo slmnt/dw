@@ -34,9 +34,16 @@ class Stuff(models.Model):
 class Codetype(models.Model):
     description = models.CharField(max_length=15)
 
-
 class Code(models.Model):
+    title = models.CharField(max_length=15,default='null')
     auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
     codetype = models.ForeignKey('Codetype', on_delete=models.CASCADE)
     source = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+
+class Comment(models.Model):
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    coments = models.CharField(max_length=1000)
+    createat = models.DateTimeField(default=timezone.now)
+    root = models.ForeignKey('Code',on_delete=models.CASCADE)

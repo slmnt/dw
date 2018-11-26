@@ -1,7 +1,16 @@
 import React, { Component } from 'react';   
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 import Minecraft from '../games/Minecraft';
+
+const styles = theme => ({
+    main:{
+        position: 'relative',
+        top: 1,
+        left: 1
+    },
+})
 
 class three extends Component {
 
@@ -26,8 +35,10 @@ class three extends Component {
     }
 
     render() {
+        const { classes } = this.props;
+
         return (
-            <div>
+            <div className={classes.main}>
                 <div id="gameFrame" style={{position: "relative"}}>
                     <canvas id="canvas"></canvas>
                 </div>
@@ -41,5 +52,4 @@ three.propTypes = {
     //theme: PropTypes.object.isRequired,
 };
 
-
-export default three;
+export default withStyles(styles)(three);

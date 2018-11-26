@@ -36,11 +36,11 @@ const styles = theme => ({
   },
   appFrame: {
     height: '100%',
+    width: '100%',
     zIndex: 1,
     overflow: 'hidden',
-    position: 'absolute',
     display: 'flex',
-    width: '100%',
+    position: 'absolute',
     left: 0,
     top: 0,
   },
@@ -67,8 +67,8 @@ const styles = theme => ({
     marginRight: drawerWidth,
   },
   menuButton: {
-    marginLeft: 12,
-    marginRight: 20,
+    marginLeft: 6,
+    marginRight: 10,
   },
   hide: {
     display: 'none',
@@ -110,13 +110,20 @@ const styles = theme => ({
   'contentShift-right': {
     marginRight: 0,
   },  
+  appbarhis:{
+    position: 'relative',
+    left: -10
+  },
   logoutButton: {
     position: 'absolute',
-    left: '85%'    
+    left: '92%'
   },
   test: {
-    backgroundColor: 'red'
-  }
+    position: 'relative',
+    // top: -25,
+    left:-1,
+    height: "100%",
+  },
 });
 
 class App extends React.Component {
@@ -321,12 +328,12 @@ class App extends React.Component {
           paper: classes.drawerPaper,
         }}
       >
-        <Scrollbars>        
         <div className={classes.drawerHeader}>
           <IconButton onClick={this.handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
+        <Scrollbars style={{ height: "90vh" }}>        
         <Divider />
         <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
         <Divider />
@@ -368,8 +375,10 @@ class App extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
+        
+        
           <AppBar
-            sition='sticky'
+            position='sticky'
             className={classNames(classes.appBar, {
               [classes.appBarShift]: open,
               [classes[`appBarShift-${anchor}`]]: open,
@@ -384,7 +393,7 @@ class App extends React.Component {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" noWrap>
+              <Typography className={classes.appbarhis} color="inherit" noWrap>
                 {this.state.current}
               </Typography>
               <div className={classes.logoutButton}>
@@ -401,9 +410,11 @@ class App extends React.Component {
             })}
           >
             <div className={classes.drawerHeader} />
+              <div className={classes.test}>
               {contents}                                  
+              </div>
           </main>
-          {after}
+            {after}
         </div>
       </div>
     );
@@ -419,4 +430,4 @@ App = withRouter(App);
 export default withStyles(styles, { withTheme: true })(App);
 
 /*
-*/
+*/ 
