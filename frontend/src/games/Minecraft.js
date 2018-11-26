@@ -49,6 +49,11 @@ Game.init = function () {
   this.html.init();
 
 }
+Game.destroy = function () {
+  if (this.main && this.main.renderer) this.main.renderer.dispose();
+}
+
+
 Game.input.init = function () {
   this.main = this.game.main;
 
@@ -874,8 +879,14 @@ this.init = function () {
   this.stats.init();
   this.main.init();
 }.bind(Game);
+this.destroy = Game.destroy.bind(Game);
 this.setRendererElement = Game.html.setRendererElement.bind(Game.html);
 this.setStatsElement = Game.html.setStatsElement.bind(Game.html);
+
+
+
+
+
 
 }.bind(ret))
 

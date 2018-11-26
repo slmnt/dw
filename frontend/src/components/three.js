@@ -26,6 +26,9 @@ class three extends Component {
         Minecraft.init();
         this.update();
     }
+    componentWillUnmount(){
+        Minecraft.destroy();
+    }
     update = () => {
         window.requestAnimationFrame(this.update);
         Minecraft.update();
