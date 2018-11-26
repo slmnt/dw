@@ -23,11 +23,21 @@ ul{
 	padding-left: 1;
 }
 
+.tab_item{
+    display:inline-block;
+    width: 100px;
+    background-color: rgb(121, 124, 124);
+    padding: 0.2em 0.5em;
+    margin-left: 1px;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+}
+
+
 .tab{
-    height: 5vh;
+    height: 3vh;
     padding-left: 0;
     overflow-x: auto;
-	background-color: black;
 }
 .tab::-webkit-scrollbar{
 	height: 5px;

@@ -43,6 +43,7 @@ class Mylayout extends Component {
         result: '',
         views: [],
         tabs: [],
+        tabrender: <div><a href="#" className="tab_item">test</a><a href="#" className="tab_item">test2</a></div>
     }
 
     constructor(props) {
@@ -197,7 +198,7 @@ class Mylayout extends Component {
                                     onDragStart={this.dragStart}                                
                                     onClick={this.select}
                                     >
-                                        itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3
+                                        item3
                                     </a>
                                 </li>
 
@@ -207,7 +208,7 @@ class Mylayout extends Component {
                                 onDrop={this.tabdrop}
                                 onDragOver={this.allowdrop}                                
                                 >
-                                    tab
+                                    {this.state.tabrender}
                             </td>
                         </tr>
                         <tr>
