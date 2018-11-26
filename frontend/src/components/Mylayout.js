@@ -1,7 +1,6 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -12,8 +11,14 @@ import 'brace/mode/java';
 import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
-
+/*
+fix view / tab management system
+*/
 const styles = theme => ({
+    root:{
+        //position: 'relative',
+        //top: -25
+    },
     table_view:{
         minWidth: '10%',
         maxWidth: 100,
@@ -21,7 +26,8 @@ const styles = theme => ({
         textAlign: "left",
     },
     table_tab:{
-        height: "1vw",
+        height: "2vw",
+        backgroundColor: '#FFF',
     },
     table_body:{
         height: "70%",
@@ -34,7 +40,9 @@ class Mylayout extends Component {
     state = {
         flag: false,
         val: '',
-        result: ''
+        result: '',
+        views: [],
+        tabs: [],
     }
 
     constructor(props) {
@@ -82,6 +90,8 @@ class Mylayout extends Component {
             console.log(dump.textContent)
         // dump.innerHTML = '<div><a href="#" className="run" onClick={this.run_code} >execute</a><a href="#" onClick={this.select} >x</a></div>'
         e.target.appendChild(dump);
+
+        console.log(e.target)
     }
 
     select(e){
@@ -93,7 +103,6 @@ class Mylayout extends Component {
     }
 
     tab_cloas(e){
-        console.log(e)
     }
 
     run_code(){
@@ -123,7 +132,7 @@ class Mylayout extends Component {
             onChange={(e) => this.onChange(e)}
             name="UNIQUE_ID_OF_DIV"
             fontSize={15}
-            width="90vw"
+            width="89.5vw"
             height="70vh"
             editorProps={{$blockScrolling: Infinity}}
             setOptions={{
@@ -143,7 +152,8 @@ class Mylayout extends Component {
         }
 
         return (
-            <Scrollbars  disableHorizontalScrolling style={{ width: "100vw", height: "100vh" }}>
+            <div className={classes.root}>
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "94vh" }}>
                 <table className={classes.table}>
                     <tbody>
                         <tr onDragOver={this.dragOver}>
@@ -187,18 +197,17 @@ class Mylayout extends Component {
                                     onDragStart={this.dragStart}                                
                                     onClick={this.select}
                                     >
-                                        itme3
+                                        itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3itme3
                                     </a>
                                 </li>
 
                             </ul>
                             </td>
-                            <td className={'tab'}
-                            draggable="true" 
-                            onDrop={this.tabdrop}
-                            onDragOver={this.allowdrop}                                
-                            >
-                            tab
+                                <td className={'tab'}
+                                onDrop={this.tabdrop}
+                                onDragOver={this.allowdrop}                                
+                                >
+                                    tab
                             </td>
                         </tr>
                         <tr>
@@ -219,6 +228,7 @@ class Mylayout extends Component {
                     </tbody>
                 </table>
             </Scrollbars>
+        </div>
         );
   	}   
 }
