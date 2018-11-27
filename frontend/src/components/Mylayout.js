@@ -1,6 +1,7 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
+import ReactDOM from 'react-dom'
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -42,14 +43,21 @@ class Mylayout extends Component {
         val: '',
         result: '',
         views: [],
-        tabs: [],
-        tabrender: <div><a href="#" className="tab_item">test</a><a href="#" className="tab_item">test2</a></div>
+        tabs: ["1", "2"],
+        tabrender: <div className="tab_item"
+                        id="tabitem1"
+                        draggable="true" 
+                        onDragStart={this.dragStart}
+                        onClick={this.tab_close}
+                        >itme1
+                    </div>
     }
 
     constructor(props) {
         super(props);
 
         this.select = this.select.bind(this)
+        this.tabdrop = this.tabdrop.bind(this)
         this.run_code = this.run_code.bind(this)
         this.onChange = this.onChange.bind(this)
     }
@@ -67,6 +75,7 @@ class Mylayout extends Component {
 
     dragStart(e) {
         // Update our state with the item that is being dragged
+        console.log('start')
         e.dataTransfer.effectAllowed = 'copy'
         e.dataTransfer.setData("tab", e.target.id);
     }
@@ -84,14 +93,35 @@ class Mylayout extends Component {
     tabdrop(e){
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
-        var dump = document.getElementById(data).cloneNode(true)
+        /**
+         * tartget position check
+         * check 3 if
+         * first
+         * middle
+         * end
+         * 
+         */
+        
+        try{
+            /**
+             var dump = document.getElementById(data).cloneNode(true)
+             dump.setAttribute("class","tab_item")
+             if(e.target.id)
+                 console.log()
+             else
+                 e.target.appendChild(dump);
+             * 
+             */
 
-        // check current items
-        if(dump.textContent === "item1")
-            console.log(dump.textContent)
-        // dump.innerHTML = '<div><a href="#" className="run" onClick={this.run_code} >execute</a><a href="#" onClick={this.select} >x</a></div>'
-
-        console.log(e.target)
+            let temp = this.state.tabs 
+            temp.push(data)
+            this.setState({
+                tabs: temp
+            })
+            
+        }catch(e){
+            console.log('error')
+        }
     }
 
     intab(e){
@@ -109,7 +139,10 @@ class Mylayout extends Component {
             this.setState({flag: true})
     }
 
-    tab_cloas(e){
+    tab_close(e){
+        let dump = document.getElementById(e.target.id)
+        console.log(dump)
+        dump.remove()
     }
 
     run_code(){
@@ -151,11 +184,19 @@ class Mylayout extends Component {
           );
               
         let con;
-
+        let tabb = null;
         if(this.state.flag){
-            con = (<ul><li>test</li></ul>);
+            con = <ul><li>{this.state.tabs[0]}</li></ul>;
         }else{
             con = null;
+        }
+
+        if(this.state.tabs.length > 0){
+            tabb = this.state.tabs.map(e =>{
+                return(
+                    <div className="tab_item">{e}</div>
+                )
+            })
         }
 
         return (
@@ -195,17 +236,16 @@ class Mylayout extends Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a
-                                    href="#"
-                                    className="item"
-                                    id={3}
+                                    <div id="view3"
                                     draggable="true" 
                                     onDragEnd={this.dragEnd} 
                                     onDragStart={this.dragStart}                                
-                                    onClick={this.select}
                                     >
                                         item3
-                                    </a>
+                                        <div id="view3" onClick={this.tab_close} className="closer">
+                                            x
+                                        </div>
+                                    </div>
                                 </li>
 
                             </ul>
@@ -214,6 +254,7 @@ class Mylayout extends Component {
                                 onDrop={this.tabdrop}
                                 onDragOver={this.allowdrop}
                                 >
+                                    {tabb}
                                     {this.state.tabrender}
                             </td>
                         </tr>
@@ -226,7 +267,7 @@ class Mylayout extends Component {
                             <td className={classes.table_result}>
                                 <div>
                                     <a href="#" className="run" onClick={this.run_code} >execute</a>
-                                    <a href="#" onClick={this.tab_cloas('tab')} >x</a>
+                                    <a href="#" onClick={this.tab_close} >x</a>
                                 </div>
                                 <br/>
                                 <textarea value={this.state.result} disabled/>
