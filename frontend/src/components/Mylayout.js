@@ -1,6 +1,6 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import PropTypes, { string } from 'prop-types';
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -43,13 +43,19 @@ class Mylayout extends Component {
         result: '',
         views: [],
         tabs: [],
-        tabrender: <div><a href="#" className="tab_item">test</a><a href="#" className="tab_item">test2</a></div>
+        tabrender: <div className="tab_item"
+                        id="tabitem1"
+                        draggable="true" 
+                        onDragStart={this.dragStart}
+                        >itme1
+                    </div>
     }
 
     constructor(props) {
         super(props);
 
         this.select = this.select.bind(this)
+        this.tabdrop = this.tabdrop.bind(this)
         this.run_code = this.run_code.bind(this)
         this.onChange = this.onChange.bind(this)
     }
@@ -67,6 +73,7 @@ class Mylayout extends Component {
 
     dragStart(e) {
         // Update our state with the item that is being dragged
+        console.log('start')
         e.dataTransfer.effectAllowed = 'copy'
         e.dataTransfer.setData("tab", e.target.id);
     }
@@ -84,15 +91,31 @@ class Mylayout extends Component {
     tabdrop(e){
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
-        var dump = document.getElementById(data).cloneNode(true)
+        let dump = document.getElementById(data).cloneNode(true)
+        /**
+         *          
+         var dump = document.getElementById(data).cloneNode(true)
+         // check current items
+         if(dump.textContent === "item1")
+             console.log(dump.textContent)
+         // dump.innerHTML = '<div><a href="#" className="run" onClick={this.run_code} >execute</a><a href="#" onClick={this.select} >x</a></div>'
+        */
 
-        // check current items
-        if(dump.textContent === "item1")
-            console.log(dump.textContent)
-        // dump.innerHTML = '<div><a href="#" className="run" onClick={this.run_code} >execute</a><a href="#" onClick={this.select} >x</a></div>'
-        e.target.appendChild(dump);
+        console.log(dump.innerHTML)
+        console.log(dump.outerHTML)
+        dump.outerHTML = "<div> test</div>";
+        dump.setAttribute("class","tab_item")
+        
+        try{
+            if(e.target.id)
+                console.log()
+            else
+                e.target.appendChild(dump);
 
-        console.log(e.target)
+            console.log(e.target)
+        }catch(e){
+            console.log('error')
+        }
     }
 
     select(e){

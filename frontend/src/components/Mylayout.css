@@ -25,14 +25,16 @@ ul{
 
 .tab_item{
     display:inline-block;
-    width: 100px;
+    width: 70px;
     background-color: rgb(121, 124, 124);
     padding: 0.2em 0.5em;
     margin-left: 1px;
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
 }
-
+.tab_item:active{
+    background-color: rgb(53, 53, 53);
+}
 
 .tab{
     height: 3vh;
