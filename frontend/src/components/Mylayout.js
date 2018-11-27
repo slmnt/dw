@@ -90,9 +90,15 @@ class Mylayout extends Component {
         if(dump.textContent === "item1")
             console.log(dump.textContent)
         // dump.innerHTML = '<div><a href="#" className="run" onClick={this.run_code} >execute</a><a href="#" onClick={this.select} >x</a></div>'
-        e.target.appendChild(dump);
 
         console.log(e.target)
+    }
+
+    intab(e){
+        e.preventDefault();
+        var data = e.dataTransfer.getData("tab");
+        e.target.appendChild(data);
+
     }
 
     select(e){
@@ -206,7 +212,7 @@ class Mylayout extends Component {
                             </td>
                                 <td className={'tab'}
                                 onDrop={this.tabdrop}
-                                onDragOver={this.allowdrop}                                
+                                onDragOver={this.allowdrop}
                                 >
                                     {this.state.tabrender}
                             </td>
