@@ -1,7 +1,6 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes, { string } from 'prop-types';
-import ReactDOM from 'react-dom'
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -44,13 +43,6 @@ class Mylayout extends Component {
         result: '',
         views: [],
         tabs: ["1", "2"],
-        tabrender: <div className="tab_item"
-                        id="tabitem1"
-                        draggable="true" 
-                        onDragStart={this.dragStart}
-                        onClick={this.tab_close}
-                        >itme1
-                    </div>
     }
 
     constructor(props) {
@@ -62,6 +54,7 @@ class Mylayout extends Component {
         this.onChange = this.onChange.bind(this)
     }
 
+
     onChange(newValue) {
         this.setState({val: newValue})
     }    
@@ -70,7 +63,6 @@ class Mylayout extends Component {
     }
 
     componentWillUnmount(){
-
     }
 
     dragStart(e) {
@@ -103,20 +95,51 @@ class Mylayout extends Component {
          */
         
         try{
+            //when mouse up, get mouse position data -> check target tab position => adjust tab elemenets  =>rebuild tabs render
+            //console.log(e.clientX)
+            var dump = document.getElementById(e.target.id)
+            var rect = dump.getBoundingClientRect();
+            var checkx = (2 * rect.x + rect.width) / 2 
+            var id = e.target.id
+            id = id.split("tab")
+            var temp = []
+            var inn = this.state.tabs.length + 1
+            inn = inn.toString()
+            var origin = this.state.tabs
+
+            while(true){
+                var t = origin.pop()
+                if(t === id[1]){
+                    origin.push(t)
+                    break
+                }
+                
+                temp.push(t)
+            }
+            if(checkx > e.clientX){
+                var t = origin.pop()
+                temp.push(t)
+            }
+            origin.push(inn)
+            //console.log(temp)
+            var times = temp.length
+            for(var i = 0; i < times;i++)
+                origin.push(temp.pop())
+
+
             /**
-             var dump = document.getElementById(data).cloneNode(true)
              dump.setAttribute("class","tab_item")
              if(e.target.id)
                  console.log()
              else
                  e.target.appendChild(dump);
+                 let temp = this.state.tabs 
+                 temp.push(this.state.tabs.length + 1)
              * 
              */
 
-            let temp = this.state.tabs 
-            temp.push(data)
             this.setState({
-                tabs: temp
+                tabs: origin
             })
             
         }catch(e){
@@ -128,7 +151,6 @@ class Mylayout extends Component {
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
         e.target.appendChild(data);
-
     }
 
     select(e){
@@ -194,7 +216,11 @@ class Mylayout extends Component {
         if(this.state.tabs.length > 0){
             tabb = this.state.tabs.map(e =>{
                 return(
-                    <div className="tab_item">{e}</div>
+                    <div id={"tab" + e} className="tab_item"
+                    draggable="true" 
+                    onDragStart={this.dragStart}
+                    onClick={this.tab_close}
+                    >{e}</div>
                 )
             })
         }
@@ -255,7 +281,6 @@ class Mylayout extends Component {
                                 onDragOver={this.allowdrop}
                                 >
                                     {tabb}
-                                    {this.state.tabrender}
                             </td>
                         </tr>
                         <tr>
