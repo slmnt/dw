@@ -98,35 +98,43 @@ class Mylayout extends Component {
             //when mouse up, get mouse position data -> check target tab position => adjust tab elemenets  =>rebuild tabs render
             //console.log(e.clientX)
             var dump = document.getElementById(e.target.id)
-            var rect = dump.getBoundingClientRect();
-            var checkx = (2 * rect.x + rect.width) / 2 
-            var id = e.target.id
-            id = id.split("tab")
             var temp = []
             var inn = this.state.tabs.length + 1
             inn = inn.toString()
             var origin = this.state.tabs
+            if(e.target.id === ""){
+                origin.push(inn)
 
-            while(true){
-                var t = origin.pop()
-                if(t === id[1]){
-                    origin.push(t)
-                    break
+            }else{
+                var rect = dump.getBoundingClientRect();
+                var checkx = (2 * rect.x + rect.width) / 2 
+                var id = e.target.id
+                id = id.split("tab")
+    
+                while(true){
+                    var t = origin.pop()
+                    if(t === id[1]){
+                        origin.push(t)
+                        break
+                    }
+                    
+                    temp.push(t)
                 }
+                if(checkx > e.clientX){
+                    var t = origin.pop()
+                    temp.push(t)
+                }
+                origin.push(inn)
+                //console.log(temp)
+                var times = temp.length
+                for(var i = 0; i < times;i++)
+                    origin.push(temp.pop())
+
+            }                
                 
-                temp.push(t)
-            }
-            if(checkx > e.clientX){
-                var t = origin.pop()
-                temp.push(t)
-            }
-            origin.push(inn)
-            //console.log(temp)
-            var times = temp.length
-            for(var i = 0; i < times;i++)
-                origin.push(temp.pop())
-
-
+            this.setState({
+                tabs: origin
+            })
             /**
              dump.setAttribute("class","tab_item")
              if(e.target.id)
@@ -138,13 +146,11 @@ class Mylayout extends Component {
              * 
              */
 
-            this.setState({
-                tabs: origin
-            })
             
         }catch(e){
             console.log('error')
         }
+
     }
 
     intab(e){
