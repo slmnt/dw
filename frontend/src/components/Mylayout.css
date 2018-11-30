@@ -57,7 +57,8 @@ ul{
 }
 
 .closer{
-    display:inline-block;
+    position: relative;
+    left: 50px;
 }
 /*
 one line

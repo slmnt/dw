@@ -52,8 +52,8 @@ class Mylayout extends Component {
         this.tabdrop = this.tabdrop.bind(this)
         this.run_code = this.run_code.bind(this)
         this.onChange = this.onChange.bind(this)
+        this.tab_close = this.tab_close.bind(this)
     }
-
 
     onChange(newValue) {
         this.setState({val: newValue})
@@ -67,7 +67,7 @@ class Mylayout extends Component {
 
     dragStart(e) {
         // Update our state with the item that is being dragged
-        console.log('start')
+        // console.log('start')
         e.dataTransfer.effectAllowed = 'copy'
         e.dataTransfer.setData("tab", e.target.id);
     }
@@ -85,24 +85,47 @@ class Mylayout extends Component {
     tabdrop(e){
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
-        /**
-         * tartget position check
-         * check 3 if
-         * first
-         * middle
-         * end
-         * 
-         */
-        
+
         try{
             //when mouse up, get mouse position data -> check target tab position => adjust tab elemenets  =>rebuild tabs render
             //console.log(e.clientX)
             var dump = document.getElementById(e.target.id)
             var temp = []
+            var origin = this.state.tabs
             var inn = this.state.tabs.length + 1
             inn = inn.toString()
-            var origin = this.state.tabs
+
+            for(var i = 0; i < origin.length;i++){
+                temp.push(Number(origin[i]))
+            }
+            temp = temp.sort()            
+            
+            for(var i = 0; i < temp.length;i++){
+                if(temp[i] !== (i + 1)){
+                    inn = (i + 1).toString()
+                    break
+                }
+            }
+
+            temp = []
+
             if(e.target.id === ""){
+                data = data.split("tab")
+                if(data[1]){
+                    inn = data[1].toString()
+                    while(true){
+                        var t = origin.pop()
+                        if(t == inn)
+                            break;
+                        temp.push(t)
+                    }
+
+                    var times = temp.length
+                    for(var i = 0; i < times;i++)
+                        origin.push(temp.pop())
+
+                    temp = []
+                }
                 origin.push(inn)
 
             }else{
@@ -110,42 +133,49 @@ class Mylayout extends Component {
                 var checkx = (2 * rect.x + rect.width) / 2 
                 var id = e.target.id
                 id = id.split("tab")
-    
-                while(true){
-                    var t = origin.pop()
-                    if(t === id[1]){
-                        origin.push(t)
-                        break
+                data = data.split("tab")
+                if(data[1]){
+                    inn = data[1].toString()
+                    while(true){
+                        var t = origin.pop()
+                        if(t == inn)
+                            break;
+                        temp.push(t)
                     }
-                    
-                    temp.push(t)
+
+                    var times = temp.length
+                    for(var i = 0; i < times;i++)
+                        origin.push(temp.pop())
+
+                    temp = []
                 }
-                if(checkx > e.clientX){
-                    var t = origin.pop()
-                    temp.push(t)
+
+                if(inn !== id[1]){
+                    while(true){
+                        var t = origin.pop()
+                        if(t === id[1]){
+                            origin.push(t)
+                            break
+                        }                    
+                        temp.push(t)
+                    }
+                    if(checkx > e.clientX){
+                        var t = origin.pop()
+                        temp.push(t)
+                    }
                 }
+
                 origin.push(inn)
+    
                 //console.log(temp)
                 var times = temp.length
                 for(var i = 0; i < times;i++)
                     origin.push(temp.pop())
-
-            }                
+            }
                 
             this.setState({
                 tabs: origin
             })
-            /**
-             dump.setAttribute("class","tab_item")
-             if(e.target.id)
-                 console.log()
-             else
-                 e.target.appendChild(dump);
-                 let temp = this.state.tabs 
-                 temp.push(this.state.tabs.length + 1)
-             * 
-             */
-
             
         }catch(e){
             console.log('error')
@@ -168,9 +198,30 @@ class Mylayout extends Component {
     }
 
     tab_close(e){
-        let dump = document.getElementById(e.target.id)
-        console.log(dump)
-        dump.remove()
+        //let dump = document.getElementById(e.target.id)
+        //dump.remove()
+        var origin = this.state.tabs
+        var data = e.target.id
+        var temp = []
+        
+        data = data.split("tab")
+        if(data[1]){
+            var inn = data[1].toString()
+            while(true){
+                var t = origin.pop()
+                if(t == inn)
+                    break;
+                temp.push(t)
+            }
+
+            var times = temp.length
+            for(var i = 0; i < times;i++)
+                origin.push(temp.pop())
+
+            this.setState({
+                tabs: origin
+            })
+        }
     }
 
     run_code(){
@@ -225,8 +276,12 @@ class Mylayout extends Component {
                     <div id={"tab" + e} className="tab_item"
                     draggable="true" 
                     onDragStart={this.dragStart}
+                    >{e}
+                    <span
+                    id={"tab" + e}
+                    className="closer"
                     onClick={this.tab_close}
-                    >{e}</div>
+                    >x</span></div>
                 )
             })
         }
@@ -274,9 +329,6 @@ class Mylayout extends Component {
                                     onDragStart={this.dragStart}                                
                                     >
                                         item3
-                                        <div id="view3" onClick={this.tab_close} className="closer">
-                                            x
-                                        </div>
                                     </div>
                                 </li>
 
