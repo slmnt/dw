@@ -43,7 +43,7 @@ class board extends Component {
                 <br/>
                 <br/>
                 <Grid container justify="center">
-                <table>
+                <table className="table_board">
                 <tbody>
                     <tr>
                         <td colSpan="2">

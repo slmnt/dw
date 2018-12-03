@@ -68,6 +68,7 @@ class Myprogram extends Component {
     constructor(props) {
         super(props);
 
+        this.go = props.go
         this.update = this.update.bind(this)
     }
     
@@ -82,7 +83,7 @@ class Myprogram extends Component {
 
         axios.get('/api/getlist/').then(response => {
             this.setState({data: response.data})
-            console.log(this.state.data)
+            // console.log(this.state.data)
         })
 
     }
@@ -92,9 +93,7 @@ class Myprogram extends Component {
     }
 
     getcode(id){
-        axios.get('/api/igetboard/'+id).then(response => {
-            console.log(response.data)
-        })
+        this.go('/Board/' + id)
     }
 
     render() {

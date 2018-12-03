@@ -21,8 +21,8 @@ import Button from '@material-ui/core/Button';
 import Main from './components/Main'; 
 //import Right from './components/Inter';
 //import Right from './components/CreateUser';
-//import Right from './components/Mylayout';
-import Right from './components/MyProgram';
+import Right from './components/Mylayout';
+import Boards from './components/MyProgram';
 import Three from './components/three';
 import Login from './components/Login';
 import Mypage from './components/mypage';
@@ -146,8 +146,10 @@ class App extends React.Component {
     this.drawercloseer = this.drawercloseer.bind(this)
     this.testprops = this.testprops.bind(this)
     this.gomypage = this.gomypage.bind(this)
+    this.gomypagechild = this.gomypagechild.bind(this)
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
+    console.log(this.state.login)
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -276,6 +278,14 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
+  gomypagechild(e){
+
+    this.setState({current: e})
+    this.props.location.pathname = '/' + e
+    this.props.history.push(e)
+  }
+
+
 
   testprops(){
     console.log(this.state.current)
@@ -295,7 +305,8 @@ class App extends React.Component {
       */}
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
-      <Route path="/Board/:id" component={Boardid} />
+      <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+      <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>

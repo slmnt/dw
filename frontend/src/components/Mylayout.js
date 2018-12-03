@@ -302,7 +302,7 @@ class Mylayout extends Component {
         return (
             <div className={classes.root}>
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "94vh" }}>
-                <table className={classes.table}>
+                <table className="table_mylayout">
                     <tbody>
                         <tr onDragOver={this.dragOver}>
                             <td rowSpan="3" 
