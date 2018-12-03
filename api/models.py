@@ -41,9 +41,15 @@ class Code(models.Model):
     source = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
+    count = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
 
 class Comment(models.Model):
     auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
     coments = models.CharField(max_length=1000)
     createat = models.DateTimeField(default=timezone.now)
     root = models.ForeignKey('Code',on_delete=models.CASCADE)
+
+class Open(models.Model):
+    root = models.ForeignKey(Code,on_delete=models.CASCADE)
+

@@ -21,12 +21,13 @@ import Button from '@material-ui/core/Button';
 import Main from './components/Main'; 
 //import Right from './components/Inter';
 //import Right from './components/CreateUser';
-//import Right from './components/MyProgram';
-import Right from './components/Mylayout';
+//import Right from './components/Mylayout';
+import Right from './components/MyProgram';
 import Three from './components/three';
 import Login from './components/Login';
 import Mypage from './components/mypage';
 import Codeman from './components/code/codeman';
+import Boardid from './components/Boardget'
 
 const drawerWidth = 200;
 
@@ -294,6 +295,7 @@ class App extends React.Component {
       */}
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
+      <Route path="/Board/:id" component={Boardid} />
       <Route path="/main" component={Main}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>

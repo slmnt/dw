@@ -63,7 +63,8 @@ class Myprogram extends Component {
         activePage: 0,
         pagelimit: 0,
         open: false,
-        }
+    }
+
     constructor(props) {
         super(props);
 
@@ -74,13 +75,26 @@ class Myprogram extends Component {
     }
 
     componentDidMount(){
-        axios.get('/api/code/').then(response => {
+        //axios.get('/api/code/').then(response => {
+        //    this.setState({data: response.data})
+        //    console.log(this.state.data)
+        //})
+
+        axios.get('/api/getlist/').then(response => {
             this.setState({data: response.data})
             console.log(this.state.data)
         })
+
     }
 
     componentWillUnmount(){
+
+    }
+
+    getcode(id){
+        axios.get('/api/igetboard/'+id).then(response => {
+            console.log(response.data)
+        })
     }
 
     render() {
@@ -99,44 +113,21 @@ class Myprogram extends Component {
                         <div key={el.id}>
                             <table className={classes.table}>
                             <tbody>
-                                <tr className={classes.table_title}>
-                                    <td colSpan="2">
-                                        <Typography>
-                                            {el.title}|
-                                            {el.codetype}
-                                            <Divider/>
-                                            <div className={classes.table_info}>
-                                                {el.auth}|
-                                                {el.createat}|
-                                                {el.updateat}
-                                            </div>
-                                        </Typography>
-                                    </td>
-                                </tr>
                                 <tr>
-                                    {/** */}
-                                    <td className={classes.table_body}>
-                                    <xmp className={classes.table_code}>
-                                        { el.source}
-                                    </xmp>
-                                    <Divider/>
-                                    <Typography>
-                                        comment
-                                    </Typography>
+                                    <td>
+                                        {el.count}
                                     </td>
-                                    {/** */}
-                                    <td className={classes.table_right} rowSpan="2">
-                                    <Typography>
-                                        right
-                                    </Typography>
+                                    <td>
+                                        {el.comments}
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td className={classes.table_extention}>
-                                    <Typography>
-                                        <Divider/>
-                                        extention comments
-                                    </Typography>
+                                    <td onClick={(e) => this.getcode(el.id)}>
+                                        {el.title}
+                                    </td>
+                                    <td>
+                                        <span>
+                                        {el.auth}
+                                        </span>
+                                        {el.createat}
                                     </td>
                                 </tr>
                             </tbody>
@@ -157,3 +148,61 @@ class Myprogram extends Component {
 
 Myprogram.PropTypes = PropTypes;
 export default withStyles(styles)(Myprogram);
+
+/**
+    {(() => {
+    if(this.state.data.length > 0){
+        return(
+            <div>
+            {this.state.data.map(el => (
+            <div key={el.id}>
+                <table className={classes.table}>
+                <tbody>
+                    <tr className={classes.table_title}>
+                        <td colSpan="2">
+                            <Typography>
+                                {el.title}|
+                                {el.codetype}
+                                <Divider/>
+                                <div className={classes.table_info}>
+                                    {el.auth}|
+                                    {el.createat}|
+                                    {el.updateat}
+                                </div>
+                            </Typography>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className={classes.table_body}>
+                        <xmp className={classes.table_code}>
+                            { el.source}
+                        </xmp>
+                        <Divider/>
+                        <Typography>
+                            comment
+                        </Typography>
+                        </td>
+                        <td className={classes.table_right} rowSpan="2">
+                        <Typography>
+                            right
+                        </Typography>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className={classes.table_extention}>
+                        <Typography>
+                            <Divider/>
+                            extention comments
+                        </Typography>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+            </div>
+            ))}   
+            </div>
+        )
+    }
+    })()}
+ */

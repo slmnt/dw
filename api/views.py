@@ -27,109 +27,7 @@ import subprocess
 from back.settings import BASE_DIR
 # Create your views here.
 
-STATIC = BASE_DIR + '//static//'
-
-class StuffViewSet(viewsets.ModelViewSet):
-    queryset = m.Stuff.objects.all()
-    serializer_class = s.StuffSerializer
-
-
-class TotestAPIView(generics.ListAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = TotestSerializer
-    queryset = Totest.objects.all()
-    
-class TestUserAPIView(generics.ListAPIView):
-    permission_classes = (AllowAny,)
-    serializer_class = TestUserSerializer
-    queryset = TestUser.objects.all()
-
-@schema(None)
-class TestUserFViewset(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = TestUserFSerializer
-    queryset = TestUserF.objects.all()
-
-    def get(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            test = TestUserF.objects.all()
-            serializer = TestUserFSerializer(test, many=True)                    
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
-
-        #return Response(serializer.data, status=status.HTTP_404_NOT_FOUND)
-
-@schema(None)
-class TestUserViewset(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    serializer_class = TestUserSerializer
-    queryset = TestUser.objects.all()
-
-    def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            try:
-                user = TestUser.objects.get(uid=request.data['uid'])
-            except:
-                return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE) 
-    
-            if user.pwd == request.data['pwd']:
-                try:
-                    live_user = TestUserLive.objects.get(uid=user)
-                except:
-                    live_user = TestUserLive(uid=user,live=False)
-                    return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
-                live_user.live = True
-                live_user.save()
-                result = TestUserLive.objects.filter(live=True).count()
-                return Response(data=result,status=status.HTTP_202_ACCEPTED)
-            else:
-                return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
-        else:
-            return redirect("http://localhost:3000")
-
-
-class TestUserLiveViewset(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    queryset = TestUserLive.objects.all()
-
-    def get(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            try:
-                result = TestUserLive.objects.filter(live=True).count()        
-            except:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            return Response(data=result)
-        else:
-            return redirect("http://localhost:3000")
-
-#required data
-# 'uid'
-class TestDropUserLiveViewset(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    queryset = TestUserLive.objects.all()
-
-    def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            try:
-                uid = User.objects.get(username=request.data['uid'])
-            except:
-                return Response(status=status.HTTP_404_NOT_FOUND)
-            logout(request)
-            try:
-                live = TestUserLive.objects.get(uid=uid)
-            except:
-                live = TestUserLive(uid=uid)
-            live.live = False
-            live.save()
-            result = TestUserLive.objects.filter(live=True).count()
-            return Response(data=result,status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
+STATIC = BASE_DIR + '//static//'    
 
 #required data
 # 'uid' 'pwd'
@@ -200,7 +98,6 @@ class CreateUser(APIView):
         else:
             return redirect("http://localhost:3000")
 
-
 class CreateMUser(APIView):
 
     def post(self, request):
@@ -270,6 +167,41 @@ class Getboard(viewsets.ModelViewSet):
         #print(STATIC)
         #cut section
         #boards = Testboard.objects.all().order_by('-id')[start:end]
+
+#get board id 
+#ex) /api/igetboard/1
+class icodeget(generics.ListAPIView):
+    serializer_class = CodeSerializer
+    
+    def get_queryset(self):
+        #print(self.kwargs['id'])
+        #print('run')
+        ob = Code.objects.get(id=self.kwargs['id'])
+        ob.count += 1
+        ob.save()
+        queryset = Code.objects.all().filter(id=self.kwargs['id'])
+        return queryset
+
+#get board list
+class Codelistget(generics.ListAPIView):
+    serializer_class = CodeListSerializer
+    
+    def get_queryset(self):
+        queryset = Code.objects.all()
+        return queryset
+
+#get comment to board
+class commentget(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    
+    def get_queryset(self):
+        tar = Code.objects.get(id=self.kwargs['id'])
+        queryset = Comment.objects.get(root=tar)
+        return queryset
+
+#create comment from board
+
+
 
 class Getboardnum(viewsets.ModelViewSet):
 

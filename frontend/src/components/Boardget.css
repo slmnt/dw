@@ -1,0 +1,28 @@
+table{
+    width: 70vw
+}
+
+.info{
+    text-align: right
+}
+
+.body{
+    background-color: rgb(51, 51, 51);
+    color: white;
+    padding: 0.5em;
+}
+
+.right{
+    padding: 0 1em;
+}
+
+.comment{
+    width: 100%;
+    height: 15vh;
+    overflow-y: scroll;
+    resize: none;
+    outline: 0px
+}
+
+.board{
+}

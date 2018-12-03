@@ -60,6 +60,14 @@ class Mylayout extends Component {
     }    
 
     componentDidMount(){
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+        axios.get('/api/igetboard/1',).then(response => {
+            console.log(response.data)
+        }).catch(e => {
+            // console.log(e)
+        })
+
     }
 
     componentWillUnmount(){
@@ -82,6 +90,7 @@ class Mylayout extends Component {
     allowdrop(e){
         e.preventDefault();
     }
+
     tabdrop(e){
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
@@ -94,12 +103,11 @@ class Mylayout extends Component {
             var origin = this.state.tabs
             var inn = this.state.tabs.length + 1
             inn = inn.toString()
-
             for(var i = 0; i < origin.length;i++){
                 temp.push(Number(origin[i]))
             }
-            temp = temp.sort()            
-            
+            temp = temp.sort((a,b) => a- b)
+
             for(var i = 0; i < temp.length;i++){
                 if(temp[i] !== (i + 1)){
                     inn = (i + 1).toString()
@@ -110,7 +118,7 @@ class Mylayout extends Component {
             temp = []
 
             if(e.target.id === ""){
-                data = data.split("tab")
+                   data = data.split("tab")
                 if(data[1]){
                     inn = data[1].toString()
                     while(true){
@@ -172,7 +180,7 @@ class Mylayout extends Component {
                 for(var i = 0; i < times;i++)
                     origin.push(temp.pop())
             }
-                
+
             this.setState({
                 tabs: origin
             })
@@ -187,6 +195,10 @@ class Mylayout extends Component {
         e.preventDefault();
         var data = e.dataTransfer.getData("tab");
         e.target.appendChild(data);
+    }
+
+    tab_select(e){
+        console.log(e.target.id)
     }
 
     select(e){
@@ -276,6 +288,7 @@ class Mylayout extends Component {
                     <div id={"tab" + e} className="tab_item"
                     draggable="true" 
                     onDragStart={this.dragStart}
+                    onClick={this.tab_select}
                     >{e}
                     <span
                     id={"tab" + e}
