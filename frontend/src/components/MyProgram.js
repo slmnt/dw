@@ -97,11 +97,10 @@ class Myprogram extends Component {
     }
 
     render() {
-
         const { classes } = this.props;
 
         return (
-            <Scrollbars  disablehorizontalscrolling={true} style={{ width: "100vw", height: "95vh" }}>
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
                 <br/>
                 <Grid container justify="center">
                 {(() => {

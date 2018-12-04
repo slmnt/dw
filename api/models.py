@@ -44,6 +44,9 @@ class Code(models.Model):
     count = models.IntegerField(default=0)
     comments = models.IntegerField(default=0)
 
+    def __unicode__(self):
+        return '%d' % (self.id)
+
 class Comment(models.Model):
     auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
     coments = models.CharField(max_length=1000)

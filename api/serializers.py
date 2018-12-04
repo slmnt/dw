@@ -48,12 +48,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    root = serializers.SlugRelatedField(read_only=True,slug_field='id')
     auth = serializers.StringRelatedField()
     
     class Meta:
-        model = Code
-        fields = ('__all__')
+        model = Comment
+        fields = ('id','auth', 'coments', 'createat')
 
 class CodeListSerializer(serializers.ModelSerializer):
     codetype = serializers.SlugRelatedField(read_only=True,slug_field='description')

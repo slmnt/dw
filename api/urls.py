@@ -34,6 +34,9 @@ user = userinfo.as_view({
     'get': 'get'
 })
 
+addcomment = Commentadd.as_view({
+    'post': 'post'
+})
 
 urlpatterns = [
     path('authentic/',UserAuthentic.as_view()),
@@ -48,6 +51,8 @@ urlpatterns = [
     path('code/',codesec),
     path('user/',user),
     path('igetboard/<id>',icodeget.as_view()),
-    path('getlist/',Codelistget.as_view())
+    path('getcomment/<id>/',commentget.as_view()),
+    path('getlist/',Codelistget.as_view()),
+    path('addcomment/',addcomment)
 
 ]

@@ -187,7 +187,7 @@ class Codelistget(generics.ListAPIView):
     serializer_class = CodeListSerializer
     
     def get_queryset(self):
-        queryset = Code.objects.all()
+        queryset = Code.objects.all().order_by('-id')
         return queryset
 
 #get comment to board
@@ -195,13 +195,26 @@ class commentget(generics.ListAPIView):
     serializer_class = CommentSerializer
     
     def get_queryset(self):
-        tar = Code.objects.get(id=self.kwargs['id'])
-        queryset = Comment.objects.get(root=tar)
+        id = self.kwargs['id']
+        tar = Code.objects.get(id=id)
+        queryset = Comment.objects.all().filter(root=tar)
         return queryset
 
 #create comment from board
+class Commentadd(viewsets.ModelViewSet):
 
-
+    def post(self, request):
+        id = request.data['id']
+        text = request.data['text']
+        root = Code.objects.get(id=id)
+        user = User.objects.get(username=str(request.user))
+        new = Comment(auth=user,root=root,coments=text)
+        root.comments += 1
+        root.save()
+        new.save()
+        q = Comment.objects.all().filter(root=root)
+        s = CommentSerializer(q,many=True)
+        return Response(data=s.data,status=status.HTTP_200_OK)
 
 class Getboardnum(viewsets.ModelViewSet):
 
@@ -228,7 +241,7 @@ class GetboardPage(viewsets.ModelViewSet):
             print(start,end)
             boards = Testboard.objects.all().order_by('-id')[start:end]
             if boards.count() > 0:
-                serializer = TestBoardSerializer(boards, many=True)                                      
+                serializer = TestBoardSerializer(boards, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_204_NO_CONTENT)

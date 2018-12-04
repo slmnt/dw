@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Boardget.css'
 
+import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from '@material-ui/core/Divider';
 import { Grid } from '@material-ui/core';
 
 class board extends Component {
     state = {
         data: [],
+        comment: '',
+        comments: []
     }
 
     constructor(props){
         super(props)
 
+        this.onChange = this.onChange.bind(this)
+        this.addcomment = this.addcomment.bind(this)
         this.commentsend = this.commentsend.bind(this)
     }
 
@@ -21,24 +26,56 @@ class board extends Component {
         let id = this.props.match.params['id']
         axios.get('/api/igetboard/'+id).then(response => {
             this.setState({data: response.data[0]})
-            console.log(this.state.data)
         })
+
+        axios.get('/api/getcomment/' +id).then(response => {
+            this.setState({comments: response.data})
+        })  
     }
+
+    onChange(newValue) {
+        this.setState({comment: newValue.target.value})
+    }    
 
     commentsend(){
         console.log("comment")
+    }
+
+    addcomment(){
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        let id = this.props.match.params['id']        
+        axios.post('/api/addcomment/', {
+            id: id,
+            text: this.state.comment
+        }).then(response => {
+            this.setState({comments: response.data})
+            this.setState({comment: ''})
+        })
 
     }
 
     render() {
 
         const commentin = <div>
-            <textarea className="comment"></textarea>
+            <textarea className="comment" value={this.state.comment} onChange={(e)=> this.onChange(e)} ></textarea>
             <br/>
-            <button>send</button>
+            <button onClick={(e) => this.addcomment()} >send</button>
         </div>
-            
+
+        let comm = this.state.comments.map(el =>(
+            <div key={el.id}>
+            {el.auth}
+            {el.createat}
+            <br/>
+            {el.coments}
+            <Divider/>
+            </div>
+        ))
+
         return (
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
             <div className="board">
                 <br/>
                 <br/>
@@ -73,13 +110,18 @@ class board extends Component {
                     <tr>
                         <td>
                             <Divider/>
-                            extention comments
+                            {comm}
                         </td>
                     </tr>
-                </tbody>
-            </table>
-            </Grid>
+                    </tbody>
+                </table>
+                </Grid>
             </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            </Scrollbars>
         );
   	}
 }
