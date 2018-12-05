@@ -28,6 +28,7 @@ import Login from './components/Login';
 import Mypage from './components/mypage';
 import Codeman from './components/code/codeman';
 import Boardid from './components/Boardget'
+import Load from './components/Loading'
 
 const drawerWidth = 200;
 
@@ -308,6 +309,7 @@ class App extends React.Component {
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
+      <Route path="/Load" component={Load}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />
@@ -355,6 +357,8 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>

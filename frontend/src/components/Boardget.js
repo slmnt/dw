@@ -56,6 +56,11 @@ class board extends Component {
 
     }
 
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+
     render() {
 
         const commentin = <div>
@@ -67,9 +72,13 @@ class board extends Component {
         let comm = this.state.comments.map(el =>(
             <div key={el.id}>
             {el.auth}
-            {el.createat}
+            <div className="comment_date">
+                {this.convertdata(el.createat)}
+            </div>
+            <div className="comment_body">
+                {el.coments}
+            </div>
             <br/>
-            {el.coments}
             <Divider/>
             </div>
         ))
@@ -89,8 +98,8 @@ class board extends Component {
                             <Divider/>
                             <div className="info">
                                 {this.state.data.auth}|
-                                {this.state.data.createat}|
-                                {this.state.data.updateat}
+                                {this.convertdata(this.state.data.createat)}|
+                                {this.convertdata(this.state.data.updateat)}
                             </div>
                         </td>
                     </tr>

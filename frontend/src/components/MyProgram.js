@@ -1,10 +1,12 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
+import Loading from './Loading'
+import './Myprogram.css'
+
+import { Grid } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
@@ -96,6 +98,11 @@ class Myprogram extends Component {
         this.go('/Board/' + id)
     }
 
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -107,34 +114,46 @@ class Myprogram extends Component {
                 if(this.state.data.length > 0){
                     return(
                         <div>
+                        <table className={classes.table}>
+                            <tbody className="boards_body">
                         {this.state.data.map(el => (
                         <div key={el.id}>
-                            <table className={classes.table}>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        {el.count}
-                                    </td>
-                                    <td>
-                                        {el.comments}
-                                    </td>
-                                    <td onClick={(e) => this.getcode(el.id)}>
-                                        {el.title}
-                                    </td>
-                                    <td>
-                                        <span>
-                                        {el.auth}
-                                        </span>
-                                        {el.createat}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
+                        <Divider/>
+                            <tr>
+                                <td className="boards_line">
+                                    {el.count}
+                                    <div className="board_cap">
+                                        count
+                                    </div>
+                                </td>
+                                <td className="boards_line">
+                                    {el.comments}
+                                    <div className="board_cap">
+                                        comments
+                                    </div>
+                                </td>
+                                <td onClick={(e) => this.getcode(el.id)} className="boards_title">
+                                    {el.title}
+                                </td>
+                                <td className="boards_auth">
+                                    <span>
+                                    {el.auth}
+                                    </span>
+                                    <div className="boards_date">
+                                        {this.convertdata(el.createat)}
+                                    </div>
+                                    <br/>
+                                </td>
+                            </tr>
                         </div>
                         ))}   
+                        </tbody>
+                        </table>
+                        <Divider className="loading" />
                         </div>
                     )
+                }else{
+                    return <Loading/>
                 }
                 })()}
 
@@ -146,61 +165,3 @@ class Myprogram extends Component {
 
 Myprogram.PropTypes = PropTypes;
 export default withStyles(styles)(Myprogram);
-
-/**
-    {(() => {
-    if(this.state.data.length > 0){
-        return(
-            <div>
-            {this.state.data.map(el => (
-            <div key={el.id}>
-                <table className={classes.table}>
-                <tbody>
-                    <tr className={classes.table_title}>
-                        <td colSpan="2">
-                            <Typography>
-                                {el.title}|
-                                {el.codetype}
-                                <Divider/>
-                                <div className={classes.table_info}>
-                                    {el.auth}|
-                                    {el.createat}|
-                                    {el.updateat}
-                                </div>
-                            </Typography>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={classes.table_body}>
-                        <xmp className={classes.table_code}>
-                            { el.source}
-                        </xmp>
-                        <Divider/>
-                        <Typography>
-                            comment
-                        </Typography>
-                        </td>
-                        <td className={classes.table_right} rowSpan="2">
-                        <Typography>
-                            right
-                        </Typography>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={classes.table_extention}>
-                        <Typography>
-                            <Divider/>
-                            extention comments
-                        </Typography>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <br/>
-            </div>
-            ))}   
-            </div>
-        )
-    }
-    })()}
- */

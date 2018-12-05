@@ -197,7 +197,7 @@ class commentget(generics.ListAPIView):
     def get_queryset(self):
         id = self.kwargs['id']
         tar = Code.objects.get(id=id)
-        queryset = Comment.objects.all().filter(root=tar)
+        queryset = Comment.objects.all().filter(root=tar).order_by('createat')
         return queryset
 
 #create comment from board
@@ -212,7 +212,7 @@ class Commentadd(viewsets.ModelViewSet):
         root.comments += 1
         root.save()
         new.save()
-        q = Comment.objects.all().filter(root=root)
+        q = Comment.objects.all().filter(root=root).order_by('createat')
         s = CommentSerializer(q,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
 

@@ -1,5 +1,7 @@
 .table_board{
-    width: 70vw
+    width: 70vw;
+    font-size: 10px;
+    font-family: "Segoe UI";
 }
 
 .info{
@@ -10,6 +12,7 @@
     background-color: rgb(51, 51, 51);
     color: white;
     padding: 0.5em;
+    font-size: 14px;
 }
 
 .right{
@@ -25,4 +28,11 @@
 }
 
 .board{
+}
+
+.comment_body{
+    font-size: 13px
+}
+.comment_date{
+    text-align: right;
 }
