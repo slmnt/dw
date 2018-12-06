@@ -167,6 +167,9 @@ class Myprogram extends Component {
                                 </td>
                                 <td onClick={(e) => this.getcode(el.id)} className="boards_title">
                                     {el.title}
+                                    <div className="board_type">
+                                        {el.codetype}
+                                    </div>
                                 </td>
                                 <td className="boards_auth">
                                     <span>

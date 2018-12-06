@@ -9,7 +9,7 @@ import { Grid } from '@material-ui/core';
 
 class board extends Component {
     state = {
-        data: [],
+        data: false,
         comment: '',
         comments: []
     }

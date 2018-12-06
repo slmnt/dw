@@ -1,6 +1,6 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -60,14 +60,6 @@ class Mylayout extends Component {
     }    
 
     componentDidMount(){
-        axios.defaults.xsrfCookieName = 'csrftoken';
-        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-        axios.get('/api/igetboard/1',).then(response => {
-            console.log(response.data)
-        }).catch(e => {
-            // console.log(e)
-        })
-
     }
 
     componentWillUnmount(){
@@ -108,7 +100,7 @@ class Mylayout extends Component {
             }
             temp = temp.sort((a,b) => a- b)
 
-            for(var i = 0; i < temp.length;i++){
+            for(i = 0; i < temp.length;i++){
                 if(temp[i] !== (i + 1)){
                     inn = (i + 1).toString()
                     break
@@ -123,13 +115,13 @@ class Mylayout extends Component {
                     inn = data[1].toString()
                     while(true){
                         var t = origin.pop()
-                        if(t == inn)
+                        if(t === inn)
                             break;
                         temp.push(t)
                     }
 
                     var times = temp.length
-                    for(var i = 0; i < times;i++)
+                    for(i = 0; i < times;i++)
                         origin.push(temp.pop())
 
                     temp = []
@@ -145,14 +137,14 @@ class Mylayout extends Component {
                 if(data[1]){
                     inn = data[1].toString()
                     while(true){
-                        var t = origin.pop()
-                        if(t == inn)
+                        t = origin.pop()
+                        if(t === inn)
                             break;
                         temp.push(t)
                     }
 
-                    var times = temp.length
-                    for(var i = 0; i < times;i++)
+                    times = temp.length
+                    for(i = 0; i < times;i++)
                         origin.push(temp.pop())
 
                     temp = []
@@ -160,7 +152,7 @@ class Mylayout extends Component {
 
                 if(inn !== id[1]){
                     while(true){
-                        var t = origin.pop()
+                        t = origin.pop()
                         if(t === id[1]){
                             origin.push(t)
                             break
@@ -168,7 +160,7 @@ class Mylayout extends Component {
                         temp.push(t)
                     }
                     if(checkx > e.clientX){
-                        var t = origin.pop()
+                        t = origin.pop()
                         temp.push(t)
                     }
                 }
@@ -176,8 +168,8 @@ class Mylayout extends Component {
                 origin.push(inn)
     
                 //console.log(temp)
-                var times = temp.length
-                for(var i = 0; i < times;i++)
+                times = temp.length
+                for(i = 0; i < times;i++)
                     origin.push(temp.pop())
             }
 
@@ -198,11 +190,11 @@ class Mylayout extends Component {
     }
 
     tab_select(e){
-        console.log(e.target.id)
+       // console.log(e.target.id)
     }
 
     select(e){
-        console.log(e.target.id)
+        // console.log(e.target.id)
         if(this.state.flag)
             this.setState({flag: false})
         else
@@ -221,7 +213,7 @@ class Mylayout extends Component {
             var inn = data[1].toString()
             while(true){
                 var t = origin.pop()
-                if(t == inn)
+                if(t === inn)
                     break;
                 temp.push(t)
             }
@@ -285,7 +277,7 @@ class Mylayout extends Component {
         if(this.state.tabs.length > 0){
             tabb = this.state.tabs.map(e =>{
                 return(
-                    <div id={"tab" + e} className="tab_item"
+                    <div key={e} id={"tab" + e} className="tab_item"
                     draggable="true" 
                     onDragStart={this.dragStart}
                     onClick={this.tab_select}

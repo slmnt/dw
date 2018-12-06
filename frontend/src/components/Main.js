@@ -5,6 +5,7 @@ import { withCookies, Cookies } from 'react-cookie';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Grid } from '@material-ui/core';
 import bridge from './bridge.jpeg';
+import './Main.css'
 
 const styles = theme => ({
   body: {
@@ -124,8 +125,10 @@ class Main extends Component {
 
         <div className = {classes.main}>
           <div className = {classes.main_title}>
-            <p>幅広い年齢層を対象にプログラミング学習を行えるシステム。</p>
-            <h2>『Mini Prog』</h2>
+            <div className="rapper">
+              <p>幅広い年齢層を対象にプログラミング学習を行えるシステム。</p>
+              <h2>『Mini Prog』</h2>
+            </div>
           </div>
           <h3 className = {classes.main_contents_title}>サービスの特徴</h3>
           <Grid container direction="row" justify="center" text-align="center" className = {classes.main_contents}>
