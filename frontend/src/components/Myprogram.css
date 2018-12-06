@@ -36,6 +36,23 @@
     font-size: 8px;
 }
 
+.boards_search-textarea{
+    resize: none;
+    outline: 0px;
+    width: 30vw;
+    height: 5vh;
+}
+
+.boards_search-button{
+    height: 6vh;
+}
+
+.boards_search-select{
+    outline: 0px;
+    width: 7vw;
+    height: 6vh;
+}
+
 .loading{
     position: relative;
     top: 50vh

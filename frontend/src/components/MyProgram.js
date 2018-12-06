@@ -65,6 +65,8 @@ class Myprogram extends Component {
         activePage: 0,
         pagelimit: 0,
         open: false,
+        select: 0,
+        search: '',
     }
 
     constructor(props) {
@@ -72,6 +74,8 @@ class Myprogram extends Component {
 
         this.go = props.go
         this.update = this.update.bind(this)
+        this.search = this.search.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
     
     update(){
@@ -91,7 +95,6 @@ class Myprogram extends Component {
     }
 
     componentWillUnmount(){
-
     }
 
     getcode(id){
@@ -103,6 +106,19 @@ class Myprogram extends Component {
         return time.toLocaleString()
     }
 
+    search(){
+        let element = document.getElementById("selecter")
+        let val = element.options[element.selectedIndex].value
+
+        axios.get('/api/search/' + val + '/' + this.state.search).then(response => {
+            this.setState({data: response.data})
+        })
+    }
+
+    handleChange(event) {
+        this.setState({search: event.target.value});
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -110,6 +126,23 @@ class Myprogram extends Component {
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
                 <br/>
                 <Grid container justify="center">
+                    <div className="boards_search">
+                        <select className="boards_search-select" name="type" id="selecter">
+                            <option value={1}>title</option>
+                            <option value={2}>body</option>
+                            <option value={3}>username</option>
+                        </select>&nbsp;
+                        <input className="boards_search-textarea"
+                        value={this.state.search}
+                        onChange={this.handleChange}
+                        maxLength="20"
+                        ></input>&nbsp;
+                        <button className="boards_search-button" onClick={(e) => this.search()} >seaarch</button>
+                    </div>
+                </Grid>
+                <br/>
+                <Grid container justify="center">
+                <br/>
                 {(() => {
                 if(this.state.data.length > 0){
                     return(

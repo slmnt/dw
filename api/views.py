@@ -190,6 +190,26 @@ class Codelistget(generics.ListAPIView):
         queryset = Code.objects.all().order_by('-id')
         return queryset
 
+class Searchget(generics.ListAPIView):
+    serializer_class = CodeListSerializer
+    
+    #type 1 title search
+    #type 2 body search
+    #type 3 username search
+    def get_queryset(self):
+        ty = self.kwargs['type']
+        con = self.kwargs['context']
+        queryset = Code.objects.all().order_by('-id')
+        if ty == '1':
+            queryset = Code.objects.filter(title__contains=con).order_by('-id')
+        elif ty == '2':
+            queryset = Code.objects.filter(source__contains=con).order_by('-id')
+        else:
+            auth = User.objects.get(username=con)
+            queryset = Code.objects.all().filter(auth=auth).order_by('-id')
+        return queryset
+
+
 #get comment to board
 class commentget(generics.ListAPIView):
     serializer_class = CommentSerializer

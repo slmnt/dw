@@ -53,6 +53,6 @@ urlpatterns = [
     path('igetboard/<id>',icodeget.as_view()),
     path('getcomment/<id>/',commentget.as_view()),
     path('getlist/',Codelistget.as_view()),
-    path('addcomment/',addcomment)
-
+    path('addcomment/',addcomment),
+    path('search/<type>/<context>/',Searchget.as_view())
 ]
