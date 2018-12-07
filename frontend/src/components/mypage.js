@@ -16,13 +16,12 @@ const styles = theme => ({
         position: 'static',
     },
     paper: {
-    height: window.innerHeight / 7,
-    width: window.innerWidth / 7,
+    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
     },
-    sub: {
-    height: window.innerHeight / 7,
-    width: window.innerWidth / 4,
-    },
+    //sub: {
+    //height: window.innerHeight / 7,
+    //width: window.innerWidth / 4,
+    //},
     one:{
     width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
     },
@@ -96,11 +95,7 @@ class Mypage extends Component {
                             </Card>
                         </Grid>
                         <Grid item>
-                        <Card className={this.props.classes.sub}>
-                            <CardContent>
-                                additional info
-                            </CardContent>
-                        </Card>
+                        
                         </Grid>
                     </Grid>
                     <Grid container>
@@ -109,7 +104,7 @@ class Mypage extends Component {
                         <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('C')}>
                         <Card className={this.props.classes.one}>
                             <CardContent>
-                                <Typography>c </Typography>
+                                <Typography>C言語 </Typography>
                                 <br/>
                                 <LinearProgress variant="determinate" value={this.state.c} />       
                                 <Typography align='right'>10/26</Typography>                             
@@ -124,7 +119,7 @@ class Mypage extends Component {
                         <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Cpp')}>
                         <Card className={this.props.classes.one}>
                             <CardContent>
-                                cpp
+                                C++
                             </CardContent>
                         </Card>
                         </CardActionArea>
@@ -136,7 +131,7 @@ class Mypage extends Component {
                         <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Java')}>
                         <Card className={this.props.classes.one}>
                             <CardContent>
-                                java
+                                Java
                             </CardContent>
                         </Card>
                         </CardActionArea>
@@ -148,7 +143,7 @@ class Mypage extends Component {
                         <CardActionArea className={this.props.classes.action} onClick={e => this.onclicked('Python')}>
                         <Card className={this.props.classes.one}>
                             <CardContent>
-                                python
+                                Python
                             </CardContent>
                         </Card>
                         </CardActionArea>
