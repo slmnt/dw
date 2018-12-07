@@ -151,17 +151,10 @@ class App extends React.Component {
     this.gomypagechild = this.gomypagechild.bind(this)
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
-    console.log(this.state.login)
+    // console.log(this.state.login)
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
-  }
-
-  closewindows(){
-    axios.get('/api/cookieauth/').then((response) => {
-    }).catch((e) => {
-    })
-    return 'test'
   }
 
   setlan(l){
@@ -192,6 +185,7 @@ class App extends React.Component {
   }
   
   componentWillMount(){
+
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -204,6 +198,8 @@ class App extends React.Component {
             uid: response.data,
             login: true
           })
+          sessionStorage.setItem('key','test')
+          
           this.clicked('mypage')
         } else {
           this.clicked('/') 

@@ -19,10 +19,12 @@ class board extends Component {
 
         this.onChange = this.onChange.bind(this)
         this.addcomment = this.addcomment.bind(this)
-        this.commentsend = this.commentsend.bind(this)
     }
 
     componentDidMount(){
+
+        console.log(sessionStorage.getItem('key'))
+
         let id = this.props.match.params['id']
         axios.get('/api/igetboard/'+id).then(response => {
             this.setState({data: response.data[0]})
@@ -37,10 +39,6 @@ class board extends Component {
         this.setState({comment: newValue.target.value})
     }    
 
-    commentsend(){
-        console.log("comment")
-    }
-
     addcomment(){
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -53,7 +51,20 @@ class board extends Component {
             this.setState({comments: response.data})
             this.setState({comment: ''})
         })
+    }
 
+    wait2sec(x){
+        return new Promise(resolve =>{
+            resolve(x)
+            axios.get('/api/igetboard/'+3).then(response => {
+                this.setState({data: response.data[0]})
+            })
+        })
+    }
+
+    async syn(){
+        var x = await this.wait2sec(1)
+        console.log(this.state.data)
     }
 
     convertdata(date){
@@ -66,7 +77,7 @@ class board extends Component {
         const commentin = <div>
             <textarea className="comment" value={this.state.comment} onChange={(e)=> this.onChange(e)} ></textarea>
             <br/>
-            <button onClick={(e) => this.addcomment()} >send</button>
+            <button onClick={(e) => this.syn()} >send</button>
         </div>
 
         let comm = this.state.comments.map(el =>(
