@@ -1,19 +1,6 @@
 from .views import *
 from django.urls import path
 
-todo_list = TestUserFViewset.as_view({
-    'get': 'get'
-})
-enter_list = TestUserViewset.as_view({
-    'post': 'post' 
-})
-live_list = TestUserLiveViewset.as_view({
-    'get': 'get' ,
-})
-drop_live_list = TestDropUserLiveViewset.as_view({
-    'post': 'post'
-})
-
 board_list = Addboard.as_view({
     'post': 'post'
 })
@@ -47,11 +34,11 @@ user = userinfo.as_view({
     'get': 'get'
 })
 
+addcomment = Commentadd.as_view({
+    'post': 'post'
+})
+
 urlpatterns = [
-    path('todo/', todo_list),
-    path('enter/', enter_list),
-    path('liveuser/', live_list),
-    path('dropliveuser/', drop_live_list),
     path('authentic/',UserAuthentic.as_view()),
     path('createuser/',CreateUser.as_view()),
     path('createmuser/',CreateMUser.as_view()),
@@ -62,5 +49,10 @@ urlpatterns = [
     path('cookieauth/',cokkie),
     path('python/',python),
     path('code/',codesec),
-    path('user/',user)
+    path('user/',user),
+    path('igetboard/<id>',icodeget.as_view()),
+    path('getcomment/<id>/',commentget.as_view()),
+    path('getlist/',Codelistget.as_view()),
+    path('addcomment/',addcomment),
+    path('search/<type>/<context>/',Searchget.as_view())
 ]

@@ -1,0 +1,38 @@
+.table_board{
+    width: 70vw;
+    font-size: 10px;
+    font-family: "Segoe UI";
+}
+
+.info{
+    text-align: right
+}
+
+.body{
+    background-color: rgb(51, 51, 51);
+    color: white;
+    padding: 0.5em;
+    font-size: 14px;
+}
+
+.right{
+    padding: 0 1em;
+}
+
+.comment{
+    width: 100%;
+    height: 15vh;
+    overflow-y: scroll;
+    resize: none;
+    outline: 0px
+}
+
+.board{
+}
+
+.comment_body{
+    font-size: 13px
+}
+.comment_date{
+    text-align: right;
+}

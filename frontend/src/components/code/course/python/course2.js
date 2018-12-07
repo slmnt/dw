@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 
 class course2 extends Component {
 
-    constructor(props){
-        super(props)
-    }
 
     render() {
 

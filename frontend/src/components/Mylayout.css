@@ -1,4 +1,4 @@
-table{
+.table_mylayout{
     table-layout: fixed;
     width: 100vw;
     height: 100vh;
@@ -25,16 +25,19 @@ ul{
 
 .tab_item{
     display:inline-block;
-    width: 100px;
+    width: 70px;
     background-color: rgb(121, 124, 124);
     padding: 0.2em 0.5em;
     margin-left: 1px;
-    border-top-left-radius: 1em;
-    border-top-right-radius: 1em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+}
+.tab_item:active{
+    background-color: rgb(53, 53, 53);
 }
 
-
 .tab{
+    white-space: nowrap;
     height: 3vh;
     padding-left: 0;
     overflow-x: auto;
@@ -51,6 +54,11 @@ ul{
 .tab::-webkit-scrollbar-track{
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
+}
+
+.closer{
+    position: relative;
+    left: 50px;
 }
 /*
 one line

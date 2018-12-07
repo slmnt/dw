@@ -1,10 +1,12 @@
 import React, { Component } from 'react';   
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
+import Loading from './Loading'
+import './Myprogram.css'
+
+import { Grid } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
@@ -63,89 +65,131 @@ class Myprogram extends Component {
         activePage: 0,
         pagelimit: 0,
         open: false,
-        }
+        select: 0,
+        search: '',
+    }
+
     constructor(props) {
         super(props);
 
+        this.go = props.go
         this.update = this.update.bind(this)
+        this.search = this.search.bind(this)
+        this.handleChange = this.handleChange.bind(this)
     }
     
     update(){
     }
 
     componentDidMount(){
-        axios.get('/api/code/').then(response => {
+        //axios.get('/api/code/').then(response => {
+        //    this.setState({data: response.data})
+        //    console.log(this.state.data)
+        //})
+
+        axios.get('/api/getlist/').then(response => {
             this.setState({data: response.data})
-            console.log(this.state.data)
+            // console.log(this.state.data)
         })
+
     }
 
     componentWillUnmount(){
     }
 
-    render() {
+    getcode(id){
+        this.go('/Board/' + id)
+    }
 
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+
+    search(){
+        let element = document.getElementById("selecter")
+        let val = element.options[element.selectedIndex].value
+
+        axios.get('/api/search/' + val + '/' + this.state.search).then(response => {
+            this.setState({data: response.data})
+        })
+    }
+
+    handleChange(event) {
+        this.setState({search: event.target.value});
+    }
+
+    render() {
         const { classes } = this.props;
 
         return (
-            <Scrollbars  disablehorizontalscrolling={true} style={{ width: "100vw", height: "95vh" }}>
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
                 <br/>
                 <Grid container justify="center">
+                    <div className="boards_search">
+                        <select className="boards_search-select" name="type" id="selecter">
+                            <option value={1}>title</option>
+                            <option value={2}>body</option>
+                            <option value={3}>username</option>
+                        </select>&nbsp;
+                        <input className="boards_search-textarea"
+                        value={this.state.search}
+                        onChange={this.handleChange}
+                        maxLength="20"
+                        ></input>&nbsp;
+                        <button className="boards_search-button" onClick={(e) => this.search()} >seaarch</button>
+                    </div>
+                </Grid>
+                <br/>
+                <Grid container justify="center">
+                <br/>
                 {(() => {
                 if(this.state.data.length > 0){
                     return(
                         <div>
+                        <table className={classes.table}>
+                            <tbody className="boards_body">
                         {this.state.data.map(el => (
                         <div key={el.id}>
-                            <table className={classes.table}>
-                            <tbody>
-                                <tr className={classes.table_title}>
-                                    <td colSpan="2">
-                                        <Typography>
-                                            {el.title}|
-                                            {el.codetype}
-                                            <Divider/>
-                                            <div className={classes.table_info}>
-                                                {el.auth}|
-                                                {el.createat}|
-                                                {el.updateat}
-                                            </div>
-                                        </Typography>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    {/** */}
-                                    <td className={classes.table_body}>
-                                    <xmp className={classes.table_code}>
-                                        { el.source}
-                                    </xmp>
-                                    <Divider/>
-                                    <Typography>
-                                        comment
-                                    </Typography>
-                                    </td>
-                                    {/** */}
-                                    <td className={classes.table_right} rowSpan="2">
-                                    <Typography>
-                                        right
-                                    </Typography>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className={classes.table_extention}>
-                                    <Typography>
-                                        <Divider/>
-                                        extention comments
-                                    </Typography>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
+                        <Divider/>
+                            <tr>
+                                <td className="boards_line">
+                                    {el.count}
+                                    <div className="board_cap">
+                                        count
+                                    </div>
+                                </td>
+                                <td className="boards_line">
+                                    {el.comments}
+                                    <div className="board_cap">
+                                        comments
+                                    </div>
+                                </td>
+                                <td onClick={(e) => this.getcode(el.id)} className="boards_title">
+                                    {el.title}
+                                    <div className="board_type">
+                                        {el.codetype}
+                                    </div>
+                                </td>
+                                <td className="boards_auth">
+                                    <span>
+                                    {el.auth}
+                                    </span>
+                                    <div className="boards_date">
+                                        {this.convertdata(el.createat)}
+                                    </div>
+                                    <br/>
+                                </td>
+                            </tr>
                         </div>
                         ))}   
+                        </tbody>
+                        </table>
+                        <Divider className="loading" />
                         </div>
                     )
+                }else{
+                    return <Loading/>
                 }
                 })()}
 

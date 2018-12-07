@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 
 class course1 extends Component {
 
-    constructor(props){
-      super(props)
-    }
-
     render() {
       return (
         <div>

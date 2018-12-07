@@ -7,11 +7,6 @@ class Lobby extends Component {
 
   course;
 
-  constructor(props){
-    super(props)
-
-  }
-
   componentDidMount(){
     switch(this.props.match.params['id']){
       case "1":
@@ -22,6 +17,8 @@ class Lobby extends Component {
         break;
       case "3":
         this.course = <C3/>
+        break;
+      default:
         break;
     }
   }
