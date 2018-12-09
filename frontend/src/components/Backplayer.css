@@ -1,0 +1,13 @@
+.player{
+    position: relative;
+    top: 10vh;
+    left: 30vw;
+}
+
+.run{
+    visibility: hidden;
+    display: none;
+}
+
+.player_body{
+}

@@ -18,6 +18,7 @@ import axios from 'axios';
 import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
+import './App.css'
 
 //import Right from './components/Inter';
 import CreateU from './components/CreateUser';
@@ -30,6 +31,7 @@ import Mypage from './components/mypage';
 import Codeman from './components/code/codeman';
 import Boardid from './components/Boardget'
 import Load from './components/Loading'
+import Back from './components/BackPlayer'
 
 const drawerWidth = 200;
 
@@ -136,7 +138,9 @@ class App extends React.Component {
     login: false,
     uid: '',
     current: '',
-    language: 'python'
+    language: 'python',
+    bgm: true,
+    bid: 'GugsCdLHm-Q',
   };
 
   constructor(props){
@@ -151,7 +155,11 @@ class App extends React.Component {
     this.gomypagechild = this.gomypagechild.bind(this)
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
+<<<<<<< HEAD
     // console.log(this.state.login)
+=======
+    this.hideplayer = this.hideplayer.bind(this)
+>>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -169,12 +177,18 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
+<<<<<<< HEAD
     // console.log(this.state.uid)
+=======
+>>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
 
     axios.post('/api/dropliveuser/',{
       uid: this.state.uid,
       }).then(response => {
+<<<<<<< HEAD
       // console.log(response)
+=======
+>>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
       this.setState({
         login: false
       })
@@ -185,6 +199,13 @@ class App extends React.Component {
   }
   
   componentWillMount(){
+<<<<<<< HEAD
+=======
+    
+    this.setState({
+      bid: localStorage.getItem("bid")
+    })
+>>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
 
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -237,6 +258,24 @@ class App extends React.Component {
       this.handleDrawerClose()
     }
   }
+
+  hideplayer(){
+    
+    if(this.state.bgm){
+      this.setState({
+        bgm: false
+      })
+    }else{
+      this.setState({
+        bgm: true
+      })
+    }
+    
+    // reload set bid and refresh page
+    // localStorage.setItem('bid', 'bHQqvYy5KYo')
+    // window.location.reload();
+}
+
 
   handleDrawerOpen = () => {
     // console.log('open')
@@ -299,12 +338,18 @@ class App extends React.Component {
       setting react router route
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
       */}
+        <div className={classNames({
+          'hide': this.state.bgm,
+          'player': true
+        })}>
+          <Back id={this.state.bid}/>
+        </div>
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
-      <Route path="/Load" component={Load}/>
+      <Route path="/back" component={Back}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />
@@ -355,6 +400,8 @@ class App extends React.Component {
         <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
         <Divider />
         <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
+        <Divider />
+        <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
         <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>

@@ -1,0 +1,9 @@
+.hide{
+    visibility: hidden;
+    display: none;
+}
+
+.player{
+    position: -webkit-sticky;
+    position: sticky;
+}
