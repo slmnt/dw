@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Boardget.css'
+import crypto from 'crypto'
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from '@material-ui/core/Divider';
@@ -24,6 +25,39 @@ class board extends Component {
     componentDidMount(){
 
         console.log(sessionStorage.getItem('key'))
+        const cipher = crypto.createCipher('aes192', 'testword');
+
+        let encrypted = '';
+        cipher.on('readable', () => {
+          const data = cipher.read();
+          if (data)
+            encrypted += data.toString('hex');
+        });
+        cipher.on('end', () => {
+        });        
+        cipher.write('some clear text data');
+        cipher.end();
+        console.log(encrypted);
+
+        const decipher = crypto.createDecipher('aes192','testword');
+
+        let decrypted = '';
+        decipher.on('readable', () => {
+        const data = decipher.read();
+        if (data)
+            decrypted += data.toString('utf8');
+        });
+        decipher.on('end', () => {
+        console.log(decrypted);
+        // Prints: some clear text data
+        });
+
+        decipher.write(encrypted, 'hex');
+        decipher.end();
+        
+
+
+        // sessionstorage -> authentic infomation -> crypto?? => incoder , decoder
 
         let id = this.props.match.params['id']
         axios.get('/api/igetboard/'+id).then(response => {
@@ -43,7 +77,7 @@ class board extends Component {
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-        let id = this.props.match.params['id']        
+        let id = this.props.match.params['id']    
         axios.post('/api/addcomment/', {
             id: id,
             text: this.state.comment

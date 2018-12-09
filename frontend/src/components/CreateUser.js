@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Scrollbars } from 'react-custom-scrollbars';
 
+import axios from 'axios';
+import Loading from './Loading'
+
 const styles = theme => ({
   main: {
     fontFamily:"arial black,Yu Gothic",
@@ -64,15 +67,14 @@ class SignIn extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
-    this.showparam = this.showparam.bind(this)
     this.submit = this.submit.bind(this)
 
     document.addEventListener('submit',(e) => this.submit(e))
   }
 
   submit(e){    
-    console.log("clicked")
     e.preventDefault()
+    console.log(this.state)
   }
 
   handleChange = name => event => {
@@ -80,12 +82,6 @@ class SignIn extends Component {
       [name]: event.target.value,
     });
   };
-
-  showparam(){
-    console.log(this.state)
-
-    return false
-  }
 
   componentWillUnmount(){
     document.removeEventListener('submit', (e) => this.submit(e))

@@ -19,9 +19,8 @@ import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 
-
 //import Right from './components/Inter';
-//import Right from './components/CreateUser';
+import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
 import Right from './components/Mylayout';
 import Boards from './components/MyProgram';
@@ -170,12 +169,12 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-    console.log(this.state.uid)
+    // console.log(this.state.uid)
 
     axios.post('/api/dropliveuser/',{
       uid: this.state.uid,
       }).then(response => {
-      console.log(response)
+      // console.log(response)
       this.setState({
         login: false
       })
@@ -266,7 +265,7 @@ class App extends React.Component {
   gomypage(e){
 
     if(this.state.login){
-      e = 'mypage'      
+      e = 'mypage'
     }
     else{
       e = 'login'
@@ -284,10 +283,8 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
-
-
   testprops(){
-    console.log(this.state.current)
+    // console.log(this.state.current)
   }
 
 
@@ -312,6 +309,7 @@ class App extends React.Component {
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
+      <Route path="/createuser"  component={CreateU}/>
       </div>
     );
 
@@ -390,8 +388,6 @@ class App extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-        
-        
           <AppBar
             position='sticky'
             className={classNames(classes.appBar, {
@@ -426,7 +422,7 @@ class App extends React.Component {
           >
             <div className={classes.drawerHeader} />
               <div className={classes.test}>
-              {contents}                                  
+              {contents}
               </div>
           </main>
             {after}
