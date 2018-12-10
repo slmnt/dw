@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Scrollbars } from 'react-custom-scrollbars';
-import classNames from 'classnames';
 import './CreateUser.css'
 
 import axios from 'axios';
@@ -98,6 +97,18 @@ class SignIn extends Component {
   submit(e){    
     e.preventDefault()
     console.log(this.state)
+    //api/createuser/
+    // 'uid' 'pwd' 'email' 'fname' 'lname
+
+    axios.post('/api/createuser/', {
+      uid: this.state.username,
+      pwd: this.state.passwd,
+      email: this.state.email,
+      fname: this.state.firstname,
+      lname: this.state.lastname
+    }).then(response => {
+      console.log(response)
+    })
   }
 
   handleChange = name => event => {

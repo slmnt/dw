@@ -18,10 +18,16 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 import api.views
+from .settings import DEBUG
 
 router = DefaultRouter()
 
-urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    path('api/', include('api.urls'))
-]
+if DEBUG:
+    urlpatterns = [
+        url(r'^admin/', admin.site.urls),
+        path('api/', include('api.urls'))
+    ]
+else:
+    urlpatterns = [
+        path('api/', include('api.urls'))
+    ]

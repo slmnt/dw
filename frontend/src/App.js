@@ -174,16 +174,9 @@ class App extends React.Component {
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
-    axios.post('/api/dropliveuser/',{
-      uid: this.state.uid,
-      }).then(response => {
-      this.setState({
-        login: false
-      })
-      this.clicked('/') 
-    }).catch(e => {
-      // console.log(e)
-    })              
+    axios.get('/api/logout/').then(response => {
+      //
+    })
   }
   
   componentWillMount(){
