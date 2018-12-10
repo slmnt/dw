@@ -32,6 +32,7 @@ import Codeman from './components/code/codeman';
 import Boardid from './components/Boardget'
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
+import Tech from './components/Techinfo'
 
 const drawerWidth = 200;
 
@@ -173,9 +174,11 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-
     axios.get('/api/logout/').then(response => {
-      //
+      this.setState({
+        login: false
+      })
+      this.clicked('/')
     })
   }
   
@@ -332,6 +335,7 @@ class App extends React.Component {
       <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
       <Route path="/createuser"  component={CreateU}/>
+      <Route path="/tech"  component={Tech}/>
       </div>
     );
 
@@ -393,8 +397,8 @@ class App extends React.Component {
       <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
     );
 
-    let before = null;
     let after = null;
+    let before = null;
     let log = null
 
     if(this.state.login){
@@ -403,10 +407,9 @@ class App extends React.Component {
       log = login
     }
     if (anchor === 'left') {
-        before = drawer;
-
+      before = drawer;
     } else {
-        after = drawer;
+      after = drawer;
     }
 
     return (

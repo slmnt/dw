@@ -46,14 +46,14 @@ class UserAuthentic(APIView):
                 if auth_user.is_active:
                     pass
             except:
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
             #sended pwd check
             try:
                 pwd = request.data['pwd']
                 if check_password(pwd, auth_user.password):
                     pass
             except:
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
             v_user = authenticate(request=None,username=auth_user.username,password=pwd)
             if v_user is not None:
                 login(request,v_user)
@@ -63,7 +63,7 @@ class UserAuthentic(APIView):
                 return Response(status=status.HTTP_200_OK)
             else:
                 #now
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
         else:
             return redirect("http://localhost:3000")
 
