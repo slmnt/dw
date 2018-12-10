@@ -155,11 +155,7 @@ class App extends React.Component {
     this.gomypagechild = this.gomypagechild.bind(this)
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
-<<<<<<< HEAD
-    // console.log(this.state.login)
-=======
     this.hideplayer = this.hideplayer.bind(this)
->>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -177,18 +173,10 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-<<<<<<< HEAD
-    // console.log(this.state.uid)
-=======
->>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
 
     axios.post('/api/dropliveuser/',{
       uid: this.state.uid,
       }).then(response => {
-<<<<<<< HEAD
-      // console.log(response)
-=======
->>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
       this.setState({
         login: false
       })
@@ -199,13 +187,10 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-<<<<<<< HEAD
-=======
     
     this.setState({
       bid: localStorage.getItem("bid")
     })
->>>>>>> c91949c8b53b6f308a32dac14fed9c153613d9a8
 
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -342,14 +327,13 @@ class App extends React.Component {
           'hide': this.state.bgm,
           'player': true
         })}>
-          <Back id={this.state.bid}/>
+        <Back id={this.state.bid}/>
         </div>
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
-      <Route path="/back" component={Back}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />

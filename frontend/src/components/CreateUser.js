@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Scrollbars } from 'react-custom-scrollbars';
+import classNames from 'classnames';
+import './CreateUser.css'
 
 import axios from 'axios';
 import Loading from './Loading'
@@ -60,16 +62,37 @@ class SignIn extends Component {
 
     this.state = {
       username: '',
-      password: '',
+      passwd: '',
+      passwd2: '',
       email: '',
       firstname: '',
-      lastname: ''
+      lastname: '',
+      flag: false,
+      load: false
     }
 
-    this.handleChange = this.handleChange.bind(this)
     this.submit = this.submit.bind(this)
+    this.checkpasswd = this.checkpasswd.bind(this)
+    this.handleChange = this.handleChange.bind(this)
 
     document.addEventListener('submit',(e) => this.submit(e))
+  }
+
+  checkpasswd(){
+    var tar1 = this.state.passwd
+    var tar2 = this.state.passwd2
+    if(tar1 !== tar2)
+      this.setState({
+        flag: true
+      })
+    else
+      this.setState({
+        flag: false
+      })
+
+    this.setState({
+      load: false
+    })
   }
 
   submit(e){    
@@ -78,9 +101,13 @@ class SignIn extends Component {
   }
 
   handleChange = name => event => {
+
     this.setState({
-      [name]: event.target.value,
-    });
+      [name]: event.target.value
+    })
+
+    if(name === "passwd2" || name === "passwd")
+      this.setState({load: true})
   };
 
   componentWillUnmount(){
@@ -88,8 +115,10 @@ class SignIn extends Component {
   }
 
   render() {
-
     const { classes } = this.props;
+
+    if(this.state.load)
+      this.checkpasswd()
 
     return (
       <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
@@ -110,11 +139,19 @@ class SignIn extends Component {
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">パスワード</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="new-password" />
+            <Input value={this.state.passwd} onChange={this.handleChange('passwd')} name="password" type="password" id="password" autoComplete="new-password" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">パスワード確認</InputLabel>
-            <Input name="password" type="password" id="password_c" autoComplete="new-password" />
+            <Input 
+              value={this.state.passwd2}
+              onChange={this.handleChange('passwd2')}
+              name="password" 
+              type="password" 
+              id="password_c" 
+              autoComplete="new-password" 
+              error={this.state.flag}
+              />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">メールアドレス</InputLabel>
