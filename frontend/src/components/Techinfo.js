@@ -59,9 +59,14 @@ class Tech extends Component {
           
     render() {
         return (
-          <ReactQuill 
-          modules={this.modules}
-          className="Tech_editor" value={this.state.text} onChange={this.handleChange} />
+            <div>
+                <div className="tech_test">
+                    test
+                </div>
+                <ReactQuill 
+                modules={this.modules}
+                className="Tech_editor" value={this.state.text} onChange={this.handleChange} />
+            </div>
         )
     }
 }
