@@ -17,6 +17,7 @@ const styles = theme => ({
     },
     paper: {
     width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
+    fontSize:"100px",
     },
     //sub: {
     //height: window.innerHeight / 7,
