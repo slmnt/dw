@@ -35,7 +35,6 @@ class UserAuthentic(APIView):
 
     def post(self, request):
         select = request.META['HTTP_ACCEPT'].split(',')[0]
-        print(select)
         if select == 'application/json':
             #sended username check
             try:
@@ -47,14 +46,14 @@ class UserAuthentic(APIView):
                 if auth_user.is_active:
                     pass
             except:
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
             #sended pwd check
             try:
                 pwd = request.data['pwd']
                 if check_password(pwd, auth_user.password):
                     pass
             except:
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
             v_user = authenticate(request=None,username=auth_user.username,password=pwd)
             if v_user is not None:
                 login(request,v_user)
@@ -64,7 +63,7 @@ class UserAuthentic(APIView):
                 return Response(status=status.HTTP_200_OK)
             else:
                 #now
-                return Response(data="1")
+                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
         else:
             return redirect("http://localhost:3000")
 
@@ -73,6 +72,7 @@ class UserAuthentic(APIView):
 class CreateUser(APIView):
 
     def post(self, request):
+        print(request.data)
         select = request.META['HTTP_ACCEPT'].split(',')[0]
         if select == 'application/json':
             #check username
@@ -80,7 +80,8 @@ class CreateUser(APIView):
                 uname = request.data['uid']
                 pwd = request.data['pwd']
                 email = request.data['email']
-                new_user = User.objects.create_user(username=uname, password=pwd, email=emal)
+                new_user = User(username=uname, email=email)
+                new_user.set_password(pwd)
             except:
                 return Response(data="1")
             #check first name
@@ -108,7 +109,7 @@ class CreateMUser(APIView):
                 uname = request.data['uid']
                 pwd = request.data['pwd']
                 email = request.data['email']
-                new_user = User.objects.create_user(username=uname, password=pwd, email=email)
+                new_user = User(username=uname, password=pwd, email=email)
             except:
                 return Response(data="1")
             #check first name
@@ -296,6 +297,12 @@ class userinfo(viewsets.ModelViewSet):
         # get user auth
         serializer = UserSerializer(uid) 
         return Response(serializer.data,status=status.HTTP_200_OK)
+
+class Logout(APIView):
+
+    def get(self, request):
+        logout(request)
+        return HttpResponse('logout',status=status.HTTP_200_OK)
 
 
 

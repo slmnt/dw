@@ -9,6 +9,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Scrollbars } from 'react-custom-scrollbars';
+import './CreateUser.css'
+
+import axios from 'axios';
+import Loading from './Loading'
 
 const styles = theme => ({
   main: {
@@ -57,43 +61,75 @@ class SignIn extends Component {
 
     this.state = {
       username: '',
-      password: '',
+      passwd: '',
+      passwd2: '',
       email: '',
       firstname: '',
-      lastname: ''
+      lastname: '',
+      flag: false,
+      load: false
     }
 
-    this.handleChange = this.handleChange.bind(this)
-    this.showparam = this.showparam.bind(this)
     this.submit = this.submit.bind(this)
+    this.checkpasswd = this.checkpasswd.bind(this)
+    this.handleChange = this.handleChange.bind(this)
 
     document.addEventListener('submit',(e) => this.submit(e))
   }
 
+  checkpasswd(){
+    var tar1 = this.state.passwd
+    var tar2 = this.state.passwd2
+    if(tar1 !== tar2)
+      this.setState({
+        flag: true
+      })
+    else
+      this.setState({
+        flag: false
+      })
+
+    this.setState({
+      load: false
+    })
+  }
+
   submit(e){    
-    console.log("clicked")
     e.preventDefault()
+    console.log(this.state)
+    //api/createuser/
+    // 'uid' 'pwd' 'email' 'fname' 'lname
+
+    axios.post('/api/createuser/', {
+      uid: this.state.username,
+      pwd: this.state.passwd,
+      email: this.state.email,
+      fname: this.state.firstname,
+      lname: this.state.lastname
+    }).then(response => {
+      console.log(response)
+    })
   }
 
   handleChange = name => event => {
+
     this.setState({
-      [name]: event.target.value,
-    });
+      [name]: event.target.value
+    })
+
+    if(name === "passwd2" || name === "passwd")
+      this.setState({load: true})
   };
-
-  showparam(){
-    console.log(this.state)
-
-    return false
-  }
 
   componentWillUnmount(){
     document.removeEventListener('submit', (e) => this.submit(e))
   }
 
   render() {
-
     const { classes } = this.props;
+
+    if(this.state.load)
+      this.checkpasswd()
 
     return (
       <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
@@ -114,11 +150,19 @@ class SignIn extends Component {
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">パスワード</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="new-password" />
+            <Input value={this.state.passwd} onChange={this.handleChange('passwd')} name="password" type="password" id="password" autoComplete="new-password" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">パスワード確認</InputLabel>
-            <Input name="password" type="password" id="password_c" autoComplete="new-password" />
+            <Input 
+              value={this.state.passwd2}
+              onChange={this.handleChange('passwd2')}
+              name="password" 
+              type="password" 
+              id="password_c" 
+              autoComplete="new-password" 
+              error={this.state.flag}
+              />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">メールアドレス</InputLabel>

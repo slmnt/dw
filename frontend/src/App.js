@@ -18,9 +18,13 @@ import axios from 'axios';
 import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
+<<<<<<< HEAD
+=======
+import './App.css'
+>>>>>>> d0b344fa04cd82ac217f452886043cd191b945cf
 
 //import Right from './components/Inter';
-//import Right from './components/CreateUser';
+import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
 import Right from './components/Mylayout';
 import Boards from './components/MyProgram';
@@ -30,6 +34,8 @@ import Mypage from './components/mypage';
 import Codeman from './components/code/codeman';
 import Boardid from './components/Boardget'
 import Load from './components/Loading'
+import Back from './components/BackPlayer'
+import Tech from './components/Techinfo'
 
 const drawerWidth = 200;
 
@@ -136,7 +142,9 @@ class App extends React.Component {
     login: false,
     uid: '',
     current: '',
-    language: 'python'
+    language: 'python',
+    bgm: true,
+    bid: 'GugsCdLHm-Q',
   };
 
   constructor(props){
@@ -151,17 +159,10 @@ class App extends React.Component {
     this.gomypagechild = this.gomypagechild.bind(this)
     this.setlen = this.setlan.bind(this)
     this.getlen = this.getlan.bind(this)
-    console.log(this.state.login)
+    this.hideplayer = this.hideplayer.bind(this)
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
-  }
-
-  closewindows(){
-    axios.get('/api/cookieauth/').then((response) => {
-    }).catch((e) => {
-    })
-    return 'test'
   }
 
   setlan(l){
@@ -176,22 +177,20 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-    console.log(this.state.uid)
-
-    axios.post('/api/dropliveuser/',{
-      uid: this.state.uid,
-      }).then(response => {
-      console.log(response)
+    axios.get('/api/logout/').then(response => {
       this.setState({
         login: false
       })
-      this.clicked('/') 
-    }).catch(e => {
-      // console.log(e)
-    })              
+      this.clicked('/')
+    })
   }
   
   componentWillMount(){
+    
+    this.setState({
+      bid: localStorage.getItem("bid")
+    })
+
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -204,6 +203,8 @@ class App extends React.Component {
             uid: response.data,
             login: true
           })
+          sessionStorage.setItem('key','test')
+          
           this.clicked('mypage')
         } else {
           this.clicked('/') 
@@ -242,6 +243,24 @@ class App extends React.Component {
     }
   }
 
+  hideplayer(){
+    
+    if(this.state.bgm){
+      this.setState({
+        bgm: false
+      })
+    }else{
+      this.setState({
+        bgm: true
+      })
+    }
+    
+    // reload set bid and refresh page
+    // localStorage.setItem('bid', 'bHQqvYy5KYo')
+    // window.location.reload();
+}
+
+
   handleDrawerOpen = () => {
     // console.log('open')
     this.setState({ open: true });
@@ -269,7 +288,7 @@ class App extends React.Component {
   gomypage(e){
 
     if(this.state.login){
-      e = 'mypage'      
+      e = 'mypage'
     }
     else{
       e = 'login'
@@ -287,10 +306,8 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
-
-
   testprops(){
-    console.log(this.state.current)
+    // console.log(this.state.current)
   }
 
 
@@ -305,16 +322,23 @@ class App extends React.Component {
       setting react router route
       <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
       */}
+        <div className={classNames({
+          'hide': this.state.bgm,
+          'player': true
+        })}>
+        <Back id={this.state.bid}/>
+        </div>
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
-      <Route path="/Load" component={Load}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
+      <Route path="/createuser"  component={CreateU}/>
+      <Route path="/tech"  component={Tech}/>
       </div>
     );
 
@@ -361,6 +385,8 @@ class App extends React.Component {
         <Divider />
         <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
         <Divider />
+        <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
+        <Divider />
         <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>
       </Drawer>
@@ -374,8 +400,8 @@ class App extends React.Component {
       <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
     );
 
-    let before = null;
     let after = null;
+    let before = null;
     let log = null
 
     if(this.state.login){
@@ -384,17 +410,14 @@ class App extends React.Component {
       log = login
     }
     if (anchor === 'left') {
-        before = drawer;
-
+      before = drawer;
     } else {
-        after = drawer;
+      after = drawer;
     }
 
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-        
-        
           <AppBar
             position='sticky'
             className={classNames(classes.appBar, {
@@ -429,7 +452,7 @@ class App extends React.Component {
           >
             <div className={classes.drawerHeader} />
               <div className={classes.test}>
-              {contents}                                  
+              {contents}
               </div>
           </main>
             {after}

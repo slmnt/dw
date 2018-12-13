@@ -47,6 +47,7 @@ urlpatterns = [
     path('getboardnum/',getboardnum),
     path('getboardpage/',getboardpage),
     path('cookieauth/',cokkie),
+    path('logout/',Logout.as_view()),
     path('python/',python),
     path('code/',codesec),
     path('user/',user),

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Boardget.css'
+import crypto from 'crypto'
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from '@material-ui/core/Divider';
@@ -19,10 +20,45 @@ class board extends Component {
 
         this.onChange = this.onChange.bind(this)
         this.addcomment = this.addcomment.bind(this)
-        this.commentsend = this.commentsend.bind(this)
     }
 
     componentDidMount(){
+
+        console.log(sessionStorage.getItem('key'))
+        const cipher = crypto.createCipher('aes192', 'testword');
+
+        let encrypted = '';
+        cipher.on('readable', () => {
+          const data = cipher.read();
+          if (data)
+            encrypted += data.toString('hex');
+        });
+        cipher.on('end', () => {
+        });        
+        cipher.write('some clear text data');
+        cipher.end();
+        console.log(encrypted);
+
+        const decipher = crypto.createDecipher('aes192','testword');
+
+        let decrypted = '';
+        decipher.on('readable', () => {
+        const data = decipher.read();
+        if (data)
+            decrypted += data.toString('utf8');
+        });
+        decipher.on('end', () => {
+        console.log(decrypted);
+        // Prints: some clear text data
+        });
+
+        decipher.write(encrypted, 'hex');
+        decipher.end();
+        
+
+
+        // sessionstorage -> authentic infomation -> crypto?? => incoder , decoder
+
         let id = this.props.match.params['id']
         axios.get('/api/igetboard/'+id).then(response => {
             this.setState({data: response.data[0]})
@@ -37,15 +73,11 @@ class board extends Component {
         this.setState({comment: newValue.target.value})
     }    
 
-    commentsend(){
-        console.log("comment")
-    }
-
     addcomment(){
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-        let id = this.props.match.params['id']        
+        let id = this.props.match.params['id']    
         axios.post('/api/addcomment/', {
             id: id,
             text: this.state.comment
@@ -53,7 +85,20 @@ class board extends Component {
             this.setState({comments: response.data})
             this.setState({comment: ''})
         })
+    }
 
+    wait2sec(x){
+        return new Promise(resolve =>{
+            resolve(x)
+            axios.get('/api/igetboard/'+3).then(response => {
+                this.setState({data: response.data[0]})
+            })
+        })
+    }
+
+    async syn(){
+        var x = await this.wait2sec(1)
+        console.log(this.state.data)
     }
 
     convertdata(date){
@@ -66,7 +111,7 @@ class board extends Component {
         const commentin = <div>
             <textarea className="comment" value={this.state.comment} onChange={(e)=> this.onChange(e)} ></textarea>
             <br/>
-            <button onClick={(e) => this.addcomment()} >send</button>
+            <button onClick={(e) => this.syn()} >send</button>
         </div>
 
         let comm = this.state.comments.map(el =>(
