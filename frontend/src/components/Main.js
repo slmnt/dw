@@ -42,7 +42,7 @@ const styles = theme => ({
   },
   main_title: {
     color:"#f2f7ff",
-    background: `linear-gradient(to top, rgba(150, 100, 150, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
+    background: `linear-gradient(to top, rgba(100, 100, 100, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
     backgroundRepeat:"no-repeat", 
     backgroundSize:"cover",
     fontSize:"30px",

@@ -18,10 +18,7 @@ import axios from 'axios';
 import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
-<<<<<<< HEAD
-=======
 import './App.css'
->>>>>>> d0b344fa04cd82ac217f452886043cd191b945cf
 
 //import Right from './components/Inter';
 import CreateU from './components/CreateUser';

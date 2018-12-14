@@ -7,6 +7,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import bridge from './bridge.jpeg';
 
 const styles = theme => ({
     root: {
@@ -16,28 +17,35 @@ const styles = theme => ({
         position: 'static',
     },
     paper: {
-    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
-    fontSize:"100px",
+        width: window.innerWidth / 2,
+        textAlign:'center',
     },
-    //sub: {
+    icon: {
+        desplay:'block',
+        borderRadius: '50%',
+        height: window.innerWidth / 2 / 6,
+        width: window.innerWidth / 2 / 6,
+        maxWidth: '50%',
+    },
+    sub: {
     //height: window.innerHeight / 7,
     //width: window.innerWidth / 4,
-    //},
+    },
     one:{
-    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
+        width: window.innerWidth / 2,
     },
     control: {
-    padding: theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 2,
     },    
     action: {
-    borderRadius: 5
+        borderRadius: 5
     }
 })
 
 // react-paginatge is crash react meterial-ui
 class Mypage extends Component {
     state = {
-        spacing: '16',
+        spacing: '24',
         userinfo: {},        
         c: 10/26 * 100,
     };
@@ -83,14 +91,15 @@ class Mypage extends Component {
                         <Grid item>
                             <Card className={this.props.classes.paper}>
                                 <CardContent>
-                                    <Typography variant='caption'>
-                                        {this.state.userinfo.last_login}
-                                    </Typography>
-                                    <Typography>
+                                    <img className={this.props.classes.icon} src={bridge} alt="icon" />
+                                    <Typography variant='h4'>
                                         {this.state.userinfo.username}
                                     </Typography>
                                     <Typography>
                                         {this.state.userinfo.email}
+                                    </Typography>
+                                    <Typography align='right'variant='caption'>
+                                        {this.state.userinfo.last_login}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -107,7 +116,7 @@ class Mypage extends Component {
                             <CardContent>
                                 <Typography>C言語 </Typography>
                                 <br/>
-                                <LinearProgress variant="determinate" value={this.state.c} />       
+                                <LinearProgress variant="determinate" value={this.state.c} color='' />       
                                 <Typography align='right'>10/26</Typography>                             
                             </CardContent>
                         </Card>
