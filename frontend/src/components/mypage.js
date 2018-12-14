@@ -23,13 +23,10 @@ const styles = theme => ({
     icon: {
         desplay:'block',
         borderRadius: '50%',
-        height: window.innerWidth / 2 / 6,
-        width: window.innerWidth / 2 / 6,
+        height: window.innerWidth / 2 / 2.5,
+        width: window.innerWidth / 2 / 2.5,
         maxWidth: '50%',
-    },
-    sub: {
-    //height: window.innerHeight / 7,
-    //width: window.innerWidth / 4,
+        padding: window.innerWidth / 2 / 20,
     },
     one:{
         width: window.innerWidth / 2,
