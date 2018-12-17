@@ -120,7 +120,7 @@ class Mypage extends Component {
                             <CardContent>
                                 <Typography>C言語 </Typography>
                                 <br/>
-                                <LinearProgress variant="determinate" value={this.state.c} color='' />       
+                                <LinearProgress variant="determinate" value={this.state.c} />       
                                 <Typography align='right'>10/26</Typography>                             
                             </CardContent>
                         </Card>
