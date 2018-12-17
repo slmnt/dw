@@ -38,6 +38,10 @@ addcomment = Commentadd.as_view({
     'post': 'post'
 })
 
+get_auth = Getuser.as_view({
+    'get': 'get'
+})
+
 urlpatterns = [
     path('authentic/',UserAuthentic.as_view()),
     path('createuser/',CreateUser.as_view()),
@@ -55,5 +59,6 @@ urlpatterns = [
     path('getcomment/<id>/',commentget.as_view()),
     path('getlist/',Codelistget.as_view()),
     path('addcomment/',addcomment),
-    path('search/<type>/<context>/',Searchget.as_view())
+    path('search/<type>/<context>/',Searchget.as_view()),
+    path('getauth/',get_auth)
 ]

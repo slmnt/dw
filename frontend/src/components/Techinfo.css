@@ -6,10 +6,10 @@
 .tech_test{
     display: inline-block;
     background-color: blue;
-    animation-duration: 3s;
-    animation-name: fadeout;
-    animation-delay: 1s;
+    animation-duration: 2s;
+    animation-name: fadein;
     animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 /*
@@ -20,6 +20,9 @@ fade out animation
     100%{ opacity: 0;}
 }
 
+/*
+fade in animation
+*/
 @keyframes fadein{
     0%{ opacity: 0; }
     100%{ opacity: 1;}

@@ -1,16 +1,20 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import './Techinfo.css'
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 class Tech extends Component {
+    state = {
+        text: '',
+        key: false
+    }
 
     constructor(props) {
         super(props);
 
-        this.state = { text: '' } // You can also pass a Quill Delta here
         this.handleChange = this.handleChange.bind(this)    
         this.check = this.check.bind(this)
     }
@@ -18,6 +22,21 @@ class Tech extends Component {
 
     componentDidMount(){
         document.addEventListener('keydown',(e) => this.check(e))
+
+        axios.get('/api/getauth/').then(response => {
+            this.setState({
+                key: true
+            })
+        }).catch((e) =>{            
+            console.log(e)
+        })
+
+
+        // window.setInterval(this.alram(socket),1000)
+    }
+
+    alram(){
+        console.log("alram")
     }
 
     componentWillUnmount(){
@@ -32,7 +51,6 @@ class Tech extends Component {
 
     handleChange(value) {
         this.setState({ text: value })
-        console.log(this.state.text)
     }
      
     modules = {
@@ -55,17 +73,27 @@ class Tech extends Component {
           
             ['clean']                                         // remove formatting button
         ]
-    }
-          
+    }   
+
     render() {
+
+        const editor =  <ReactQuill 
+                            modules={this.modules}
+                            className="Tech_editor" 
+                            value={this.state.text} 
+                            onChange={this.handleChange} />
+
+        let edd = null;
+
+        if(this.state.key)
+            edd = editor
+
         return (
             <div>
                 <div className="tech_test">
                     test
                 </div>
-                <ReactQuill 
-                modules={this.modules}
-                className="Tech_editor" value={this.state.text} onChange={this.handleChange} />
+                {edd}
             </div>
         )
     }
