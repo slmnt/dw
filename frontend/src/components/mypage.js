@@ -75,6 +75,11 @@ class Mypage extends Component {
         })        
     }
 
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+
     render() {
         const { spacing } = this.state;
 
@@ -98,7 +103,7 @@ class Mypage extends Component {
                                         {this.state.userinfo.email}
                                     </Typography>
                                     <Typography align='right'variant='caption'>
-                                        {this.state.userinfo.last_login}
+                                        {this.convertdata(this.state.userinfo.last_login)}
                                     </Typography>
                                 </CardContent>
                             </Card>
