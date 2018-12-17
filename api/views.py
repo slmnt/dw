@@ -503,3 +503,13 @@ class Cpplang(viewsets.ModelViewSet):
         output.close()
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
+
+class Getuser(viewsets.ModelViewSet):
+
+    def get(self, request):
+        user = User.objects.get(username=str(request.user))
+        if user.is_staff:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
