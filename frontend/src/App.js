@@ -20,9 +20,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
 import './App.css'
 
-
 //import Right from './components/Inter';
-//import Right from './components/CreateUser';
+import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
 import Right from './components/Mylayout';
 import Boards from './components/MyProgram';
@@ -33,6 +32,7 @@ import Codeman from './components/code/codeman';
 import Boardid from './components/Boardget'
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
+import Tech from './components/Techinfo'
 
 const drawerWidth = 200;
 
@@ -162,13 +162,6 @@ class App extends React.Component {
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
-  closewindows(){
-    axios.get('/api/cookieauth/').then((response) => {
-    }).catch((e) => {
-    })
-    return 'test'
-  }
-
   setlan(l){
     this.setState({ language: l})
   }
@@ -181,17 +174,12 @@ class App extends React.Component {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-
-    axios.post('/api/dropliveuser/',{
-      uid: this.state.uid,
-      }).then(response => {
+    axios.get('/api/logout/').then(response => {
       this.setState({
         login: false
       })
-      this.clicked('/') 
-    }).catch(e => {
-      // console.log(e)
-    })              
+      this.clicked('/')
+    })
   }
   
   componentWillMount(){
@@ -212,6 +200,8 @@ class App extends React.Component {
             uid: response.data,
             login: true
           })
+          sessionStorage.setItem('key','test')
+          
           this.clicked('mypage')
         } else {
           this.clicked('/') 
@@ -295,7 +285,7 @@ class App extends React.Component {
   gomypage(e){
 
     if(this.state.login){
-      e = 'mypage'      
+      e = 'mypage'
     }
     else{
       e = 'login'
@@ -313,10 +303,8 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
-
-
   testprops(){
-    console.log(this.state.current)
+    // console.log(this.state.current)
   }
 
 
@@ -335,18 +323,19 @@ class App extends React.Component {
           'hide': this.state.bgm,
           'player': true
         })}>
-          <Back id={this.state.bid}/>
+        <Back id={this.state.bid}/>
         </div>
       <Route exact path="/"  render={() => <Main />}/>
       <Route path="/right" component={Right} />
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
       <Route path="/main" component={Main}/>
-      <Route path="/back" component={Back}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
       <Route path="/three" render={(props) => <Three {...props}/>} />
       <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
+      <Route path="/createuser"  component={CreateU}/>
+      <Route path="/tech"  component={Tech}/>
       </div>
     );
 
@@ -408,8 +397,8 @@ class App extends React.Component {
       <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
     );
 
-    let before = null;
     let after = null;
+    let before = null;
     let log = null
 
     if(this.state.login){
@@ -418,17 +407,14 @@ class App extends React.Component {
       log = login
     }
     if (anchor === 'left') {
-        before = drawer;
-
+      before = drawer;
     } else {
-        after = drawer;
+      after = drawer;
     }
 
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-        
-        
           <AppBar
             position='sticky'
             className={classNames(classes.appBar, {
@@ -463,7 +449,7 @@ class App extends React.Component {
           >
             <div className={classes.drawerHeader} />
               <div className={classes.test}>
-              {contents}                                  
+              {contents}
               </div>
           </main>
             {after}

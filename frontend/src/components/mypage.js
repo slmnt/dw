@@ -7,6 +7,8 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import bridge from './bridge.jpeg';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
     root: {
@@ -16,27 +18,32 @@ const styles = theme => ({
         position: 'static',
     },
     paper: {
-    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
+        width: window.innerWidth / 2,
+        textAlign:'center',
     },
-    //sub: {
-    //height: window.innerHeight / 7,
-    //width: window.innerWidth / 4,
-    //},
+    icon: {
+        desplay:'block',
+        borderRadius: '50%',
+        height: window.innerWidth / 2 / 2.5,
+        width: window.innerWidth / 2 / 2.5,
+        maxWidth: '50%',
+        padding: window.innerWidth / 2 / 20,
+    },
     one:{
-    width: window.innerWidth / 7 + window.innerWidth / 4 + 16,
+        width: window.innerWidth / 2,
     },
     control: {
-    padding: theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 2,
     },    
     action: {
-    borderRadius: 5
+        borderRadius: 5
     }
 })
 
 // react-paginatge is crash react meterial-ui
 class Mypage extends Component {
     state = {
-        spacing: '16',
+        spacing: '24',
         userinfo: {},        
         c: 10/26 * 100,
     };
@@ -68,10 +75,16 @@ class Mypage extends Component {
         })        
     }
 
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+
     render() {
         const { spacing } = this.state;
 
         return (
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
             <div className={this.props.classes.test}>
             <br/>
             <Grid container spacing={24} direction="column">
@@ -82,14 +95,15 @@ class Mypage extends Component {
                         <Grid item>
                             <Card className={this.props.classes.paper}>
                                 <CardContent>
-                                    <Typography variant='caption'>
-                                        {this.state.userinfo.last_login}
-                                    </Typography>
-                                    <Typography>
+                                    <img className={this.props.classes.icon} src={bridge} alt="icon" />
+                                    <Typography variant='h4'>
                                         {this.state.userinfo.username}
                                     </Typography>
                                     <Typography>
                                         {this.state.userinfo.email}
+                                    </Typography>
+                                    <Typography align='right'variant='caption'>
+                                        {this.convertdata(this.state.userinfo.last_login)}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -153,7 +167,8 @@ class Mypage extends Component {
                 </Grid>
                 </Grid>
                 </Grid>
-            </div>        
+            </div>    
+            </Scrollbars>    
 		);
   	}
 }

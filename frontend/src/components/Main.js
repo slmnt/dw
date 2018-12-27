@@ -42,7 +42,7 @@ const styles = theme => ({
   },
   main_title: {
     color:"#f2f7ff",
-    background: `linear-gradient(to top, rgba(150, 100, 150, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
+    background: `linear-gradient(to top, rgba(100, 100, 100, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
     backgroundRepeat:"no-repeat", 
     backgroundSize:"cover",
     fontSize:"30px",
@@ -108,11 +108,10 @@ class Main extends Component {
     // console.log(props)
   }
 
-
   render() {
     const { classes } = this.props;
     return (
-      <Scrollbars  disablehorizontalscrolling={true} style={{ width: "100vw", height: "95vh" }}>
+        <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
       <div className = {classes.body}>
         <header className = {classes.header}>
           <h1 className = {classes.header_title}>

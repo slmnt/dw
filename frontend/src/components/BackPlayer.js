@@ -21,7 +21,6 @@ class Back extends Component {
         this.setState({
             id: this.props.id
         })
-        console.log(this.props.id)
     }
 
     findid(){
