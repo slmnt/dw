@@ -56,3 +56,38 @@ class Comment(models.Model):
 class Open(models.Model):
     root = models.ForeignKey(Code,on_delete=models.CASCADE)
 
+
+class Techinfo(models.Model):
+    title = models.CharField(max_length=15)
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    count = models.IntegerField(default=0)
+
+
+class Usertechinfo(models.Model):
+    title = models.CharField(max_length=15,default='null')
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    count = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return '%d' % (self.id)
+
+class Usertechinfocomment(models.Model):
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    coments = models.CharField(max_length=1000)
+    createat = models.DateTimeField(default=timezone.now)
+    root = models.ForeignKey('Usertechinfo',on_delete=models.CASCADE)
+
+class Ads(models.Model):
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    context = models.TextField()
+
+class Adque(models.Model):
+    ads = models.ForeignKey('Ads',on_delete=models.CASCADE)
+
+
