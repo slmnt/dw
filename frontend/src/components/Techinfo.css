@@ -1,6 +1,8 @@
-.Tech_editor{
-    width: 70vw;
-    height: 50vh;
+.body{
+    height:100%;
+    width:100%;
+    color:black;
+    background-color:#f2f7ff;
 }
 
 .tech_test{
@@ -11,6 +13,18 @@
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
+
+.Tech_editor{
+    height:20%;
+    width:50%;
+    text-align:center;
+}
+
+.submit{
+    text-align:right;
+    margin-top:5.5%;
+}
+
 
 /*
 fade out animation

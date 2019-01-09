@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Techinfo.css'
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { Link } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+
 
 class Tech extends Component {
     state = {
@@ -89,12 +93,18 @@ class Tech extends Component {
             edd = editor
 
         return (
-            <div>
+            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
+            <div className="body">
                 <div className="tech_test">
-                    test
+                    広告
                 </div>
                 {edd}
+                <input className="submit" type="submit" value="投稿" /><br/>
+                <output name="result">{this.state.text}</output>
+                
+
             </div>
+            </Scrollbars>
         )
     }
 }
