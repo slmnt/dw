@@ -61,3 +61,10 @@ class CodeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Code
         fields = ('id','title', 'auth', 'codetype', 'createat', 'count', 'comments')
+
+class CertiListSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField()
+    
+    class Meta:
+        model = CertiList
+        fields = ('__all__')

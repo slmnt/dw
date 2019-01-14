@@ -90,4 +90,6 @@ class Ads(models.Model):
 class Adque(models.Model):
     ads = models.ForeignKey('Ads',on_delete=models.CASCADE)
 
-
+class CertiList(models.Model):
+    name = models.ForeignKey(User,on_delete=False, null=False,default=False)
+    code = models.CharField(max_length=25)
