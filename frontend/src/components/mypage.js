@@ -168,6 +168,9 @@ class Mypage extends Component {
                 </Grid>
                 </Grid>
             </div>    
+            <br/>
+            <br/>
+            <br/>
             </Scrollbars>    
 		);
   	}

@@ -31,7 +31,6 @@ class Tech extends Component {
             console.log(e)
         })
 
-
         // window.setInterval(this.alram(socket),1000)
     }
 
