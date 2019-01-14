@@ -21,6 +21,7 @@ from django.contrib.sessions.models import Session
 
 from django.utils import timezone
 from django.http import HttpResponse
+from django.core.mail import send_mail
 
 from datetime import datetime
 import subprocess
@@ -28,6 +29,15 @@ from back.settings import BASE_DIR
 # Create your views here.
 
 STATIC = BASE_DIR + '//static//'    
+"""
+send_mail(
+    'Subject here',
+    'Here is the message.',
+    'from@example.com',
+    ['to@example.com'],
+    fail_silently=False,
+)
+"""
 
 #required data
 # 'uid' 'pwd'
@@ -509,6 +519,26 @@ class Getuser(viewsets.ModelViewSet):
     def get(self, request):
         user = User.objects.get(username=str(request.user))
         if user.is_staff:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CheckMailing(viewsets.ModelViewSet):
+
+    def get(self, request):
+        user = User.objects.get(username=str(request.user))
+        try:
+            c = CertiList.objects.get(name=user)
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        user = User.objects.get(username=str(request.user))
+        c = CertiList.objects.get(name=user)
+        encoded = request.data['crypto']
+        if encoded == c.code:
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
