@@ -55,6 +55,7 @@ const styles = theme => ({
     padding:"50px",
     //margin:"50px 100px 0px 100px",
   },
+
   main_contents: {
     color:"#f2f7ff",
   },
@@ -78,7 +79,6 @@ const styles = theme => ({
     padding:"50px",
     margin:"25px 50px 100px 25px "
   },
-
 // footer
   footer: {
     color:"#f2f7ff",
@@ -129,25 +129,29 @@ class Main extends Component {
               <h2>『Mini Prog』</h2>
             </div>
           </div>
-          <h3 className = {classes.main_contents_title}>サービスの特徴</h3>
-          <Grid container direction="row" justify="center" text-align="center" className = {classes.main_contents}>
-            <Grid item xs = {5} className = {classes.main_contents_1}>
-             <h4>幅広いご利用可能年齢層</h4>
-              <p>興味があれば、誰でも簡単にプログラミングが学べるよう、わかりやすい解説、見易い、そして、学ぶ意欲を掻き立てるようなデザインを心がけて作成しております。</p>
-            </Grid>
-            <Grid item xs = {5} className = {classes.main_contents_2}>
-              <h4>コードの結果をすぐに確認できる</h4>
-              <p>用意されている、又は自分で書いたソースコードをネットで実行し、その結果をすぐに確認することで、思い通りに動いているか、エラーがないかどうかをすぐに確認することが出来ます。</p>
-            </Grid>
-            <Grid item xs = {5} className = {classes.main_contents_3}>
-              <h4>多言語対応</h4>
-              <p>主流な言語は勿論のこと、数多くの言語に対応しております。さらに、ニーズに応じて、サービスの拡張も行っております。</p>
-            </Grid>
-            <Grid item xs = {5} className = {classes.main_contents_4}>
-              <h4>ユーザ間コミュニティ</h4>
-              <p>サービス利用者同士でのコミュニケーションが可能。エラーの改善案を共有したり、わからない箇所を質問したりと、他の人と情報を共有することにより、新たな知識が身に付きます。</p>
-            </Grid>
-          </Grid>
+          <h3 className={classes.main_contents_title}>サービスの特徴</h3>
+          <div className="main_contents" style={{padding: "0 25px"}}>
+            <div className="f-grid">
+              <div className="f-grid-item main-tile main_contents_1">
+                <h4>幅広いご利用可能年齢層</h4>
+                <p>興味があれば、誰でも簡単にプログラミングが学べるよう、わかりやすい解説、見易い、そして、学ぶ意欲を掻き立てるようなデザインを心がけて作成しております。</p>
+              </div>
+              <div className="f-grid-item main-tile main_contents_2">
+                <h4>コードの結果をすぐに確認できる</h4>
+                <p>用意されている、又は自分で書いたソースコードをネットで実行し、その結果をすぐに確認することで、思い通りに動いているか、エラーがないかどうかをすぐに確認することが出来ます。</p>
+              </div>
+            </div>
+            <div className="f-grid">
+              <div className="f-grid-item main-tile main_contents_3">
+                <h4>多言語対応</h4>
+                <p>主流な言語は勿論のこと、数多くの言語に対応しております。さらに、ニーズに応じて、サービスの拡張も行っております。</p>
+              </div>
+              <div className="f-grid-item main-tile main_contents_4">
+                <h4>ユーザ間コミュニティ</h4>
+                <p>サービス利用者同士でのコミュニケーションが可能。エラーの改善案を共有したり、わからない箇所を質問したりと、他の人と情報を共有することにより、新たな知識が身に付きます。</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <footer className = {classes.footer}>

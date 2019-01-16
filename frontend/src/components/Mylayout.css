@@ -1,47 +1,4 @@
-.table_mylayout{
-    table-layout: fixed;
-    width: 100vw;
-    height: 100vh;
-    overflow:scroll;
-    color: white;
-    background-color: rgba(20, 20, 20, 0.774);    
-}
 
-a{
-    text-decoration: none;
-    color: white;
-}
-
-.view{
-    list-style-type: none;
-    list-style-position: outside;  
-	padding-left: 0;
-}
-ul{
-    list-style-type: none;
-    list-style-position: outside;  
-	padding-left: 1;
-}
-
-.tab_item{
-    display:inline-block;
-    width: 70px;
-    background-color: rgb(121, 124, 124);
-    padding: 0.2em 0.5em;
-    margin-left: 1px;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-}
-.tab_item:active{
-    background-color: rgb(53, 53, 53);
-}
-
-.tab{
-    white-space: nowrap;
-    height: 3vh;
-    padding-left: 0;
-    overflow-x: auto;
-}
 .tab::-webkit-scrollbar{
 	height: 5px;
 	background-color: rgb(196, 195, 195);
@@ -56,24 +13,6 @@ ul{
 	background-color: #F5F5F5;
 }
 
-.closer{
-    position: relative;
-    left: 50px;
-}
-/*
-one line
-li{
-    display:inline; 
-}
-*/
-
-.item:focus{
-    background-color: rgb(167, 167, 243);
-}
-
-td{
-    vertical-align: top;
-}
 .run{
     display: inline-block;
     padding: 0.2em 0.5em;
@@ -86,3 +25,80 @@ td{
 .run:active{
     transform: translateY(0.5px);
 }
+
+
+/* タブ付きウィンドウ */
+
+.window-tablist {
+  display: flex;
+  overflow: auto hidden;
+  height: 2em;
+  background-color: rgb(37, 37, 38);
+}
+.window-tab {
+  display: flex;
+  border-radius: 50px 50px 0 0;
+  /*border: 0.1rem solid;*/
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+  height: 2em;
+  line-height: 2em;
+  padding-left: 0.3em;
+}
+.window-tab-image {
+  width: 1.6em;
+  margin-right: 0.2em;
+  background-size: 1.6em;
+  background-position: 0px center;
+  background-repeat: no-repeat;
+}
+.window-tab-close {
+  height: 1em;
+  width: 1em;
+  background: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.428 8L12 10.573 10.572 12 8 9.428 5.428 12 4 10.573 6.572 8 4 5.428 5.427 4 8 6.572 10.573 4 12 5.428 9.428 8z' fill='%23E8E8E8'/%3E%3C/svg%3E") 50% no-repeat;
+  background-size: 1em;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+}
+.window-content {
+  text-align: left;
+}
+
+
+/* ディレクトリツリー */
+
+.dir-window {
+  height: 100%;
+  background-color: rgb(37, 37, 38);
+}
+.dir-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
+}
+.dir-label {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  line-height: 1.6em;
+  /*
+  padding: 0.2em;
+  height: 100px;
+  */
+}
+.dir-label:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.dir-label-image {
+width: 1.6em;
+  margin-right: 0.2em;
+  background-size: 1.6em;
+  background-position: 0px center;
+  background-repeat: no-repeat;
+}
+

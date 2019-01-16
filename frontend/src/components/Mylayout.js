@@ -4,238 +4,514 @@ import PropTypes from 'prop-types';
 import './Mylayout.css'
 
 import { Scrollbars } from 'react-custom-scrollbars';
-import AceEditor from 'react-ace';
 import axios from 'axios';
+/*
 import 'brace/mode/python';
 import 'brace/mode/java';
 import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
-/*
-fix view / tab management system
 */
-const styles = theme => ({
-    root:{
-        //position: 'relative',
-        //top: -25
-    },
-    table_view:{
-        minWidth: '10%',
-        maxWidth: 100,
-        width: "10%",
-        textAlign: "left",
-    },
-    table_tab:{
-        height: "2vw",
-        backgroundColor: '#FFF',
-    },
-    table_body:{
-        height: "70%",
-    },
-    table_result:{
-    }
-});
-  
-class Mylayout extends Component {
-    state = {
-        flag: false,
-        val: '',
-        result: '',
-        views: [],
-        tabs: ["1", "2"],
-    }
 
+import * as monaco from 'monaco-editor'
+
+
+import 'xterm/src/xterm.css';
+import * as xterm from 'xterm';
+import * as attach from 'xterm/lib/addons/attach/attach';
+import * as fit from 'xterm/lib/addons/fit/fit';
+import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
+import * as search from 'xterm/lib/addons/search/search';
+import * as webLinks from 'xterm/lib/addons/webLinks/webLinks';
+import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
+
+import logo from '../logo.svg';
+
+
+let Terminal = xterm.Terminal;
+Terminal.applyAddon(attach);
+Terminal.applyAddon(fit);
+Terminal.applyAddon(fullscreen);
+Terminal.applyAddon(search);
+Terminal.applyAddon(webLinks);
+Terminal.applyAddon(winptyCompat);
+
+function runFakeTerminal(term) {
+  if (term._initialized) {
+    return;
+  }
+
+  term._initialized = true;
+
+  term.prompt = () => {
+    term.write('\r\n$ ');
+  };
+
+  term.writeln('Welcome to xterm.js');
+  term.writeln('This is a local terminal emulation, without a real terminal in the back-end.');
+  term.writeln('Type some keys and commands to play around.');
+  term.writeln('');
+  term.prompt();
+
+  term._core.register(term.addDisposableListener('key', (key, ev) => {
+    const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+
+    if (ev.keyCode === 13) {
+      term.prompt();
+    } else if (ev.keyCode === 8) {
+     // Do not delete the prompt
+      if (term.x > 2) {
+        term.write('\b \b');
+      }
+    } else if (printable) {
+      term.write(key);
+    }
+  }));
+
+  term._core.register(term.addDisposableListener('paste', (data, ev) => {
+    term.write(data);
+  }));
+}
+
+class Term extends React.Component {
+    constructor (props) {
+      super(props);
+      this.state = {
+      }
+    }
+    termRef = element => {
+        let term = new xterm.Terminal();
+        this.term = term;
+        term.open(element);
+        term.winptyCompatInit();
+        term.webLinksInit();
+        term.fit();
+        term.focus();
+        term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ') 
+        runFakeTerminal(this.term)
+    }
+    render() {
+        return (
+            <div>
+                <div ref={this.termRef} ></div>
+            </div>
+        );
+    }
+}
+
+class DirTree extends Component {
+    constructor (props) {
+      super(props);
+      this.state = {
+        fileData: {
+        }
+      }
+    }
+    onToggleCollapse = (path) => {
+      let s = this.state.fileData[path] && this.state.fileData[path].collapsing;
+      this.state.fileData[path] = {collapsing: !s};
+      this.setState({fileData: this.state.fileData});
+    }
+    flatten(dir) {
+      // ディレクトリ階層を React element の list に変換
+      let re = []; //
+      let stack = []; // 親ディレクトリの一覧
+      let f = d => {
+        let path = stack.join("/") + "/" + d.name;
+        d.name && re.push(
+          <div className={"dir-item"}
+            key={path}
+            data-filepath={path}
+            style={ {
+              width: "100%"
+            } }
+            onClick={(() => {
+              if (d.children) {
+                this.onToggleCollapse(path);
+              } else {
+                if (this.props.openFile) this.props.openFile(path);
+              }
+            }).bind(this)}
+          >
+            <div className={"dir-label"} draggable>
+              <span
+                className="dir-label-image"
+                style={{
+                  marginLeft: stack.length * 1 + "em",
+                  backgroundImage: "url(" + (!d.children ? logo : `"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E"` ) + ")",
+                  transform: "rotate(" + (d.children ? this.state.fileData[path] && this.state.fileData[path].collapsing && "-45" || "0" : "0") + "deg)"
+                }}
+              >
+              </span>
+              <a className={"dir-label-name"}>
+                {d.name}
+              </a>
+            </div>
+          </div>
+        );
+        if (!d.children || (this.state.fileData[path] && this.state.fileData[path].collapsing) ) return;
+        stack.push(d.name);
+        for (let v of d.children) {
+          f(v);
+        }
+        stack.pop();
+      }
+      f(dir);
+      return re;
+    }
+    render() {
+      return (
+        <div
+          className="dir-window"
+          style={ {
+            width: "100%"
+          } }
+        >
+          {
+            this.flatten(this.props.dir)
+          }
+        </div>
+      )
+    }
+}
+  
+class Window extends Component {
     constructor(props) {
         super(props);
 
-        this.select = this.select.bind(this)
-        this.tabdrop = this.tabdrop.bind(this)
-        this.run_code = this.run_code.bind(this)
-        this.onChange = this.onChange.bind(this)
-        this.tab_close = this.tab_close.bind(this)
+        this.state ={
+        tabs: [
+            { name: null },
+        ],
+        currentTab: null,
+        };
+        this.editor = null;
+        this.tabList = React.createRef();
     }
-
-    onChange(newValue) {
-        this.setState({val: newValue})
-    }    
-
-    componentDidMount(){
+    containerRef = element => {
+        let rect = element.getBoundingClientRect();
+        element.style.width = rect.width + "px";
+        element.style.height = rect.height + "px";
+        this.onEditorResize(rect.width, rect.height);
     }
-
-    componentWillUnmount(){
+    contentRef = element => {
+        this.editor = monaco.editor.create(element, {
+            value: '',
+            language: 'python',
+            theme: "vs-dark",
+        })
     }
-
-    dragStart(e) {
-        // Update our state with the item that is being dragged
-        // console.log('start')
+    onEditorResize(width, height) {
+        this.editor.layout();
+        this.tabList.current.style.width = width + "px"
+    }
+    setEditorScroll(top, left) {
+        this.editor.setScrollPosition({scrollTop: top, scrollLeft: left});
+    }
+    onDragStart = (e) => {
         e.dataTransfer.effectAllowed = 'copy'
-        e.dataTransfer.setData("tab", e.target.id);
+        e.dataTransfer.setData("tab", e.currentTarget.dataset["tabpath"]);
     }
-    
-    dragOver(e) {
-        e.preventDefault()
-    }
-    
-    dragEnd(e) {
-    }
-
-    allowdrop(e){
+    onDragOver = (e) => {
         e.preventDefault();
     }
-
-    tabdrop(e){
+    onDrop = (e) => {
         e.preventDefault();
-        var data = e.dataTransfer.getData("tab");
+        let path = e.dataTransfer.getData("tab");
+        let to = e.currentTarget.dataset["tabpath"];
+        if (path && to) {
+            this.moveTab(path, this.getTabIndex(to));
+        }
+    }
+    onClickTab = (e) => {
+        let path = e.currentTarget.dataset["tabpath"];
+        if (path) this.activateTab(path);
+    }
+    onClickBackground = e => {
+        if (this.noTab()) this.openTab('src/index.js');
+        e.stopPropagation();
+    }
 
-        try{
-            //when mouse up, get mouse position data -> check target tab position => adjust tab elemenets  =>rebuild tabs render
-            //console.log(e.clientX)
-            var dump = document.getElementById(e.target.id)
-            var temp = []
-            var origin = this.state.tabs
-            var inn = this.state.tabs.length + 1
-            inn = inn.toString()
-            for(var i = 0; i < origin.length;i++){
-                temp.push(Number(origin[i]))
-            }
-            temp = temp.sort((a,b) => a- b)
-
-            for(i = 0; i < temp.length;i++){
-                if(temp[i] !== (i + 1)){
-                    inn = (i + 1).toString()
-                    break
-                }
-            }
-
-            temp = []
-
-            if(e.target.id === ""){
-                   data = data.split("tab")
-                if(data[1]){
-                    inn = data[1].toString()
-                    while(true){
-                        var t = origin.pop()
-                        if(t === inn)
-                            break;
-                        temp.push(t)
-                    }
-
-                    var times = temp.length
-                    for(i = 0; i < times;i++)
-                        origin.push(temp.pop())
-
-                    temp = []
-                }
-                origin.push(inn)
-
-            }else{
-                var rect = dump.getBoundingClientRect();
-                var checkx = (2 * rect.x + rect.width) / 2 
-                var id = e.target.id
-                id = id.split("tab")
-                data = data.split("tab")
-                if(data[1]){
-                    inn = data[1].toString()
-                    while(true){
-                        t = origin.pop()
-                        if(t === inn)
-                            break;
-                        temp.push(t)
-                    }
-
-                    times = temp.length
-                    for(i = 0; i < times;i++)
-                        origin.push(temp.pop())
-
-                    temp = []
-                }
-
-                if(inn !== id[1]){
-                    while(true){
-                        t = origin.pop()
-                        if(t === id[1]){
-                            origin.push(t)
-                            break
-                        }                    
-                        temp.push(t)
-                    }
-                    if(checkx > e.clientX){
-                        t = origin.pop()
-                        temp.push(t)
-                    }
-                }
-
-                origin.push(inn)
-    
-                //console.log(temp)
-                times = temp.length
-                for(i = 0; i < times;i++)
-                    origin.push(temp.pop())
-            }
-
-            this.setState({
-                tabs: origin
-            })
-            
-        }catch(e){
-            console.log('error')
+    openTab(path) {
+        let id = this.getTabIndex(path);
+        if (id != -1) {
+            this.activateTab(path);
+            return;
         }
 
-    }
+        let newTabs = [];
+        for (let v of this.state.tabs) {
+            if (v.name) {
+                newTabs.push(v);
+            }
+        }
+        let tab = {
+            path: path,
+            name: path.substring(path.lastIndexOf('/') + 1),
+            value: this.getContent(path) || "const a = 0;",
+            scroll: null,
+            selections: null,
+            cursor: null,
+            init: false
+        };
+        newTabs.push(tab);
 
-    intab(e){
-        e.preventDefault();
-        var data = e.dataTransfer.getData("tab");
-        e.target.appendChild(data);
-    }
+        this.setState({tabs: newTabs}, (() => {
+            if (this.state.tabs.length > 0) {
+                this.activateTab(path);
+            }
+        }).bind(this));
 
-    tab_select(e){
-       // console.log(e.target.id)
     }
+    closeTab(path) {
+        let tabId = this.getTabIndex(path);
+        let newTabs = Array.from(this.state.tabs);
+        newTabs.splice(tabId, 1);
+        this.setState({
+            tabs: newTabs,
+            currentTab: null
+        }, (() => {
+            if (path == this.state.currentTab && this.state.tabs.length > 0) {
+                let i = tabId > 0 ? tabId - 1 : 0;
+                this.activateTab(this.state.tabs[i].path);
+            }
+        }).bind(this));
 
-    select(e){
-        // console.log(e.target.id)
-        if(this.state.flag)
-            this.setState({flag: false})
-        else
-            this.setState({flag: true})
     }
+    saveTabState(tab) {
+        if (!tab) return;
 
-    tab_close(e){
-        //let dump = document.getElementById(e.target.id)
-        //dump.remove()
-        var origin = this.state.tabs
-        var data = e.target.id
-        var temp = []
+        tab.value = this.editor.getValue();
+        tab.scroll = {
+            scrollLeft: this.editor.getScrollLeft(),
+            scrollTop: this.editor.getScrollTop(),
+        }
+        tab.cursor = this.editor.getPosition();
+        tab.selections = this.editor.getSelections();
+    }
+    loadTabState(tab) {
+        if (!tab) return;
+
+        if (tab.value) this.editor.setValue(tab.value);
+        if (tab.scroll) this.editor.setScrollPosition(tab.scroll);
+        if (tab.cursor) this.editor.setPosition(tab.cursor);
+        if (tab.selections) this.editor.setSelections(tab.selections);
+    }
+    activateTab(path) {
+        if (path == this.state.currentTab) return;
+
+        let tab =  this.getTab(path);
+        if (!tab) return;
         
-        data = data.split("tab")
-        if(data[1]){
-            var inn = data[1].toString()
-            while(true){
-                var t = origin.pop()
-                if(t === inn)
-                    break;
-                temp.push(t)
+        let newState = {
+            currentTab: path
+        };
+
+        let currentTab =  this.getTab(this.state.currentTab);
+        if (currentTab) {
+            this.saveTabState(currentTab);
+            newState.tabs = this.state.tabs;
+        } else {
+            this.editor.setValue(tab.value);
+        }
+
+        this.setState(newState, (() => {
+            let tab = this.getTab(path);
+            console.log("load", tab)
+            this.loadTabState(tab);
+            tab.init = true;
+        }).bind(this));
+        
+    }
+    moveTab(path, to) {
+        let from = this.getTabIndex(path);
+        let newTabs = [];
+
+        for (let i in this.state.tabs) {
+            if (i == from) { //
+                continue;
             }
+            let right = (i >= from && i <= to);
+            
+            if (right) {
+                newTabs.push(this.state.tabs[i]);
+            }
+            if (i == to) {
+                newTabs.push(this.state.tabs[from]);
+            }
+            if (!right) {
+                newTabs.push(this.state.tabs[i]);
+            }
+        }
 
-            var times = temp.length
-            for(var i = 0; i < times;i++)
-                origin.push(temp.pop())
-
-            this.setState({
-                tabs: origin
-            })
+        this.setState({tabs: newTabs});
+    }
+    getTab(path) {
+        for (let v of this.state.tabs) {
+            if (v.path == path) {
+                return v;
+            }
+        }
+        return; 
+    }
+    getTabIndex(path) {
+        for (let i in this.state.tabs) {
+            if (this.state.tabs[i].path == path) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    noTab() {
+        for (let v of this.state.tabs) {
+            if (v.name) return false;
+        }
+        return true;
+    }
+    getValue = () => {
+        return this.editor.getValue();
+    }
+    getContent(path) {
+        return {
+            "/src/index.js": "const a = 0;",
+            "/app.js": "const あこどぉう = 'ういえおｋ';"
+        }[path];
+    }
+    render() {
+        const options = {
+            selectOnLineNumbers: true
+        };
+        return (
+        <div
+            style={{
+                position: "relative",
+                display: "flex",
+                flexFlow: "column",
+                width: "100%",
+                height: "100%",
+            }}
+        >
+            <div
+                className="window-tablist"
+                style={{
+                    flex: "0 0 auto",
+                    maxWidth: "100%",
+                    textAlign: "left"
+                }}
+                ref={this.tabList}
+            >
+            {
+                this.state.tabs.map((v, i, ar) => {
+                if (!v || !v.name) return;
+                return <div
+                    key={i}
+                    className="window-tab"
+                    style={ {
+                        backgroundColor: this.state.currentTab == v.path && "rgb(30, 30, 30)" || "rgb(45, 45, 45)",
+                        borderRight: ar.length == i + 1 ? "none" : "1.5px solid rgb(37, 37, 38)",
+                    } }
+                    draggable
+                    onDragStart={this.onDragStart}
+                    onDragOver={this.onDragOver}
+                    onDrop={this.onDrop}
+                    onClick={this.onClickTab}
+                    data-tabpath={v.path}
+                    >
+                    <span
+                        className="window-tab-image"
+                        style={{
+                            backgroundImage: "url(" + logo + ")",
+                        }}
+                    >
+                    </span>
+                    {v.name}
+                    <span
+                        className="window-tab-close"
+                        onClick={
+                            ((e) => {
+                                this.closeTab(v.path); // e.currentTarget.dataset["tabpath"] は使えない
+                                e.stopPropagation();
+                            }).bind(this)
+                        }
+                    ></span>
+                    </div>
+                })          
+            }
+            </div>
+            <div
+                style={{
+                    flex: "1 1 auto",
+                    width: "100%",
+                    opacity: this.state.currentTab && "1" || "0",
+                    overflow: "hidden",
+                    background: "linear-gradient(145deg, #00c1da, #003bca)",
+                }}
+                onClick={this.onClickBackground}
+                ref={this.containerRef}
+            >
+                <div
+                    className="window-content"
+                    style={{
+                        height: "100%",
+                        width: "100%",
+                    }}
+                    ref={this.contentRef}
+                >
+                </div>
+            </div>
+            <div
+                style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "200px",
+                    top: "auto",
+                    bottom: "0",
+                }}
+            >
+                <Term />
+            </div>
+        </div>
+        );
+    }
+}
+  
+class Mylayout extends Component {
+    state = {
+        dir: {
+          children: [
+            {
+              name: "src",
+              children: [
+                {
+                  name: "index.js"
+                }
+              ]
+            },
+            { name: "app.js" },
+            { name: "app1.js" },
+            { name: "app2.js" },
+            { name: "app3.js" },
+          ]
         }
     }
+    
+    constructor(props) {
+        super(props);
 
-    run_code(){
+        this.window = React.createRef();
+    }
+
+    runCode(){
+        if (!this.editor) return;
 
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
         // console.log(this.state.value)
         /*
         */
-        axios.post('/api/python/',{contents: this.state.val}).then(response => {
+
+        let text = this.editor.getValue();
+        axios.post('/api/python/',{contents: text}).then(response => {
             this.setState({ result: response.data})
             // console.log(response.data)
         }).catch(e => {
@@ -245,129 +521,40 @@ class Mylayout extends Component {
     }
     
     render() {
-        const { classes } = this.props;
-        const editor = (
-            <AceEditor
-            //mode="java"
-            mode="python"
-            theme="monokai"
-            value={this.state.val}
-            onChange={(e) => this.onChange(e)}
-            name="UNIQUE_ID_OF_DIV"
-            fontSize={15}
-            width="89.5vw"
-            height="70vh"
-            editorProps={{$blockScrolling: Infinity}}
-            setOptions={{
-              enableSnippets: false,
-              showLineNumbers: true,
-              tabSize: 4,
-            }}
-            />
-          );
-              
-        let con;
-        let tabb = null;
-        if(this.state.flag){
-            con = <ul><li>{this.state.tabs[0]}</li></ul>;
-        }else{
-            con = null;
-        }
-
-        if(this.state.tabs.length > 0){
-            tabb = this.state.tabs.map(e =>{
-                return(
-                    <div key={e} id={"tab" + e} className="tab_item"
-                    draggable="true" 
-                    onDragStart={this.dragStart}
-                    onClick={this.tab_select}
-                    >{e}
-                    <span
-                    id={"tab" + e}
-                    className="closer"
-                    onClick={this.tab_close}
-                    >x</span></div>
-                )
-            })
-        }
-
         return (
-            <div className={classes.root}>
-            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "94vh" }}>
-                <table className="table_mylayout">
-                    <tbody>
-                        <tr onDragOver={this.dragOver}>
-                            <td rowSpan="3" 
-                            className={classes.table_view}
-                            >
-                            <ul className="view">
-                                <li>
-                                    <a
-                                    href="#"
-                                    id={1}
-                                    draggable="true" 
-                                    onDragEnd={this.dragEnd} 
-                                    onDragStart={this.dragStart}                                
-                                    onClick={this.select}
-                                    >
-                                        item1
-                                        {con}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                    href="#"
-                                    className="item"
-                                    id={2}
-                                    draggable="true" 
-                                    onDragEnd={this.dragEnd} 
-                                    onDragStart={this.dragStart}                                
-                                    onClick={this.select}
-                                    >
-                                        itme2
-                                    </a>
-                                </li>
-                                <li>
-                                    <div id="view3"
-                                    draggable="true" 
-                                    onDragEnd={this.dragEnd} 
-                                    onDragStart={this.dragStart}                                
-                                    >
-                                        item3
-                                    </div>
-                                </li>
-
-                            </ul>
-                            </td>
-                                <td className={'tab'}
-                                onDrop={this.tabdrop}
-                                onDragOver={this.allowdrop}
-                                >
-                                    {tabb}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className={classes.table_body}>
-                            {editor}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className={classes.table_result}>
-                                <div>
-                                    <a href="#" className="run" onClick={this.run_code} >execute</a>
-                                    <a href="#" onClick={this.tab_close} >x</a>
-                                </div>
-                                <br/>
-                                <textarea value={this.state.result} disabled/>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </Scrollbars>
-        </div>
-        );
-  	}   
+            <div
+                style={{
+                display: "flex",
+                lineHeight: "120%",
+                fontSize: "0.6em",
+                color: "#cccccc",
+                height: "500px",
+                width: "100%",
+                }}
+            >
+                <div
+                    style={{
+                        flex: "0 0 auto",
+                        width: "200px",
+                        overflow: "hidden auto"
+                    }}
+                >
+                    <DirTree dir={this.state.dir} openFile={path => {this.window.current.openTab(path);}} />
+                </div>
+                <div
+                    style={{
+                        flex: "1 1 auto",
+                        height: "100%",
+                        width: "100%",      
+                    }}
+                >
+                    <Window ref={this.window} />
+                    <button onClick={() => this.runCode()}>実行</button>
+                </div>
+            </div>
+        )
+    }
 }
 
 Mylayout.PropTypes = PropTypes;
-export default withStyles(styles)(Mylayout);
+export default Mylayout;
