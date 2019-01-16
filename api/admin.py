@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Codetype)
 admin.site.register(Code)
 admin.site.register(Testboard)
+admin.site.register(CertiList)
