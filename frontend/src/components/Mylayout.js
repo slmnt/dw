@@ -26,6 +26,7 @@ import * as webLinks from 'xterm/lib/addons/webLinks/webLinks';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
 
 import logo from '../logo.svg';
+import { Z_BLOCK } from 'zlib';
 
 
 let Terminal = xterm.Terminal;
@@ -80,6 +81,12 @@ class Term extends React.Component {
       }
     }
     termRef = element => {
+        
+        let rect = element.getBoundingClientRect();
+        element.style.width = rect.width + "px";
+        element.style.height = rect.height + "px";
+        console.log(rect)
+
         let term = new xterm.Terminal();
         this.term = term;
         term.open(element);
@@ -89,11 +96,32 @@ class Term extends React.Component {
         term.focus();
         term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ') 
         runFakeTerminal(this.term)
+
+        const stringOptions = {
+            //bellSound: null,
+            //bellStyle: 'none', //['none', 'sound'],
+            //cursorStyle: 'block', //['block', 'underline', 'bar'],
+            //experimentalCharAtlas: 'none', //['none', 'static', 'dynamic'],
+            fontFamily: "Consolas, 'Courier New', monospace",
+            //fontWeight: 'normal', //['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
+            //fontWeightBold: 'normal', //['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
+            //rendererType: ['dom', 'canvas'],
+            //fontColor: "#cccccc",
+            theme: {
+                background: "rgb(37, 37, 38)",
+                cursor: "#cccccc",
+            }
+        };
+        for (let k in stringOptions) {
+            term.setOption(k, stringOptions[k]);
+        }
     }
     render() {
         return (
-            <div>
-                <div ref={this.termRef} ></div>
+            <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+                <div ref={this.termRef}
+                    style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}
+                ></div>
             </div>
         );
     }
