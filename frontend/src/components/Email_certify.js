@@ -4,15 +4,15 @@ import axios from 'axios';
 
 class Email extends Component {
     state = {
-        certi: ""
+        flag: false
     };
 
     constructor(props){
         super(props)
-        this.setState({certi: props.match.params['code']})        
     }
 
     componentDidMount(){
+        console.log(this.props)
         //console.log("monted")
         //console.log(this.props.match.params)
         axios.defaults.xsrfCookieName = 'csrftoken';
@@ -21,16 +21,28 @@ class Email extends Component {
         axios.post('/api/checkmail/', {
             code: this.props.match.params['code']
         }).then(response => {
-            console.log(response)
+            this.props.history.push('/mypage')
+            //checked ok mail, goto mypage
         }).catch(e => {
-            console.log(e)
+            //Dont checked mail, print BLOCK page
+            this.setState({flag: true})
         })
-
     }
 
     render() {
+
+        var body = null;
+        var fail = <div>email Certification is fail or already done email check. try re-send email.</div>
+
+
+        if(this.state.flag){
+            body = fail
+        }else
+            body = null;
+
         return (
             <div>
+                {body}
                 Email Certification
             </div>
 
