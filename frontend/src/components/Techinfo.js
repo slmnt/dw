@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Techinfo.css'
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+//import ReactQuill from 'react-quill';
+//import * as qu from 'quill-markdown-shortcuts'
+//import 'react-quill/dist/quill.snow.css';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
@@ -21,6 +22,7 @@ class Tech extends Component {
 
         this.handleChange = this.handleChange.bind(this)    
         this.check = this.check.bind(this)
+        this.output = React.createRef()
     }
     
 
@@ -54,6 +56,8 @@ class Tech extends Component {
 
     handleChange(value) {
         this.setState({ text: value })
+        //this.output.current.innerHTML = this.state.text
+        //console.log(this.output)
     }
      
     modules = {
@@ -79,17 +83,22 @@ class Tech extends Component {
     }   
 
     render() {
+        /**
+         * 
+         * 
+         * 
+         const editor =  <ReactQuill 
+                             modules={this.modules}
+                             className="Tech_editor" 
+                             value={this.state.text} 
+                             onChange={this.handleChange} />
+                             let edd = editor;
+                             {edd}
+                             if(this.state.key)
+                                 edd = editor
+         */
 
-        const editor =  <ReactQuill 
-                            modules={this.modules}
-                            className="Tech_editor" 
-                            value={this.state.text} 
-                            onChange={this.handleChange} />
 
-        let edd = null;
-
-        if(this.state.key)
-            edd = editor
 
         return (
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
@@ -97,11 +106,8 @@ class Tech extends Component {
                 <div className="tech_test">
                     広告
                 </div>
-                {edd}
                 <input className="submit" type="submit" value="投稿" /><br/>
                 <output name="result">{this.state.text}</output>
-                
-
             </div>
             </Scrollbars>
         )
