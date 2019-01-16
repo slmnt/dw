@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 500px;
+  width: 100%;
+  
+  resize: both;
+  overflow: scroll;
+}
+.header {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  
+  overflow: scroll hidden;
+}
+
+.main-container {
+  display: flex;
+  flex-flow: row nowrap;
+
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+}
+
+.side {
+  flex: 0 0 100px;
+  width: auto;
+  height: auto;
+  
+  overflow: hidden scroll;
+}
+
+.main-container-2 {
+  display: flex;
+  flex-flow: column nowrap;
+
+  flex: 1 1 auto;
+  width: 100%;
+  height: auto;
+}
+.main {
+  flex: 1 1 auto;
+  width: auto;
+  height: 0px;
+}
+.footer {
+  flex: 0 0 auto;
+  width: 100%;
+  height: 100px;
+  
+  overflow: scroll hidden;
+}
