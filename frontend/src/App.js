@@ -33,6 +33,7 @@ import Boardid from './components/Boardget'
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
 import Tech from './components/Techinfo'
+import Mail from './components/Email_certify'
 
 const drawerWidth = 200;
 
@@ -329,6 +330,7 @@ class App extends React.Component {
       <Route path="/right" component={Right} />
       <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
       <Route path="/Board/:id" component={Boardid}/>
+      <Route path="/certify/:code" component={Mail}/>
       <Route path="/main" component={Main}/>
       <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
       <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
