@@ -92,4 +92,4 @@ class Adque(models.Model):
 
 class CertiList(models.Model):
     name = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
-    code = models.CharField(max_length=25)
+    code = models.CharField(max_length=128)
