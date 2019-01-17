@@ -180,6 +180,6 @@ class board extends Component {
   	}
 }
 
-board.PropTypes = PropTypes;
+board.propTypes = {};
 
 export default board;

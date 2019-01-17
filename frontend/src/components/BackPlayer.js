@@ -78,6 +78,6 @@ class Back extends Component {
       }    
 }
 
-Back.PropTypes = PropTypes;
+Back.propTypes = {};
 
 export default Back;

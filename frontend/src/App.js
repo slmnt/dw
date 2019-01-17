@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -39,21 +40,7 @@ import Mail from './components/Email_certify'
 const drawerWidth = 200;
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  appFrame: {
-    height: '100%',
-    width: '100%',
-    zIndex: 1,
-    overflow: 'hidden',
-    display: 'flex',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
   appBar: {
-    position: 'absolute',
     backgroundColor: '#0b409c',
     color: '#ffe867',
     transition: theme.transitions.create(['margin', 'width'], {
@@ -93,7 +80,6 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
   },
   content: {
-    flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
@@ -101,10 +87,10 @@ const styles = theme => ({
     }),
   },
   'content-left': {
-    marginLeft: -drawerWidth,
+    marginLeft: 0,
   },
   'content-right': {
-    marginRight: -drawerWidth,
+    marginRight: 0,
   },
   contentShift: {
     transition: theme.transitions.create('margin', {
@@ -125,13 +111,7 @@ const styles = theme => ({
   logoutButton: {
     position: 'absolute',
     left: '92%'
-  },
-  test: {
-    position: 'relative',
-    // top: -25,
-    left:-1,
-    height: "100%",
-  },
+  }
 });
 
 class App extends React.Component {
@@ -144,35 +124,45 @@ class App extends React.Component {
     language: 'python',
     bgm: true,
     bid: 'GugsCdLHm-Q',
+    isDrawerOpen: false,
   };
 
   constructor(props){
     super(props)
+
+    this.drawer = React.createRef();
     
-    this.clicked = this.clicked.bind(this);
-    this.statecallback = this.statecallback.bind(this)
-    this.drop = this.drop.bind(this)
-    this.drawercloseer = this.drawercloseer.bind(this)
-    this.testprops = this.testprops.bind(this)
-    this.gomypage = this.gomypage.bind(this)
-    this.gomypagechild = this.gomypagechild.bind(this)
-    this.setlen = this.setlan.bind(this)
-    this.getlen = this.getlan.bind(this)
     this.hideplayer = this.hideplayer.bind(this)
     // console.log(props.history.location.pathname)
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
-  setlan(l){
+  openDrawer = e => {
+    /*
+        let rect = element.getBoundingClientRect();
+        element.style.width = rect.width + "px";
+        element.style.height = rect.height + "px";
+    */
+    this.setState({isDrawerOpen: true});
+  }
+  closeDrawer = e => {
+    this.setState({isDrawerOpen: false});
+  }
+  getComponentSize(com) {
+    let dom = ReactDOM.findDOMNode(com);
+    return dom.getBoundingClientRect();
+  }
+
+  setlan = (l) => {
     this.setState({ language: l})
   }
 
-  getlan(){
+  getlan = () => {
     return this.state.language
   }
 
-  drop(){
+  drop = () => {
     axios.defaults.xsrfCookieName = 'csrftoken';
     axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -236,11 +226,6 @@ class App extends React.Component {
     // console.log(datafromchild)
   }
 
-  drawercloseer(){
-    if(this.state.open){
-      this.handleDrawerClose()
-    }
-  }
 
   hideplayer(){
     
@@ -257,18 +242,8 @@ class App extends React.Component {
     // reload set bid and refresh page
     // localStorage.setItem('bid', 'bHQqvYy5KYo')
     // window.location.reload();
-}
+  }
 
-
-  handleDrawerOpen = () => {
-    // console.log('open')
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    // console.log('close')
-    this.setState({ open: false });
-  };
 
   handleChangeAnchor = event => {
     this.setState({
@@ -284,7 +259,7 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
-  gomypage(e){
+  gomypage = (e) => {
 
     if(this.state.login){
       e = 'mypage'
@@ -298,14 +273,14 @@ class App extends React.Component {
     this.props.history.push(e)
   }
 
-  gomypagechild(e){
+  gomypagechild = (e) => {
 
     this.setState({current: e})
     this.props.location.pathname = '/' + e
     this.props.history.push(e)
   }
 
-  testprops(){
+  testprops = () => {
     // console.log(this.state.current)
   }
 
@@ -334,8 +309,8 @@ class App extends React.Component {
           <Route path="/Board/:id" component={Boardid}/>
           <Route path="/certify/:code" component={Mail}/>
           <Route path="/main" component={Main}/>
-          <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
-          <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
+          <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} />
+          <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
           <Route path="/three" render={(props) => <Three {...props}/>} />
           <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
           <Route path="/createuser"  component={CreateU}/>
@@ -354,43 +329,10 @@ class App extends React.Component {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={this.handleDrawerClose}>
+          <IconButton onClick={this.closeDrawer}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </div>
-      </Drawer>
-    );
-
-    const drawer = (
-      <Drawer
-        variant="persistent"
-        anchor={anchor}
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={this.handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Scrollbars style={{ height: "90vh" }}>        
-          <Divider />
-          <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
-          <Divider />
-          <List><ListItem button><Typography>help</Typography></ListItem></List>
-        </Scrollbars>
       </Drawer>
     );
 
@@ -402,8 +344,6 @@ class App extends React.Component {
       <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
     );
 
-    let after = null;
-    let before = null;
     let log = null
 
     if(this.state.login){
@@ -411,18 +351,13 @@ class App extends React.Component {
     } else{
       log = login
     }
-    if (anchor === 'left') {
-      before = drawer;
-    } else {
-      after = drawer;
-    }
 
     return (
-      <div className={classes.root}>
-        <div className={classes.appFrame}>
+      <div className="root">
+        <div className="appFrame">
           <AppBar
-            position='relative'
-            className={classNames(classes.appBar, {
+            position='sticky'
+            className={classNames("appBar", {
               [classes.appBarShift]: open,
               [classes[`appBarShift-${anchor}`]]: open,
             })}
@@ -431,7 +366,7 @@ class App extends React.Component {
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
+                onClick={this.openDrawer}
                 className={classNames(classes.menuButton, open && classes.hide)}
               >
                 <MenuIcon />
@@ -444,20 +379,59 @@ class App extends React.Component {
               </div>
             </Toolbar>
           </AppBar>
-          {before}
-          <main
-            onClick={this.drawercloseer}
-            className={classNames(classes.content, classes[`content-${anchor}`], {
-              [classes.contentShift]: open,
-              [classes[`contentShift-${anchor}`]]: open,
-            })}
+          
+          
+          <div
+            onClick={this.closeDrawer}
+            style={{
+              display: this.state.isDrawerOpen ? "block" : "none"
+            }}
+            className="mobileMenuBg">
+          </div>
+
+
+          <Drawer
+            variant="persistent"
+            anchor={anchor}
+            open={open}
+            className="mobileMenu"
+            style={{
+              left: this.state.isDrawerOpen ? 0 : -1000 + "px"
+            }}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ref={this.drawer}
           >
-            <div className={classes.drawerHeader} />
-            <div className={classes.test}>
-              {contents}
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={this.closeDrawer}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
             </div>
+            <Scrollbars style={{ height: "90vh" }}>        
+            <Divider />
+            <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
+            <Divider />
+            <List><ListItem button><Typography>help</Typography></ListItem></List>
+            </Scrollbars>
+          </Drawer>
+          
+          
+          <main
+            className="content"
+          >
+            {contents}
           </main>
-          {after}
         </div>
       </div>
     );

@@ -50,6 +50,6 @@ class Email extends Component {
   	}
 }
 
-Email.PropTypes = PropTypes;
+Email.propTypes = {};
 
 export default Email;

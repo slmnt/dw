@@ -12,6 +12,6 @@ class Boardprogram extends Component {
   	}
 }
 
-Boardprogram.PropTypes = PropTypes;
+Boardprogram.propTypes = {};
 
 export default Boardprogram;

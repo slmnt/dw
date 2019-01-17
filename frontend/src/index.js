@@ -12,7 +12,7 @@ class Index extends Component {
     return(
       <CookiesProvider>
         <Switch>
-        <App />
+          <App />
         </Switch>
       </CookiesProvider>
     );
