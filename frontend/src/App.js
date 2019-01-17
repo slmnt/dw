@@ -37,6 +37,8 @@ import Back from './components/BackPlayer'
 import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
+import CourseE from './components/Editor'
+
 const drawerWidth = 200;
 
 const styles = theme => ({
@@ -315,7 +317,8 @@ class App extends React.Component {
           <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
           <Route path="/createuser"  component={CreateU}/>
           <Route path="/tech"  component={Tech}/>
-          <Route path="/course"  component={CourseS}/>
+          <Route path="/courseSearch"  component={CourseS}/>
+          <Route path="/course/Edit/:id"  component={CourseE}/>
         </Scrollbars>
       </div>
     );
