@@ -7,13 +7,14 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import axios from 'axios';
 /*
 import 'brace/mode/python';
-import 'brace/mode/java';
+import 'brace/mode/java'
 import 'brace/mode/c_cpp';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 */
 
-import * as monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor'; 
+import Editor from './Editor'; // test
 
 
 import 'xterm/src/xterm.css';
@@ -81,7 +82,10 @@ class Term extends React.Component {
       }
     }
     termRef = element => {
-        
+        if (!element) {
+            // unmount
+            return;
+        }
         let rect = element.getBoundingClientRect();
         element.style.width = rect.width + "px";
         element.style.height = rect.height + "px";
@@ -217,12 +221,20 @@ class Window extends Component {
         this.tabList = React.createRef();
     }
     containerRef = element => {
+        if (!element) {
+            // unmount
+            return;
+        }
         let rect = element.getBoundingClientRect();
         element.style.width = rect.width + "px";
         element.style.height = rect.height + "px";
         this.onEditorResize(rect.width, rect.height);
     }
     contentRef = element => {
+        if (!element) {
+            // unmount
+            return;
+        }
         this.editor = monaco.editor.create(element, {
             value: '',
             language: 'python',
@@ -550,35 +562,38 @@ class Mylayout extends Component {
     
     render() {
         return (
-            <div
-                style={{
-                display: "flex",
-                lineHeight: "120%",
-                fontSize: "0.6em",
-                color: "#cccccc",
-                height: "500px",
-                width: "100%",
-                }}
-            >
+            <div>
                 <div
                     style={{
-                        flex: "0 0 auto",
-                        width: "200px",
-                        overflow: "hidden auto"
+                    display: "flex",
+                    lineHeight: "120%",
+                    fontSize: "0.6em",
+                    color: "#cccccc",
+                    height: "500px",
+                    width: "100%",
                     }}
                 >
-                    <DirTree dir={this.state.dir} openFile={path => {this.window.current.openTab(path);}} />
+                    <div
+                        style={{
+                            flex: "0 0 auto",
+                            width: "200px",
+                            overflow: "hidden auto"
+                        }}
+                    >
+                        <DirTree dir={this.state.dir} openFile={path => {this.window.current.openTab(path);}} />
+                    </div>
+                    <div
+                        style={{
+                            flex: "1 1 auto",
+                            height: "100%",
+                            width: "100%",      
+                        }}
+                    >
+                        <Window ref={this.window} />
+                        <button onClick={() => this.runCode()}>実行</button>
+                    </div>
                 </div>
-                <div
-                    style={{
-                        flex: "1 1 auto",
-                        height: "100%",
-                        width: "100%",      
-                    }}
-                >
-                    <Window ref={this.window} />
-                    <button onClick={() => this.runCode()}>実行</button>
-                </div>
+                <Editor /> {/*test*/}
             </div>
         )
     }

@@ -82,6 +82,6 @@ class Codeman extends Component {
   	}
 }
 
-Codeman.PropTypes = PropTypes;
+Codeman.propTypes = {};
 
 export default Codeman;

@@ -69,6 +69,6 @@ class Interf extends Component {
   	}
 }
 
-Interf.PropTypes = PropTypes;
+Interf.propTypes = {};
 
 export default Interf;

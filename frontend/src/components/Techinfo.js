@@ -128,6 +128,6 @@ class Tech extends Component {
     }
 }
 
-Tech.PropTypes = PropTypes;
+Tech.propTypes = {};
 
 export default Tech;

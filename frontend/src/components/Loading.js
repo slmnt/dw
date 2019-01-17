@@ -21,6 +21,6 @@ class Load extends Component {
   	}
 }
 
-Load.PropTypes = PropTypes;
+Load.propTypes = {};
 
 export default Load;

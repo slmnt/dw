@@ -201,5 +201,5 @@ class Myprogram extends Component {
   	}   
 }
 
-Myprogram.PropTypes = PropTypes;
+Myprogram.propTypes = {};
 export default withStyles(styles)(Myprogram);
