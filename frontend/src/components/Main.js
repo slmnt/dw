@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { Grid } from '@material-ui/core';
 import bridge from './bridge.jpeg';
 import './Main.css'
@@ -111,7 +110,6 @@ class Main extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
       <div className = {classes.body}>
         <header className = {classes.header}>
           <h1 className = {classes.header_title}>
@@ -155,10 +153,9 @@ class Main extends Component {
         </div>
 
         <footer className = {classes.footer}>
-          <p>Comming soon</p>
+          <p>Coming soon</p>
         </footer>
       </div>
-      </Scrollbars>            
     )
   }
 }

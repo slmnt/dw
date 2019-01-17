@@ -18,6 +18,7 @@ import axios from 'axios';
 import { ListItem } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import Button from '@material-ui/core/Button';
+
 import './App.css'
 
 //import Right from './components/Inter';
@@ -315,29 +316,31 @@ class App extends React.Component {
     const { anchor, open } = this.state;
 
     const contents = (
-      <div>
-      {/*
-      setting react router route
-      <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-      */}
-        <div className={classNames({
-          'hide': this.state.bgm,
-          'player': true
-        })}>
-        <Back id={this.state.bid}/>
-        </div>
-      <Route exact path="/"  render={() => <Main />}/>
-      <Route path="/right" component={Right} />
-      <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-      <Route path="/Board/:id" component={Boardid}/>
-      <Route path="/certify/:code" component={Mail}/>
-      <Route path="/main" component={Main}/>
-      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
-      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
-      <Route path="/three" render={(props) => <Three {...props}/>} />
-      <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
-      <Route path="/createuser"  component={CreateU}/>
-      <Route path="/tech"  component={Tech}/>
+      <div style={{ width: "100%", height: "100%" }}>
+        <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+          {/*
+          setting react router route
+          <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
+          */}
+            <div className={classNames({
+            'hide': this.state.bgm,
+            'player': true
+          })}>
+            <Back id={this.state.bid}/>
+          </div>
+          <Route exact path="/"  render={() => <Main />}/>
+          <Route path="/right" component={Right} />
+          <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+          <Route path="/Board/:id" component={Boardid}/>
+          <Route path="/certify/:code" component={Mail}/>
+          <Route path="/main" component={Main}/>
+          <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
+          <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
+          <Route path="/three" render={(props) => <Three {...props}/>} />
+          <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
+          <Route path="/createuser"  component={CreateU}/>
+          <Route path="/tech"  component={Tech}/>
+        </Scrollbars>
       </div>
     );
 
@@ -373,20 +376,20 @@ class App extends React.Component {
           </IconButton>
         </div>
         <Scrollbars style={{ height: "90vh" }}>        
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button><Typography>help</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
+          <Divider />
+          <List><ListItem button><Typography>help</Typography></ListItem></List>
         </Scrollbars>
       </Drawer>
     );
@@ -418,7 +421,7 @@ class App extends React.Component {
       <div className={classes.root}>
         <div className={classes.appFrame}>
           <AppBar
-            position='sticky'
+            position='relative'
             className={classNames(classes.appBar, {
               [classes.appBarShift]: open,
               [classes[`appBarShift-${anchor}`]]: open,
@@ -450,11 +453,11 @@ class App extends React.Component {
             })}
           >
             <div className={classes.drawerHeader} />
-              <div className={classes.test}>
+            <div className={classes.test}>
               {contents}
-              </div>
+            </div>
           </main>
-            {after}
+          {after}
         </div>
       </div>
     );
