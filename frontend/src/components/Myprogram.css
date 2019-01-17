@@ -62,6 +62,6 @@
 }
 
 .loading{
-    position: relative;
-    top: 50vh
+    position: fixed;
+    top: 50vh;
 }
