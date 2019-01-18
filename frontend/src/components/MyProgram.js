@@ -185,13 +185,11 @@ class Myprogram extends Component {
                         ))}   
                         </tbody>
                         </table>
-                        <Divider/>
+                        <Divider className="loading" />
                         </div>
                     )
                 }else{
-                    return <div className="loading">
-                        <Loading/>
-                        </div>
+                    return <Loading/>
                 }
                 })()}
 

@@ -36,7 +36,7 @@ class Codetype(models.Model):
 
 class Code(models.Model):
     title = models.CharField(max_length=15,default='null')
-    auth = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    auth = models.ForeignKey(User,on_delete=False, null=False,default=False)
     codetype = models.ForeignKey('Codetype', on_delete=models.CASCADE)
     source = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
@@ -48,7 +48,7 @@ class Code(models.Model):
         return '%d' % (self.id)
 
 class Comment(models.Model):
-    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     coments = models.CharField(max_length=1000)
     createat = models.DateTimeField(default=timezone.now)
     root = models.ForeignKey('Code',on_delete=models.CASCADE)
@@ -59,7 +59,7 @@ class Open(models.Model):
 
 class Techinfo(models.Model):
     title = models.CharField(max_length=15)
-    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     count = models.IntegerField(default=0)
@@ -67,7 +67,7 @@ class Techinfo(models.Model):
 
 class Usertechinfo(models.Model):
     title = models.CharField(max_length=15,default='null')
-    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
@@ -78,39 +78,18 @@ class Usertechinfo(models.Model):
         return '%d' % (self.id)
 
 class Usertechinfocomment(models.Model):
-    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     coments = models.CharField(max_length=1000)
     createat = models.DateTimeField(default=timezone.now)
     root = models.ForeignKey('Usertechinfo',on_delete=models.CASCADE)
 
 class Ads(models.Model):
-    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     context = models.TextField()
 
 class Adque(models.Model):
     ads = models.ForeignKey('Ads',on_delete=models.CASCADE)
 
 class CertiList(models.Model):
-    name = models.ForeignKey(User,on_delete=models.CASCADE)
+    name = models.ForeignKey(User,on_delete=models.CASCADE, null=False,default=False)
     code = models.CharField(max_length=128)
-
-class UserInfo(models.Model):
-    root = models.ForeignKey(User,on_delete=models.CASCADE)
-    year = models.IntegerField(default=-1)
-    gen = models.CharField(max_length=1)
-    subscribed = models.IntegerField(default=0)
-    level = models.IntegerField(default=0)
-
-class UserCourse(models.Model):
-    root = models.ForeignKey(User,on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
-    descriptoin = models.CharField(max_length=500)
-    createat = models.DateTimeField(default=timezone.now)
-
-class UserCourseContent(models.Model):
-    root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
-    title = models.CharField(max_length=50)
-    descriptoin = models.CharField(max_length=500)
-    createat = models.DateTimeField(default=timezone.now)
-    likes = models.IntegerField(default=0)
-    code = models.TextField()

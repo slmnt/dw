@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Techinfo.css'
-import ReactQuill from 'react-quill';
+//import ReactQuill from 'react-quill';
+//import * as qu from 'quill-markdown-shortcuts'
+//import 'react-quill/dist/quill.snow.css';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Link } from 'react-router-dom'
-import 'react-quill/dist/quill.snow.css';
+import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
+
 
 class Tech extends Component {
     state = {
         text: '',
-        key: false,
-        open: false
+        key: false
     }
 
     constructor(props) {
@@ -21,7 +23,6 @@ class Tech extends Component {
         this.handleChange = this.handleChange.bind(this)    
         this.check = this.check.bind(this)
         this.output = React.createRef()
-        this.onClick = this.onClick.bind(this)
     }
     
 
@@ -35,7 +36,7 @@ class Tech extends Component {
         }).catch((e) =>{            
             console.log(e)
         })
-    
+
         // window.setInterval(this.alram(socket),1000)
     }
 
@@ -59,21 +60,6 @@ class Tech extends Component {
         //console.log(this.output)
     }
      
-    onClick(e){
-        var ad = document.getElementById('ad')
-        console.log(ad)
-        if(this.state.open){
-            this.setState({open: false})
-            ad.style.transform += 'translateX(-100px)'
-        }
-        else{
-            ad.style.transform += 'translateX(100px)'
-            this.setState({open: true})
-        }
-
-
-    }
-
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -96,32 +82,32 @@ class Tech extends Component {
         ]
     }   
 
-
     render() {
-        const editor =  <ReactQuill 
-                            modules={this.modules}
-                            className="Tech_editor" 
-                            value={this.state.text} 
-                            onChange={this.handleChange} />
+        /**
+         * 
+         * 
+         * 
+         const editor =  <ReactQuill 
+                             modules={this.modules}
+                             className="Tech_editor" 
+                             value={this.state.text} 
+                             onChange={this.handleChange} />
+                             let edd = editor;
+                             {edd}
+                             if(this.state.key)
+                                 edd = editor
+         */
 
-        let edd = editor;
 
-        if(this.state.key)
-            edd = editor
 
         return (
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
             <div className="body">
-                {edd}
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <a className="submit" href="javascript:void(0)" onClick={(e) => this.onClick(e)} >投稿</a>
-                <br/>
-                <div id="ad" className="tech_test">広告</div>
-
+                <div className="tech_test">
+                    広告
+                </div>
+                <input className="submit" type="submit" value="投稿" /><br/>
+                <output name="result">{this.state.text}</output>
             </div>
             </Scrollbars>
         )

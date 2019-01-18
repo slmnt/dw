@@ -13,9 +13,8 @@ import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 */
 
-import * as monaco from 'monaco-editor';
-//Editor component path set localhost:3000/course/Edit/<:id> 
-//import Editor from './Editor'; // test
+import * as monaco from 'monaco-editor'; 
+import Editor from './Editor'; // test
 
 
 import 'xterm/src/xterm.css';
