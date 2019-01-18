@@ -34,7 +34,6 @@ class Email extends Component {
         var body = null;
         var fail = <div>email Certification is fail or already done email check. try re-send email.</div>
 
-
         if(this.state.flag){
             body = fail
         }else
