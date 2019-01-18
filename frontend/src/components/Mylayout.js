@@ -620,7 +620,6 @@ class Mylayout extends Component {
                     }}
                 >
                 </div>
-                <Editor />
             </div>
         )
     }
