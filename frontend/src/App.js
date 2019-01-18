@@ -429,8 +429,6 @@ class App extends React.Component {
             <List><ListItem button><Typography>help</Typography></ListItem></List>
             </Scrollbars>
           </Drawer>
-          
-          
           <main
             className="content"
           >

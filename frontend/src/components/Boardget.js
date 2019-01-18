@@ -24,7 +24,7 @@ class board extends Component {
 
     componentDidMount(){
 
-        console.log(sessionStorage.getItem('key'))
+        //console.log(sessionStorage.getItem('key'))
         const cipher = crypto.createCipher('aes192', 'testword');
 
         let encrypted = '';
@@ -37,7 +37,7 @@ class board extends Component {
         });        
         cipher.write('some clear text data');
         cipher.end();
-        console.log(encrypted);
+        //console.log(encrypted);
 
         const decipher = crypto.createDecipher('aes192','testword');
 
@@ -48,7 +48,7 @@ class board extends Component {
             decrypted += data.toString('utf8');
         });
         decipher.on('end', () => {
-        console.log(decrypted);
+        //console.log(decrypted);
         // Prints: some clear text data
         });
 

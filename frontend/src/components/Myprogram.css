@@ -43,12 +43,12 @@
     background-color: rgb(174, 231, 160)
 }
 
-
 .boards_search-textarea{
     resize: none;
     outline: 0px;
     width: 30vw;
     height: 5vh;
+    border: 1rem solid;
 }
 
 .boards_search-button{
