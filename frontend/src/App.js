@@ -406,6 +406,8 @@ class App extends React.Component {
               <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
               <Route path="/createuser"  component={CreateU}/>
               <Route path="/tech"  component={Tech}/>
+              <Route path="/courseSearch"  component={CourseS}/>
+              <Route path="/course/Edit/:id"  component={CourseE}/>
             </Scrollbars>
           </main>
 
