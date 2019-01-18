@@ -1,22 +1,22 @@
-
+/* CSS reset */
 body {
     margin: 0;
 }
 
 /* root > appFrame > appBar + content */
-.root {
+.pageContainer {
     position: fixed;
     width: 100%;
     height: 100%;
 }
-.appFrame {
+.page {
     display: flex;
     flex-flow: column nowrap;
     height: 100%;
     width: 100%;
     overflow: hidden;
 }
-.appBar {
+.topBar {
     flex: 0 0 auto;
     width: 100%;
 }
@@ -26,8 +26,7 @@ body {
     overflow: hidden;
 }
 
-/*  */
-
+/* mobile menu */
 .mobileMenu {
     position: fixed;
     height: 100%;

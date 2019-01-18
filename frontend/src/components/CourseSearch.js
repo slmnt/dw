@@ -36,9 +36,14 @@ class CourseSearch extends Component {
                     <option value="python">Python</option>
                 </select>
                 &nbsp;
-                <input className="boards_search-textarea" value={this.state.keyword} onChange={this.handleChange} ></input>
+                <input 
+                onKeyPress={(e) => e.nativeEvent.key === "Enter" ? this.onSearch(e)  : void(0)} 
+                className="boards_search-textarea" 
+                value={this.state.keyword} 
+                onChange={this.handleChange} ></input>
                 &nbsp;
-                <a className="Sbuttom" href="javascript:void(0)" onClick={this.onSearch} >Search</a>
+                <a className="Sbuttom" href="javascript:void(0)"
+                    onClick={this.onSearch}>Search</a>
                 <br/>
                 Searching....
                 <div className="Sloading">

@@ -90,7 +90,6 @@ class Term extends React.Component {
         let rect = element.getBoundingClientRect();
         element.style.width = rect.width + "px";
         element.style.height = rect.height + "px";
-        console.log(rect)
 
         let term = new xterm.Terminal();
         this.term = term;
@@ -114,6 +113,7 @@ class Term extends React.Component {
             //fontColor: "#cccccc",
             theme: {
                 background: "rgb(37, 37, 38)",
+                foreground: "#cccccc",
                 cursor: "#cccccc",
             }
         };
@@ -124,8 +124,9 @@ class Term extends React.Component {
     render() {
         return (
             <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-                <div ref={this.termRef}
+                <div
                     style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}
+                    ref={this.termRef}
                 ></div>
             </div>
         );
@@ -515,6 +516,22 @@ class Window extends Component {
         );
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 class Mylayout extends Component {
     state = {
@@ -564,6 +581,7 @@ class Mylayout extends Component {
     render() {
         return (
             <div>
+
                 <div
                     style={{
                     display: "flex",
@@ -594,10 +612,18 @@ class Mylayout extends Component {
                         <button onClick={() => this.runCode()}>実行</button>
                     </div>
                 </div>
+
+                <div
+                    style={{
+                        height: "300px",
+                        width: "300px",      
+                    }}
+                >
+                </div>
             </div>
         )
     }
 }
 
-Mylayout.PropTypes = PropTypes;
+Mylayout.propTypes = {};
 export default Mylayout;

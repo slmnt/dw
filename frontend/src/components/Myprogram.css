@@ -48,8 +48,18 @@
     outline: 0px;
     width: 30vw;
     height: 5vh;
-    border: 1rem solid;
+    border: 2px solid;
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
+.boards_search-textarea:hover{
+    background-color: rgb(241, 241, 241);
+}
+.boards_search-textarea:focus{
+    background-color: rgb(241, 241, 241);
+}
+
 
 .boards_search-button{
     height: 6vh;
