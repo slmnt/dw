@@ -38,6 +38,8 @@ import Load from './components/Loading'
 import Back from './components/BackPlayer'
 import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
+import CourseS from './components/CourseSearch'
+import CourseE from './components/Editor'
 
 const drawerWidth = 200;
 

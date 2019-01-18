@@ -32,7 +32,6 @@ class TestBoardSerializer(serializers.ModelSerializer):
         model = Testboard
         fields = ('__all__')
 
-
 class CodeSerializer(serializers.ModelSerializer):
     codetype = serializers.SlugRelatedField(read_only=True,slug_field='description')
     auth = serializers.StringRelatedField()
