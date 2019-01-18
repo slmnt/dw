@@ -1,7 +1,29 @@
 import React, { Component } from 'react';
 import './Editor.css';
 
-import * as Quill from 'quill'
+import 'highlight.js/styles/vs.css'
+import hljs from 'highlight.js';
+
+import katex from 'katex';
+
+import * as Quill from 'quill';
+import 'quill/dist/quill.snow.css';
+
+/*
+問題
+  highlight.js の language auto detection
+  katex の render
+*/
+
+// highlight.js
+window.hljs = hljs;
+hljs.configure({
+  languages: ['javascript', 'ruby', 'python'],
+  useBR: false,
+});
+
+// katex
+window.katex = katex;
 
 // quill-markdown-shortcuts
 (() => {
@@ -307,6 +329,40 @@ import * as Quill from 'quill'
   Quill.register('modules/markdownShortcuts', MarkdownShortcuts)
 })();
 
+
+//
+class TestIFrame extends React.Component {
+  componentDidMount() {
+      this._updateIframe();
+  }
+  componentDidUpdate() {
+      this._updateIframe();
+  }
+  _updateIframe() {
+      const iframe = this.refs.iframe;
+      const document = iframe.contentDocument;
+      document.body.innerHTML = this.props.content;
+      /*
+      const head = document.getElementsByTagName('head')[0];
+      this.props.stylesheets.forEach(url => {
+          const ref = document.createElement('link');
+          ref.rel = 'stylesheet';
+          ref.type = 'text/css';
+          ref.href = url;
+          head.appendChild(ref);
+      });*/
+  }
+
+  render() {
+      return (<iframe
+        allowfullscreen="true"
+        sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
+        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
+        ref="iframe"/>)
+  }
+}
+
+
 //
 class Editor extends Component {
   constructor (props) {
@@ -315,10 +371,49 @@ class Editor extends Component {
     }
   }
   testRef(element) {
+    /* quill.js
+      https://github.com/quilljs/quill/blob/develop/docs/_includes/standalone/full.html
+      
+      buildButtons():  button を作成
+        ql-*
+      buildPickers(), fillSelect():  picker を作成
+        var ALIGNS = [false, 'center', 'right', 'justify'];
+        var COLORS = ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466"];
+        var FONTS = [false, 'serif', 'monospace'];
+        var HEADERS = ['1', '2', '3', false];
+        var SIZES = ['small', false, 'large', 'huge'];
+    */
     var quill = new Quill(element, {
       modules: {
-        toolbar: true,
-        markdownShortcuts: {}
+        toolbar: [
+          [
+            {font: [false, 'serif', 'monospace', 'Comic Sans']},
+            {size: ['small', false, 'large', 'huge']}
+          ],
+          [{ header: ['1', '2', '3', false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [
+            {color: ['#ffffff', '#000000']},
+            {background: ['#ffffff', '#000000']}
+          ],
+          [
+            {script: 'sub'},
+            {script: 'super'}
+          ],
+          [
+            {list: 'ordered' }, { list: 'bullet' },
+            {indent: '-1'}, {indent: '+1'}
+          ],
+          [
+            {direction: 'rtl'},
+            {align: ['center', 'right', 'justify']}
+          ],
+          ['blockquote', 'code', 'code-block'],
+          ['link', 'image', 'video', 'formula'],
+          ['clean'],
+        ],
+        markdownShortcuts: {},
+        syntax: hljs,
       },
       theme: 'snow'
     });
@@ -338,12 +433,27 @@ class Editor extends Component {
               <div className="main" >
                 MAIN
               </div>
-              <div className="footer" ref={this.testRef}>
+              <div className="footer">
                 FOOTEER
               </div>
             </div>
           </div>
         </div>
+        <div style={{width: "500px", height: "500px"}}>
+          <div style={{width: "500px", height: "500px"}} ref={this.testRef}>
+          </div>
+          <TestIFrame content={`
+            <html><body>
+            <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
+            <h1>hellonfj</h1>
+            <div class="po"></div>
+            </body></html>
+          `} />
+        </div>
+        {/*
+        <div style={{width: "500px", height: "500px"}}>
+        </div>
+        */}
       </div>
     );
   }
