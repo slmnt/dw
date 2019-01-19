@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Editor.css';
+import styles from './Editor.module.css';
 
 import 'highlight.js/styles/vs.css'
 import hljs from 'highlight.js';
@@ -8,6 +8,7 @@ import katex from 'katex';
 
 import * as Quill from 'quill';
 import 'quill/dist/quill.snow.css';
+import './Quill.css';
 
 /*
 問題
@@ -355,7 +356,7 @@ class TestIFrame extends React.Component {
 
   render() {
       return (<iframe
-        allowfullscreen="true"
+        allowFullScreen={true}
         sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
         allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
         ref="iframe"/>)
@@ -368,6 +369,25 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      boxes: [
+        {name: "dwaok", pos: -1},
+        {name: "ytrgf", pos: -1},
+        {name: "cws", pos: -1},
+        {name: "cws", pos: -1},
+        {name: "cws", pos: -1},
+        {name: "cws", pos: -1},
+        {name: "cws", pos: -1},
+        {name: "cws", pos: -1},
+      ],
+      boxHeight: 50,
+      draggingBox: null, //参照
+      boxInitialPos: null,
+    }
+
+    let i = 0;
+    for (let v of this.state.boxes) {
+      v.pos = i;
+      i++;
     }
   }
   testRef(element) {
@@ -383,18 +403,17 @@ class Editor extends Component {
         var HEADERS = ['1', '2', '3', false];
         var SIZES = ['small', false, 'large', 'huge'];
     */
-    var quill = new Quill(element, {
-      modules: {
-        toolbar: [
+   /* old options
+      toolbar: [
           [
-            {font: [false, 'serif', 'monospace', 'Comic Sans']},
+            {font: []},
             {size: ['small', false, 'large', 'huge']}
           ],
-          [{ header: ['1', '2', '3', false] }],
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
           ['bold', 'italic', 'underline', 'strike'],
           [
-            {color: ['#ffffff', '#000000']},
-            {background: ['#ffffff', '#000000']}
+            {color: []},
+            {background: []}
           ],
           [
             {script: 'sub'},
@@ -412,48 +431,143 @@ class Editor extends Component {
           ['link', 'image', 'video', 'formula'],
           ['clean'],
         ],
+   */
+    var quill = new Quill(element, {
+      modules: {
+        toolbar: [
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+          
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+          
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+          
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+          
+            ['clean']                                         // remove formatting button
+        ],
         markdownShortcuts: {},
         syntax: hljs,
       },
+      placeholder: 'Write something...',
+      bounds: "#editorContainer",
       theme: 'snow'
     });
+  }
+  moveBox(from, to) {
+    if (!this.getBox(to)) return;
+
+    let target = this.getBox(from);
+    let forward = from < to;
+    let p = forward ? -1 : 1;
+    for (let v of this.state.boxes) {
+      if (forward ? v.pos >= from && v.pos <= to : v.pos >= to && v.pos <= from) v.pos += p;
+    }
+    target.pos = to;
+    this.lastPos = to;
+    this.lastBox = target;
+
+    this.setState({boxes: this.state.boxes})
+  }
+  getBoxPos(el, localX, localY) {
+    let rect = el.getBoundingClientRect();
+    let ly = localY - rect.y;
+    return parseInt(ly / this.state.boxHeight);
+  }
+  getBox(pos) {
+    for (let v of this.state.boxes) {
+      if (v.pos == pos) return v;
+    }
+  }
+  onDragStart = (e) => {
+
+      e.dataTransfer.effectAllowed = 'copy'
+      //e.dataTransfer.setData("tab", e.currentTarget.dataset["tabpath"]);
+      //draggingBox
+      //boxInitialPos
+      let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+      //console.log(pos);
+
+      let box = this.getBox(pos);
+      if (box) {
+        this.draggingBox = box;
+      }
+      
+  }
+  onDrop = (e) => {
+      e.preventDefault();
+      if (!this.draggingBox) return;
+
+      let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+      if (pos != this.lastPos || this.draggingBox != this.lastBox) {
+        this.moveBox(this.draggingBox.pos, pos);
+      }
+  }
+  onDragOver = (e) => {
+    e.preventDefault();
+
   }
   render() {
     return (
       <div>
-        <div className="container">
-          <div className="header">
-            HEADER
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <div>HEADER</div>
           </div>
-          <div className="main-container">
-            <div className="side" onClick={() => {}}>
-              SIDE
+          <div className={styles["main-container"]}>
+            <div className={styles.side} style={{position: "relative"}}
+              onDragOver={this.onDragOver}
+              onDragStart={this.onDragStart}
+              onDrop={this.onDrop}
+            >
+              {
+                this.state.boxes.map((v,i) => {
+                  return (<div key={i}
+                    draggable
+                    className={styles["side-element"]}
+                    style={{
+                      height: this.state.boxHeight + "px",
+                      top: v.pos * this.state.boxHeight + "px",
+                      transition: "top 0.5s",
+                      backgroundColor: "blue",
+                      zIndex: this.draggingBox == v ? 1 : 0
+                    }}
+                  >
+                    <div style={{backgroundColor: "red", width: "100%", height: "100%"}}>
+                      {v.name}
+                    </div>
+                  </div>);
+                })
+
+              }
             </div>
-            <div className="main-container-2">
-              <div className="main" >
-                MAIN
+            <div className={styles["main-container-2"]}>
+              <div className={styles.main}>
+              <div id="editorContainer">
+                <div ref={this.testRef}>
+                </div>
+                <TestIFrame content={`
+                  <html><body>
+                  <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
+                  <h1>hellonfj</h1>
+                  <div class="po"></div>
+                  </body></html>
+                `} />
               </div>
-              <div className="footer">
+              </div>
+              <div className={styles.footer}>
                 FOOTEER
               </div>
             </div>
           </div>
         </div>
-        <div style={{width: "500px", height: "500px"}}>
-          <div style={{width: "500px", height: "500px"}} ref={this.testRef}>
-          </div>
-          <TestIFrame content={`
-            <html><body>
-            <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
-            <h1>hellonfj</h1>
-            <div class="po"></div>
-            </body></html>
-          `} />
-        </div>
-        {/*
-        <div style={{width: "500px", height: "500px"}}>
-        </div>
-        */}
+
       </div>
     );
   }

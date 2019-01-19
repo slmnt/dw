@@ -12,6 +12,9 @@
 
   background-color: #0b409c;
   color: #ffe867;
+
+  display: flex;
+  flex-flow: row nowrap;
 }
 
 .hamburger {
