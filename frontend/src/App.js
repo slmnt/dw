@@ -388,7 +388,7 @@ class App extends React.Component {
               setting react router route
               <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
               */}
-                <div className={classNames({
+              <div className={classNames({
                 'hide': this.state.bgm,
                 'player': true
               })}>

@@ -7,14 +7,12 @@ import './Load.css'
 class Load extends Component {
 
     render() {
-
         return (
         <div>
             <div className="circle sub-border">
             </div>
             <div className="circle inn-border">
             </div>
-
         </div>
 
         );
