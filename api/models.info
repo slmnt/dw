@@ -1,0 +1,19 @@
+/
+/
+/ Table name | description | serializer |
+/
+/
+/
+
+Codetype | Programming languages type | None
+Code | Sourse code | Yes
+Comment | table Code within comment | Yes
+Techinfo | Benefit Tech Infomation board | Yes
+Usertechinfo | User made Techinfo board | Yes
+Usertechinfocomment | Usertechinfo within comment | Yes
+Ads | Advertisement Infomation | Yes
+Adque | Current Ad List | None
+CertiList | Mail Certify table | None
+UserInfo | Search User Infomation table | Yes
+UserCourse | User made Course infomation table | Yes
+UserCourseContent | User made Course table | Yes

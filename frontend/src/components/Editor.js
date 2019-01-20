@@ -482,7 +482,7 @@ class Editor extends Component {
   }
   getBox(pos) {
     for (let v of this.state.boxes) {
-      if (v.pos == pos) return v;
+      if (v.pos === pos) return v;
     }
   }
   onDragStart = (e) => {
@@ -533,7 +533,7 @@ class Editor extends Component {
                       top: v.pos * this.state.boxHeight + "px",
                       transition: "top 0.5s",
                       backgroundColor: "blue",
-                      zIndex: this.draggingBox == v ? 1 : 0
+                      zIndex: this.draggingBox === v ? 1 : 0
                     }}
                   >
                     <div style={{backgroundColor: "red", width: "100%", height: "100%"}}>

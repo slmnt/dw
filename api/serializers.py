@@ -67,3 +67,32 @@ class CertiListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CertiList
         fields = ('__all__')
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    root = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserInfo
+        fields = ('__all__')
+
+class UserCourseSerializer(serializers.ModelSerializer):
+    root = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserCourse
+        fields = ('__all__')
+
+class UserCourseContentSerializer(serializers.ModelSerializer):
+    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
+    
+    class Meta:
+        model = UserCourseContent
+        fields = ('__all__')
+
+class AdsSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Ads
+        fields = ('__all__')
+

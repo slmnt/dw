@@ -559,3 +559,34 @@ class CheckMailing(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
 
+class GetUserInfo(viewsets.ModelViewSet):
+
+    def get(self,request):
+        uid = UserInfo.objects.all()
+        s = UserInfoSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+class GetUserCourse(viewsets.ModelViewSet):
+
+    def get(self,request):
+        print("run")
+        uid = UserCourse.objects.all()
+        s = UserCourseSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+class GetUserCourseContent(viewsets.ModelViewSet):
+
+    def get(self,request):
+        uid = UserCourseContent.objects.all()
+        s = UserCourseContentSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
+

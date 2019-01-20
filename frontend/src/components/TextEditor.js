@@ -85,7 +85,7 @@ class TextEditor extends React.Component {
 
   openTab(path) {
       let id = this.getTabIndex(path);
-      if (id != -1) {
+      if (id !== -1) {
           this.activateTab(path);
           return;
       }
@@ -122,7 +122,7 @@ class TextEditor extends React.Component {
           tabs: newTabs,
           currentTab: null
       }, (() => {
-          if (path == this.state.currentTab && this.state.tabs.length > 0) {
+          if (path === this.state.currentTab && this.state.tabs.length > 0) {
               let i = tabId > 0 ? tabId - 1 : 0;
               this.activateTab(this.state.tabs[i].path);
           } else {
@@ -151,7 +151,7 @@ class TextEditor extends React.Component {
       if (tab.selections) this.editor.setSelections(tab.selections);
   }
   activateTab(path) {
-      if (path == this.state.currentTab) return;
+      if (path === this.state.currentTab) return;
 
       let tab =  this.getTab(path);
       if (!tab) return;
@@ -183,7 +183,7 @@ class TextEditor extends React.Component {
       let newTabs = [];
 
       for (let i in this.state.tabs) {
-          if (i == from) { //
+          if (i === from) { //
               continue;
           }
           let right = (i >= from && i <= to);
@@ -191,7 +191,7 @@ class TextEditor extends React.Component {
           if (right) {
               newTabs.push(this.state.tabs[i]);
           }
-          if (i == to) {
+          if (i === to) {
               newTabs.push(this.state.tabs[from]);
           }
           if (!right) {
@@ -203,7 +203,7 @@ class TextEditor extends React.Component {
   }
   getTab(path) {
       for (let v of this.state.tabs) {
-          if (v.path == path) {
+          if (v.path === path) {
               return v;
           }
       }
@@ -211,7 +211,7 @@ class TextEditor extends React.Component {
   }
   getTabIndex(path) {
       for (let i in this.state.tabs) {
-          if (this.state.tabs[i].path == path) {
+          if (this.state.tabs[i].path === path) {
               return i;
           }
       }
@@ -266,7 +266,7 @@ class TextEditor extends React.Component {
                   key={i}
                   className={styles["window-tab"]}
                   style={ {
-                      backgroundColor: this.state.currentTab == v.path && "rgb(30, 30, 30)" || "rgb(45, 45, 45)",
+                      backgroundColor: this.state.currentTab === v.path && "rgb(30, 30, 30)" || "rgb(45, 45, 45)",
                       borderRight: ar.length == i + 1 ? "none" : "1.5px solid rgb(37, 37, 38)",
                   } }
                   draggable

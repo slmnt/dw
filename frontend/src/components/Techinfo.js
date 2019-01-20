@@ -4,9 +4,7 @@ import axios from 'axios';
 import './Techinfo.css'
 import ReactQuill from 'react-quill';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Link } from 'react-router-dom'
 import 'react-quill/dist/quill.snow.css';
-import classNames from 'classnames';
 
 class Tech extends Component {
     state = {
@@ -28,13 +26,16 @@ class Tech extends Component {
     componentDidMount(){
         document.addEventListener('keydown',(e) => this.check(e))
 
-        axios.get('/api/getauth/').then(response => {
-            this.setState({
-                key: true
-            })
-        }).catch((e) =>{            
-            console.log(e)
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        //getusercourse
+        //getuser
+        //getusercoursec
+        axios.get('/api/getusercourse/').then(response => {
+            console.log(response)
         })
+
     
         // window.setInterval(this.alram(socket),1000)
     }
