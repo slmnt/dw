@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
-import { Grid } from '@material-ui/core';
 import bridge from './bridge.jpeg';
 import './Main.css'
 

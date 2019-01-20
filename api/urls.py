@@ -47,6 +47,22 @@ check_mail_code = CheckMailing.as_view({
     'post': 'post'
 })
 
+Get_User = GetUserInfo.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+
+Get_User_Course = GetUserCourse.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+
+Get_User_Course_content = GetUserCourseContent.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+
+
 urlpatterns = [
     path('authentic/',UserAuthentic.as_view()),
     path('createuser/',CreateUser.as_view()),
@@ -66,5 +82,8 @@ urlpatterns = [
     path('addcomment/',addcomment),
     path('search/<type>/<context>/',Searchget.as_view()),
     path('getauth/',get_auth),
-    path('checkmail/',check_mail_code)
+    path('checkmail/',check_mail_code),
+    path('getuser/',Get_User),
+    path('getusercourse/',Get_User_Course),
+    path('getusercoursec/',Get_User_Course_content)
 ]
