@@ -68,7 +68,7 @@ class Term extends React.Component {
         }
         let rect = element.getBoundingClientRect();
         element.style.width = rect.width + "px";
-        element.style.height = rect.height + "px";
+        element.style.height = (this.props.height || rect.height) + "px";
 
         let term = new xterm.Terminal();
         this.term = term;
@@ -99,15 +99,17 @@ class Term extends React.Component {
         for (let k in stringOptions) {
             term.setOption(k, stringOptions[k]);
         }
+
+        //
+        element.style.height = term._core.viewport._viewportElement.getBoundingClientRect().height + "px";
+        console.log("heyy", element.style.height)
     }
     render() {
         return (
-            <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
-                <div
-                    style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}
-                    ref={this.termRef}
-                ></div>
-            </div>
+          <div
+              style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}
+              ref={this.termRef}
+          ></div>
         );
     }
 }

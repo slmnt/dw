@@ -7,7 +7,7 @@
   margin: auto;
 
   overflow: hidden;
-  z-index: 100000000;
+  z-index: 1;
   border-radius: inherit;
 }
 .hamon {
@@ -19,6 +19,7 @@
   margin: auto;
   
   border-radius: 100%;
+  opacity: 0;
   /*
   transform: scale(0);
   transition: transform 1s, background-color 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0ms;

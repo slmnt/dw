@@ -390,7 +390,7 @@ class Editor extends Component {
       i++;
     }
   }
-  testRef(element) {
+  editorRef(element) {
     /* quill.js
       https://github.com/quilljs/quill/blob/develop/docs/_includes/standalone/full.html
       
@@ -486,36 +486,33 @@ class Editor extends Component {
     }
   }
   onDragStart = (e) => {
+    e.dataTransfer.effectAllowed = 'copy'
+    e.dataTransfer.setData('dummy', 0);
+    //draggingBox
+    //boxInitialPos
+    let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+    //console.log(pos);
 
-      e.dataTransfer.effectAllowed = 'copy'
-      //e.dataTransfer.setData("tab", e.currentTarget.dataset["tabpath"]);
-      //draggingBox
-      //boxInitialPos
-      let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
-      //console.log(pos);
-
-      let box = this.getBox(pos);
-      if (box) {
-        this.draggingBox = box;
-      }
-      
+    let box = this.getBox(pos);
+    if (box) {
+      this.draggingBox = box;
+    }
   }
   onDrop = (e) => {
-      e.preventDefault();
-      if (!this.draggingBox) return;
+    e.preventDefault();
+    if (!this.draggingBox) return;
 
-      let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
-      if (pos != this.lastPos || this.draggingBox != this.lastBox) {
-        this.moveBox(this.draggingBox.pos, pos);
-      }
+    let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+    if (pos != this.lastPos || this.draggingBox != this.lastBox) {
+      this.moveBox(this.draggingBox.pos, pos);
+    }
   }
   onDragOver = (e) => {
     e.preventDefault();
-
   }
   render() {
     return (
-      <div>
+      <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
             <div>HEADER</div>
@@ -525,12 +522,12 @@ class Editor extends Component {
               onDragOver={this.onDragOver}
               onDragStart={this.onDragStart}
               onDrop={this.onDrop}
-            >
+              >
               {
                 this.state.boxes.map((v,i) => {
                   return (<div key={i}
-                    draggable
                     className={styles["side-element"]}
+                    draggable
                     style={{
                       height: this.state.boxHeight + "px",
                       top: v.pos * this.state.boxHeight + "px",
@@ -550,7 +547,12 @@ class Editor extends Component {
             <div className={styles["main-container-2"]}>
               <div className={styles.main}>
               <div id="editorContainer">
-                <div ref={this.testRef}>
+                <div style={{
+                  height: "2em",
+                }}>
+                  <div>name</div>
+                </div>
+                <div ref={this.editorRef}>
                 </div>
                 <TestIFrame content={`
                   <html><body>

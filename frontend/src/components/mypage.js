@@ -7,7 +7,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import bridge from './bridge.jpeg';
+import bridge from '../img/bridge.jpeg';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
@@ -84,7 +84,7 @@ class Mypage extends Component {
         const { spacing } = this.state;
 
         return (
-            <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
+            <div>
             <div className={this.props.classes.test}>
             <br/>
             <Grid container spacing={24} direction="column">
@@ -171,7 +171,7 @@ class Mypage extends Component {
             <br/>
             <br/>
             <br/>
-            </Scrollbars>    
+            </div>
 		);
   	}
 }
