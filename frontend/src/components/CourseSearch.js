@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from './Loading'
 import './CourseSearch.css'
+import Divider from '@material-ui/core/Divider';
 
 class CourseSearch extends Component {
     state = {
@@ -46,6 +47,40 @@ class CourseSearch extends Component {
                     onClick={this.onSearch}>Search</a>
                 <br/>
                 Searching....
+                <br/>
+                <div>
+                    <table className="CourseSearchbody">
+                        <tbody className="boards_body">
+                    <div>
+                    <Divider/>
+                        <tr>
+                            <td className="boards_line">
+                                123
+                                <div className="board_cap">
+                                    count
+                                </div>
+                            </td>
+                            <td className="boards_title">
+                                title
+                                <div className="board_type">
+                                    python
+                                </div>
+                            </td>
+                            <td className="boards_auth">
+                                <span>
+                                username
+                                </span>
+                                <div className="boards_date">
+                                    time
+                                </div>
+                                <br/>
+                            </td>
+                        </tr>
+                    </div>
+                    </tbody>
+                    </table>
+                </div>
+                
                 <div className="Sloading">
                     <Loading/>
                 </div>                

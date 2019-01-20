@@ -24,3 +24,6 @@ dropdb -U django djangodb
 Backend use Docker   
 Api request error fix solution-> js timer api request 5times   
 fix login flow      
+   
+pip install   
+pip install pycryptodome   
