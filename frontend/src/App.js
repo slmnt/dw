@@ -44,15 +44,13 @@ import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
 import CourseI from './components/CourseInfo'
-<<<<<<< HEAD
-
-=======
 import CourseG from './components/Courseget'
->>>>>>> a082a955557c3af7380ae0f8fa3e6a8bbd778af4
 
 axios.defaults.baseURL = '/api/';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+
 
 const drawerWidth = 200;
 
