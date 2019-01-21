@@ -40,6 +40,7 @@ import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
+import CourseI from './components/CourseInfo'
 
 const drawerWidth = 200;
 
@@ -396,8 +397,8 @@ class App extends React.Component {
               </div>
               <Route exact path="/"  render={() => <Main />}/>
               <Route path="/right" component={Right} />
-              <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-              <Route path="/Board/:id" component={Boardid}/>
+              <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+              <Route exact strict path="/Boards/:id" component={Boardid}/>
               <Route path="/certify/:code" component={Mail}/>
               <Route path="/main" component={Main}/>
               <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} />
@@ -406,7 +407,8 @@ class App extends React.Component {
               <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
               <Route path="/createuser"  component={CreateU}/>
               <Route path="/tech"  component={Tech}/>
-              <Route path="/courseSearch"  component={CourseS}/>
+              <Route exact strict path="/courseSearch"  component={CourseS}/>
+              <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
               <Route path="/course/:id/edit"  component={CourseE}/>
             </Scrollbars>
           </main>

@@ -563,7 +563,7 @@ class GetUserInfo(viewsets.ModelViewSet):
 
     def get(self,request):
         uid = UserInfo.objects.all()
-        s = UserInfoSerializer(uid,many=True) 
+        s = UserInfoSerializer(uid,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -572,9 +572,8 @@ class GetUserInfo(viewsets.ModelViewSet):
 class GetUserCourse(viewsets.ModelViewSet):
 
     def get(self,request):
-        print("run")
         uid = UserCourse.objects.all()
-        s = UserCourseSerializer(uid,many=True) 
+        s = UserCourseSerializer(uid,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -584,9 +583,25 @@ class GetUserCourseContent(viewsets.ModelViewSet):
 
     def get(self,request):
         uid = UserCourseContent.objects.all()
-        s = UserCourseContentSerializer(uid,many=True) 
+        s = UserCourseContentSerializer(uid,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
 
     def post(self, request):
         return Response(status=status.HTTP_200_OK)
 
+#CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
+
+class CourseInfoConetntsInfoGet(generics.ListAPIView):
+    serializer_class = UserCourseContentSerializer
+    
+    def get_queryset(self):
+        id = self.kwargs['id']
+        try:            
+            tar = UserCourse.objects.get(id=id)
+        except:
+            return Response(status=status.HTTP_200_OK)
+        try:
+            queryset = UserCourseContent.objects.all().filter(root=tar).order_by('createat')
+        except:
+            return Response(status=status.HTTP_200_OK)
+        return queryset
