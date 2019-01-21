@@ -8,13 +8,15 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import { Scrollbars } from 'react-custom-scrollbars';
-import './CreateUser.css'
 
 import axios from 'axios';
 import Loading from './Loading'
 
-const styles = theme => ({
+import styles from './CreateUser.module.css';
+import {MainContext} from '../contexts/main';
+
+
+const styles2 = theme => ({
   main: {
     fontFamily:"arial black,Yu Gothic",
     width: 'auto',
@@ -100,15 +102,13 @@ class SignIn extends Component {
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
 
-    axios.post('/api/createuser/', {
+    this.context.createUser({
       uid: this.state.username,
       pwd: this.state.passwd,
       email: this.state.email,
       fname: this.state.firstname,
       lname: this.state.lastname
-    }).then(response => {
-      console.log(response)
-    })
+    });
   }
 
   handleChange = name => event => {
@@ -132,7 +132,6 @@ class SignIn extends Component {
       this.checkpasswd()
 
     return (
-      <Scrollbars style={{ width: window.innerWidth, height: window.innerHeight }}>
       <div className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -199,7 +198,6 @@ class SignIn extends Component {
       <br/>
       <br/>
     </div>
-    </Scrollbars>
     );
   }
 }
@@ -207,5 +205,6 @@ class SignIn extends Component {
 SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+SignIn.contextType = MainContext;
 
-export default withStyles(styles)(SignIn);
+export default withStyles(styles2)(SignIn);

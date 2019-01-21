@@ -8,6 +8,11 @@ import classNames from 'classnames';
 import styles from './Main.module.css'
 import bridge from '../img/bridge.jpeg';
 
+const styles2 = theme => ({
+  main: {
+    fontFamily: "arial black,Yu Gothic",
+  }
+});
 
 class Main extends Component {
   static propTypes = {
@@ -27,7 +32,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div className={styles.body}>
+      <div className={classNames(styles.body, this.props.classes.main)}>
         <header className={styles.header}>
           <h1 className={styles.header_title}>
             <span className={styles.m}>M</span>in<span className = {styles.i}>i</span> <span className = {styles.p}>P</span>ro<span className = {styles.g}>g</span>
@@ -99,4 +104,4 @@ class Main extends Component {
   }
 }
 Main = withCookies(Main)  
-export default Main;
+export default withStyles(styles2)(Main);

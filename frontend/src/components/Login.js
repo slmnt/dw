@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+
+// UI
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -6,14 +8,20 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import classNames from 'classnames';
-import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
+//
+import classNames from 'classnames';
 
-const styles = theme => ({
+//
+import styles from './Login.module.css';
+import {MainContext} from '../contexts/main';
+
+
+
+const styles2 = theme => ({
     button: {
       margin: theme.spacing.unit,
     },
@@ -26,7 +34,7 @@ const styles = theme => ({
       textField: {
         flexBasis: 280,
       },    
-  });
+});
   
 class Login extends Component {
 
@@ -39,10 +47,6 @@ class Login extends Component {
             showPassword: false,    
         }
 
-        this.key = this.key.bind(this)
-        this.clicked = this.clicked.bind(this)
-        this.drop = this.drop.bind(this)
-
         document.addEventListener('keypress', this.key, false)
     }
 
@@ -50,59 +54,29 @@ class Login extends Component {
         document.removeEventListener('keypress', this.key)
     }
 
-    key(e){
+    key = (e) => {
         if(e.key === 'Enter'){
             this.clicked()
         }
     }
-    clicked(){
-        //console.log(this.state.password)
-        // send allowed true reject false
-        axios.defaults.xsrfCookieName = 'csrftoken';
-        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-        
-        axios.post('/api/authentic/',{
-            uid: this.state.name,
-            pwd: this.state.password
-            }).then(response => {
-            // console.log(response)
-            if(response.data === 1){                
-            }else{
-                this.props.test({
-                    login: true,
-                    uid: this.state.name
-                })
-            }
-          }).catch(e => {
-            // console.log(e)
-          })              
+    onClickLogin = () => {
+        this.context.logIn(this.state.name, this.state.password);
     }
-    drop(){
-        axios.defaults.xsrfCookieName = 'csrftoken';
-        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-        axios.post('/api/dropliveuser/',{
-            uid: this.state.name,
-            }).then(response => {
-            // console.log(response)
-            this.props.test(false)
-          }).catch(e => {
-            // console.log(e)
-          })              
-
+    onClickDrop = () => {
+        this.context.drop();
     }
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
-      };    
+    };    
 
     handleClickShowPassword = () => {
         this.setState(state => ({ showPassword: !state.showPassword }));
-      };    
+    };    
 
 	render() {
         return (
-            <div>
+            <div className={styles.main}>
             <Grid container direction="column">
                 <Grid container item justify="center" >
                 <Grid item xs={6}>
@@ -139,10 +113,10 @@ class Login extends Component {
                         }}
                         />
                         <br/>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.clicked}>
+                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickLogin}>
                             Submit
                         </Button>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.drop}>
+                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickDrop}>
                             Drop
                         </Button>
                     </CardContent>
@@ -154,5 +128,6 @@ class Login extends Component {
 		);
   	}
 }
+Login.contextType = MainContext;
 
-export default withStyles(styles)(Login);
+export default withStyles(styles2)(Login);

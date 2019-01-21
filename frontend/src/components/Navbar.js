@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { ReactComponent as Ham } from '../img/hamburger.svg';
 
-import MainContext from '../contexts/main';
+import {MainContext} from '../contexts/main';
 import Hamon from './helper/Hamon';
 
 class NavBar extends React.Component {
@@ -16,6 +16,9 @@ class NavBar extends React.Component {
     if (this.props.onClickMenu) {
       this.props.onClickMenu(e);
     }
+  }
+  componentDidUpdate(){
+    console.log(this.context)
   }
   render() {
     /* flexbox で全て解決 */
@@ -34,10 +37,24 @@ class NavBar extends React.Component {
 
         {this.props.children}
 
-        <div>{this.context.username}</div>
+        <div>{"login: " + (this.context.isLoggedIn ? true : false) }</div>
+
         <div className={styles.rightMenu}>
-          <div><Link to="/login">Log in</Link></div>
-          <div><Link to="/signup">Sign up</Link></div>
+          {
+            !this.context.isLoggedIn ?
+              <React.Fragment>
+                <div><Link to="/login">Log in</Link></div>
+                <div><Link to="/signup">Sign up</Link></div>
+              </React.Fragment>
+            :
+              <React.Fragment>
+                <div>
+                  {this.context.uid}
+                </div>
+                <div className={styles.avatar}>
+                </div>
+              </React.Fragment>
+          }
         </div>
       </nav>
     );

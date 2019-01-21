@@ -9,7 +9,7 @@ import axios from 'axios';
 import './App.css';
 import {login, logout} from './modules/main';
 import store from './modules/store';
-import MainContext from './contexts/main';
+import {MainContext} from './contexts/main';
 
 // UI
 import { withStyles } from '@material-ui/core/styles';
@@ -26,6 +26,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 //
 //import Right from './components/Inter';
+import NotFound from './components/NotFound';
 import Navbar from './components/Navbar';
 import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
@@ -45,7 +46,7 @@ import CourseE from './components/Editor'
 
 
 
-
+axios.defaults.baseURL = '/api/';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -105,13 +106,23 @@ class App extends React.Component {
       isLoggedIn: false,
       uid: '',
       username: '',
+      logIn: this.logIn,
+      drop: this.drop
     }
   };
 
   constructor(props){
     super(props)
 
+    this.state.data = {
+      isLoggedIn: false,
+      uid: '',
+      username: '',
+      logIn: this.logIn,
+      drop: this.drop
+    }
     this.drawer = React.createRef();
+
 
     // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -146,27 +157,7 @@ class App extends React.Component {
       bid: localStorage.getItem("bid")
     })
 
-    // user platform check
-    // console.log(window.navigator.platform)
-    let isRoot = this.props.history.location.pathname === '/';
-    axios.get('/api/cookieauth/').then((response) => {
-      if (response.status === 200){
-        this.setState({
-          uid: response.data,
-          login: true
-        })
-        if (isRoot) {
-          sessionStorage.setItem('key','test')
 
-          this.clicked('mypage')
-        }
-        
-      } else {
-        if (isRoot) this.clicked('/') 
-      }
-    }).catch((e) => {
-
-    })
   }
   componentDidMount(){
   }
@@ -179,24 +170,89 @@ class App extends React.Component {
   }
 
 
-  logIn() {
+  logIn = (name, password, callback) => {
+    //console.log(this.state.password)
+    // send allowed true reject false
+    axios.post('authentic/',{
+      uid: name,
+      pwd: password
+    }).then(response => {
+        console.log(response);
+        // console.log(response)
+        if(response.status === 200){
+            if (callback) callback();
+            this.state.data.isLoggedIn = true;
+            this.state.data.uid = name;
 
+            this.setState({
+              data: this.state.data
+            });
+
+            console.log("logged in as: ", this.state.data.uid);
+        }else{
+        }
+    }).catch(e => {
+      // console.log(e)
+    });
   }
-  logOut() {
+  logInCookie = () => {
+    // user platform check
+    // console.log(window.navigator.platform)
+    let isRoot = this.props.history.location.pathname === '/';
+    axios.get('cookieauth/').then((response) => {
+      if (response.status === 200){
+        this.state.data.isLoggedIn = true;
+        this.state.data.uid = response.data;
+        this.setState({ data: this.state.data });
 
-  }
+        console.log("logged in as: ", this.state.data.uid);
+        if (isRoot) {
+          //sessionStorage.setItem('key','test')
+        }
+        
+      } else {
+        //fail
+      }
+    }).catch((e) => {
 
-
-  statecallback = (datafromchild) => {
-    this.setState({
-      login: datafromchild.login,
-      uid:  datafromchild.uid
     })
-    if(datafromchild.login === true){
-      this.clicked('mypage') 
-    } 
-    // console.log(datafromchild)
   }
+  logOut = () => {
+
+  }
+  checkLoginState = () => {
+    /*
+      this.state.data.isLoggedIn = false;
+      this.state.data.uid = '';
+    */
+  }
+  removeLoginState = () => {
+    this.state.data.isLoggedIn = false;
+    this.state.data.uid = '';
+    this.setState({ data: this.state.data });
+  }
+  drop = () => {
+    axios.post('dropliveuser/',{
+        uid: this.state.name,
+    }).then(response => {
+        // console.log(response)
+        this.removeLoginState();
+    }).catch(e => {
+        // console.log(e)
+    });
+  }
+
+  createUser = (data) => {
+    axios.post('createuser/', data).then(response => {
+      console.log(response)
+    })
+  }
+  removeUser = () => {
+
+  }
+
+
+
 
 
   hideplayer = () => {
@@ -218,15 +274,11 @@ class App extends React.Component {
 
 
 
-  clicked(e){
-    this.setState({current: e})
-    this.props.location.pathname = '/' + e
-    this.props.history.push(e)
-
-    //
+  onClickDrawerItem(e){
     this.closeDrawer();
+    this.props.history.push(e)
   }
-
+  
 
   render() {
     // update rendering
@@ -267,19 +319,19 @@ class App extends React.Component {
               </div>
               <Scrollbars style={{ height: "90vh" }}>        
                 <Divider />
-                <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
+                <List><ListItem button onClick={e => this.onClickDrawerItem('three')}><Typography>three</Typography></ListItem></List>
                 <Divider />
-                <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
+                <List><ListItem button onClick={e => this.onClickDrawerItem('right')}><Typography>right</Typography></ListItem></List>
                 <Divider />
-                <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
+                <List><ListItem button onClick={e => this.onClickDrawerItem('main')}><Typography>main</Typography></ListItem></List>
                 <Divider />
-                <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
+                <List><ListItem button onClick={e => this.onClickDrawerItem('mypage')}><Typography>mypage</Typography></ListItem></List>
                 <Divider />
-                <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
+                <List><ListItem button onClick={e => this.onClickDrawerItem('Boards')}><Typography>Boards</Typography></ListItem></List>
                 <Divider />
                 <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
                 <Divider />
-                <List><ListItem button onClick={e => this.setState({data: {isLoggedIn: true}})}><Typography>help</Typography></ListItem></List>
+                <List><ListItem button onClick={e => {this.state.data.isLoggedIn = true; this.setState({data: this.state.data})}}><Typography>help</Typography></ListItem></List>
               </Scrollbars>
             </Drawer>
             
@@ -306,13 +358,16 @@ class App extends React.Component {
                   <Route path="/certify/:code" component={Mail}/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
-                  <Route path="/createuser"  component={CreateU}/>
                   <Route path="/tech"  component={Tech}/>
                   <Route path="/courseSearch"  component={CourseS}/>
                   <Route path="/course/:id/edit"  component={CourseE}/>
                   <Route path="/right" component={Right}/>
-                  <ProtectedRoute path="/login" ok={!this.state.data.isLoggedIn} redirectTo="/right" render={() => <Login test={this.statecallback} />}/>
+
+                  <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
+                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+
+                  <Route component={NotFound}/>
                 </Switch>
               </Scrollbars>
             </main>
