@@ -46,13 +46,9 @@ import CourseE from './components/Editor'
 import CourseI from './components/CourseInfo'
 
 
-
 axios.defaults.baseURL = '/api/';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-
-
 
 const drawerWidth = 200;
 
@@ -366,11 +362,9 @@ class App extends React.Component {
                   <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
                   <Route path="/course/:id/edit"  component={CourseE}/>
                   <Route path="/right" component={Right}/>
-
                   <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
-
                   <Route component={NotFound}/>
                 </Switch>
               </Scrollbars>
