@@ -44,15 +44,11 @@ import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
 import CourseI from './components/CourseInfo'
-
-
+import CourseG from './components/Courseget'
 
 axios.defaults.baseURL = '/api/';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-
-
 
 const drawerWidth = 200;
 
@@ -358,15 +354,15 @@ class App extends React.Component {
                   <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
                   <Route path="/main" render={() => <Main />}/>
-                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
                   <Route exact strict path="/courseSearch"  component={CourseS}/>
                   <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
-                  <Route path="/course/:id/edit"  component={CourseE}/>
-                  <Route path="/right" component={Right}/>
+                  <Route exact strict path="/courseSearch/:id/:number"  component={CourseG}/>
 
+                  <ProtectedRoute path="/course/:id/edit"  component={CourseE} redirectTo="/login" />
+                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan} redirectTo="/login"/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
