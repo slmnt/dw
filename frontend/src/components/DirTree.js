@@ -1,5 +1,9 @@
 import React from 'react';   
-import logo from '../logo.svg';
+
+
+import styles from './DirTree.module.css';
+
+import logo from '../img/logo.svg';
 
 
 class DirTree extends React.Component {
@@ -22,7 +26,7 @@ class DirTree extends React.Component {
     let f = d => {
       let path = stack.join("/") + "/" + d.name;
       d.name && re.push(
-        <div className={"dir-item"}
+        <div className={styles["dir-item"]}
           key={path}
           data-filepath={path}
           style={ {
@@ -36,9 +40,9 @@ class DirTree extends React.Component {
             }
           }).bind(this)}
         >
-          <div className={"dir-label"} draggable>
+          <div className={styles["dir-label"]} draggable>
             <span
-              className="dir-label-image"
+              className={styles["dir-label-image"]}
               style={{
                 marginLeft: stack.length * 1 + "em",
                 backgroundImage: "url(" + (!d.children ? logo : `"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E"` ) + ")",
@@ -46,7 +50,7 @@ class DirTree extends React.Component {
               }}
             >
             </span>
-            <a className={"dir-label-name"}>
+            <a className={styles["dir-label-name"]}>
               {d.name}
             </a>
           </div>
@@ -65,7 +69,7 @@ class DirTree extends React.Component {
   render() {
     return (
       <div
-        className="dir-window"
+        className={styles["dir-window"]}
         style={ {
           width: "100%"
         } }

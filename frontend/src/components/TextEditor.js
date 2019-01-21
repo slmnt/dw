@@ -1,23 +1,25 @@
 import React from 'react';   
-
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import * as monaco from 'monaco-editor';
 //Editor component path set localhost:3000/course/<:id>/edit 
 //import Editor from './Editor'; // test
 
+import styles from './TextEditor.module.css';
 import Term from './Term';
 
-import logo from '../logo.svg';
+import logo from '../img/logo.svg';
 
 class TextEditor extends React.Component {
   constructor(props) {
       super(props);
 
       this.state ={
-      tabs: [
-          { name: null },
-      ],
-      currentTab: null,
+        tabs: [
+            { name: null },
+        ],
+        currentTab: null,
+        showEditor: false,
       };
       this.editor = null;
       this.tabList = React.createRef();
@@ -74,6 +76,13 @@ class TextEditor extends React.Component {
       e.stopPropagation();
   }
 
+  showEditor() {
+    this.setState({showEditor: true});
+  }
+  hideEditor() {
+    this.setState({showEditor: false});
+  }
+
   openTab(path) {
       let id = this.getTabIndex(path);
       if (id !== -1) {
@@ -116,6 +125,8 @@ class TextEditor extends React.Component {
           if (path === this.state.currentTab && this.state.tabs.length > 0) {
               let i = tabId > 0 ? tabId - 1 : 0;
               this.activateTab(this.state.tabs[i].path);
+          } else {
+            this.hideEditor();
           }
       }).bind(this));
 
@@ -162,6 +173,8 @@ class TextEditor extends React.Component {
           console.log("load", tab)
           this.loadTabState(tab);
           tab.init = true;
+
+          this.showEditor();
       }).bind(this));
       
   }
@@ -231,23 +244,27 @@ class TextEditor extends React.Component {
               flexFlow: "column",
               width: "100%",
               height: "100%",
+              background: "linear-gradient(145deg, #00c1da, #003bca)",
           }}
       >
           <div
-              className="window-tablist"
+              className={styles["window-tablist"]}
               style={{
                   flex: "0 0 auto",
                   maxWidth: "100%",
-                  textAlign: "left"
+                  textAlign: "left",
+                  opacity: this.state.showEditor && "1" || "0",
+
               }}
               ref={this.tabList}
           >
+          <Scrollbars>
           {
-              this.state.tabs.map((v, i, ar) => {
+            this.state.tabs.map((v, i, ar) => {
               if (!v || !v.name) return;
-              return <div
+                return <div
                   key={i}
-                  className="window-tab"
+                  className={styles["window-tab"]}
                   style={ {
                       backgroundColor: this.state.currentTab === v.path && "rgb(30, 30, 30)" || "rgb(45, 45, 45)",
                       borderRight: ar.length == i + 1 ? "none" : "1.5px solid rgb(37, 37, 38)",
@@ -260,7 +277,7 @@ class TextEditor extends React.Component {
                   data-tabpath={v.path}
                   >
                   <span
-                      className="window-tab-image"
+                      className={styles["window-tab-image"]}
                       style={{
                           backgroundImage: "url(" + logo + ")",
                       }}
@@ -268,7 +285,7 @@ class TextEditor extends React.Component {
                   </span>
                   {v.name}
                   <span
-                      className="window-tab-close"
+                      className={styles["window-tab-close"]}
                       onClick={
                           ((e) => {
                               this.closeTab(v.path); // e.currentTarget.dataset["tabpath"] は使えない
@@ -276,23 +293,23 @@ class TextEditor extends React.Component {
                           }).bind(this)
                       }
                   ></span>
-                  </div>
-              })          
+                </div>
+            })          
           }
+          </Scrollbars>
           </div>
           <div
               style={{
                   flex: "1 1 auto",
                   width: "100%",
-                  opacity: this.state.currentTab && "1" || "0",
                   overflow: "hidden",
-                  background: "linear-gradient(145deg, #00c1da, #003bca)",
+                  opacity: this.state.showEditor && "1" || "0",
               }}
               onClick={this.onClickBackground}
               ref={this.containerRef}
           >
               <div
-                  className="window-content"
+                  className={styles["window-content"]}
                   style={{
                       height: "100%",
                       width: "100%",
@@ -303,14 +320,15 @@ class TextEditor extends React.Component {
           </div>
           <div
               style={{
-                  position: "absolute",
+                  flex: "0 0 auto",
+                  //position: "absolute",
                   width: "100%",
-                  height: "200px",
+                  height: "auto",
                   top: "auto",
                   bottom: "0",
               }}
           >
-              <Term />
+              <Term height={200} />
           </div>
       </div>
       );

@@ -3,6 +3,11 @@ body {
     margin: 0;
 }
 
+/* tweak */
+[draggable=true] {
+    -khtml-user-drag: element;
+}
+
 /* root > appFrame > appBar + content */
 .pageContainer {
     position: fixed;
