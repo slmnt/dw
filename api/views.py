@@ -605,3 +605,11 @@ class CourseInfoConetntsInfoGet(generics.ListAPIView):
         except:
             return Response(status=status.HTTP_200_OK)
         return queryset
+
+class GetUserCourseContentid(generics.ListAPIView):
+    serializer_class = UserCourseContentSerializer
+
+    def get_queryset(self):
+        print(self.kwargs)
+        queryset = UserCourseContent.objects.all()
+        return queryset

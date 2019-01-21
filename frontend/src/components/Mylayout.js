@@ -11,7 +11,6 @@ import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 */
 
-
 import TextEditor from './TextEditor';
 import DirTree from './DirTree';
 
