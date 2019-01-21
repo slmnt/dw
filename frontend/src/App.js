@@ -43,6 +43,7 @@ import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
+import CourseI from './components/CourseInfo'
 
 
 
@@ -351,15 +352,18 @@ class App extends React.Component {
                 </div>
                 */}
                 <Switch>
-                  <Route exact path="/" render={() => <Main />}/>
-                  <Route path="/main" render={() => <Main />}/>
-                  <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-                  <Route path="/Board/:id" component={Boardid}/>
+                  <Route exact path="/"  render={() => <Main />}/>
+                  <Route path="/right" component={Right} />
+                  <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+                  <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
+                  <Route path="/main" render={() => <Main />}/>
+                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
-                  <Route path="/courseSearch"  component={CourseS}/>
+                  <Route exact strict path="/courseSearch"  component={CourseS}/>
+                  <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
                   <Route path="/course/:id/edit"  component={CourseE}/>
                   <Route path="/right" component={Right}/>
 

@@ -85,5 +85,6 @@ urlpatterns = [
     path('checkmail/',check_mail_code),
     path('getuser/',Get_User),
     path('getusercourse/',Get_User_Course),
-    path('getusercoursec/',Get_User_Course_content)
+    path('getusercoursec/',Get_User_Course_content),
+    path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view())
 ]
