@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Techinfo.css'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
@@ -13,12 +14,12 @@ import classNames from 'classnames';
 class Tech extends Component {
     state = {
         text: '',
-        key: false
+        key: false,
+        test_data: ['testssfsd','tststest','testsetestsete']
     }
 
     constructor(props) {
         super(props);
-
         this.handleChange = this.handleChange.bind(this)    
         this.check = this.check.bind(this)
     }
@@ -95,13 +96,21 @@ class Tech extends Component {
         return (
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
             <div className="body">
-                <div className="tech_test">
-                    広告
+                <div className="header">
+                    <h1 className="title">Mini Prog</h1>
                 </div>
-                {edd}
-                <input className="submit" type="submit" value="投稿" /><br/>
-                <output name="result">{this.state.text}</output>
-                
+                <Grid container direction="row" justify="center" text-align="center" className = "edd">
+                    <Grid item xs = {8} className="edd">
+                        {edd}
+                    </Grid>
+                </Grid> 
+                    <div className="form">
+                        <form>
+                            <input name="title" type="text" placeholder="タイトル" defaultValue="" /><br/>
+                            <textarea name="desc" placeholder="記事を入力" defaultValue=""></textarea><br/>
+                            <button type="submit">投稿</button>
+                        </form>
+                    </div>
 
             </div>
             </Scrollbars>
