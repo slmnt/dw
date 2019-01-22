@@ -55,7 +55,7 @@ a {
 }
 
 
-/* ------------------------------ */
+/* BackGround player*/
 .hide{
     visibility: hidden;
     display: none;
@@ -67,4 +67,11 @@ a {
     position: sticky;
 }
 
-
+/* My drawer*/
+.test_id{
+    position: fixed;
+    background-color: blue;
+    transition-duration: 0.5s;
+    z-index: 1;
+    top:49px
+}

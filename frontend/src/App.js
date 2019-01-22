@@ -43,7 +43,8 @@ import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
 import CourseI from './components/CourseInfo'
-import CourseG from './components/Courseget'
+import CourseG from './components/CourseGet'
+import Mydraw from './components/Drawer'
 
 // pages
 import About from './components/pages/About';
@@ -105,7 +106,8 @@ class App extends React.Component {
     //bgm: true,
     //bid: 'GugsCdLHm-Q',
     isDrawerOpen: false,
-
+    open: false,
+    drawerlist: ['right','mypage','board','coursesearh'],
     data: {
       isLoggedIn: false,
       uid: '',
@@ -255,9 +257,14 @@ class App extends React.Component {
 
   }
 
-
-
-
+  OpenBar = () => {
+    if(this.state.open){
+        this.setState({open: false})
+    }
+    else{
+        this.setState({open: true})
+    }
+  }
 
   hideplayer = () => {
     
@@ -288,6 +295,7 @@ class App extends React.Component {
 
   render() {
     // update rendering
+    //<Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
     const { classes, theme } = this.props;
 
     return (
@@ -295,7 +303,7 @@ class App extends React.Component {
         <div className="page">
           <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
+            <Navbar className="topBar" onClickMenu={() => this.OpenBar()}>
             </Navbar>
             
             <div
@@ -340,8 +348,16 @@ class App extends React.Component {
                 <List><ListItem button onClick={e => {this.state.data.isLoggedIn = true; this.setState({data: this.state.data})}}><Typography>help</Typography></ListItem></List>
               </Scrollbars>
             </Drawer>
-            
-            
+            <div className="test_id"
+              style={{
+                left: this.state.open ? 0 : -1000 + "px"
+              }}            
+            >
+              <Mydraw list={this.state.drawerlist} click={this.onClickDrawerItem}/>
+            </div>
+
+
+
             <main className="content">
               <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
@@ -386,8 +402,6 @@ class App extends React.Component {
                 </Switch>
               </Scrollbars>
             </main>
-
-
           </MainContext.Provider>
         </div>
       </div>
