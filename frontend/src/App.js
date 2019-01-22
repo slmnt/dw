@@ -42,8 +42,8 @@ import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
-import CourseI from './components/CourseInfo'
 import CourseG from './components/Courseget'
+import CourseInfo from './components/pages/CourseInfo'
 
 // pages
 import About from './components/pages/About';
@@ -367,7 +367,7 @@ class App extends React.Component {
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
                   <Route exact strict path="/courseSearch"  component={CourseS}/>
-                  <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
+                  <Route exact strict path="/courseSearch/:id"  component={CourseInfo}/>
                   <Route exact strict path="/courseSearch/:id/:number"  component={CourseG}/>
 
                   <Route path="/about" component={About}/>
@@ -380,6 +380,7 @@ class App extends React.Component {
                   <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/mypage" component={Mypage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                  <Route path="/test"  component={CourseInfo} />
 
                   <Route component={NotFound}/>
                 </Switch>
