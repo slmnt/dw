@@ -26,7 +26,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 //
 //import Right from './components/Inter';
-import NotFound from './components/NotFound';
 import Navbar from './components/Navbar';
 import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
@@ -44,6 +43,16 @@ import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
 import CourseI from './components/CourseInfo'
+
+// pages
+import About from './components/pages/About';
+import GettingStarted from './components/pages/GettingStarted';
+import Terms from './components/pages/Terms';
+import Privacy from './components/pages/Privacy';
+import NotFound from './components/pages/NotFound';
+
+// parts
+import Footer from './components/Footer';
 
 
 
@@ -82,16 +91,11 @@ class ProtectedRoute extends React.Component {
   render() {
     const { children, render, component, ok, redirectTo, ...props } = this.props;
     const to = redirectTo;
-    return (
-      <React.Fragment>
-        {
-          ok ?
-            <Route {...props} render={render} component={component} />
-          :
-            <Route {...props} render={() => <Redirect to={to} />} />
-        }
-      </React.Fragment>
-    )
+    if (ok) {
+      return <Route {...props} render={render} component={component} />;
+    } else {
+      return <Route {...props} render={() => <Redirect to={to} />} />;
+    }
   }
 }
 
@@ -353,23 +357,27 @@ class App extends React.Component {
                 */}
                 <Switch>
                   <Route exact path="/"  render={() => <Main />}/>
+                  <Route path="/main" render={() => <Main />}/>
+
                   <Route path="/right" component={Right} />
                   <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
                   <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
-                  <Route path="/main" render={() => <Main />}/>
-                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
                   <Route exact strict path="/courseSearch"  component={CourseS}/>
                   <Route exact strict path="/courseSearch/:id"  component={CourseI}/>
                   <Route path="/course/:id/edit"  component={CourseE}/>
-                  <Route path="/right" component={Right}/>
+
+                  <Route path="/about" component={About}/>
+                  <Route path="/getting-started" component={GettingStarted}/>
+                  <Route path="/terms" component={Terms}/>
+                  <Route path="/privacy" component={Privacy}/>
 
                   <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                  <ProtectedRoute path="/mypage" component={Mypage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
 
                   <Route component={NotFound}/>
                 </Switch>

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import { withStyles } from '@material-ui/core/styles';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
@@ -7,6 +9,8 @@ import classNames from 'classnames';
 
 import styles from './Main.module.css'
 import bridge from '../img/bridge.jpeg';
+
+import Footer from './Footer';
 
 const styles2 = theme => ({
   main: {
@@ -50,6 +54,14 @@ class Main extends Component {
               <p>幅広い年齢層を対象にプログラミング学習を行えるシステム。</p>
               <h2>『Mini Prog』</h2>
             </div>
+            <div className={styles.welcomeContainer}>
+              <div className={styles.signinBtn}>
+                <Link to="/signup">新規会員登録</Link>
+              </div>
+              <div className={styles.startBtn}>
+                <Link to="/getting-started">はじめてみる</Link>
+              </div>
+            </div>
           </div>
           <h3 className={styles.main_contents_title}>サービスの特徴</h3>
           <div className={styles.main_contents} style={{padding: "0 25px"}}>
@@ -75,30 +87,7 @@ class Main extends Component {
             </div>
           </div>
         </div>
-
-        <footer>
-          <div className={styles.footer}>
-            <p>Coming soon</p>
-          </div>
-          <div className={styles.bottom}> 
-            <div>
-              <span>
-                Made with ❤ by がんくん
-              </span>
-              <span>
-                © 2019 Kang Academy
-              </span>
-            </div>
-            <div>
-              <span>
-                Terms
-              </span>
-              <span>
-                Privacy
-              </span>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     )
   }
