@@ -18,7 +18,7 @@ class NavBar extends React.Component {
     }
   }
   componentDidUpdate(){
-    console.log(this.context)
+    // console.log(this.context)
   }
   render() {
     /* flexbox で全て解決 */

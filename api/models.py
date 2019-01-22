@@ -108,6 +108,7 @@ class UserCourse(models.Model):
     createat = models.DateTimeField(default=timezone.now)
 
 class UserCourseContent(models.Model):
+    cid = models.IntegerField(default=-1)
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)

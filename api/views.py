@@ -610,6 +610,6 @@ class GetUserCourseContentid(generics.ListAPIView):
     serializer_class = UserCourseContentSerializer
 
     def get_queryset(self):
-        print(self.kwargs)
-        queryset = UserCourseContent.objects.all()
+        tar = UserCourse.objects.get(id=self.kwargs['id'])
+        queryset = UserCourseContent.objects.all().filter(root=tar,cid=self.kwargs['num'])
         return queryset

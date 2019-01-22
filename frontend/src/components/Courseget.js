@@ -16,11 +16,13 @@ class CourseGet extends Component {
         /**
          * 
          */
-        var u = '/getusercourseid/1/1'
+        var u = '/getusercourseid/' + this.props.match.params.id + "/" + this.props.match.params.number
         axios.get(u).then(response => {
-            this.setState({contents: response.data})
+            // console.log(response.data[0])
+            if(typeof response.data[0] !== "object");
+            else
+                this.setState({contents: response.data[0]})
         }).catch(e => console.log(e))
-        console.log(this.props.match.params)
     }
 
 
