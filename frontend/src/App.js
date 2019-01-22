@@ -109,9 +109,17 @@ class App extends React.Component {
   };
 
   constructor(props){
-    super(props)
+    super(props);
 
     this.drawer = React.createRef();
+
+    this.state.data = {
+      isLoggedIn: false,
+      uid: '',
+      username: '',
+      login: this.login,
+      drop: this.drop
+    };
 
     // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
