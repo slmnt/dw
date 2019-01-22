@@ -10,11 +10,11 @@ class Rating extends Component {
     let a = [];
     for (let i = 0; i < 5; i++) {
       if (value >= 1)
-        a.push(<Star className={styles.star}/>);
+        a.push(<Star key={i} className={styles.star}/>);
       else if (value >= 0.5)
-        a.push(<StarHalf className={styles.star}/>);
+        a.push(<StarHalf key={i} className={styles.star}/>);
       else
-        a.push(<StarBorder className={styles.star}/>);
+        a.push(<StarBorder key={i} className={styles.star}/>);
       value -= 1;
     }
     return a;

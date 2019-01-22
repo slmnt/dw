@@ -383,6 +383,20 @@ class Editor extends Component {
       boxHeight: 50,
       draggingBox: null, //参照
       boxInitialPos: null,
+      courseData: {
+        name: "",
+        chapters: [
+          {
+            name: "",
+            slides: [
+              {
+                name: "",
+                text: ""
+              }
+            ]
+          }
+        ]
+      }
     }
 
     let i = 0;

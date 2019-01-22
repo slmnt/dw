@@ -1,6 +1,6 @@
 .main {
-  height: 5em;
-  width: 25em;
+  height: 4em;
+  width: 20em;
   font-size: 1em;
 
   display: flex;
@@ -16,14 +16,14 @@
   color: indigo;
 }
 .description {
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: darkgray;
 }
 .avatar {
   flex: 0 0 auto;
 
-  height: 5em;
-  width: 5em;
+  height: 4em;
+  width: 4em;
   border-radius: 100%;
 }
 

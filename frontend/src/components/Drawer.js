@@ -14,11 +14,15 @@ class Drawer extends Component {
         this.state = {
             isDrawerOpen: false,
             items: [
-                // name, url
-                ['right'],
+                // [name, url] or [name & url]
+                ['トップ', '/'],
+                ['text editor (right)', 'right'],
                 ['mypage'],
                 ['board'],
-                ['courseSearch']
+                ['courseSearch'],
+                ['test course get', '/course/123/'],
+                ['test course edit', '/course/123/edit'],
+                ['test'],
             ],
         }
     }

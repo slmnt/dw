@@ -4,11 +4,12 @@ import { withRouter } from 'react-router'
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import queryString from 'query-string';
 import axios from 'axios';
+import history from './modules/history';
+
 
 import './App.css';
-import {login, logout} from './modules/main';
-import store from './modules/store';
 import {MainContext} from './contexts/main';
 
 // UI
@@ -82,13 +83,28 @@ let pages = {
 };
 
 class ProtectedRoute extends React.Component {
+  setParam(url, params) {
+    if (this.props.processRedirect) {
+      // props.path から出る際, ?redirect= があれば移動
+      const parsed = queryString.parse(history.location.search);
+      if (parsed.redirect) return parsed.redirect;
+    }
+    if (this.props.redirectBack) {
+      // redirect する際, ?redirect= に元の path (props.path) を格納
+      console.log(history.location, history)
+      params = params || [];
+      params.redirect = history.location.pathname;
+    }
+    if (!params) return url;
+    return url + "?" + queryString.stringify(params);
+  }
   render() {
-    const { children, render, component, ok, redirectTo, ...props } = this.props;
+    const { children, render, component, ok, redirectTo, processRedirect, redirectBack, params, ...props } = this.props;
     const to = redirectTo;
     if (ok) {
       return <Route {...props} render={render} component={component} />;
     } else {
-      return <Route {...props} render={() => <Redirect to={to} />} />;
+      return <Route {...props} render={() => <Redirect to={this.setParam(to, params)} />} />;
     }
   }
 }
@@ -167,15 +183,16 @@ class App extends React.Component {
         console.log(response);
         // console.log(response)
         if(response.status === 200){
+          this.state.data.isLoggedIn = true;
+          this.state.data.uid = name;
+          
+          this.setState({
+            data: this.state.data
+          }, () => {
             if (callback) callback();
-            this.state.data.isLoggedIn = true;
-            this.state.data.uid = name;
-
-            this.setState({
-              data: this.state.data
-            });
-
             console.log("logged in as: ", this.state.data.uid);
+          });
+          
         }else{
         }
     }).catch(e => {
@@ -300,13 +317,13 @@ class App extends React.Component {
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>
+                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
+                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
 
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route exact strict path="/course/:id"  component={CourseInfo}/>
-                  <ProtectedRoute path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
+                  <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
                   <Route exact strict path="/course/:id/:number"  component={CourseGet}/>
 
                   <Route path="/about" component={About}/>
