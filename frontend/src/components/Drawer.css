@@ -2,3 +2,9 @@
     width: 200px;
     height: 100vh;
 }
+.close_button{
+    display: table-cell;
+    height: 40px;
+    vertical-align: middle;
+    padding-left: 160px;
+}

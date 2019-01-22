@@ -120,6 +120,12 @@ class UserCourseContentIndex(models.Model):
     createat = models.DateTimeField(default=timezone.now)
     context = models.TextField()
 
+class UserCourseContentCode(models.Model):
+    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
+    createat = models.DateTimeField(default=timezone.now)
+    context = models.TextField()
+
+
 class UserCourseComment(models.Model):
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
     auth = models.ForeignKey(User,on_delete=models.CASCADE)

@@ -321,7 +321,7 @@ class App extends React.Component {
                 left: this.state.isDrawerOpen ? 0 : -1000 + "px"
               }}            
             >
-              <Mydraw props={this.props} list={this.state.drawerlist} click={this.onClickDrawerItem}/>
+              <Mydraw props={this.props} close={this.closeDrawer} list={this.state.drawerlist} click={this.onClickDrawerItem}/>
             </div>
 
 

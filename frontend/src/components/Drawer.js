@@ -21,7 +21,10 @@ class MyDrawer extends Component {
 
         return (
             <div className="D_body">
-                MyDrawer
+                <a href="javascript:void(0)" onClick={(e) => this.props.close()} className="close_button">
+                    &lt;
+                </a>
+                <hr/>
                 {context}
             </div>
         );
