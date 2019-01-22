@@ -106,8 +106,7 @@ class App extends React.Component {
     //bgm: true,
     //bid: 'GugsCdLHm-Q',
     isDrawerOpen: false,
-    open: false,
-    drawerlist: ['right','mypage','board','coursesearh'],
+    drawerlist: ['right','mypage','board','courseSearch'],
     data: {
       isLoggedIn: false,
       uid: '',
@@ -262,11 +261,11 @@ class App extends React.Component {
   }
 
   OpenBar = () => {
-    if(this.state.open){
-        this.setState({open: false})
+    if(this.state.isDrawerOpen){
+        this.setState({isDrawerOpen: false})
     }
     else{
-        this.setState({open: true})
+        this.setState({isDrawerOpen: true})
     }
   }
 
@@ -289,8 +288,11 @@ class App extends React.Component {
 
 
 
-  onClickDrawerItem(e){
-    this.closeDrawer();
+  onClickDrawerItem = (e) => {
+    // this.closeDrawer();
+    this.setState({
+      isDrawerOpen: false
+    })
     this.props.history.location.pathname = "/"
     this.props.history.push(e)
     
@@ -318,46 +320,12 @@ class App extends React.Component {
               className="mobileMenuBg">
             </div>
 
-
-            <Drawer
-              variant="persistent"
-              className="mobileMenu"
-              style={{
-                left: this.state.isDrawerOpen ? 0 : -1000 + "px"
-              }}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ref={this.drawer}
-            >
-              <div className={classes.drawerHeader}>
-                <IconButton onClick={this.closeDrawer}>
-                  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-              </div>
-              <Scrollbars style={{ height: "90vh" }}>        
-                <Divider />
-                <List><ListItem button onClick={e => this.onClickDrawerItem('three')}><Typography>three</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.onClickDrawerItem('right')}><Typography>right</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.onClickDrawerItem('main')}><Typography>main</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.onClickDrawerItem('mypage')}><Typography>mypage</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.onClickDrawerItem('Boards')}><Typography>Boards</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => {this.state.data.isLoggedIn = true; this.setState({data: this.state.data})}}><Typography>help</Typography></ListItem></List>
-              </Scrollbars>
-            </Drawer>
             <div className="test_id"
               style={{
-                left: this.state.open ? 0 : -1000 + "px"
+                left: this.state.isDrawerOpen ? 0 : -1000 + "px"
               }}            
             >
-              <Mydraw list={this.state.drawerlist} click={this.onClickDrawerItem}/>
+              <Mydraw props={this.props} close={this.closeDrawer} list={this.state.drawerlist} click={this.onClickDrawerItem}/>
             </div>
 
 

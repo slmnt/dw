@@ -1,5 +1,10 @@
 .D_body{
     width: 200px;
     height: 100vh;
-    background-color: rgb(109, 214, 255);
+}
+.close_button{
+    display: table-cell;
+    height: 40px;
+    vertical-align: middle;
+    padding-left: 160px;
 }

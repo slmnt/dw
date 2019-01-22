@@ -70,8 +70,7 @@ a {
 /* My drawer*/
 .test_id{
     position: fixed;
-    background-color: blue;
+    background-color: white;
     transition-duration: 0.5s;
-    z-index: 1;
-    top:49px
+    z-index: 100001;
 }

@@ -114,7 +114,17 @@ class UserCourseContent(models.Model):
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
-    code = models.TextField()
+
+class UserCourseContentIndex(models.Model):
+    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
+    createat = models.DateTimeField(default=timezone.now)
+    context = models.TextField()
+
+class UserCourseContentCode(models.Model):
+    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
+    createat = models.DateTimeField(default=timezone.now)
+    context = models.TextField()
+
 
 class UserCourseComment(models.Model):
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
