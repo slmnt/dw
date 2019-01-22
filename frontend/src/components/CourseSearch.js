@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from './Loading'
 import './CourseSearch.css'
-import Divider from '@material-ui/core/Divider';
+import Ad from './Adpanel'
 
 class CourseSearch extends Component {
     state = {
@@ -35,7 +35,7 @@ class CourseSearch extends Component {
                     <option value="cpp">CPP</option>
                     <option value="java">Java</option>
                     <option value="python">Python</option>
-                </select>
+                </select>   
                 &nbsp;
                 <input 
                 onKeyPress={(e) => e.nativeEvent.key === "Enter" ? this.onSearch(e)  : void(0)} 
@@ -45,45 +45,30 @@ class CourseSearch extends Component {
                 &nbsp;
                 <a className="Sbuttom" href="javascript:void(0)"
                     onClick={this.onSearch}>Search</a>
-                <br/>
+                <hr className="courseSearch_HR"/>
                 Searching....
                 <br/>
-                <div>
-                    <table className="CourseSearchbody">
-                        <tbody className="boards_body">
-                    <div>
-                    <Divider/>
-                        <tr>
-                            <td className="boards_line">
-                                123
-                                <div className="board_cap">
-                                    count
-                                </div>
-                            </td>
-                            <td className="boards_title">
-                                title
-                                <div className="board_type">
-                                    python
-                                </div>
-                            </td>
-                            <td className="boards_auth">
-                                <span>
-                                username
-                                </span>
-                                <div className="boards_date">
-                                    time
-                                </div>
-                                <br/>
-                            </td>
-                        </tr>
+                <hr className="courseSearch_HR"/>
+                <div className="coursesearch_block">
+                    <div className="courseSearch_title">
+                        title_length_is_something
                     </div>
-                    </tbody>
-                    </table>
+                    <div className="courseSearch_auth">
+                        author
+                    </div>
+                    <div className="courseSearch_createat">
+                        createat
+                    </div>
+                    <div className="courseSearch_type">
+                        type
+                    </div>
                 </div>
-                
                 <div className="Sloading">
                     <Loading/>
                 </div>                
+            <div className="coursesearch_ad">
+            <Ad/>
+            </div>
             </div>
         );
   	}

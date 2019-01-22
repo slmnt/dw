@@ -89,10 +89,26 @@ class UserCourseContentSerializer(serializers.ModelSerializer):
         model = UserCourseContent
         fields = ('__all__')
 
+class UserCourseContentinfoSerializer(serializers.ModelSerializer):
+    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
+    
+    class Meta:
+        model = UserCourseContent
+        fields = ('title','createat','descriptoin')
+
 class AdsSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()
     
     class Meta:
         model = Ads
+        fields = ('__all__')
+
+
+class UserCourseCommentSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
+    
+    class Meta:
+        model = UserCourseComment
         fields = ('__all__')
 

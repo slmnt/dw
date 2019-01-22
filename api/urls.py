@@ -86,6 +86,7 @@ urlpatterns = [
     path('getusercourse/',Get_User_Course),
     path('getusercoursec/',Get_User_Course_content),
     path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
-    path('getusercourseid/<id>/<num>',GetUserCourseContentid.as_view())
+    path('getusercourseid/<id>/<num>',GetUserCourseContentid.as_view()),
+    path('getusercoursecomment/<id>',GetUserCourseComments.as_view())
 
 ]

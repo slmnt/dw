@@ -62,7 +62,6 @@ axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
-
 const drawerWidth = 200;
 
 const styles = theme => ({
@@ -281,7 +280,9 @@ class App extends React.Component {
 
   onClickDrawerItem(e){
     this.closeDrawer();
+    this.props.history.location.pathname = "/"
     this.props.history.push(e)
+    
   }
   
 
@@ -367,8 +368,8 @@ class App extends React.Component {
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
                   <Route exact strict path="/courseSearch"  component={CourseS}/>
-                  <Route exact strict path="/courseSearch/:id"  component={CourseInfo}/>
-                  <Route exact strict path="/courseSearch/:id/:number"  component={CourseG}/>
+                  <Route exact strict path="/course/:id"  component={CourseInfo}/>
+                  <Route exact strict path="/course/:id/:number"  component={CourseG}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>
