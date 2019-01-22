@@ -42,7 +42,7 @@ import Tech from './components/Techinfo'
 import Mail from './components/Email_certify'
 import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
-import CourseInfo from './components/CourseInfo'
+import CourseInfo from './components/pages/CourseInfo'
 import CourseG from './components/CourseGet'
 import Mydraw from './components/Drawer'
 
