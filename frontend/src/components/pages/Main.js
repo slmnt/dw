@@ -8,9 +8,9 @@ import classNames from 'classnames';
 
 
 import styles from './Main.module.css'
-import bridge from '../img/bridge.jpeg';
+import bridge from '../../img/bridge.jpeg';
 
-import Footer from './Footer';
+import Footer from '../Footer';
 
 const styles2 = theme => ({
   main: {

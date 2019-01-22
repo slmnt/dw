@@ -8,7 +8,7 @@ const styles = theme => ({
   }
 });
 
-class left extends React.Component {
+class Left extends React.Component {
   
   constructor(props){
     super(props)
@@ -42,9 +42,9 @@ class left extends React.Component {
   }
 }
 
-left.propTypes = {
+Left.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(left);
+export default withStyles(styles, { withTheme: true })(Left);

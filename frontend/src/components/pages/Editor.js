@@ -9,7 +9,7 @@ import katex from 'katex';
 
 import * as Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import './Quill.css';
+import '../Quill.css';
 
 /*
 問題

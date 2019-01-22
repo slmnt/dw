@@ -1,6 +1,6 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
-import './Mylayout.css'
+import './MyLayout.css'
 
 import axios from 'axios';
 /*
@@ -11,8 +11,8 @@ import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 */
 
-import TextEditor from './TextEditor';
-import DirTree from './DirTree';
+import TextEditor from '../TextEditor';
+import DirTree from '../DirTree';
 
 import { Z_BLOCK } from 'zlib';
 
