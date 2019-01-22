@@ -7,17 +7,22 @@ class MyDrawer extends Component {
 
     constructor (props) {
         super(props);
-
     }
-    
-    
+        
     render() {
-        console.log(this.props)
+
+        let context = this.props.list.map(el =>(
+            <div onClick={(e) => this.props.click(el)}>
+                {el}
+            <br/>
+            <hr/>
+            </div>
+        ))
 
         return (
             <div className="D_body">
                 MyDrawer
-                <hr/>
+                {context}
             </div>
         );
   	}
