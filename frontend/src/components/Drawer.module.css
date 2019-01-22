@@ -29,7 +29,9 @@
 
 /* close */
 .close-container {
-    padding: 1em 1em;
+    padding: 0.5em 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #1abc9c40;
 }
 .close-button {
     position: relative;
@@ -51,8 +53,9 @@
 }
 .close-img {
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 2em;
+    height: 2em;
+    fill: #0f7561;
 }
 
 /* bg */
