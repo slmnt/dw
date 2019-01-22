@@ -33,20 +33,20 @@ import Right from './components/Mylayout';
 import Boards from './components/MyProgram';
 import Three from './components/three';
 import Login from './components/Login';
-import Mypage from './components/mypage';
-import Codeman from './components/code/codeman';
-import Boardid from './components/Boardget'
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
-import Tech from './components/Techinfo'
-import Mail from './components/Email_certify'
-import CourseS from './components/CourseSearch'
 import CourseE from './components/Editor'
-import CourseInfo from './components/pages/CourseInfo'
-import CourseG from './components/CourseGet'
 import Mydraw from './components/Drawer'
 
 // pages
+import Mypage from './components/mypage';
+import Codeman from './components/code/codeman';
+import Boardid from './components/Boardget'
+import Tech from './components/Techinfo'
+import Mail from './components/Email_certify'
+import CourseS from './components/CourseSearch'
+import CourseG from './components/CourseGet'
+import CourseInfo from './components/pages/CourseInfo'
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
 import Terms from './components/pages/Terms';
