@@ -1,8 +1,8 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
-import Loading from './Loading'
+import Loading from '../Loading'
 import './CourseSearch.css'
-import Ad from './Adpanel'
+import Ad from '../AdPanel'
 
 class CourseSearch extends Component {
     state = {

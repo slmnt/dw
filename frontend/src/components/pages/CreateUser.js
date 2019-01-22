@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 import axios from 'axios';
-import Loading from './Loading'
+import Loading from '../Loading'
 
 import styles from './CreateUser.module.css';
-import {MainContext} from '../contexts/main';
+import {MainContext} from '../../contexts/main';
 
 
 const styles2 = theme => ({

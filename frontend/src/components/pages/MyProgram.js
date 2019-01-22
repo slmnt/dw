@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import Loading from './Loading'
-import './Myprogram.css'
+import Loading from '../Loading'
+import './MyProgram.css'
 
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';

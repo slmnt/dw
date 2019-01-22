@@ -27,25 +27,25 @@ import { Scrollbars } from 'react-custom-scrollbars';
 //
 //import Right from './components/Inter';
 import Navbar from './components/Navbar';
-import CreateU from './components/CreateUser';
-import Main from './components/Main'; 
-import Right from './components/Mylayout';
-import Boards from './components/MyProgram';
-import Three from './components/three';
-import Login from './components/Login';
+import CreateU from './components/pages/CreateUser';
+import Three from './components/Three';
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
-import CourseE from './components/Editor'
 import Mydraw from './components/Drawer'
 
 // pages
-import Mypage from './components/mypage';
+import Login from './components/pages/Login';
+import Main from './components/pages/Main'; 
+import Right from './components/pages/MyLayout';
+import Boards from './components/pages/MyProgram';
+import MyPage from './components/pages/MyPage';
 import Codeman from './components/code/codeman';
-import Boardid from './components/Boardget'
-import Tech from './components/Techinfo'
-import Mail from './components/Email_certify'
-import CourseS from './components/CourseSearch'
-import CourseG from './components/CourseGet'
+import Boardid from './components/pages/BoardGet'
+import Tech from './components/pages/Techinfo'
+import Mail from './components/pages/EmailCertify'
+import CourseE from './components/pages/Editor'
+import CourseS from './components/pages/CourseSearch'
+import CourseG from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
@@ -361,10 +361,10 @@ class App extends React.Component {
                   <Route path="/privacy" component={Privacy}/>
 
                   <ProtectedRoute path="/course/:id/edit"  component={CourseE} redirectTo="/login" />
-                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan} redirectTo="/login"/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                  <ProtectedRoute path="/mypage" render={(props) => <MyPage {...props} gogo={this.testprops} set={this.setlan} redirectTo="/login"/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/mypage" component={Mypage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <Route path="/test"  component={CourseInfo} />
 
                   <Route component={NotFound}/>

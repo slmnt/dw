@@ -7,8 +7,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import bridge from '../img/bridge.jpeg';
-import { Scrollbars } from 'react-custom-scrollbars';
+import bridge from '../../img/bridge.jpeg';
 
 const styles = theme => ({
     root: {
@@ -41,7 +40,7 @@ const styles = theme => ({
 })
 
 // react-paginatge is crash react meterial-ui
-class Mypage extends Component {
+class MyPage extends Component {
     state = {
         spacing: '24',
         userinfo: {},        
@@ -176,4 +175,4 @@ class Mypage extends Component {
   	}
 }
 
-export default withStyles(styles)(Mypage);
+export default withStyles(styles)(MyPage);

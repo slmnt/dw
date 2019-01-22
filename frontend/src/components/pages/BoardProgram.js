@@ -1,7 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 
-class Boardprogram extends Component {
+class BoardProgram extends Component {
 
     render() {
         return (
@@ -12,6 +12,6 @@ class Boardprogram extends Component {
   	}
 }
 
-Boardprogram.propTypes = {};
+BoardProgram.propTypes = {};
 
-export default Boardprogram;
+export default BoardProgram;
