@@ -43,9 +43,9 @@ import Codeman from './components/code/codeman';
 import Boardid from './components/pages/BoardGet'
 import Tech from './components/pages/Techinfo'
 import Mail from './components/pages/EmailCertify'
-import CourseE from './components/pages/Editor'
-import CourseS from './components/pages/CourseSearch'
-import CourseG from './components/pages/CourseGet'
+import CourseEditor from './components/pages/Editor'
+import CourseSearch from './components/pages/CourseSearch'
+import CourseGet from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
@@ -124,7 +124,7 @@ class App extends React.Component {
       isLoggedIn: false,
       uid: '',
       username: '',
-      logIn: this.logIn,
+      logIn: this.login,
       drop: this.drop
     }
     this.drawer = React.createRef();
@@ -166,6 +166,7 @@ class App extends React.Component {
 
   }
   componentDidMount(){
+    //this.updateLoginState()
   }
   componentDidUpdate(){
   }
@@ -176,7 +177,7 @@ class App extends React.Component {
   }
 
 
-  logIn = (name, password, callback) => {
+  login = (name, password, callback) => {
     //console.log(this.state.password)
     // send allowed true reject false
     axios.post('authentic/',{
@@ -201,7 +202,7 @@ class App extends React.Component {
       // console.log(e)
     });
   }
-  logInCookie = () => {
+  loginWithCookie = () => {
     // user platform check
     // console.log(window.navigator.platform)
     let isRoot = this.props.history.location.pathname === '/';
@@ -223,8 +224,11 @@ class App extends React.Component {
 
     })
   }
-  logOut = () => {
+  logout = () => {
 
+  }
+  updateLoginState = () => {
+    //this.loginWithCookie();
   }
   checkLoginState = () => {
     /*
@@ -232,7 +236,7 @@ class App extends React.Component {
       this.state.data.uid = '';
     */
   }
-  removeLoginState = () => {
+  clearLoginState = () => {
     this.state.data.isLoggedIn = false;
     this.state.data.uid = '';
     this.setState({ data: this.state.data });
@@ -253,7 +257,7 @@ class App extends React.Component {
       console.log(response)
     })
   }
-  removeUser = () => {
+  deleteUser = () => {
 
   }
 
@@ -383,20 +387,21 @@ class App extends React.Component {
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
-                  <Route exact strict path="/courseSearch"  component={CourseS}/>
+
+                  <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
+                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
+                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+
+                  <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route exact strict path="/course/:id"  component={CourseInfo}/>
-                  <Route exact strict path="/course/:id/:number"  component={CourseG}/>
+                  <ProtectedRoute path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
+                  <Route exact strict path="/course/:id/:number"  component={CourseGet}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>
                   <Route path="/terms" component={Terms}/>
                   <Route path="/privacy" component={Privacy}/>
 
-                  <ProtectedRoute path="/course/:id/edit"  component={CourseE} redirectTo="/login" />
-                  <ProtectedRoute path="/mypage" render={(props) => <MyPage {...props} gogo={this.testprops} set={this.setlan} redirectTo="/login"/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
-                  <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
-                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
                   <Route path="/test"  component={CourseInfo} />
 
                   <Route component={NotFound}/>

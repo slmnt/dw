@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styles from './Navbar.module.css';
 import { ReactComponent as Ham } from '../img/hamburger.svg';
+import { ReactComponent as Logo } from '../img/logo.svg';
 
 import {MainContext} from '../contexts/main';
 import Hamon from './helper/Hamon';
@@ -36,16 +37,21 @@ class NavBar extends React.Component {
         <div>
           <div className={styles.mobileButton} onClick={this.onClickMenu}>
             <Ham className={styles.hamburger}/>
-            <Hamon />
+            <Hamon color="#1abc9c" />
           </div>
           
           <div className={styles.logo}>
+            <Logo className={styles["logo-img"]} style={{width: "1em", height: "1em"}}/>
             <Link to="/">MiniProg</Link>
           </div>
         </div>
 
         {this.props.children}
 
+        <div className={styles.navigation}>
+          <div><Link to="/getting-started">Getting Started</Link></div>
+          <div><Link to="/">コース</Link></div>
+        </div>
         <div>{"login: " + (this.context.isLoggedIn ? true : false) }</div>
 
         <div className={styles.rightMenu}>

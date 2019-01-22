@@ -26,7 +26,13 @@
   color: indigo;
 }
 .rate {
-
+  font-size: 1.2em;
+  color: blueviolet;
+}
+.rate-info {
+  font-size: 0.8em;
+  color: darkgray;
+  margin-left: 0.5em;
 }
 .start-button {
   border-radius: 0.5em;
@@ -44,6 +50,17 @@
   flex: 0 0 auto;
 }
 
+.middle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.rating-container {
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+
+}
 
 /* tab */
 .tab-list {
@@ -64,6 +81,7 @@
 .tab-list > div:hover {
   background-color: azure;
   color: black;
+  font-weight: bold;
 }
 .tab-list > div > * {
   margin: 0 1em;
@@ -118,7 +136,7 @@
 }
 .review-info {
   margin-top: 1em;
-  font-size: 0.7em;
+  font-size: 0.8em;
   color: darkgray;
   text-align: right;
 }

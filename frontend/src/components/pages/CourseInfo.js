@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import styles from './CourseInfo.module.css';
 import UserPanel from '../UserPanel';
+import Rating from '../Rating';
 
 class Courseinfo extends Component {
     state = {
@@ -41,9 +42,15 @@ class Courseinfo extends Component {
                                 初めから / 続きから
                             </div>
                         </div>
-                        <div>
-                            <div className={styles.rate}>
-                                3/5
+                        <div className={styles["middle-container"]}>
+                            <div className={styles["rating-container"]}>
+                                <Rating value={3.5}/>
+                                <span className={styles.rate}>
+                                    3.5
+                                </span>
+                                <span className={styles["rate-info"]}>
+                                    (103 人)
+                                </span>
                             </div>
                             <UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png" />
                         </div>

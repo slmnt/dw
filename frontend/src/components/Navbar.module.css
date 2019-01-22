@@ -34,6 +34,26 @@
 
   font-size: 1.5em;
   color: #1abc9c;
+
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+.logo-img {
+  display: inline-block;
+}
+.logo > * + * {
+  margin-left: 0.5em;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+.navigation > div + div {
+  margin-left: 1em;
 }
 
 .mobileButton {

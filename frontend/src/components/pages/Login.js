@@ -60,7 +60,7 @@ class Login extends Component {
         }
     }
     onClickLogin = () => {
-        this.context.logIn(this.state.name, this.state.password);
+        this.context.login(this.state.name, this.state.password);
     }
     onClickDrop = () => {
         this.context.drop();
