@@ -14,7 +14,9 @@ class CourseGet extends Component {
 
     componentDidMount(){
         /**
-         * 
+         * Requirement
+         *  CourseContent Rendering
+         *      this.state.contents
          */
         var u = '/getusercourseid/' + this.props.match.params.id + "/" + this.props.match.params.number
         axios.get(u).then(response => {
@@ -24,7 +26,6 @@ class CourseGet extends Component {
                 this.setState({contents: response.data[0]})
         }).catch(e => console.log(e))
     }
-
 
     render() {
 

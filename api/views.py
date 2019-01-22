@@ -592,7 +592,7 @@ class GetUserCourseContent(viewsets.ModelViewSet):
 #CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
 
 class CourseInfoConetntsInfoGet(generics.ListAPIView):
-    serializer_class = UserCourseContentSerializer
+    serializer_class = UserCourseContentinfoSerializer
     
     def get_queryset(self):
         id = self.kwargs['id']
@@ -612,4 +612,12 @@ class GetUserCourseContentid(generics.ListAPIView):
     def get_queryset(self):
         tar = UserCourse.objects.get(id=self.kwargs['id'])
         queryset = UserCourseContent.objects.all().filter(root=tar,cid=self.kwargs['num'])
+        return queryset
+
+class GetUserCourseComments(generics.ListAPIView):
+    serializer_class = UserCourseCommentSerializer
+
+    def get_queryset(self):
+        tar = UserCourse.objects.get(id=self.kwargs['id'])
+        queryset = UserCourseComment.objects.all().filter(root=tar)
         return queryset
