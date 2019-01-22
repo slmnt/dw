@@ -6,6 +6,18 @@ class GettingStarted extends Component {
     return (
       <div className={styles.main}>
         get started
+        <div className={styles["huge-panel"]}>
+          1. 会員登録
+        </div>
+        <div className={styles["huge-panel"]}>
+          2. コースを開始
+        </div>
+        <div className={styles["huge-panel"]}>
+          3. ???
+        </div>
+        <div className={styles["huge-panel"]}>
+          4. profit
+        </div>
       </div>
     )
   }

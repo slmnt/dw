@@ -1,0 +1,125 @@
+.main {
+  height: 100%;
+}
+.container {
+  height: 100%;
+  width: 80%;
+  margin: auto;
+  margin-top: 2em;
+}
+
+/* info */
+.info-panel {
+  box-shadow: 0px 1px 2px black;
+
+  padding: 2em 2em;
+}
+.info-panel > div + div {
+  padding-top: 1em;
+}
+.course-name {
+  font-size: 2em;
+  color: darkgreen;
+}
+.description {
+  font-size: 1em;
+  color: indigo;
+}
+.rate {
+
+}
+.start-button {
+  border-radius: 0.5em;
+  background-color: hsl(160, 93%, 55%);
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-container > div + div {
+  flex: 0 0 auto;
+}
+
+
+/* tab */
+.tab-list {
+  display: flex;
+  justify-content: flex-start;
+
+  font-size: 20px;
+  border: 1px solid black;
+}
+.tab-list > div {
+  flex: 0 0 auto;
+  color: darkgray;
+  border-right: 1px solid black;
+  padding: 0.2em 0;
+
+  cursor: pointer;
+}
+.tab-list > div:hover {
+  background-color: azure;
+  color: black;
+}
+.tab-list > div > * {
+  margin: 0 1em;
+  vertical-align: middle;
+}
+.tab-content {
+  height: 100%;
+  padding: 1em 0;
+}
+
+
+/* chapter */
+.chapter-list {
+  padding: 1em 2em;
+  font-size: 1em;
+}
+.chapter-list > div {
+  padding: 1em 1em;
+  border-bottom: 1px solid black;
+}
+.chapter-header {
+  display: flex;
+  justify-content: space-between;
+}
+.chapter-name {
+  font-size: 1.5em;
+}
+.chapter-desc {
+  margin-top: 1em;
+}
+.chapter-start-button {
+  flex: 0 0 auto;
+
+  border-radius: 0.5em;
+  background-color: hsl(160, 93%, 55%);
+  padding: 0.5em 2em;
+  cursor: pointer;
+}
+
+
+/* review */
+.review-list {
+  padding: 1em 2em;
+  font-size: 1em;
+}
+.review-list > div {
+  padding: 1em 1em;
+  border-bottom: 1px solid black;
+}
+.review-text {
+  margin-top: 1em;
+}
+.review-info {
+  margin-top: 1em;
+  font-size: 0.7em;
+  color: darkgray;
+  text-align: right;
+}
+
