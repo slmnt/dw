@@ -56,7 +56,7 @@ class Login extends Component {
 
     key = (e) => {
         if(e.key === 'Enter'){
-            this.clicked()
+            this.onClickLogin()
         }
     }
     onClickLogin = () => {

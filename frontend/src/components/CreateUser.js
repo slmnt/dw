@@ -19,40 +19,13 @@ import {MainContext} from '../contexts/main';
 const styles2 = theme => ({
   main: {
     fontFamily:"arial black,Yu Gothic",
-    width: 'auto',
-    display: 'block',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    backgroundColor:"#f2f7ff",
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 500,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
   },
-  paper: {
-    marginTop: theme.spacing.unit * 5,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  signup:{
-    color:"white",
-    backgroundColor:"#1abc9c",
-    width:"100%",
-    textAlign:"center",
-    padding:"5px",
-    fontSize: 20,
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing.unit,
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-    backgroundColor:"#1abc9c",
-  },
+
 });
 
 
@@ -132,13 +105,13 @@ class SignIn extends Component {
       this.checkpasswd()
 
     return (
-      <div className={classes.main}>
+      <div className={styles.main}>
       <CssBaseline />
-      <Paper className={classes.paper}>
-        <Typography component="h2" className={classes.signup}>
+      <Paper className={styles.paper}>
+        <Typography component="h2" className={styles.signup}>
           Mini Prog 会員登録
         </Typography>
-        <form className={classes.form}>
+        <form className={styles.form}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="id">ID(半角英数字)</InputLabel>
             <Input 
@@ -185,7 +158,7 @@ class SignIn extends Component {
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            className={styles.submit}
             type="submit"
           >
             登録

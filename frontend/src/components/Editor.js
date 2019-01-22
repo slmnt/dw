@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Editor.module.css';
 
 import 'highlight.js/styles/vs.css'
@@ -515,7 +516,12 @@ class Editor extends Component {
       <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <div>HEADER</div>
+            <div className={styles["course-name"]}>HEADER</div>
+            <div className={styles["header-controls"]}>
+              <div><span>戻る</span></div>
+              <div><span>プレビュー</span></div>
+              <div><span>保存</span></div>
+            </div>
           </div>
           <div className={styles["main-container"]}>
             <div className={styles.side} style={{position: "relative"}}
