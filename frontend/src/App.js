@@ -13,48 +13,42 @@ import {MainContext} from './contexts/main';
 
 // UI
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { ListItem } from '@material-ui/core';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-//
-//import Right from './components/Inter';
+// parts
 import Navbar from './components/Navbar';
-import CreateU from './components/pages/CreateUser';
+import Drawer from './components/Drawer'
+import Footer from './components/Footer';
 import Three from './components/Three';
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
-import Mydraw from './components/Drawer'
+//import Right from './components/Inter';
 
 // pages
-import Login from './components/pages/Login';
 import Main from './components/pages/Main'; 
+import Login from './components/pages/Login';
+import CreateUser from './components/pages/CreateUser';
+import MyPage from './components/pages/MyPage';
+
 import Right from './components/pages/MyLayout';
 import Boards from './components/pages/MyProgram';
-import MyPage from './components/pages/MyPage';
 import Codeman from './components/code/codeman';
 import Boardid from './components/pages/BoardGet'
 import Tech from './components/pages/Techinfo'
 import Mail from './components/pages/EmailCertify'
+
 import CourseEditor from './components/pages/Editor'
 import CourseSearch from './components/pages/CourseSearch'
 import CourseGet from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
+
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
 import Terms from './components/pages/Terms';
 import Privacy from './components/pages/Privacy';
 import NotFound from './components/pages/NotFound';
 
-// parts
-import Footer from './components/Footer';
 
 
 
@@ -105,13 +99,11 @@ class App extends React.Component {
     language: 'python',
     //bgm: true,
     //bid: 'GugsCdLHm-Q',
-    isDrawerOpen: false,
-    drawerlist: ['right','mypage','board','courseSearch'],
     data: {
       isLoggedIn: false,
       uid: '',
       username: '',
-      logIn: this.logIn,
+      login: this.login,
       drop: this.drop
     }
   };
@@ -119,31 +111,12 @@ class App extends React.Component {
   constructor(props){
     super(props)
 
-    this.state.data = {
-      isLoggedIn: false,
-      uid: '',
-      username: '',
-      logIn: this.login,
-      drop: this.drop
-    }
     this.drawer = React.createRef();
-
 
     // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
-  openDrawer = e => {
-    /*
-        let rect = element.getBoundingClientRect();
-        element.style.width = rect.width + "px";
-        element.style.height = rect.height + "px";
-    */
-    this.setState({isDrawerOpen: true});
-  }
-  closeDrawer = e => {
-    this.setState({isDrawerOpen: false});
-  }
   getComponentSize(com) {
     let dom = ReactDOM.findDOMNode(com);
     return dom.getBoundingClientRect();
@@ -260,14 +233,6 @@ class App extends React.Component {
 
   }
 
-  OpenBar = () => {
-    if(this.state.isDrawerOpen){
-        this.setState({isDrawerOpen: false})
-    }
-    else{
-        this.setState({isDrawerOpen: true})
-    }
-  }
 
   hideplayer = () => {
     
@@ -286,19 +251,6 @@ class App extends React.Component {
     // window.location.reload();
   }
 
-
-
-  onClickDrawerItem = (e) => {
-    // this.closeDrawer();
-    this.setState({
-      isDrawerOpen: false
-    })
-    this.props.history.location.pathname = "/"
-    this.props.history.push(e)
-    
-  }
-  
-
   render() {
     // update rendering
     //<Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
@@ -309,26 +261,10 @@ class App extends React.Component {
         <div className="page">
           <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.OpenBar()}>
+            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
             </Navbar>
             
-            <div
-              onClick={this.closeDrawer}
-              style={{
-                display: this.state.isDrawerOpen ? "block" : "none"
-              }}
-              className="mobileMenuBg">
-            </div>
-
-            <div className="test_id"
-              style={{
-                left: this.state.isDrawerOpen ? 0 : -1000 + "px"
-              }}            
-            >
-              <Mydraw props={this.props} close={this.closeDrawer} list={this.state.drawerlist} click={this.onClickDrawerItem}/>
-            </div>
-
-
+            <Drawer ref={this.drawer} />
 
             <main className="content">
               <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
@@ -356,7 +292,7 @@ class App extends React.Component {
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateU} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/right"/>
                   <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
 

@@ -40,10 +40,10 @@ class NavBar extends React.Component {
             <Hamon color="#1abc9c" />
           </div>
           
-          <div className={styles.logo}>
+          <Link to="/" className={styles.logo}>
             <Logo className={styles["logo-img"]} style={{width: "1em", height: "1em"}}/>
-            <Link to="/">MiniProg</Link>
-          </div>
+            <span>MiniProg</span>
+          </Link>
         </div>
 
         {this.props.children}

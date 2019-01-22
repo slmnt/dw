@@ -1,0 +1,20 @@
+.container {
+  position: relative;
+  border-radius: 100%;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.container:hover {
+  background-color: #1abc9c34;
+  opacity: 0.8;
+}
+.container > svg {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}

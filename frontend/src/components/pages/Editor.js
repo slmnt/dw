@@ -517,6 +517,9 @@ class Editor extends Component {
         <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles["course-name"]}>HEADER</div>
+            <div className={styles["chapters-btn"]}>
+              チャプター一覧
+            </div>
             <div className={styles["header-controls"]}>
               <div><span>戻る</span></div>
               <div><span>プレビュー</span></div>

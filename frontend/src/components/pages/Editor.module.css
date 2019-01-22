@@ -29,6 +29,11 @@
 
   font-size: 2em;
 }
+.chapters-btn {
+  box-shadow: 0 1px 3px black;
+  border-radius: 1em;
+  padding: 0.5em 1em;
+}
 .header-controls {
   display: flex;
   flex-flow: row nowrap;
