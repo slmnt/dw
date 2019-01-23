@@ -106,7 +106,9 @@ class UserCourse(models.Model):
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
+    users = models.IntegerField(default=0)
     createat = models.DateTimeField(default=timezone.now)
+    
 
 class UserCourseContent(models.Model):
     cid = models.IntegerField(default=-1)

@@ -53,7 +53,7 @@ import NotFound from './components/pages/NotFound';
 
 
 
-axios.defaults.baseURL = '/api/';
+axios.defaults.baseURL = '/api';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
