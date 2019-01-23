@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Editor.module.css';
 
+import TextEditor from '../TextEditor';
+import DirTree from '../DirTree';
+import TextBox from '../helper/TextBox';
+
 import 'highlight.js/styles/vs.css'
 import hljs from 'highlight.js';
 
@@ -365,49 +369,21 @@ class TestIFrame extends React.Component {
 }
 
 
-//
-class Editor extends Component {
-  constructor (props) {
+
+
+
+class SlideEditor extends React.Component {
+  constructor(props) {
     super(props);
+
     this.state = {
-      boxes: [
-        {name: "dwaok", pos: -1},
-        {name: "ytrgf", pos: -1},
-        {name: "cws", pos: -1},
-        {name: "cws", pos: -1},
-        {name: "cws", pos: -1},
-        {name: "cws", pos: -1},
-        {name: "cws", pos: -1},
-        {name: "cws", pos: -1},
-      ],
       boxHeight: 50,
       draggingBox: null, //参照
       boxInitialPos: null,
 
-      courseData: {
-        name: "",
-        chapters: [
-          {
-            name: "",
-            slides: [
-              {
-                name: "",
-                text: ""
-              }
-            ]
-          }
-        ],
-        files: [], // base 64?
-        directory: {}, // directory structure
-      },
-      currentChapter: 0,
     }
 
-    let i = 0;
-    for (let v of this.state.boxes) {
-      v.pos = i;
-      i++;
-    }
+    this.slideNameInput = React.createRef();
   }
   editorRef(element) {
     /* quill.js
@@ -474,43 +450,29 @@ class Editor extends Component {
         markdownShortcuts: {},
         syntax: hljs,
       },
-      placeholder: 'Write something...',
+      placeholder: 'ここに記入してください...',
       bounds: "#editorContainer",
       theme: 'snow'
     });
   }
-  moveBox(from, to) {
-    if (!this.getBox(to)) return;
 
-    let target = this.getBox(from);
-    let forward = from < to;
-    let p = forward ? -1 : 1;
-    for (let v of this.state.boxes) {
-      if (forward ? v.pos >= from && v.pos <= to : v.pos >= to && v.pos <= from) v.pos += p;
-    }
-    target.pos = to;
-    this.lastPos = to;
-    this.lastBox = target;
-
-    this.setState({boxes: this.state.boxes})
-  }
   getBoxPos(el, localX, localY) {
     let rect = el.getBoundingClientRect();
     let ly = localY - rect.y;
     return parseInt(ly / this.state.boxHeight);
   }
   getBox(pos) {
-    for (let v of this.state.boxes) {
+    if (!this.props.currentChapter) return;
+    for (let v of this.props.currentChapter.slides) {
       if (v.pos === pos) return v;
     }
   }
+
   onDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData('dummy', 123);
-    //draggingBox
-    //boxInitialPos
+
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
-    //console.log(pos);
 
     let box = this.getBox(pos);
     if (box) {
@@ -524,18 +486,252 @@ class Editor extends Component {
 
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
     if (pos != this.lastPos || this.draggingBox != this.lastBox) {
-      this.moveBox(this.draggingBox.pos, pos);
+      this.props.moveBox(this.draggingBox.pos, pos);
     }
   }
   onDragOver = (e) => {
     e.preventDefault();
   }
+
+  clickSlide = (slide) => {
+    this.props.openSlide(slide);
+  }
+  
+  setSlideName = (name) => {
+    this.slideNameInput.current.value = name;
+  }
+
+  render() {
+    return (
+      <div className={styles["slides-main-container"]}>
+        <div className={styles["slides-side-container"]}>
+          <div className={styles["slides-side"]} style={{position: "relative"}}
+            onDragOver={this.onDragOver}
+            onDragStart={this.onDragStart}
+            onDrop={this.onDrop}
+          >
+            {
+              this.props.currentChapter && this.props.currentChapter.slides.map((v,i) => {
+                return (<div key={i}
+                  className={styles["slides-side-element"]}
+                  draggable
+                  style={{
+                    height: this.state.boxHeight + "px",
+                    top: v.pos * this.state.boxHeight + "px",
+                    zIndex: this.draggingBox === v ? 1 : 0
+                  }}
+                  onClick={() => {this.clickSlide(v)}}
+                >
+                  <div style={{width: "100%", height: "100%"}}>
+                    {i}: {v.name}
+                  </div>
+                </div>);
+              })
+
+            }
+          </div>
+        </div>
+
+        <div className={styles["slides-main-container-2"]}>
+          <div className={styles["slides-main"]}>
+            <div id="editorContainer">
+              <div className={styles["slides-header"]}>
+                <input type="text" className={styles.textbox} ref={this.slideNameInput} className={styles["slides-name"]} />
+                <div className={styles["slides-header-control"]}>
+                  <div><div>Markdown</div></div>
+                </div>
+              </div>
+              <div ref={this.editorRef}>
+              </div>
+              {/*
+              <TestIFrame content={`
+                <html><body>
+                <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
+                <h1>hellonfj</h1>
+                <div class="po"></div>
+                </body></html>
+              `} />
+              */}
+            </div>
+            </div>
+          <div className={styles["slides-footer"]}>
+            FOOTEER
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+}
+
+class FileEditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+    }
+    this.window = React.createRef();
+  }
+
+  render() {
+    return (
+      <div
+          style={{
+          display: "flex",
+          lineHeight: "120%",
+          fontSize: "0.6em",
+          color: "#cccccc",
+          height: "100%",
+          width: "100%",
+          }}
+      >
+          <div
+              style={{
+                  flex: "0 0 auto",
+                  width: "200px",
+                  overflow: "hidden auto",
+                  borderRight: "1px solid #666666",
+              }}
+          >
+          {/*
+          */}
+          <DirTree dir={this.props.directory} openFile={path => {this.window.current.openTab(path);}} />
+
+          </div>
+          <div
+              style={{
+                  flex: "1 1 auto",
+                  height: "100%",
+                  width: "100%",      
+              }}
+          >
+              <TextEditor ref={this.window} />
+            {/*
+            */}
+
+          </div>
+      </div>
+    )
+  }
+}
+
+//
+class Editor extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      courseData: {
+        name: "testcoure",
+        chapters: [
+          {
+            name: "testhcapter",
+            slides: [
+              {
+                name: "sl whataa awana aw we 1   wd dwa",
+                text: "dwwdw",
+                pos: -1
+              },
+              {
+                name: "wish we could turn back time",
+                text: "dwwdw",
+                pos: -1
+              },
+              {
+                name: "to the good old days",
+                text: "dwwdw",
+                pos: -1
+              }
+            ]
+          }
+        ],
+        files: [], // base 64?
+        directory: { // directory structure
+          children: [
+            {
+              name: "src",
+              children: [
+                {
+                  name: "index.js"
+                }
+              ]
+            },
+            { name: "app.js" },
+            { name: "app1.js" },
+            { name: "app2.js" },
+            { name: "app3.js" },
+          ]
+        },
+      },
+      currentChapter: null,
+      currentSlide: null,
+      currentTab: 0,
+    }
+
+    this.courseNameInput = React.createRef();
+    this.chapterNameInput = React.createRef();
+
+    this.slideEditor = React.createRef();
+  }
+  componentDidMount() {
+    this.loadCourse(this.state.courseData); // テスト test
+  }
+
+
+  moveBox(from, to) {
+    if (!this.slideEditor.current.getBox(to)) return;
+
+    let target = this.slideEditor.current.getBox(from);
+    let forward = from < to;
+    let p = forward ? -1 : 1;
+    for (let v of this.state.currentChapter.slides) {
+      if (forward ? v.pos >= from && v.pos <= to : v.pos >= to && v.pos <= from) v.pos += p;
+    }
+    target.pos = to;
+    this.lastPos = to;
+    this.lastBox = target;
+
+    this.setState({courseData: this.state.courseData})
+  }
+
+  loadCourse(data) {
+    //
+    for (let ch of data.chapters) {
+      for (let i in ch.slides) {
+        ch.slides[i].pos = parseInt(i);
+      }
+    }
+
+    //
+    this.courseNameInput.current.value = this.state.courseData.name;
+
+    //
+    this.setState({
+      courseData: data
+    }, () => {
+      this.openChapter(this.state.courseData.chapters[0]);
+      this.openSlide(this.state.courseData.chapters[0].slides[0]);
+    })
+  }
+  openChapter = (chapter) => {
+    this.setState({currentChapter: chapter}, () => {
+      //this.chapterNameInput.current.value = chapter.name;
+    });
+  }
+  openSlide = (slide) => {
+    this.setState({currentSlide: slide}, () => {
+      this.slideEditor.current.setSlideName(slide.name);
+    });
+  }
+  openTab = (id) => {
+    this.setState({currentTab: id});
+  }
+
   render() {
     return (
       <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <div className={styles["course-name"]}>HEADER</div>
+            <input type="text" className={styles["course-name"]} ref={this.courseNameInput} />
             <div className={styles["chapters-btn"]}>
               チャプター一覧
             </div>
@@ -546,64 +742,20 @@ class Editor extends Component {
             </div>
           </div>
           <div className={styles.tablist}>
-            <div>dwa</div>
-            <div>dwa</div>
+            <div onClick={() => this.openTab(0)}>スライド</div>
+            <div onClick={() => this.openTab(1)}>コード (ファイル)</div>
           </div>
-          <div className={styles["slides-main-container"]}>
-            <div className={styles["slides-side"]} style={{position: "relative"}}
-              onDragOver={this.onDragOver}
-              onDragStart={this.onDragStart}
-              onDrop={this.onDrop}
-            >
-              {
-                this.state.boxes.map((v,i) => {
-                  return (<div key={i}
-                    className={styles["slides-side-element"]}
-                    draggable
-                    style={{
-                      height: this.state.boxHeight + "px",
-                      top: v.pos * this.state.boxHeight + "px",
-                      transition: "top 0.5s",
-                      backgroundColor: "blue",
-                      zIndex: this.draggingBox === v ? 1 : 0
-                    }}
-                  >
-                    <div style={{backgroundColor: "red", width: "100%", height: "100%"}}>
-                      {v.name}
-                    </div>
-                  </div>);
-                })
+          <div className={styles["editor-container"]}>
+            <div style={{backgroundColor: "var(--bg-color)", zIndex: "0"}}>
+            </div>
+            <div style={{zIndex: this.state.currentTab === 0 ? "1" : "-1"}} >
+              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} />
+            </div>
+            <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
+              <FileEditor directory={this.state.courseData.directory} />
+            </div>
+          </div>
 
-              }
-            </div>
-            <div className={styles["slides-main-container-2"]}>
-              <div className={styles["slides-main"]}>
-                <div id="editorContainer">
-                  <div style={{
-                    height: "2em",
-                  }}>
-                    <div>
-                      <div>name</div>
-                      <div>Markdown</div>
-                      <div>preview</div>
-                    </div>
-                  </div>
-                  <div ref={this.editorRef}>
-                  </div>
-                  <TestIFrame content={`
-                    <html><body>
-                    <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
-                    <h1>hellonfj</h1>
-                    <div class="po"></div>
-                    </body></html>
-                  `} />
-                </div>
-                </div>
-              <div className={styles["slides-footer"]}>
-                FOOTEER
-              </div>
-            </div>
-          </div>
         </div>
 
       </div>
