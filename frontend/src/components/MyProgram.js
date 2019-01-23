@@ -185,11 +185,13 @@ class Myprogram extends Component {
                         ))}   
                         </tbody>
                         </table>
-                        <Divider className="loading" />
+                        <Divider/>
                         </div>
                     )
                 }else{
-                    return <Loading/>
+                    return <div className="loading">
+                        <Loading/>
+                        </div>
                 }
                 })()}
 
@@ -199,5 +201,5 @@ class Myprogram extends Component {
   	}   
 }
 
-Myprogram.PropTypes = PropTypes;
+Myprogram.propTypes = {};
 export default withStyles(styles)(Myprogram);

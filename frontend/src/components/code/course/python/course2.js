@@ -15,6 +15,6 @@ class course2 extends Component {
   	}
 }
 
-course2.PropTypes = PropTypes;
+course2.propTypes = {};
 
 export default course2;

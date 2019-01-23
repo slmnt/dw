@@ -1,0 +1,32 @@
+.dir-window {
+  height: 100%;
+  background-color: rgb(37, 37, 38);
+}
+.dir-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+}
+.dir-label {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  line-height: 1.6em;
+  /*
+  padding: 0.2em;
+  height: 100px;
+  */
+}
+.dir-label:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.dir-label-image {
+  width: 1.6em;
+  margin-right: 0.2em;
+  background-size: 1.6em;
+  background-position: 0px center;
+  background-repeat: no-repeat;
+}
+

@@ -12,6 +12,6 @@ class Qanda extends Component {
   	}
 }
 
-Qanda.PropTypes = PropTypes;
+Qanda.propTypes = {};
 
 export default Qanda;

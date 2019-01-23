@@ -21,13 +21,24 @@ from django.contrib.sessions.models import Session
 
 from django.utils import timezone
 from django.http import HttpResponse
+from django.core.mail import send_mail
 
 from datetime import datetime
 import subprocess
+from Crypto.Hash import SHA256
 from back.settings import BASE_DIR
 # Create your views here.
 
 STATIC = BASE_DIR + '//static//'    
+"""
+send_mail(
+    'Subject here',
+    'Here is the message.',
+    'from@example.com',
+    ['to@example.com'],
+    fail_silently=False,
+)
+"""
 
 #required data
 # 'uid' 'pwd'
@@ -72,7 +83,7 @@ class UserAuthentic(APIView):
 class CreateUser(APIView):
 
     def post(self, request):
-        print(request.data)
+        #print(request.data)
         select = request.META['HTTP_ACCEPT'].split(',')[0]
         if select == 'application/json':
             #check username
@@ -95,6 +106,26 @@ class CreateUser(APIView):
             except:
                 pass
             new_user.save()
+            try:
+                u = User.objects.get(username=uname)
+                h = SHA256.new()
+                h.update(uname.encode('utf-8'))
+                #print(uname)
+                code = h.hexdigest()
+                c = CertiList(name=u,code=str(code))
+                c.save()
+                print(u)
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            body = "http://localhost:3000/checkmail/" + code + "/"
+            send_mail(
+                'mail check',
+                str(body),
+                'miniprog2018@gmail.com',
+                [str(email)],
+                fail_silently=False,
+            )
             return Response(data=uname,status=status.HTTP_200_OK)
         else:
             return redirect("http://localhost:3000")
@@ -512,4 +543,50 @@ class Getuser(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CheckMailing(viewsets.ModelViewSet):
+
+    def get(self,request):
+        return Response(status=status.HTTP_200_OK)
+
+    def post(self, request):
+        crypt = request.data['code']
+        try:
+            c = CertiList.objects.get(code=crypt)
+            c.delete()
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
+
+class GetUserInfo(viewsets.ModelViewSet):
+
+    def get(self,request):
+        uid = UserInfo.objects.all()
+        s = UserInfoSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+class GetUserCourse(viewsets.ModelViewSet):
+
+    def get(self,request):
+        print("run")
+        uid = UserCourse.objects.all()
+        s = UserCourseSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
+
+class GetUserCourseContent(viewsets.ModelViewSet):
+
+    def get(self,request):
+        uid = UserCourseContent.objects.all()
+        s = UserCourseContentSerializer(uid,many=True) 
+        return Response(data=s.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        return Response(status=status.HTTP_200_OK)
 

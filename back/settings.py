@@ -81,6 +81,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'back.wsgi.application'
 
+#Email configure
+#DONT CHANGE THIS SETTING
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'miniprog2018@gmail.com'
+EMAIL_HOST_PASSWORD = 'kobedenshi1'
+EMAIL_PORT = 587
+
 # Database
 #/2.1/ref/settings/#databases
 

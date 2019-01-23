@@ -13,6 +13,6 @@ class Submit extends Component {
   	}
 }
 
-Submit.PropTypes = PropTypes;
+Submit.propTypes = {};
 
 export default Submit;

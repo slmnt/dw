@@ -1,0 +1,83 @@
+
+
+.main {
+  position: relative;
+  top: 0;
+  bottom: auto;
+  left: 0;
+  
+  height: 2em;
+  padding: 0.5em 1em;
+
+  background-color: #ffffff;
+  color: #1abc9c;
+  text-shadow: 1px 1px 1px black;
+  box-shadow: 0px 2px 10px black;
+
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.main > div {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  margin-left: 1em;
+
+  font-size: 1.5em;
+  color: #1abc9c;
+}
+
+.mobileButton {
+  position: relative;
+  border-radius: 100%;
+  width: 2em;
+  height: 2em;
+
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+.mobileButton:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: background-color 0.5s;
+}
+
+.hamburger {
+  fill: currentColor;
+  width: 80%;
+  height: 80%;
+  display: inline-block;
+  font-size: 24px;
+  transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+
+.rightMenu {
+}
+.rightMenu > div:hover {
+  color: #14836d;
+  cursor: pointer;
+}
+.rightMenu > div + div {
+  margin-left: 1em;
+}
+
+
+.main a {
+  color: #14836d;
+  cursor: pointer;
+  text-decoration: none;
+}

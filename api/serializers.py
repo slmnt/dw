@@ -32,7 +32,6 @@ class TestBoardSerializer(serializers.ModelSerializer):
         model = Testboard
         fields = ('__all__')
 
-
 class CodeSerializer(serializers.ModelSerializer):
     codetype = serializers.SlugRelatedField(read_only=True,slug_field='description')
     auth = serializers.StringRelatedField()
@@ -61,3 +60,39 @@ class CodeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Code
         fields = ('id','title', 'auth', 'codetype', 'createat', 'count', 'comments')
+
+class CertiListSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField()
+    
+    class Meta:
+        model = CertiList
+        fields = ('__all__')
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    root = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserInfo
+        fields = ('__all__')
+
+class UserCourseSerializer(serializers.ModelSerializer):
+    root = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserCourse
+        fields = ('__all__')
+
+class UserCourseContentSerializer(serializers.ModelSerializer):
+    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
+    
+    class Meta:
+        model = UserCourseContent
+        fields = ('__all__')
+
+class AdsSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = Ads
+        fields = ('__all__')
+

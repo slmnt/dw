@@ -1,26 +1,32 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import { withRouter } from 'react-router'
+import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import axios from 'axios';
+
+import './App.css';
+import {login, logout} from './modules/main';
+import store from './modules/store';
+import MainContext from './contexts/main';
+
+// UI
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { Route } from 'react-router-dom';
-import { withRouter } from 'react-router'
-import axios from 'axios';
 import { ListItem } from '@material-ui/core';
-import { Scrollbars } from 'react-custom-scrollbars';
-import Button from '@material-ui/core/Button';
-import './App.css'
 
+import { Scrollbars } from 'react-custom-scrollbars';
+
+//
 //import Right from './components/Inter';
+import Navbar from './components/Navbar';
 import CreateU from './components/CreateUser';
 import Main from './components/Main'; 
 import Right from './components/Mylayout';
@@ -33,49 +39,22 @@ import Boardid from './components/Boardget'
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
 import Tech from './components/Techinfo'
+import Mail from './components/Email_certify'
+import CourseS from './components/CourseSearch'
+import CourseE from './components/Editor'
+
+
+
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+
+
 
 const drawerWidth = 200;
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  appFrame: {
-    height: '100%',
-    width: '100%',
-    zIndex: 1,
-    overflow: 'hidden',
-    display: 'flex',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-  },
-  appBar: {
-    position: 'absolute',
-    backgroundColor: '#0b409c',
-    color: '#ffe867',
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  'appBarShift-left': {
-    marginLeft: drawerWidth,
-  },
-  'appBarShift-right': {
-    marginRight: drawerWidth,
-  },
-  menuButton: {
-    marginLeft: 6,
-    marginRight: 10,
-  },
   hide: {
     display: 'none',
   },
@@ -89,97 +68,76 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  'content-left': {
-    marginLeft: -drawerWidth,
-  },
-  'content-right': {
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  'contentShift-left': {
-    marginLeft: 0,
-  },
-  'contentShift-right': {
-    marginRight: 0,
-  },  
-  appbarhis:{
-    position: 'relative',
-    left: -10
-  },
-  logoutButton: {
-    position: 'absolute',
-    left: '92%'
-  },
-  test: {
-    position: 'relative',
-    // top: -25,
-    left:-1,
-    height: "100%",
-  },
+  }
 });
+
+
+let pages = {
+  "mypage": ""
+};
+
+class ProtectedRoute extends React.Component {
+  render() {
+    const { children, render, component, ok, redirectTo, ...props } = this.props;
+    const to = redirectTo;
+    return (
+      <React.Fragment>
+        {
+          ok ?
+            <Route {...props} render={render} component={component} />
+          :
+            <Route {...props} render={() => <Redirect to={to} />} />
+        }
+      </React.Fragment>
+    )
+  }
+}
 
 class App extends React.Component {
   state = {
-    open: false,
-    anchor: 'left',
-    login: false,
-    uid: '',
-    current: '',
+    //uid: '',
     language: 'python',
-    bgm: true,
-    bid: 'GugsCdLHm-Q',
+    //bgm: true,
+    //bid: 'GugsCdLHm-Q',
+    isDrawerOpen: false,
+
+    data: {
+      isLoggedIn: false,
+      uid: '',
+      username: '',
+    }
   };
 
   constructor(props){
     super(props)
-    
-    this.clicked = this.clicked.bind(this);
-    this.statecallback = this.statecallback.bind(this)
-    this.drop = this.drop.bind(this)
-    this.drawercloseer = this.drawercloseer.bind(this)
-    this.testprops = this.testprops.bind(this)
-    this.gomypage = this.gomypage.bind(this)
-    this.gomypagechild = this.gomypagechild.bind(this)
-    this.setlen = this.setlan.bind(this)
-    this.getlen = this.getlan.bind(this)
-    this.hideplayer = this.hideplayer.bind(this)
-    // console.log(props.history.location.pathname)
 
+    this.drawer = React.createRef();
+
+    // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
-  setlan(l){
+  openDrawer = e => {
+    /*
+        let rect = element.getBoundingClientRect();
+        element.style.width = rect.width + "px";
+        element.style.height = rect.height + "px";
+    */
+    this.setState({isDrawerOpen: true});
+  }
+  closeDrawer = e => {
+    this.setState({isDrawerOpen: false});
+  }
+  getComponentSize(com) {
+    let dom = ReactDOM.findDOMNode(com);
+    return dom.getBoundingClientRect();
+  }
+
+  setlan = (l) => {
     this.setState({ language: l})
   }
-
-  getlan(){
+  getlan = () => {
     return this.state.language
-  }
-
-  drop(){
-    axios.defaults.xsrfCookieName = 'csrftoken';
-    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-    axios.get('/api/logout/').then(response => {
-      this.setState({
-        login: false
-      })
-      this.clicked('/')
-    })
   }
   
   componentWillMount(){
@@ -188,40 +146,46 @@ class App extends React.Component {
       bid: localStorage.getItem("bid")
     })
 
-    axios.defaults.xsrfCookieName = 'csrftoken';
-    axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
     // user platform check
     // console.log(window.navigator.platform)
-    if(this.props.history.location.pathname === '/'){
-      axios.get('/api/cookieauth/').then((response) => {
-        if (response.status === 200){
-          this.setState({
-            uid: response.data,
-            login: true
-          })
+    let isRoot = this.props.history.location.pathname === '/';
+    axios.get('/api/cookieauth/').then((response) => {
+      if (response.status === 200){
+        this.setState({
+          uid: response.data,
+          login: true
+        })
+        if (isRoot) {
           sessionStorage.setItem('key','test')
-          
+
           this.clicked('mypage')
-        } else {
-          this.clicked('/') 
         }
-      }).catch((e) => {
-  
-      })
-    }
-    else {
-      axios.get('/api/cookieauth/').then((response) => {
-        if (response.status === 200){
-          this.setState({
-            uid: response.data,
-            login: true
-          })
-        }
-      }).catch((e) => {
-      })      
-    }
+        
+      } else {
+        if (isRoot) this.clicked('/') 
+      }
+    }).catch((e) => {
+
+    })
   }
+  componentDidMount(){
+  }
+  componentDidUpdate(){
+  }
+  componentWillUnmount(){
+  }
+  componentDidCatch(error, info){
+    console.log('error')
+  }
+
+
+  logIn() {
+
+  }
+  logOut() {
+
+  }
+
 
   statecallback = (datafromchild) => {
     this.setState({
@@ -234,13 +198,8 @@ class App extends React.Component {
     // console.log(datafromchild)
   }
 
-  drawercloseer(){
-    if(this.state.open){
-      this.handleDrawerClose()
-    }
-  }
 
-  hideplayer(){
+  hideplayer = () => {
     
     if(this.state.bgm){
       this.setState({
@@ -255,204 +214,111 @@ class App extends React.Component {
     // reload set bid and refresh page
     // localStorage.setItem('bid', 'bHQqvYy5KYo')
     // window.location.reload();
-}
-
-
-  handleDrawerOpen = () => {
-    // console.log('open')
-    this.setState({ open: true });
-  };
-
-  handleDrawerClose = () => {
-    // console.log('close')
-    this.setState({ open: false });
-  };
-
-  handleChangeAnchor = event => {
-    this.setState({
-      anchor: event.target.value,
-    });
-  };
-  componentDidCatch(error, info){
-    console.log('error')
   }
+
+
+
   clicked(e){
     this.setState({current: e})
     this.props.location.pathname = '/' + e
     this.props.history.push(e)
-  }
 
-  gomypage(e){
-
-    if(this.state.login){
-      e = 'mypage'
-    }
-    else{
-      e = 'login'
-    }
-
-    this.setState({current: e})
-    this.props.location.pathname = '/' + e
-    this.props.history.push(e)
-  }
-
-  gomypagechild(e){
-
-    this.setState({current: e})
-    this.props.location.pathname = '/' + e
-    this.props.history.push(e)
-  }
-
-  testprops(){
-    // console.log(this.state.current)
+    //
+    this.closeDrawer();
   }
 
 
   render() {
     // update rendering
     const { classes, theme } = this.props;
-    const { anchor, open } = this.state;
-
-    const contents = (
-      <div>
-      {/*
-      setting react router route
-      <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-      */}
-        <div className={classNames({
-          'hide': this.state.bgm,
-          'player': true
-        })}>
-        <Back id={this.state.bid}/>
-        </div>
-      <Route exact path="/"  render={() => <Main />}/>
-      <Route path="/right" component={Right} />
-      <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-      <Route path="/Board/:id" component={Boardid}/>
-      <Route path="/main" component={Main}/>
-      <Route path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlen}/>} />
-      <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlen} set={this.setlen}/>}/>
-      <Route path="/three" render={(props) => <Three {...props}/>} />
-      <Route path="/login"  render={() => <Login test={this.statecallback} />}/>
-      <Route path="/createuser"  component={CreateU}/>
-      <Route path="/tech"  component={Tech}/>
-      </div>
-    );
-
-    const planed = (
-      <Drawer
-        variant="persistent"
-        anchor={anchor}
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={this.handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-      </Drawer>
-    );
-
-    const drawer = (
-      <Drawer
-        variant="persistent"
-        anchor={anchor}
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={this.handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Scrollbars style={{ height: "90vh" }}>        
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
-        <Divider />
-        <List><ListItem button><Typography>help</Typography></ListItem></List>
-        </Scrollbars>
-      </Drawer>
-    );
-
-    const logout = (
-      <Button color="inherit" onClick={this.drop}>Logout</Button>
-    );
-
-    const login = (
-      <Button color="inherit" onClick={e => this.clicked('login')}>Login</Button>
-    );
-
-    let after = null;
-    let before = null;
-    let log = null
-
-    if(this.state.login){
-      log = logout
-    } else{
-      log = login
-    }
-    if (anchor === 'left') {
-      before = drawer;
-    } else {
-      after = drawer;
-    }
 
     return (
-      <div className={classes.root}>
-        <div className={classes.appFrame}>
-          <AppBar
-            position='sticky'
-            className={classNames(classes.appBar, {
-              [classes.appBarShift]: open,
-              [classes[`appBarShift-${anchor}`]]: open,
-            })}
-          >
-            <Toolbar disableGutters={!open}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(classes.menuButton, open && classes.hide)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography className={classes.appbarhis} color="inherit" noWrap>
-                {this.state.current}
-              </Typography>
-              <div className={classes.logoutButton}>
-                {log}
+      <div className="pageContainer">
+        <div className="page">
+          <MainContext.Provider value={this.state.data}>
+
+            <Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
+            </Navbar>
+            
+            <div
+              onClick={this.closeDrawer}
+              style={{
+                display: this.state.isDrawerOpen ? "block" : "none"
+              }}
+              className="mobileMenuBg">
+            </div>
+
+
+            <Drawer
+              variant="persistent"
+              className="mobileMenu"
+              style={{
+                left: this.state.isDrawerOpen ? 0 : -1000 + "px"
+              }}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              ref={this.drawer}
+            >
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.closeDrawer}>
+                  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
               </div>
-            </Toolbar>
-          </AppBar>
-          {before}
-          <main
-            onClick={this.drawercloseer}
-            className={classNames(classes.content, classes[`content-${anchor}`], {
-              [classes.contentShift]: open,
-              [classes[`contentShift-${anchor}`]]: open,
-            })}
-          >
-            <div className={classes.drawerHeader} />
-              <div className={classes.test}>
-              {contents}
-              </div>
-          </main>
-            {after}
+              <Scrollbars style={{ height: "90vh" }}>        
+                <Divider />
+                <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
+                <Divider />
+                <List><ListItem button onClick={e => this.setState({data: {isLoggedIn: true}})}><Typography>help</Typography></ListItem></List>
+              </Scrollbars>
+            </Drawer>
+            
+            
+            <main className="content">
+              <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+                {/*
+                setting react router route
+                <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
+                */}
+                {/*
+                <div className={classNames({
+                  'hide': this.state.bgm,
+                  'player': true
+                })}>
+                  <Back id={this.state.bid}/>
+                </div>
+                */}
+                <Switch>
+                  <Route exact path="/" render={() => <Main />}/>
+                  <Route path="/main" render={() => <Main />}/>
+                  <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+                  <Route path="/Board/:id" component={Boardid}/>
+                  <Route path="/certify/:code" component={Mail}/>
+                  <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
+                  <Route path="/three" render={(props) => <Three {...props}/>} />
+                  <Route path="/createuser"  component={CreateU}/>
+                  <Route path="/tech"  component={Tech}/>
+                  <Route path="/courseSearch"  component={CourseS}/>
+                  <Route path="/course/:id/edit"  component={CourseE}/>
+                  <Route path="/right" component={Right}/>
+                  <ProtectedRoute path="/login" ok={!this.state.data.isLoggedIn} redirectTo="/right" render={() => <Login test={this.statecallback} />}/>
+                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+                </Switch>
+              </Scrollbars>
+            </main>
+
+
+          </MainContext.Provider>
         </div>
       </div>
     );

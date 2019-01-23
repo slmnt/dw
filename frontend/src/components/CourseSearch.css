@@ -1,0 +1,19 @@
+.Sloading{
+    position: fixed;
+    left: 47vw;
+    top: 50vh;
+}
+.coursesearchbody{
+    font-size   : 100%;
+    position: relative;
+    left: 30vw;
+}
+
+.Sbuttom{
+    text-decoration: none;
+    color: black;
+}
+
+.CourseSearchbody{
+    width: 50vw;
+}

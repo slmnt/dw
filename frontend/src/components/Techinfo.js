@@ -3,40 +3,40 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Techinfo.css'
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import { Grid } from '@material-ui/core';
 import { Scrollbars } from 'react-custom-scrollbars';
-import { Link } from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-
+import 'react-quill/dist/quill.snow.css';
 
 class Tech extends Component {
     state = {
         text: '',
         key: false,
-        test_data: ['testssfsd','tststest','testsetestsete']
+        open: false
     }
 
     constructor(props) {
         super(props);
+
         this.handleChange = this.handleChange.bind(this)    
         this.check = this.check.bind(this)
+        this.output = React.createRef()
+        this.onClick = this.onClick.bind(this)
     }
     
 
     componentDidMount(){
         document.addEventListener('keydown',(e) => this.check(e))
 
-        axios.get('/api/getauth/').then(response => {
-            this.setState({
-                key: true
-            })
-        }).catch((e) =>{            
-            console.log(e)
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+        //getusercourse
+        //getuser
+        //getusercoursec
+        axios.get('/api/getusercourse/').then(response => {
+            console.log(response)
         })
 
-
+    
         // window.setInterval(this.alram(socket),1000)
     }
 
@@ -56,8 +56,25 @@ class Tech extends Component {
 
     handleChange(value) {
         this.setState({ text: value })
+        //this.output.current.innerHTML = this.state.text
+        //console.log(this.output)
     }
      
+    onClick(e){
+        var ad = document.getElementById('ad')
+        console.log(ad)
+        if(this.state.open){
+            this.setState({open: false})
+            ad.style.transform += 'translateX(-100px)'
+        }
+        else{
+            ad.style.transform += 'translateX(100px)'
+            this.setState({open: true})
+        }
+
+
+    }
+
     modules = {
         toolbar: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -80,15 +97,15 @@ class Tech extends Component {
         ]
     }   
 
-    render() {
 
+    render() {
         const editor =  <ReactQuill 
                             modules={this.modules}
                             className="Tech_editor" 
                             value={this.state.text} 
                             onChange={this.handleChange} />
 
-        let edd = null;
+        let edd = editor;
 
         if(this.state.key)
             edd = editor
@@ -96,21 +113,15 @@ class Tech extends Component {
         return (
             <Scrollbars  disablehorizontalscrolling="true" style={{ width: "100vw", height: "95vh" }}>
             <div className="body">
-                <div className="header">
-                    <h1 className="title">Mini Prog</h1>
-                </div>
-                <Grid container direction="row" justify="center" text-align="center" className = "edd">
-                    <Grid item xs = {8} className="edd">
-                        {edd}
-                    </Grid>
-                </Grid> 
-                    <div className="form">
-                        <form>
-                            <input name="title" type="text" placeholder="タイトル" defaultValue="" /><br/>
-                            <textarea name="desc" placeholder="記事を入力" defaultValue=""></textarea><br/>
-                            <button type="submit">投稿</button>
-                        </form>
-                    </div>
+                {edd}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <a className="submit" href="javascript:void(0)" onClick={(e) => this.onClick(e)} >投稿</a>
+                <br/>
+                <div id="ad" className="tech_test">広告</div>
 
             </div>
             </Scrollbars>
@@ -118,6 +129,6 @@ class Tech extends Component {
     }
 }
 
-Tech.PropTypes = PropTypes;
+Tech.propTypes = {};
 
 export default Tech;
