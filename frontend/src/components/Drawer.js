@@ -16,10 +16,10 @@ class Drawer extends Component {
             items: [
                 // [name, url] or [name & url]
                 ['トップ', '/'],
-                ['text editor (right)', 'right'],
-                ['mypage'],
-                ['board'],
-                ['courseSearch'],
+                ['text editor (right)', '/right'],
+                ['mypage','/mypage'],
+                ['board', '/board'],
+                ['courseSearch','/courseSearch'],
                 ['test course get', '/course/123/'],
                 ['test course edit', '/course/123/edit'],
                 ['test'],
