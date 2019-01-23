@@ -62,7 +62,6 @@ Get_User_Course_content = GetUserCourseContent.as_view({
     'post': 'post'
 })
 
-
 urlpatterns = [
     path('authentic/',UserAuthentic.as_view()),
     path('createuser/',CreateUser.as_view()),
@@ -85,5 +84,9 @@ urlpatterns = [
     path('checkmail/',check_mail_code),
     path('getuser/',Get_User),
     path('getusercourse/',Get_User_Course),
-    path('getusercoursec/',Get_User_Course_content)
+    path('getusercoursec/',Get_User_Course_content),
+    path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
+    path('getusercourseid/<id>/<num>',GetUserCourseContentid.as_view()),
+    path('getusercoursecomment/<id>',GetUserCourseComments.as_view())
+
 ]

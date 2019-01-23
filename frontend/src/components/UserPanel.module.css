@@ -1,0 +1,29 @@
+.main {
+  height: 4em;
+  width: 20em;
+  font-size: 1em;
+
+  display: flex;
+
+  box-shadow: 0 1px 3px black;
+  border-radius: 0.5em;
+}
+.info {
+  flex: 1 1 auto;
+}
+.name {
+  font-size: 1em;
+  color: indigo;
+}
+.description {
+  font-size: 0.8em;
+  color: darkgray;
+}
+.avatar {
+  flex: 0 0 auto;
+
+  height: 4em;
+  width: 4em;
+  border-radius: 100%;
+}
+

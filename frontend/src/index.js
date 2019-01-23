@@ -1,26 +1,24 @@
 // using ES6 modules
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 
-
 import App from './App';
-class Index extends Component {
+import history from './modules/history';
 
-  render() {
-    return(
-      <CookiesProvider>
-        <App />
-      </CookiesProvider>
-    );
-  }
+function Index(props) {
+  return (
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
+  );
 }
 
 render(
-  <BrowserRouter>
-      <Index />
-  </BrowserRouter>
+  <Router history={history}>
+    <Index />
+  </Router>
   ,
   document.getElementById('root')
 );

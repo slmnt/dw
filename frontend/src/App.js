@@ -4,52 +4,58 @@ import { withRouter } from 'react-router'
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import queryString from 'query-string';
 import axios from 'axios';
+import history from './modules/history';
+
 
 import './App.css';
-import {login, logout} from './modules/main';
-import store from './modules/store';
-import MainContext from './contexts/main';
+import {MainContext} from './contexts/main';
 
 // UI
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { ListItem } from '@material-ui/core';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-//
-//import Right from './components/Inter';
+// parts
 import Navbar from './components/Navbar';
-import CreateU from './components/CreateUser';
-import Main from './components/Main'; 
-import Right from './components/Mylayout';
-import Boards from './components/MyProgram';
-import Three from './components/three';
-import Login from './components/Login';
-import Mypage from './components/mypage';
-import Codeman from './components/code/codeman';
-import Boardid from './components/Boardget'
+import Drawer from './components/Drawer'
+import Footer from './components/Footer';
+import Three from './components/Three';
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
-import Tech from './components/Techinfo'
-import Mail from './components/Email_certify'
-import CourseS from './components/CourseSearch'
-import CourseE from './components/Editor'
+//import Right from './components/Inter';
+
+// pages
+import Main from './components/pages/Main'; 
+import Login from './components/pages/Login';
+import CreateUser from './components/pages/CreateUser';
+import MyPage from './components/pages/MyPage';
+
+import Right from './components/pages/MyLayout';
+import Boards from './components/pages/MyProgram';
+import Codeman from './components/code/codeman';
+import Boardid from './components/pages/BoardGet'
+import Tech from './components/pages/Techinfo'
+import Mail from './components/pages/EmailCertify'
+
+import CourseEditor from './components/pages/Editor'
+import CourseSearch from './components/pages/CourseSearch'
+import CourseGet from './components/pages/CourseGet'
+import CourseInfo from './components/pages/CourseInfo'
+
+import About from './components/pages/About';
+import GettingStarted from './components/pages/GettingStarted';
+import Terms from './components/pages/Terms';
+import Privacy from './components/pages/Privacy';
+import NotFound from './components/pages/NotFound';
 
 
 
 
+axios.defaults.baseURL = '/api/';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-
 
 
 const drawerWidth = 200;
@@ -77,19 +83,29 @@ let pages = {
 };
 
 class ProtectedRoute extends React.Component {
+  setParam(url, params) {
+    if (this.props.processRedirect) {
+      // props.path から出る際, ?redirect= があれば移動
+      const parsed = queryString.parse(history.location.search);
+      if (parsed.redirect) return parsed.redirect;
+    }
+    if (this.props.redirectBack) {
+      // redirect する際, ?redirect= に元の path (props.path) を格納
+      console.log(history.location, history)
+      params = params || [];
+      params.redirect = history.location.pathname;
+    }
+    if (!params) return url;
+    return url + "?" + queryString.stringify(params);
+  }
   render() {
-    const { children, render, component, ok, redirectTo, ...props } = this.props;
+    const { children, render, component, ok, redirectTo, processRedirect, redirectBack, params, ...props } = this.props;
     const to = redirectTo;
-    return (
-      <React.Fragment>
-        {
-          ok ?
-            <Route {...props} render={render} component={component} />
-          :
-            <Route {...props} render={() => <Redirect to={to} />} />
-        }
-      </React.Fragment>
-    )
+    if (ok) {
+      return <Route {...props} render={render} component={component} />;
+    } else {
+      return <Route {...props} render={() => <Redirect to={this.setParam(to, params)} />} />;
+    }
   }
 }
 
@@ -99,35 +115,32 @@ class App extends React.Component {
     language: 'python',
     //bgm: true,
     //bid: 'GugsCdLHm-Q',
-    isDrawerOpen: false,
-
     data: {
       isLoggedIn: false,
       uid: '',
       username: '',
+      login: this.login,
+      drop: this.drop
     }
   };
 
   constructor(props){
-    super(props)
+    super(props);
 
     this.drawer = React.createRef();
+
+    this.state.data = {
+      isLoggedIn: false,
+      uid: '',
+      username: '',
+      login: this.login,
+      drop: this.drop
+    };
 
     // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
-  openDrawer = e => {
-    /*
-        let rect = element.getBoundingClientRect();
-        element.style.width = rect.width + "px";
-        element.style.height = rect.height + "px";
-    */
-    this.setState({isDrawerOpen: true});
-  }
-  closeDrawer = e => {
-    this.setState({isDrawerOpen: false});
-  }
   getComponentSize(com) {
     let dom = ReactDOM.findDOMNode(com);
     return dom.getBoundingClientRect();
@@ -146,29 +159,10 @@ class App extends React.Component {
       bid: localStorage.getItem("bid")
     })
 
-    // user platform check
-    // console.log(window.navigator.platform)
-    let isRoot = this.props.history.location.pathname === '/';
-    axios.get('/api/cookieauth/').then((response) => {
-      if (response.status === 200){
-        this.setState({
-          uid: response.data,
-          login: true
-        })
-        if (isRoot) {
-          sessionStorage.setItem('key','test')
 
-          this.clicked('mypage')
-        }
-        
-      } else {
-        if (isRoot) this.clicked('/') 
-      }
-    }).catch((e) => {
-
-    })
   }
   componentDidMount(){
+    //this.updateLoginState()
   }
   componentDidUpdate(){
   }
@@ -179,23 +173,89 @@ class App extends React.Component {
   }
 
 
-  logIn() {
-
+  login = (name, password, callback) => {
+    //console.log(this.state.password)
+    // send allowed true reject false
+    axios.post('authentic/',{
+      uid: name,
+      pwd: password
+    }).then(response => {
+        console.log(response);
+        // console.log(response)
+        if(response.status === 200){
+          this.state.data.isLoggedIn = true;
+          this.state.data.uid = name;
+          
+          this.setState({
+            data: this.state.data
+          }, () => {
+            if (callback) callback();
+            console.log("logged in as: ", this.state.data.uid);
+          });
+          
+        }else{
+        }
+    }).catch(e => {
+      // console.log(e)
+    });
   }
-  logOut() {
+  loginWithCookie = () => {
+    // user platform check
+    // console.log(window.navigator.platform)
+    let isRoot = this.props.history.location.pathname === '/';
+    axios.get('cookieauth/').then((response) => {
+      if (response.status === 200){
+        this.state.data.isLoggedIn = true;
+        this.state.data.uid = response.data;
+        this.setState({ data: this.state.data });
 
-  }
+        console.log("logged in as: ", this.state.data.uid);
+        if (isRoot) {
+          //sessionStorage.setItem('key','test')
+        }
+        
+      } else {
+        //fail
+      }
+    }).catch((e) => {
 
-
-  statecallback = (datafromchild) => {
-    this.setState({
-      login: datafromchild.login,
-      uid:  datafromchild.uid
     })
-    if(datafromchild.login === true){
-      this.clicked('mypage') 
-    } 
-    // console.log(datafromchild)
+  }
+  logout = () => {
+
+  }
+  updateLoginState = () => {
+    //this.loginWithCookie();
+  }
+  checkLoginState = () => {
+    /*
+      this.state.data.isLoggedIn = false;
+      this.state.data.uid = '';
+    */
+  }
+  clearLoginState = () => {
+    this.state.data.isLoggedIn = false;
+    this.state.data.uid = '';
+    this.setState({ data: this.state.data });
+  }
+  drop = () => {
+    axios.post('dropliveuser/',{
+        uid: this.state.name,
+    }).then(response => {
+        // console.log(response)
+        this.removeLoginState();
+    }).catch(e => {
+        // console.log(e)
+    });
+  }
+
+  createUser = (data) => {
+    axios.post('createuser/', data).then(response => {
+      console.log(response)
+    })
+  }
+  deleteUser = () => {
+
   }
 
 
@@ -216,20 +276,9 @@ class App extends React.Component {
     // window.location.reload();
   }
 
-
-
-  clicked(e){
-    this.setState({current: e})
-    this.props.location.pathname = '/' + e
-    this.props.history.push(e)
-
-    //
-    this.closeDrawer();
-  }
-
-
   render() {
     // update rendering
+    //<Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
     const { classes, theme } = this.props;
 
     return (
@@ -237,53 +286,11 @@ class App extends React.Component {
         <div className="page">
           <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.openDrawer()}>
+            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
             </Navbar>
             
-            <div
-              onClick={this.closeDrawer}
-              style={{
-                display: this.state.isDrawerOpen ? "block" : "none"
-              }}
-              className="mobileMenuBg">
-            </div>
+            <Drawer ref={this.drawer} />
 
-
-            <Drawer
-              variant="persistent"
-              className="mobileMenu"
-              style={{
-                left: this.state.isDrawerOpen ? 0 : -1000 + "px"
-              }}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ref={this.drawer}
-            >
-              <div className={classes.drawerHeader}>
-                <IconButton onClick={this.closeDrawer}>
-                  {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-              </div>
-              <Scrollbars style={{ height: "90vh" }}>        
-                <Divider />
-                <List><ListItem button onClick={e => this.clicked('three')}><Typography>three</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.clicked('right')}><Typography>right</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.clicked('main')}><Typography>main</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.gomypage('mypage')}><Typography>mypage</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.clicked('Boards')}><Typography>Boards</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.hideplayer()}><Typography>BGM</Typography></ListItem></List>
-                <Divider />
-                <List><ListItem button onClick={e => this.setState({data: {isLoggedIn: true}})}><Typography>help</Typography></ListItem></List>
-              </Scrollbars>
-            </Drawer>
-            
-            
             <main className="content">
               <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
@@ -299,25 +306,37 @@ class App extends React.Component {
                 </div>
                 */}
                 <Switch>
-                  <Route exact path="/" render={() => <Main />}/>
+                  <Route exact path="/"  render={() => <Main />}/>
                   <Route path="/main" render={() => <Main />}/>
-                  <Route path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-                  <Route path="/Board/:id" component={Boardid}/>
+
+                  <Route path="/right" component={Right} />
+                  <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
+                  <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/three" render={(props) => <Three {...props}/>} />
-                  <Route path="/createuser"  component={CreateU}/>
                   <Route path="/tech"  component={Tech}/>
-                  <Route path="/courseSearch"  component={CourseS}/>
-                  <Route path="/course/:id/edit"  component={CourseE}/>
-                  <Route path="/right" component={Right}/>
-                  <ProtectedRoute path="/login" ok={!this.state.data.isLoggedIn} redirectTo="/right" render={() => <Login test={this.statecallback} />}/>
-                  <ProtectedRoute path="/mypage" render={(props) => <Mypage {...props} gogo={this.testprops} set={this.setlan}/>} ok={this.state.data.isLoggedIn} redirectTo="/login"/>
+
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>
+                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
+                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+
+                  <Route exact strict path="/courseSearch"  component={CourseSearch}/>
+                  <Route exact strict path="/course/:id"  component={CourseInfo}/>
+                  <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
+                  <Route exact strict path="/course/:id/:number"  component={CourseGet}/>
+
+                  <Route path="/about" component={About}/>
+                  <Route path="/getting-started" component={GettingStarted}/>
+                  <Route path="/terms" component={Terms}/>
+                  <Route path="/privacy" component={Privacy}/>
+
+                  <Route path="/test"  component={CourseInfo} />
+
+                  <Route component={NotFound}/>
                 </Switch>
               </Scrollbars>
             </main>
-
-
           </MainContext.Provider>
         </div>
       </div>

@@ -1,0 +1,56 @@
+.Sloading{
+    position: fixed;
+    left: 47vw;
+    top: 50vh;
+}
+.coursesearchbody{
+    font-family: "Segoe UI";
+    text-align: center;
+    font-size   : 100%;
+    height: 100vh;
+}
+
+.Sbuttom{
+    text-decoration: none;
+    color: black;
+}
+
+.CourseSearchbody{
+    width: 50vw;
+}
+
+.courseSearch_HR{
+    width: 70vw;
+}
+
+.courseSearch_block{
+    display: inline-block;
+    padding-right: 10px
+}
+.courseSearch_title{
+    display: inline-block;
+    width: 40vw;
+    padding-right: 20px;
+}
+.courseSearch_auth{
+    display: inline-block;
+    width: 10vw;
+}
+.courseSearch_createat{
+    display: inline-block;
+    width: 10vw;
+}
+.courseSearch_type{
+    width: 10vw;
+    display: inline-block;
+}
+.coursesearch_block{
+    width: 75vw;
+    display: inline-block
+}
+
+.coursesearch_ad{
+    position: fixed;
+    top: 30vh;
+    left: 3vw;
+}

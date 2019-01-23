@@ -1,0 +1,152 @@
+.main {
+  height: 100%;
+}
+.container {
+  height: 100%;
+  width: 80%;
+  margin: auto;
+  margin-top: 2em;
+}
+
+/* info */
+.info-panel {
+  border-width: 1px 1px 0 1px;
+  border-style: solid;
+  border-color: #1abc9c60;
+
+  padding: 2em 2em;
+}
+.info-panel > div + div {
+  padding-top: 1em;
+}
+.course-name {
+  font-size: 2em;
+  color: darkgreen;
+}
+.description {
+  font-size: 1em;
+  color: indigo;
+}
+.rating {
+  font-size: 1.2em;
+  color: blueviolet;
+  margin-left: 0.5em;
+}
+.rate-info {
+  font-size: 0.8em;
+  color: darkgray;
+  margin-left: 0.5em;
+}
+.start-button {
+  border-radius: 0.5em;
+  background-color: #1abc9c;
+  padding: 0.5em;
+  cursor: pointer;
+  color: white;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-container > div + div {
+  flex: 0 0 auto;
+}
+
+.middle-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.rating-container {
+  display: inline-flex;
+  align-items: center;
+  align-content: center;
+
+}
+
+/* tab */
+.tab-list {
+  display: flex;
+  justify-content: flex-start;
+
+  font-size: 20px;
+  border: 1px solid #1abc9c60;;
+}
+.tab-list > div {
+  flex: 0 0 auto;
+  color: #1abc9c;
+  border-right: 1px solid #1abc9c60;
+  padding: 0.2em 0;
+
+  cursor: pointer;
+}
+.tab-list > div:hover {
+  background-color: #1abc9c80;
+  color: black;
+  font-weight: bold;
+}
+.tab-list > div > * {
+  margin: 0 1em;
+  vertical-align: middle;
+}
+.tab-onclicked {
+  background-color: #1abc9c80;
+  color: white !important;
+}
+.tab-content {
+  height: 100%;
+  padding: 1em 0;
+}
+
+
+/* chapter */
+.chapter-list {
+  font-size: 1em;
+}
+.chapter-list > div {
+  padding: 2em 3em;
+  border: 1px solid #1abc9c60;
+}
+.chapter-header {
+  display: flex;
+  justify-content: space-between;
+}
+.chapter-name {
+  font-size: 1.5em;
+}
+.chapter-desc {
+  margin-top: 1em;
+}
+.chapter-start-button {
+  flex: 0 0 auto;
+
+  border-radius: 0.5em;
+  background-color: #1abc9c;
+  padding: 0.5em 2em;
+  cursor: pointer;
+
+  color: white;
+}
+
+
+/* review */
+.review-list {
+  padding: 1em 2em;
+  font-size: 1em;
+}
+.review-list > div {
+  padding: 1em 1em;
+  border-bottom: 1px solid #1abc9c60;
+}
+.review-text {
+  margin-top: 1em;
+}
+.review-info {
+  margin-top: 1em;
+  font-size: 0.8em;
+  color: darkgray;
+  text-align: right;
+}
+

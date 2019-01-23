@@ -258,7 +258,6 @@ class TextEditor extends React.Component {
               }}
               ref={this.tabList}
           >
-          <Scrollbars>
           {
             this.state.tabs.map((v, i, ar) => {
               if (!v || !v.name) return;
@@ -296,7 +295,6 @@ class TextEditor extends React.Component {
                 </div>
             })          
           }
-          </Scrollbars>
           </div>
           <div
               style={{
