@@ -148,7 +148,7 @@ typings/
 
 # Optional eslint cache
 .eslintcache
-
+ 
 # Optional REPL history
 .node_repl_history
 
@@ -164,4 +164,8 @@ typings/
 # next.js build output
 .next
 
+# vscode configure
 .vscode/
+
+# docker backup file
+*.tar
