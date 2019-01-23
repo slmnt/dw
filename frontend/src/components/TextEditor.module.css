@@ -1,21 +1,51 @@
 
-
+.window-container {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  height: 100%;
+}
+.window-bg {
+  background-color: #252526;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .window-tablist {
   display: flex;
   overflow: auto hidden;
-  height: 2em;
-  background-color: rgb(37, 37, 38);
+  height: 3em;
+  background-color: #3c3c3c;
+
+  scrollbar-width: thin;
+  scrollbar-color: #555 rgba(0, 0, 0, 0);
 }
+.window-tablist::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.window-tablist::-webkit-scrollbar-thumb {
+  background: #555; 
+}
+.window-tablist::-webkit-scrollbar-track {
+  background: #00000000;
+}
+
+
 .window-tab {
   display: flex;
   border-radius: 50px 50px 0 0;
   /*border: 0.1rem solid;*/
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
-  height: 2em;
-  line-height: 2em;
-  padding-left: 0.3em;
+  height: 3em;
+  line-height: 3em;
+  padding: 0 0.5em;
+  padding-left: 1em;
   cursor: pointer;
+}
+.window-tab-name {
+  margin: 0 0.5em;
 }
 .window-tab-image {
   width: 1.6em;
@@ -25,10 +55,10 @@
   background-repeat: no-repeat;
 }
 .window-tab-close {
-  height: 1em;
-  width: 1em;
+  height: 1.5em;
+  width: 1.5em;
   background: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.428 8L12 10.573 10.572 12 8 9.428 5.428 12 4 10.573 6.572 8 4 5.428 5.427 4 8 6.572 10.573 4 12 5.428 9.428 8z' fill='%23E8E8E8'/%3E%3C/svg%3E") 50% no-repeat;
-  background-size: 1em;
+  background-size: 1.5em;
   background-position: 50%;
   background-repeat: no-repeat;
   margin-top: auto;
@@ -38,4 +68,34 @@
 }
 .window-content {
   text-align: left;
+}
+
+/* term */
+.term-container {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  top: auto;
+  bottom: 0;
+
+  border-top: 1px solid #666666;
+  background-color: #1e1e1e;
+}
+.term-tablist {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+
+  padding: 1em 1em;
+  border-bottom: 1px solid #333333;
+}
+.term-tablist > div {
+  margin: 0 0.5em;
+  cursor: pointer;
+}
+.term-wrapper {
+  height: auto;
+  top: auto;
+  bottom: 0;
+  padding: 1em;
 }

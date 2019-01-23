@@ -84,12 +84,12 @@ class Courseinfo extends Component {
                         </div>
                     </div>
                     <div className={styles["tab-list"]}>
-                        <div onClick={() => this.setTab(0)} className={this.state.currentTab == 0 ? styles["tab-onclicked"] : ""}><span>チャプター</span></div>
-                        <div onClick={() => this.setTab(1)} className={this.state.currentTab == 1 ? styles["tab-onclicked"] : ""}><span>レビュー</span></div>
+                        <div onClick={() => this.setTab(0)} className={this.state.currentTab === 0 ? styles["tab-onclicked"] : ""}><span>チャプター</span></div>
+                        <div onClick={() => this.setTab(1)} className={this.state.currentTab === 1 ? styles["tab-onclicked"] : ""}><span>レビュー</span></div>
                     </div>
                     <div className={styles["tab-content"]}>
                         {
-                        this.state.currentTab == 0 ?
+                        this.state.currentTab === 0 ?
                             <div className={styles["chapter-list"]}>
                             {
                                 this.state.chapters.map((v, i) => {

@@ -20,18 +20,38 @@ class TextEditor extends React.Component {
         ],
         currentTab: null,
         showEditor: false,
+        showTerm: true,
       };
       this.editor = null;
+      this.term = React.createRef();
       this.tabList = React.createRef();
+      this.lastSizeUpdate = 0;
+  }
+  componentDidMount(){
+    window.addEventListener("resize", this.updateEditorSize);
+  }
+  componentWillUnmount(){
+    window.removeEventListener("resize", this.updateEditorSize);
+  }
+  updateEditorSize = (e) => {
+    if ( (e.timeStamp - this.lastSizeUpdate) < 500 ) return;
+    if (this.editor) {
+        let rect = this.editorContainer.getBoundingClientRect();
+        this.onEditorResize(rect.width, rect.height);
+        this.term.current.resize();
+
+        this.lastSizeUpdate = e.timeStamp;
+    }
   }
   containerRef = element => {
       if (!element) {
           // unmount
           return;
       }
+      this.editorContainer = element;
       let rect = element.getBoundingClientRect();
-      element.style.width = rect.width + "px";
-      element.style.height = rect.height + "px";
+      //element.style.width = rect.width + "px";
+      //element.style.height = rect.height + "px";
       this.onEditorResize(rect.width, rect.height);
   }
   contentRef = element => {
@@ -46,7 +66,8 @@ class TextEditor extends React.Component {
       })
   }
   onEditorResize(width, height) {
-      this.editor.layout();
+      console.log(width, height)
+      this.editor.layout({width, height});
       this.tabList.current.style.width = width + "px"
   }
   setEditorScroll(top, left) {
@@ -81,6 +102,15 @@ class TextEditor extends React.Component {
   }
   hideEditor() {
     this.setState({showEditor: false});
+  }
+  showTerm() {
+    this.setState({showTerm: true});
+  }
+  hideTerm() {
+    this.setState({showTerm: true});
+  }
+  toggleTerm = () => {
+    this.setState({showTerm: !this.state.showTerm});
   }
 
   openTab(path) {
@@ -125,7 +155,7 @@ class TextEditor extends React.Component {
           if (path === this.state.currentTab && this.state.tabs.length > 0) {
               let i = tabId > 0 ? tabId - 1 : 0;
               this.activateTab(this.state.tabs[i].path);
-          } else {
+          } else if (this.state.tabs.length === 0) {
             this.hideEditor();
           }
       }).bind(this));
@@ -238,96 +268,111 @@ class TextEditor extends React.Component {
       };
       return (
       <div
-          style={{
-              position: "relative",
-              display: "flex",
-              flexFlow: "column",
-              width: "100%",
-              height: "100%",
-              background: "linear-gradient(145deg, #00c1da, #003bca)",
-          }}
-      >
-          <div
-              className={styles["window-tablist"]}
-              style={{
-                  flex: "0 0 auto",
-                  maxWidth: "100%",
-                  textAlign: "left",
-                  opacity: this.state.showEditor && "1" || "0",
+        className={styles["window-container"]}
 
-              }}
-              ref={this.tabList}
-          >
-          {
-            this.state.tabs.map((v, i, ar) => {
-              if (!v || !v.name) return;
-                return <div
-                  key={i}
-                  className={styles["window-tab"]}
-                  style={ {
-                      backgroundColor: this.state.currentTab === v.path && "rgb(30, 30, 30)" || "rgb(45, 45, 45)",
-                      borderRight: ar.length == i + 1 ? "none" : "1.5px solid rgb(37, 37, 38)",
-                  } }
-                  draggable
-                  onDragStart={this.onDragStart}
-                  onDragOver={this.onDragOver}
-                  onDrop={this.onDrop}
-                  onClick={this.onClickTab}
-                  data-tabpath={v.path}
-                  >
-                  <span
-                      className={styles["window-tab-image"]}
-                      style={{
-                          backgroundImage: "url(" + logo + ")",
-                      }}
-                  >
-                  </span>
-                  {v.name}
-                  <span
-                      className={styles["window-tab-close"]}
-                      onClick={
-                          ((e) => {
-                              this.closeTab(v.path); // e.currentTarget.dataset["tabpath"] は使えない
-                              e.stopPropagation();
-                          }).bind(this)
-                      }
-                  ></span>
+      >
+        <div
+            className={styles["window-bg"]}
+            style={{
+                backgroundImage: "url(" + logo + ")",
+                display: "flex",
+                flexFlow: "column nowrap",
+                    flex: "1 1 auto",
+                    maxWidth: "100%",
+            }}
+        >
+            <div
+                className={styles["window-tablist"]}
+                style={{
+                    flex: "0 0 auto",
+                    maxWidth: "100%",
+                    textAlign: "left",
+                    opacity: this.state.showEditor && "1" || "0",
+                }}
+                ref={this.tabList}
+            >
+            {
+                this.state.tabs.map((v, i, ar) => {
+                if (!v || !v.name) return;
+                    return <div
+                    key={i}
+                    className={styles["window-tab"]}
+                    style={ {
+                        backgroundColor: this.state.currentTab === v.path && "rgb(30, 30, 30)" || "#343434",
+                        borderRight: ar.length == i + 1 ? "none" : "1.5px solid rgb(37, 37, 38)",
+                    } }
+                    draggable
+                    onDragStart={this.onDragStart}
+                    onDragOver={this.onDragOver}
+                    onDrop={this.onDrop}
+                    onClick={this.onClickTab}
+                    data-tabpath={v.path}
+                    >
+                    <span
+                        className={styles["window-tab-image"]}
+                        style={{
+                            backgroundImage: "url(" + logo + ")",
+                        }}
+                    >
+                    </span>
+                    <span className={styles["window-tab-name"]}>{v.name}</span>
+                    <span
+                        className={styles["window-tab-close"]}
+                        onClick={
+                            ((e) => {
+                                this.closeTab(v.path); // e.currentTarget.dataset["tabpath"] は使えない
+                                e.stopPropagation();
+                            }).bind(this)
+                        }
+                    ></span>
+                    </div>
+                })          
+            }
+            </div>
+            <div
+                style={{
+                    display: "relative",
+                    flex: "1 1 auto",
+                    width: "100%",
+                    overflow: "hidden",
+                    opacity: this.state.showEditor && "1" || "0",
+                }}
+                onClick={this.onClickBackground}
+                ref={this.containerRef}
+            >
+            <div style={{
+                    display: "relative",
+                    width: "100%",
+                    paddingTop: "2em",
+                    backgroundColor: "#1e1e1e",
+                }}>
+                <div
+                    className={styles["window-content"]}
+                    style={{
+                        height: "100%",
+                        width: "100%",
+                    }}
+                    ref={this.contentRef}
+                >
                 </div>
-            })          
-          }
-          </div>
-          <div
-              style={{
-                  flex: "1 1 auto",
-                  width: "100%",
-                  overflow: "hidden",
-                  opacity: this.state.showEditor && "1" || "0",
-              }}
-              onClick={this.onClickBackground}
-              ref={this.containerRef}
-          >
-              <div
-                  className={styles["window-content"]}
-                  style={{
-                      height: "100%",
-                      width: "100%",
-                  }}
-                  ref={this.contentRef}
-              >
-              </div>
-          </div>
-          <div
-              style={{
-                  flex: "0 0 auto",
-                  //position: "absolute",
-                  width: "100%",
-                  height: "auto",
-                  top: "auto",
-                  bottom: "0",
-              }}
-          >
-              <Term height={200} />
-          </div>
+                </div>
+            </div>
+        </div> 
+              
+        <div className={styles["term-container"]}>
+            <div className={styles["term-tablist"]}>
+                <div>ターミナル</div>
+                <div>???</div>
+                <div onClick={this.toggleTerm}>舌</div>
+            </div>
+            <div className={styles["term-wrapper"]}
+                style={{
+                    display: this.state.showTerm && "block" || "none"
+                }}
+            >
+                <Term height={200} ref={this.term} />
+            </div>
+        </div>
       </div>
       );
   }

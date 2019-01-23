@@ -1,3 +1,10 @@
 .main {
   
 }
+
+.form {
+  margin: 3em auto;
+  border-radius: 5em;
+  background-color: rosybrown;
+  box-shadow: 0 0 3px black;
+}

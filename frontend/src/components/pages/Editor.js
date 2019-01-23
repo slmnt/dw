@@ -383,6 +383,7 @@ class Editor extends Component {
       boxHeight: 50,
       draggingBox: null, //参照
       boxInitialPos: null,
+
       courseData: {
         name: "",
         chapters: [
@@ -395,8 +396,11 @@ class Editor extends Component {
               }
             ]
           }
-        ]
-      }
+        ],
+        files: [], // base 64?
+        directory: {}, // directory structure
+      },
+      currentChapter: 0,
     }
 
     let i = 0;
@@ -502,7 +506,7 @@ class Editor extends Component {
   }
   onDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'copy'
-    e.dataTransfer.setData('dummy', 0);
+    e.dataTransfer.setData('dummy', 123);
     //draggingBox
     //boxInitialPos
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
@@ -514,6 +518,7 @@ class Editor extends Component {
     }
   }
   onDrop = (e) => {
+    if (!e.dataTransfer.getData('dummy')) return;
     e.preventDefault();
     if (!this.draggingBox) return;
 
@@ -535,21 +540,25 @@ class Editor extends Component {
               チャプター一覧
             </div>
             <div className={styles["header-controls"]}>
-              <div><span>戻る</span></div>
-              <div><span>プレビュー</span></div>
-              <div><span>保存</span></div>
+              <div className={styles["discard-controls"]}><span>戻る</span></div>
+              <div className={styles["preview-controls"]}><span>プレビュー</span></div>
+              <div className={styles["save-controls"]}><span>保存</span></div>
             </div>
           </div>
-          <div className={styles["main-container"]}>
-            <div className={styles.side} style={{position: "relative"}}
+          <div className={styles.tablist}>
+            <div>dwa</div>
+            <div>dwa</div>
+          </div>
+          <div className={styles["slides-main-container"]}>
+            <div className={styles["slides-side"]} style={{position: "relative"}}
               onDragOver={this.onDragOver}
               onDragStart={this.onDragStart}
               onDrop={this.onDrop}
-              >
+            >
               {
                 this.state.boxes.map((v,i) => {
                   return (<div key={i}
-                    className={styles["side-element"]}
+                    className={styles["slides-side-element"]}
                     draggable
                     style={{
                       height: this.state.boxHeight + "px",
@@ -567,26 +576,30 @@ class Editor extends Component {
 
               }
             </div>
-            <div className={styles["main-container-2"]}>
-              <div className={styles.main}>
-              <div id="editorContainer">
-                <div style={{
-                  height: "2em",
-                }}>
-                  <div>name</div>
+            <div className={styles["slides-main-container-2"]}>
+              <div className={styles["slides-main"]}>
+                <div id="editorContainer">
+                  <div style={{
+                    height: "2em",
+                  }}>
+                    <div>
+                      <div>name</div>
+                      <div>Markdown</div>
+                      <div>preview</div>
+                    </div>
+                  </div>
+                  <div ref={this.editorRef}>
+                  </div>
+                  <TestIFrame content={`
+                    <html><body>
+                    <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
+                    <h1>hellonfj</h1>
+                    <div class="po"></div>
+                    </body></html>
+                  `} />
                 </div>
-                <div ref={this.editorRef}>
                 </div>
-                <TestIFrame content={`
-                  <html><body>
-                  <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
-                  <h1>hellonfj</h1>
-                  <div class="po"></div>
-                  </body></html>
-                `} />
-              </div>
-              </div>
-              <div className={styles.footer}>
+              <div className={styles["slides-footer"]}>
                 FOOTEER
               </div>
             </div>

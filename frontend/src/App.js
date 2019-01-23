@@ -91,7 +91,6 @@ class ProtectedRoute extends React.Component {
     }
     if (this.props.redirectBack) {
       // redirect する際, ?redirect= に元の path (props.path) を格納
-      console.log(history.location, history)
       params = params || [];
       params.redirect = history.location.pathname;
     }
@@ -137,7 +136,6 @@ class App extends React.Component {
       drop: this.drop
     };
 
-    // console.log(props.history.location.pathname)
     // window.addEventListener('beforeunload',e => this.closewindows(e))
   }
 
@@ -174,8 +172,7 @@ class App extends React.Component {
 
 
   login = (name, password, callback) => {
-    //console.log(this.state.password)
-    // send allowed true reject false
+    //console.log(name, password)
     axios.post('authentic/',{
       uid: name,
       pwd: password
@@ -196,7 +193,7 @@ class App extends React.Component {
         }else{
         }
     }).catch(e => {
-      // console.log(e)
+      console.log("error: authentic/", e)
     });
   }
   loginWithCookie = () => {
@@ -245,7 +242,7 @@ class App extends React.Component {
         // console.log(response)
         this.removeLoginState();
     }).catch(e => {
-        // console.log(e)
+        console.log("error: dropliveuser", e)
     });
   }
 
