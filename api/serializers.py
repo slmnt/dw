@@ -75,12 +75,13 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model = UserInfo
         fields = ('__all__')
 
+#Use /courseSearch
 class UserCourseSerializer(serializers.ModelSerializer):
     root = serializers.StringRelatedField()
     
     class Meta:
         model = UserCourse
-        fields = ('__all__')
+        fields = ('id','root','title','createat','likes')
 
 class UserCourseContentSerializer(serializers.ModelSerializer):
     root = serializers.SlugRelatedField(read_only=True,slug_field='title')

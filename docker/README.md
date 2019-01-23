@@ -19,3 +19,6 @@ docker rmi -f <image_id>
 Docker image save / load   
 docker save sendbox > sendbox.tar   
 docker load --input sendbox.tar   
+
+docker run -it c /bin/bash
+docker run -it ubuntu /bin/bash
