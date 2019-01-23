@@ -53,34 +53,11 @@ import NotFound from './components/pages/NotFound';
 
 
 
-axios.defaults.baseURL = '/api/';
+axios.defaults.baseURL = '/api';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-
 const drawerWidth = 200;
-
-const styles = theme => ({
-  hide: {
-    display: 'none',
-  },
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  }
-});
-
-
-let pages = {
-  "mypage": ""
-};
 
 class ProtectedRoute extends React.Component {
   setParam(url, params) {
@@ -347,7 +324,7 @@ App.propTypes = {
 };
 
 App = withRouter(App);
-export default withStyles(styles, { withTheme: true })(App);
+export default App;
 
 /*
 */ 

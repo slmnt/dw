@@ -11,3 +11,6 @@ admin.site.register(UserCourse)
 admin.site.register(UserCourseContent)
 admin.site.register(Ads)
 admin.site.register(Adque)
+admin.site.register(UserCourseComment)
+admin.site.register(UserCourseContentIndex)
+

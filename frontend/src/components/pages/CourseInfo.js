@@ -1,6 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import styles from './CourseInfo.module.css';
 import UserPanel from '../UserPanel';
@@ -42,13 +43,31 @@ class Courseinfo extends Component {
         this.setState({currentTab: id});
     }
 
-    componentDidMount(){
-        var u = '/api/getCourseInfoContentsInfo/' + this.props.match.params.id
-        axios.get(u).then(response => {
-            this.setState({contents: response.data})
-        }).catch(e => console.log(e))
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
     }
 
+    componentDidMount(){
+
+        var u = '/getusercourseid/';
+        axios.post(u,{id:this.props.match.params.id}).then(response => {
+            this.setState({contents: response.data})
+        }).catch(e => console.log(e))
+
+        u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+        axios.get(u).then(response => {
+            this.setState({chapters: response.data})
+        }).catch(e => console.log(e))
+
+        u = '/getusercoursecomment/' + this.props.match.params.id
+        axios.get(u).then(response => {
+            this.setState({reviews: response.data})
+        }).catch(e => console.log(e))
+
+    }
+
+    //<UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png"/>
 
     render() {
         return (
@@ -57,7 +76,7 @@ class Courseinfo extends Component {
                     <div className={styles["info-panel"]}>
                         <div className={styles["header-container"]}>
                             <div className={styles["course-name"]}>
-                                {this.state.courseData.name}
+                                {this.state.contents.title}
                             </div>
                             <div className={styles["start-button"]}>
                                 初めから / 続きから
@@ -65,21 +84,21 @@ class Courseinfo extends Component {
                         </div>
                         <div className={styles["middle-container"]}>
                             <div className={styles["rating-container"]}>
-                                <Rating value={this.state.courseData.rating}/>
+                                <Rating value={this.state.contents.likes}/>
                                 <span className={styles.rating}>
-                                    {this.state.courseData.rating}
+                                    {this.state.contents.likes / 5}
                                 </span>
                                 <span className={styles["rate-info"]}>
-                                    (103 人)
+                                    ({this.state.contents.users})
                                 </span>
                             </div>
                             <div style={{fontSize: "0.8em"}}>
-                                <UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png" />
+                                <UserPanel username={this.state.contents.root} desc="I'm Fucking Awesome PG! TIME TO DIE!"/>
                             </div>
                         </div>
                         <div>
                             <div className={styles.description}>
-                                {this.state.courseData.desc}
+                                {this.state.contents.descriptoin}
                             </div>
                         </div>
                     </div>
@@ -96,14 +115,14 @@ class Courseinfo extends Component {
                                     return <div key={i}>
                                         <div className={styles["chapter-header"]}>
                                             <div className={styles["chapter-name"]}>
-                                                <a>{v.name}</a>
+                                                <a>{v.title}</a>
                                             </div>
-                                            <div className={styles["chapter-start-button"]}>
+                                            <Link to={this.props.location.pathname +"/" + v.cid} className={styles["chapter-start-button"]}>
                                                 開始
-                                            </div>
+                                            </Link>
                                         </div>
                                         <div className={styles["chapter-desc"]}>
-                                            {v.desc}
+                                            {v.descriptoin}
                                         </div>
                                     </div>
                                 })
@@ -114,12 +133,12 @@ class Courseinfo extends Component {
                             {
                                 this.state.reviews.map((v, i) => {
                                     return <div key={i}>
-                                        <UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png" />
+                                        <UserPanel username={v.auth} desc="I'm Fucking Awesome PG! TIME TO DIE!"/>
                                         <div className={styles["review-text"]}>
-                                            11/10 would not play again
+                                            {v.comment}
                                         </div>
                                         <div className={styles["review-info"]}>
-                                            2019/01/22 19:45
+                                            {this.convertdata(v.createat)}
                                         </div>
                                     </div>
                                 })

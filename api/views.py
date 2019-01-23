@@ -572,7 +572,7 @@ class GetUserInfo(viewsets.ModelViewSet):
 class GetUserCourse(viewsets.ModelViewSet):
 
     def get(self,request):
-        uid = UserCourse.objects.all()
+        uid = UserCourse.objects.all().order_by('-createat')
         s = UserCourseSerializer(uid,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
 
@@ -589,35 +589,44 @@ class GetUserCourseContent(viewsets.ModelViewSet):
     def post(self, request):
         return Response(status=status.HTTP_200_OK)
 
-#CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
+class GetUserCourseContentid(viewsets.ModelViewSet):
 
+    def post(self, request):
+        id = request.data['id']
+        obj = UserCourse.objects.get(id=id)
+        serial = UserCourseInfoSerializer(obj)
+        return Response(data=serial.data,status=status.HTTP_200_OK)
+
+
+#CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
 class CourseInfoConetntsInfoGet(generics.ListAPIView):
     serializer_class = UserCourseContentinfoSerializer
     
     def get_queryset(self):
         id = self.kwargs['id']
-        try:            
-            tar = UserCourse.objects.get(id=id)
-        except:
-            return Response(status=status.HTTP_200_OK)
-        try:
-            queryset = UserCourseContent.objects.all().filter(root=tar).order_by('createat')
-        except:
-            return Response(status=status.HTTP_200_OK)
+        tar = UserCourse.objects.get(id=id)
+        queryset = UserCourseContent.objects.all().filter(root=tar).order_by('cid')
         return queryset
 
-class GetUserCourseContentid(generics.ListAPIView):
-    serializer_class = UserCourseContentSerializer
-
-    def get_queryset(self):
-        tar = UserCourse.objects.get(id=self.kwargs['id'])
-        queryset = UserCourseContent.objects.all().filter(root=tar,cid=self.kwargs['num'])
-        return queryset
 
 class GetUserCourseComments(generics.ListAPIView):
     serializer_class = UserCourseCommentSerializer
 
     def get_queryset(self):
         tar = UserCourse.objects.get(id=self.kwargs['id'])
-        queryset = UserCourseComment.objects.all().filter(root=tar)
+        queryset = UserCourseComment.objects.all().filter(root=tar).order_by('-createat')
         return queryset
+
+
+class GetUserCourseContentIndex(viewsets.ModelViewSet):
+
+    def post(self, request):
+        id = request.data['id']
+        cid = request.data['cid']
+        tar = UserCourse.objects.get(id=id)
+        tar2 = UserCourseContent.objects.filter(root=tar,cid=cid)
+        tar3 = tar2.get()
+        obj = UserCourseContentIndex.objects.all().filter(root=tar3)
+        print(obj)
+        serial = UserCourseContentIndexSerializer(obj,many=True)
+        return Response(data=serial.data,status=status.HTTP_200_OK)

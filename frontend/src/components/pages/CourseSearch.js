@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../Loading'
 import './CourseSearch.css'
-import Ad from '../Adpanel'
+import Ad from '../AdPanel'
+import axios from 'axios';
+
+import { Link } from 'react-router-dom';
 
 class CourseSearch extends Component {
     state = {
-        keyword: 'test'
+        keyword: 'test',
+        context: []
     }
 
     constructor (props) {
@@ -14,6 +18,15 @@ class CourseSearch extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.onSearch = this.onSearch.bind(this)
+    }
+
+    componentDidMount(){
+        var u = '/getusercourse'
+        axios.get(u).then(response => {
+            this.setState({
+                context: response.data
+            })
+        }).catch(e => console.log(e))
     }
     
     handleChange(event) {
@@ -28,6 +41,9 @@ class CourseSearch extends Component {
     render() {
         return (
             <div className="coursesearchbody">
+                <div className="coursesearch_ad">
+                <Ad/>
+                </div>
             <br/>
                 <select id="type" className="boards_search-select">
                     <option value="">--Please choose an option--</option>
@@ -46,29 +62,27 @@ class CourseSearch extends Component {
                 <a className="Sbuttom" href="javascript:void(0)"
                     onClick={this.onSearch}>Search</a>
                 <hr className="courseSearch_HR"/>
-                Searching....
-                <br/>
-                <hr className="courseSearch_HR"/>
-                <div className="coursesearch_block">
-                    <div className="courseSearch_title">
-                        title_length_is_something
-                    </div>
-                    <div className="courseSearch_auth">
-                        author
-                    </div>
-                    <div className="courseSearch_createat">
-                        createat
-                    </div>
-                    <div className="courseSearch_type">
-                        type
-                    </div>
-                </div>
-                <div className="Sloading">
-                    <Loading/>
-                </div>                
-            <div className="coursesearch_ad">
-            <Ad/>
-            </div>
+                {
+                    this.state.context.map((el) => {
+                        return (
+                            <div className="coursesearch_block">
+                                <Link to={"/course/" + el.id} className="courseSearch_title">
+                                    {el.title}
+                                </Link>
+                                <div className="courseSearch_auth">
+                                    {el.root}
+                                </div>
+                                <div className="courseSearch_createat">
+                                    createat
+                                </div>
+                                <div className="courseSearch_type">
+                                    {el.likes}
+                                </div>
+                                <hr className="courseSearch_HR"/>                            
+                            </div>
+                        )
+                    })
+                }
             </div>
         );
   	}
