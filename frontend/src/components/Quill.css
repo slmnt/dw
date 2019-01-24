@@ -1,11 +1,22 @@
+
+#editorContainer {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.ql-toolbar {
+  flex: 0 0 auto;
+}
 .ql-editor {
   overflow-y: scroll;
   resize: vertical;
-}
-.ql-editor {
+
   min-height: 18em;
+  height: 100%;
 }
 .ql-container {
+  flex: 1 1 auto;
+
   border-bottom-left-radius: 0.5em;
   border-bottom-right-radius: 0.5em;
   background: #fefcfc;

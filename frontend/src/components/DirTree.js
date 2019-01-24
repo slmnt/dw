@@ -5,9 +5,15 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import styles from './DirTree.module.css';
 
 import logo from '../img/logo.svg';
+import UploadIcon from '../img/upload.svg';
 
 
 class DirTree extends React.Component {
+  /*
+    props
+      allowUpload
+      onUpload()
+  */
   constructor (props) {
     super(props);
     this.state = {
@@ -67,9 +73,46 @@ class DirTree extends React.Component {
     f(dir);
     return re;
   }
+
+  onDragEnter = e => {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  onDragOver = e => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.target) {
+      console.log(e.target.dataset["filepath"])
+    }
+  }
+  onDrop = e => {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  onUpload = (e) => {
+    var dt = e.dataTransfer;
+    var files = dt.files;
+  
+    var count = files.length;
+    console.log("File Count: " + count + "\n");
+
+    for (var i = 0; i < files.length; i++) {
+      console.log(" File " + i + ":\n(" + (typeof files[i]) + ") : <" + files[i] + " > " +
+              files[i].name + " " + files[i].size + "\n");
+    }
+  
+  }
+
   render() {
     return (
       <div className={styles["dir-main"]}>
+          <div className={styles["dir-drop-zone"]}
+            style={{
+              display: false ? "block" : "none",
+              backgroundImage: "url(" + UploadIcon + ")",
+            }}
+          >
+          </div>
           <div className={styles["dir-header"]}>ディレクトリ</div>
           <div
             className={styles["dir-window"]}

@@ -49,7 +49,7 @@ class Drawer extends Component {
 
         return (
             <div className={styles.main}>
-                <div className={styles.panel}
+                <div
                     onClick={this.close}
                     style={{
                         display: this.state.isDrawerOpen ? "block" : "none"

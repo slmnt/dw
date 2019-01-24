@@ -48,13 +48,12 @@ class NavBar extends React.Component {
 
         {this.props.children}
 
-        <div className={styles.navigation}>
-          <div><Link to="/getting-started">Getting Started</Link></div>
-          <div><Link to="/">コース</Link></div>
-        </div>
-        <div>{"login: " + (this.context.isLoggedIn ? true : false) }</div>
-
         <div className={styles.rightMenu}>
+          <div className={styles.navigation}>
+            <div>{"login: " + (this.context.isLoggedIn ? true : false) }</div>
+            <div><Link to="/getting-started">Getting Started</Link></div>
+            <div><Link to="/">コース</Link></div>
+          </div>
           {
             !this.context.isLoggedIn ?
               <React.Fragment>

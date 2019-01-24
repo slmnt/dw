@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 import styles from './Editor.module.css';
 
 import TextEditor from '../TextEditor';
 import DirTree from '../DirTree';
-import TextBox from '../helper/TextBox';
 
 import 'highlight.js/styles/vs.css'
 import hljs from 'highlight.js';
 
 import katex from 'katex';
 
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 import * as Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import '../Quill.css';
+
+import { ReactComponent as EditIcon } from '../../img/edit.svg';
+import { ReactComponent as DragHandleIcon } from '../../img/drag-handle.svg';
+import { ReactComponent as AddIcon } from '../../img/add.svg';
+import { ReactComponent as CrossIcon } from '../../img/cross.svg';
+import { ReactComponent as ThreeDots } from '../../img/three-dots.svg';
+
 
 /*
 問題
@@ -369,6 +379,30 @@ class TestIFrame extends React.Component {
 }
 
 
+class TextBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.input = React.createRef();
+  }
+  setValue = (value) => {
+    this.input.current.value = value;
+  }
+  getValue = () => {
+    return this.input.current.value();
+  }
+  onInput = e => {
+    if (this.props.onUpdate) this.props.onUpdate(e.currentTarget.value);
+  }
+  render() {
+    return (
+      <div className={styles["textbox-container"]}>
+        <input type="text" className={classNames(styles.textbox)} onInput={this.onInput} ref={this.input} />
+        <EditIcon style={{position: "absolute", right: "0", pointerEvents: "none"}} />
+      </div>
+    )
+  }
+}
+
 
 
 
@@ -470,7 +504,7 @@ class SlideEditor extends React.Component {
 
   onDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'copy'
-    e.dataTransfer.setData('dummy', 123);
+    e.dataTransfer.setData('slide', 123);
 
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
 
@@ -480,7 +514,7 @@ class SlideEditor extends React.Component {
     }
   }
   onDrop = (e) => {
-    if (!e.dataTransfer.getData('dummy')) return;
+    if (!e.dataTransfer.getData('slide')) return;
     e.preventDefault();
     if (!this.draggingBox) return;
 
@@ -498,13 +532,17 @@ class SlideEditor extends React.Component {
   }
   
   setSlideName = (name) => {
-    this.slideNameInput.current.value = name;
+    this.slideNameInput.current.setValue(name);
   }
 
   render() {
     return (
       <div className={styles["slides-main-container"]}>
         <div className={styles["slides-side-container"]}>
+          <div className={styles["slides-side-header"]}>
+            <div>スライド一覧</div>
+            <AddIcon className={styles["slides-side-header-add"]} onClick={this.props.addBlankSlide()} />
+          </div>
           <div className={styles["slides-side"]} style={{position: "relative"}}
             onDragOver={this.onDragOver}
             onDragStart={this.onDragStart}
@@ -534,25 +572,49 @@ class SlideEditor extends React.Component {
 
         <div className={styles["slides-main-container-2"]}>
           <div className={styles["slides-main"]}>
-            <div id="editorContainer">
+            <div style={{width: "100%", height: "100%"}}>
               <div className={styles["slides-header"]}>
-                <input type="text" className={styles.textbox} ref={this.slideNameInput} className={styles["slides-name"]} />
+                <div className={styles["slides-name"]}>
+                  <TextBox ref={this.slideNameInput} onUpdate={v => this.props.setSlideName(v)} />
+                </div>
                 <div className={styles["slides-header-control"]}>
                   <div><div>Markdown</div></div>
                 </div>
               </div>
-              <div ref={this.editorRef}>
+              <div id="editorContainer" style={{width: "100%", height: "100%"}}>
+                {/*
+                <div ref={this.editorRef}>
+                </div>
+                */}
+                <CKEditor
+                    editor={ ClassicEditor }
+                    data="<p>Hello from CKEditor 5!</p>"
+                    onInit={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        console.log( 'Editor is ready to use!', editor );
+                    } }
+                    onChange={ ( event, editor ) => {
+                        const data = editor.getData();
+                        console.log( { event, editor, data } );
+                    } }
+                    onBlur={ editor => {
+                        console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ editor => {
+                        console.log( 'Focus.', editor );
+                    } }
+                />
               </div>
-              {/*
-              <TestIFrame content={`
-                <html><body>
-                <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
-                <h1>hellonfj</h1>
-                <div class="po"></div>
-                </body></html>
-              `} />
-              */}
-            </div>
+                {/*
+                <TestIFrame content={`
+                  <html><body>
+                  <style>.po {width: 100%; height: 100%; background-color: blue;} </style>
+                  <h1>hellonfj</h1>
+                  <div class="po"></div>
+                  </body></html>
+                `} />
+                */}
+              </div>
             </div>
           <div className={styles["slides-footer"]}>
             FOOTEER
@@ -625,6 +687,7 @@ class Editor extends Component {
         chapters: [
           {
             name: "testhcapter",
+            desc: "",
             slides: [
               {
                 name: "sl whataa awana aw we 1   wd dwa",
@@ -641,6 +704,16 @@ class Editor extends Component {
                 text: "dwwdw",
                 pos: -1
               }
+            ]
+          },
+          {
+            name: "ddwaw",
+            slides: [
+            ]
+          },
+          {
+            name: "oppopo",
+            slides: [
             ]
           }
         ],
@@ -665,6 +738,9 @@ class Editor extends Component {
       currentChapter: null,
       currentSlide: null,
       currentTab: 0,
+
+      showChapterMenu: false,
+      chapterMenuConfig: -1
     }
 
     this.courseNameInput = React.createRef();
@@ -702,7 +778,7 @@ class Editor extends Component {
     }
 
     //
-    this.courseNameInput.current.value = this.state.courseData.name;
+    this.courseNameInput.current.setValue(this.state.courseData.name);
 
     //
     this.setState({
@@ -727,7 +803,136 @@ class Editor extends Component {
   }
 
   openChapterMenu = () => {
+    this.setState({showChapterMenu: true});
+  }
+  closeChapterMenu = () => {
+    this.setState({showChapterMenu: false});
+  }
+  
+  openChapterMenuCfg = (id) => {
+    this.setState({chapterMenuConfig: id});
+  }
+  closeChapterMenuCfg = () => {
+    this.setState({chapterMenuConfig: -1});
+  }
+
+  // 
+  updateCourseState = () => {
+    this.setState({courseData: this.state.courseData});
+  }
+
+  // course
+  setCourseName = name => {
+    if (!this.state.courseData) return;
+    this.state.courseData.name = name;
+    this.setState({courseData: this.state.courseData});
+  }
+
+  // chapter
+  addBlankChapter = () => {
+    if (!this.state.courseData) return;
+    this.state.courseData.chapters.push({
+      name: "チャプター",
+      desc: "",
+      slides: []
+    });
+    this.setState({courseData: this.state.courseData});
+  }
+  removeChapter = (ch) => {
+    if (!this.state.courseData) return;
+    let id = typeof ch === 'number' ? ch : this.state.courseData.chapters.indexOf(ch);
+    this.state.courseData.chapters.splice(id, 1);
+    this.setState({courseData: this.state.courseData});
+  }
+  moveChapter = (from, to) => {
+    if (!this.state.courseData.chapters[to]) return;
+    if (!this.state.courseData.chapters[from]) return;
+
+    from = parseInt(from);
+    to = parseInt(to);
+
+    let clone = this.state.courseData.chapters.map((v, i) => i);
+
+    let forward = from < to;
+    let p = forward ? -1 : 1;
+    for (let i in clone) {
+      if (forward ? clone[i] >= from && clone[i] <= to : clone[i] >= to && clone[i] <= from) clone[i] += p;
+    }
+    clone[from] = to;
+
     
+    const w = Array.from(this.state.courseData.chapters);
+    for (let i in clone) {
+      this.state.courseData.chapters[clone[i]] = w[i];
+    }
+
+    this.setState({courseData: this.state.courseData})
+  }
+
+  // slide
+  setSlideName = name => {
+    if (!this.state.currentSlide) return;
+    this.state.currentSlide.name = name;
+    this.setState({courseData: this.state.courseData});
+  }
+  setSlideText = text => {
+    if (!this.state.currentSlide) return;
+    this.state.currentSlide.text = text;
+    this.setState({courseData: this.state.courseData});
+  }
+  addBlankSlide = () => {
+    if (!this.state.currentChapter) return;
+    /*this.state.currentChapter.slides.push({
+      name: "スライド",
+      text: ""
+    });
+    this.setState({courseData: this.state.courseData});
+    */
+  }
+  removeSlide = (slide) => {
+    if (!this.state.currentChapter) return;
+    let id = typeof slide === 'number' ? slide : this.state.currentChapter.slides.indexOf(slide);
+    this.state.currentChapter.slides.splice(id, 1);
+    this.setState({courseData: this.state.courseData});
+  }
+
+
+
+
+
+
+  onDragStart = (e) => {
+    e.dataTransfer.effectAllowed = 'copy'
+    e.dataTransfer.setData('chapter', e.currentTarget.dataset["chapter"]);
+
+    /*
+    let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+
+    let box = this.getBox(pos);
+    if (box) {
+      this.draggingBox = box;
+    }
+    */
+  }
+  onDrop = (e) => {
+    if (!e.dataTransfer.getData('chapter')) return;
+    e.preventDefault();
+
+    const from = e.dataTransfer.getData('chapter');
+    const to = e.currentTarget.dataset["chapter"];
+
+    this.moveChapter(from, to);
+    /*
+    if (!this.draggingBox) return;
+
+    let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
+    if (pos != this.lastPos || this.draggingBox != this.lastBox) {
+      this.props.moveBox(this.draggingBox.pos, pos);
+    }
+    */
+  }
+  onDragOver = (e) => {
+    e.preventDefault();
   }
 
   render() {
@@ -735,9 +940,9 @@ class Editor extends Component {
       <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <input type="text" className={styles["course-name"]} ref={this.courseNameInput} />
-            <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
-              チャプター一覧
+            <div className={styles["course-name"]}>
+              <div className={styles["course-name-tag"]}><span>コース作成: </span></div>
+              <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
             </div>
             <div className={styles["header-controls"]}>
               <div className={styles["discard-controls"]}><span>戻る</span></div>
@@ -745,15 +950,57 @@ class Editor extends Component {
               <div className={styles["save-controls"]}><span>保存</span></div>
             </div>
           </div>
-          <div className={styles.tablist}>
-            <div onClick={() => this.openTab(0)}>スライド</div>
-            <div onClick={() => this.openTab(1)}>コード (ファイル)</div>
+          <div className={styles["middle-header"]}>
+            <div className={styles.tablist}>
+              <div onClick={() => this.openTab(0)}>スライド</div>
+              <div onClick={() => this.openTab(1)}>コード (ファイル)</div>
+            </div>
+            <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
+              チャプター: {this.state.currentChapter && this.state.currentChapter.name}
+            </div>
+            <div className={styles["chapter-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
+              <div className={classNames(styles["chapter-menu"], styles["chapter-menu-cfg"]) } style={{display: this.state.chapterMenuConfig !== -1 ? "block" : "none"}}>
+                <div onClick={this.closeChapterMenuCfg}>戻る</div>
+              </div>
+              <div className={styles["chapter-menu"]}>
+                <div className={styles["chapter-menu-header"]}>
+                  <div className={styles["chapter-menu-header-main"]}>
+                    <div>チャプター 一覧</div>
+                    <AddIcon className={styles["chapter-menu-header-add"]} onClick={this.addBlankChapter}/>
+                  </div>
+                  <div className={styles["chapter-menu-header-close"]} onClick={() => this.closeChapterMenu()}>
+                    閉じる
+                  </div>
+                </div>
+                {
+                  this.state.courseData && this.state.courseData.chapters.map((v, i) => {
+                    return (
+                      <div key={i} className={styles["chapter-menu-item"]} draggable data-chapter={i}
+                        onDragOver={this.onDragOver}
+                        onDragStart={this.onDragStart}
+                        onDrop={this.onDrop}
+                      >
+                        <DragHandleIcon className={styles["chapter-menu-icon"]} />
+                        <div className={styles["chapter-menu-item-info"]} onClick={() => {this.openChapter(v); this.closeChapterMenu();} } >
+                          <div className={styles["chapter-menu-item-name"]}>{i + 1}. {v.name}</div>
+                          <div>スライド枚数: {v.slides.length}</div>
+                        </div>
+                        <ThreeDots className={styles["chapter-menu-icon"]} onClick={() => this.openChapterMenuCfg(i)}/>
+                        <CrossIcon className={styles["chapter-menu-icon"]} onClick={() => this.removeChapter(i)}/>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <div className={styles["chapter-menu-bg"]} onClick={() => this.closeChapterMenu()}>
+              </div>
+            </div>
           </div>
           <div className={styles["editor-container"]}>
             <div style={{backgroundColor: "var(--bg-color)", zIndex: "0"}}>
             </div>
             <div style={{zIndex: this.state.currentTab === 0 ? "1" : "-1"}} >
-              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} />
+              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} setSlideName={this.setSlideName} setSlideText={this.setSlideText} addBlankSlide={this.addBlankSlide} />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
               <FileEditor directory={this.state.courseData.directory} />
