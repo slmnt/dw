@@ -32,12 +32,12 @@ function upload(files) {
 	var formData = new FormData();
 	var photos = document.querySelector("input[type='file'][multiple]");
 
-	formData.append('test', 'My Vegas Vacation');
+	formData.append('path', 'src/index.c');
 	for (var i = 0; i < files.length; i++) {
 	  formData.append('photos', files[i]);
 	}
 
-	fetch('http://localhost:8000/upload', {
+	fetch('http://localhost:8000/api/upload/', {
 	  method: 'POST',
 	  body: formData
 	})

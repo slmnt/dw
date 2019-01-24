@@ -541,7 +541,7 @@ class SlideEditor extends React.Component {
         <div className={styles["slides-side-container"]}>
           <div className={styles["slides-side-header"]}>
             <div>スライド一覧</div>
-            <AddIcon className={styles["slides-side-header-add"]} onClick={this.props.addBlankSlide()} />
+            <AddIcon className={styles["slides-side-header-add"]} onClick={this.props.addBlankSlide} />
           </div>
           <div className={styles["slides-side"]} style={{position: "relative"}}
             onDragOver={this.onDragOver}

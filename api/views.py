@@ -3,6 +3,8 @@ from api import serializers as s
 from django.shortcuts import render,redirect
 from .models import *
 from .serializers import *
+import os
+import re
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -29,7 +31,8 @@ from Crypto.Hash import SHA256
 from back.settings import BASE_DIR
 # Create your views here.
 
-STATIC = BASE_DIR + '//static//'    
+STATIC = BASE_DIR + '//static//'
+STORAGE = BASE_DIR + '//frontend//public//'
 """
 send_mail(
     'Subject here',
@@ -630,3 +633,26 @@ class GetUserCourseContentIndex(viewsets.ModelViewSet):
         print(obj)
         serial = UserCourseContentIndexSerializer(obj,many=True)
         return Response(data=serial.data,status=status.HTTP_200_OK)
+
+class TestUpload(viewsets.ModelViewSet):
+
+    def post(self, request):
+        p = request.FILES['photos']
+        dir = request.data['path'].split('/')
+        path = STORAGE
+        for name in dir:
+            pattern = '.*\..*'
+            r = re.match(pattern,name)
+            if r:
+                path += name
+            else:
+                path += name + '//'
+                if not os.path.exists(path):
+                    os.makedirs(path)
+
+        with open(path,mode='wb+') as f:
+            for line in p:
+                f.write(line)
+            
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
