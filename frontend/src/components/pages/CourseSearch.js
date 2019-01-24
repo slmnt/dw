@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../Loading'
 import './CourseSearch.css'
-import Ad from '../Adpanel'
+import Ad from '../AdPanel'
 import axios from 'axios';
 
 import { Link } from 'react-router-dom';
