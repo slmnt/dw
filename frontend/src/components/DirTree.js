@@ -18,7 +18,8 @@ class DirTree extends React.Component {
     super(props);
     this.state = {
       fileData: {
-      }
+      },
+      dragging: false
     }
   }
   onToggleCollapse = (path) => {
@@ -103,14 +104,57 @@ class DirTree extends React.Component {
   
   }
 
+
+  onDragEnter = e => {
+    e.preventDefault();
+    this.setState({dragover: true});
+  }
+  onDragLeave = e => {
+    e.preventDefault();
+    this.setState({dragover: false});
+  }
+  onDragOver = e => {
+    e.preventDefault();
+  }
+  onDrop = e => {
+    console.log("drapp")
+    e.preventDefault();
+    
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    this.upload(files)
+  }
+
+  upload(files) {
+    const formData = new FormData();
+  
+    formData.append('path', '/src/a.c');
+    for (var i = 0; i < files.length; i++) {
+      formData.append('photos', files[i]);
+    }
+  
+    fetch('http://localhost:3000/api/upload/', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(response => console.log('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
+  
+  }
+
   render() {
     return (
       <div className={styles["dir-main"]}>
           <div className={styles["dir-drop-zone"]}
             style={{
-              display: false ? "block" : "none",
+              opacity: this.state.dragover ? 1 : 0,
               backgroundImage: "url(" + UploadIcon + ")",
             }}
+            onDragEnter={this.onDragEnter}
+            onDragLeave={this.onDragLeave}
+            onDragOver={this.onDragOver}
+            onDrop={this.onDrop}
           >
           </div>
           <div className={styles["dir-header"]}>ディレクトリ</div>
