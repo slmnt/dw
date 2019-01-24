@@ -291,7 +291,7 @@ class App extends React.Component {
                   <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
 
