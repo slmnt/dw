@@ -144,7 +144,7 @@ class SignIn extends Component {
                 <label>性別</label>
               </div>
               <div>
-                <select>
+                <select id="gender" >
                   <option>---</option>
                   <option>男性</option>
                   <option>女性</option>
@@ -157,7 +157,7 @@ class SignIn extends Component {
                 <label>年齢</label>
               </div>
               <div>
-                <input type="date"></input>
+                <input id="age" type="date"></input>
               </div>
             </div>
           <div className={styles.form_btn}>

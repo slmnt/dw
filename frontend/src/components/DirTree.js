@@ -133,7 +133,7 @@ class DirTree extends React.Component {
       formData.append('photos', files[i]);
     }
   
-    fetch('http://localhost:3000/api/upload/', {
+    fetch('http://localhost:8000/api/upload/', {
       method: 'POST',
       body: formData
     })

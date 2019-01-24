@@ -651,7 +651,10 @@ class TestUpload(viewsets.ModelViewSet):
                     os.makedirs(path)
 
         with open(path,mode='wb+') as f:
+            print(p.size)
+            d = 0            
             for line in p:
+                d += len(line)
                 f.write(line)
             
         data = {'ok':200}
