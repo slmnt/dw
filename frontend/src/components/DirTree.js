@@ -1,5 +1,4 @@
 import React from 'react';   
-import { Scrollbars } from 'react-custom-scrollbars';
 
 
 import styles from './DirTree.module.css';
@@ -123,6 +122,8 @@ class DirTree extends React.Component {
     const dt = e.dataTransfer;
     const files = dt.files;
     this.upload(files)
+
+    this.setState({dragover: false});
   }
 
   upload(files) {
@@ -133,7 +134,7 @@ class DirTree extends React.Component {
       formData.append('photos', files[i]);
     }
   
-    fetch('http://localhost:3000/api/upload/', {
+    fetch('http://localhost:8000/api/upload/', {
       method: 'POST',
       body: formData
     })

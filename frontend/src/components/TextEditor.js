@@ -1,5 +1,4 @@
 import React from 'react';   
-import { Scrollbars } from 'react-custom-scrollbars';
 
 import * as monaco from 'monaco-editor';
 //Editor component path set localhost:3000/course/<:id>/edit 

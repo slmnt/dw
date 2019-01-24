@@ -23,6 +23,7 @@ import { ReactComponent as DragHandleIcon } from '../../img/drag-handle.svg';
 import { ReactComponent as AddIcon } from '../../img/add.svg';
 import { ReactComponent as CrossIcon } from '../../img/cross.svg';
 import { ReactComponent as ThreeDots } from '../../img/three-dots.svg';
+import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 
 
 /*
@@ -402,7 +403,28 @@ class TextBox extends React.Component {
     )
   }
 }
-
+class TextArea extends React.Component {
+  constructor(props) {
+    super(props);
+    this.input = React.createRef();
+  }
+  setValue = (value) => {
+    this.input.current.value = value;
+  }
+  getValue = () => {
+    return this.input.current.value();
+  }
+  onInput = e => {
+    if (this.props.onUpdate) this.props.onUpdate(e.currentTarget.value);
+  }
+  render() {
+    return (
+      <div className={styles["textarea-container"]}>
+        <textarea type="text" className={classNames(styles.textarea)} onInput={this.onInput} ref={this.input} />
+      </div>
+    )
+  }
+}
 
 
 
@@ -411,7 +433,7 @@ class SlideEditor extends React.Component {
     super(props);
 
     this.state = {
-      boxHeight: 50,
+      boxHeight: 70,
       draggingBox: null, //参照
       boxInitialPos: null,
 
@@ -509,6 +531,7 @@ class SlideEditor extends React.Component {
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
 
     let box = this.getBox(pos);
+    console.log(pos)
     if (box) {
       this.draggingBox = box;
     }
@@ -561,7 +584,13 @@ class SlideEditor extends React.Component {
                   onClick={() => {this.clickSlide(v)}}
                 >
                   <div style={{width: "100%", height: "100%"}}>
-                    {v.pos}: {v.name}
+                    <div className={styles["slides-side-element-number"]}>
+                      {v.pos + 1}
+                    </div>
+                    <div className={styles["slides-side-element-info"]}>
+                      <div className={styles["slides-side-element-name"]}>{v.name}</div>
+                      <div className={styles["slides-side-element-text"]}>{v.text}</div>
+                    </div>
                   </div>
                 </div>);
               })
@@ -589,6 +618,9 @@ class SlideEditor extends React.Component {
                 <CKEditor
                     editor={ ClassicEditor }
                     data="<p>Hello from CKEditor 5!</p>"
+                    config={{
+                      height: "550px"
+                    }}
                     onInit={ editor => {
                         // You can store the "editor" and use when it is needed.
                         console.log( 'Editor is ready to use!', editor );
@@ -603,6 +635,10 @@ class SlideEditor extends React.Component {
                     onFocus={ editor => {
                         console.log( 'Focus.', editor );
                     } }
+
+                    style={{
+                      height: "100%"
+                    }}
                 />
               </div>
                 {/*
@@ -745,6 +781,7 @@ class Editor extends Component {
 
     this.courseNameInput = React.createRef();
     this.chapterNameInput = React.createRef();
+    this.chapterDescInput = React.createRef();
 
     this.slideEditor = React.createRef();
   }
@@ -829,6 +866,23 @@ class Editor extends Component {
   }
 
   // chapter
+  setChapterName = name => {
+    if (!this.state.currentChapter) return;
+    this.state.currentChapter.name = name;
+    this.setState({courseData: this.state.courseData});
+  }
+  setChapterDesc = desc => {
+    if (!this.state.currentChapter) return;
+    this.state.currentChapter.desc = desc;
+    this.setState({courseData: this.state.courseData});
+  }
+  saveChapterMenuCfg = () => {
+    if (!this.state.currentChapter) return;
+    this.state.currentChapter.name = this.chapterNameInput.current.value;
+    this.state.currentChapter.desc = this.chapterDescInput.current.value;
+    this.setState({courseData: this.state.courseData});
+  }
+
   addBlankChapter = () => {
     if (!this.state.courseData) return;
     this.state.courseData.chapters.push({
@@ -882,12 +936,12 @@ class Editor extends Component {
   }
   addBlankSlide = () => {
     if (!this.state.currentChapter) return;
-    /*this.state.currentChapter.slides.push({
+    this.state.currentChapter.slides.push({
       name: "スライド",
-      text: ""
+      text: "",
+      pos: this.state.currentChapter.slides.length
     });
     this.setState({courseData: this.state.courseData});
-    */
   }
   removeSlide = (slide) => {
     if (!this.state.currentChapter) return;
@@ -953,44 +1007,70 @@ class Editor extends Component {
           <div className={styles["middle-header"]}>
             <div className={styles.tablist}>
               <div onClick={() => this.openTab(0)}>スライド</div>
-              <div onClick={() => this.openTab(1)}>コード (ファイル)</div>
+              <div onClick={() => this.openTab(1)}>コード</div>
+              <div onClick={() => this.openTab(2)}>答え</div>
             </div>
             <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
               チャプター: {this.state.currentChapter && this.state.currentChapter.name}
             </div>
             <div className={styles["chapter-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
-              <div className={classNames(styles["chapter-menu"], styles["chapter-menu-cfg"]) } style={{display: this.state.chapterMenuConfig !== -1 ? "block" : "none"}}>
-                <div onClick={this.closeChapterMenuCfg}>戻る</div>
-              </div>
               <div className={styles["chapter-menu"]}>
                 <div className={styles["chapter-menu-header"]}>
                   <div className={styles["chapter-menu-header-main"]}>
                     <div>チャプター 一覧</div>
-                    <AddIcon className={styles["chapter-menu-header-add"]} onClick={this.addBlankChapter}/>
+                    <AddIcon className={styles["chapter-menu-header-add"]} onClick={this.addBlankChapter} style={{display: this.state.chapterMenuConfig !== -1 ? "none" : "block"}}/>
                   </div>
-                  <div className={styles["chapter-menu-header-close"]} onClick={() => this.closeChapterMenu()}>
-                    閉じる
+                  <div className={styles["chapter-menu-header-controls"]}>                
+                    <div className={styles["chapter-menu-header-item"]} onClick={this.closeChapterMenuCfg} style={{display: this.state.chapterMenuConfig !== -1 ? "block" : "none"}}>
+                      戻る
+                    </div>
+                    <div className={styles["chapter-menu-header-item"]} onClick={() => this.closeChapterMenu()}>
+                      閉じる
+                    </div>
                   </div>
                 </div>
-                {
-                  this.state.courseData && this.state.courseData.chapters.map((v, i) => {
-                    return (
-                      <div key={i} className={styles["chapter-menu-item"]} draggable data-chapter={i}
-                        onDragOver={this.onDragOver}
-                        onDragStart={this.onDragStart}
-                        onDrop={this.onDrop}
-                      >
-                        <DragHandleIcon className={styles["chapter-menu-icon"]} />
-                        <div className={styles["chapter-menu-item-info"]} onClick={() => {this.openChapter(v); this.closeChapterMenu();} } >
-                          <div className={styles["chapter-menu-item-name"]}>{i + 1}. {v.name}</div>
-                          <div>スライド枚数: {v.slides.length}</div>
+                <div className={classNames(styles["chapter-menu"], styles["chapter-menu-cfg"]) } style={{display: this.state.chapterMenuConfig !== -1 ? "block" : "none"}}>
+                  <div className={styles["chapter-menu-cfg-name"]}>
+                    <div>名前</div>
+                    <TextBox ref={this.chapterNameInput} />
+                  </div>
+                  <div className={styles["chapter-menu-cfg-desc"]}>
+                    <div>説明</div>
+                    <TextArea ref={this.chapterDescInput} />
+                  </div>
+                  <div className={styles["chapter-menu-cfg-footer"]}>
+                    <div onClick={() => {this.removeChapter(this.state.chapterMenuConfig); this.closeChapterMenuCfg();} }>
+                      削除
+                      <DeleteIcon />
+                    </div>
+                    <div onClick={this.closeChapterMenuCfg}>
+                      キャンセル
+                    </div>
+                    <div onClick={this.saveChapterMenuCfg}>
+                      完了
+                    </div>
+                  </div>
+                </div>
+                <div style={{display: this.state.chapterMenuConfig !== -1 ? "none" : "block"}}>
+                  {
+                    this.state.courseData && this.state.courseData.chapters.map((v, i) => {
+                      return (
+                        <div key={i} className={styles["chapter-menu-item"]} draggable data-chapter={i}
+                          onDragOver={this.onDragOver}
+                          onDragStart={this.onDragStart}
+                          onDrop={this.onDrop}
+                        >
+                          <DragHandleIcon className={styles["chapter-menu-icon"]} />
+                          <div className={styles["chapter-menu-item-info"]} onClick={() => {this.openChapter(v); this.closeChapterMenu();} } >
+                            <div className={styles["chapter-menu-item-name"]}>{i + 1}. {v.name}</div>
+                            <div>スライド枚数: {v.slides.length}</div>
+                          </div>
+                          <ThreeDots className={styles["chapter-menu-icon"]} onClick={() => this.openChapterMenuCfg(i)}/>
                         </div>
-                        <ThreeDots className={styles["chapter-menu-icon"]} onClick={() => this.openChapterMenuCfg(i)}/>
-                        <CrossIcon className={styles["chapter-menu-icon"]} onClick={() => this.removeChapter(i)}/>
-                      </div>
-                    )
-                  })
-                }
+                      )
+                    })
+                  }
+                </div>
               </div>
               <div className={styles["chapter-menu-bg"]} onClick={() => this.closeChapterMenu()}>
               </div>

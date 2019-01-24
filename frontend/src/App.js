@@ -21,7 +21,6 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Navbar from './components/Navbar';
 import Drawer from './components/Drawer'
 import Footer from './components/Footer';
-import Three from './components/Three';
 import Load from './components/Loading'
 import Back from './components/BackPlayer'
 //import Right from './components/Inter';
@@ -288,7 +287,6 @@ class App extends React.Component {
                   <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
                   <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
-                  <Route path="/three" render={(props) => <Three {...props}/>} />
                   <Route path="/tech"  component={Tech}/>
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>

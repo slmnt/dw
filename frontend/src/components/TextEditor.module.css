@@ -17,6 +17,8 @@
   height: 3em;
   background-color: #3c3c3c;
 
+  font-size: 1.2em;
+
   scrollbar-width: thin;
   scrollbar-color: #555 rgba(0, 0, 0, 0);
 }

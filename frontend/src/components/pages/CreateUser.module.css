@@ -3,17 +3,36 @@
 }
 
 .main {
-    text-align: center;
-    font-family:"arial black,Yu Gothic";
     margin-left: calc(--unit * 3);
     margin-right: calc(--unit * 3);
+    padding: 2em 0;
+
+    text-align: center;
+    font-family:"arial black,Yu Gothic";
     background-color:"#f2f7ff";
+
+}
+
+.top_logo {
+    width: 100%;
+    height: auto;
+}
+.logo_img {
+    width: 5em;
+    height: 5em;
+}
+.logo_title {
+    font-family: arial black,Yu Gothic;
+    color: var(--main-color);
+    text-align: center;
+    margin: auto;
+    height: auto;
 }
 
 .create_form{
     margin: auto;
     width: 80%;
-    padding-top: 3em;
+    padding: 2em 0;
 }
 .form_layout{
     padding: 2em;
@@ -52,6 +71,7 @@
 }
 
 .form_btn{
+    margin-top: 1em;
     text-align: center;
 }
 

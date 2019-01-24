@@ -91,13 +91,17 @@ class SignIn extends Component {
 
     return (
       <div className={styles.main}>
+        <div className={styles.top_logo}>
+          <Logo className={styles.logo_img}/>
+          <div className={styles.logo_title}>
+            MiniProg
+          </div>
+        </div>
+
         <div className={styles.create_form}>
           <div className={styles.form_layout}>
             <div className={styles.form_title}>
               会員登録
-            </div>
-            <div className={styles.form_logo}>
-              <Logo style={{width: "5em", height: "5em"}}/>
             </div>
             <div>
               <div>
@@ -181,9 +185,7 @@ class SignIn extends Component {
   }
 }
 
-SignIn.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+SignIn.propTypes = {};
 SignIn.contextType = MainContext;
 
 export default SignIn;

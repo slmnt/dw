@@ -29,6 +29,15 @@
   align-items: center;
 }
 
+/* text area */
+.textarea {
+  width: 100%;
+  height: 100%;
+}
+.textarea-container {
+
+}
+
 /* chapter menu */
 .chapter-menu-container {
   position: fixed;
@@ -56,6 +65,9 @@
   width: 100%;
   max-width: 40em;
   height: auto;
+  min-height: 20em;
+
+  overflow: hidden auto;
 
   margin: auto;
 
@@ -81,11 +93,18 @@
   align-content: center;
 
 }
+
+.chapter-menu-header-controls {
+  display: flex;
+}
+.chapter-menu-header-controls > div + div {
+  margin-left: 1em;
+}
 .chapter-menu-header-add {
   margin-left: 1em;
   cursor: pointer;
 }
-.chapter-menu-header-close {
+.chapter-menu-header-item {
   cursor: pointer;
 }
 
@@ -124,11 +143,22 @@
 
 
 .chapter-menu-cfg {
-
+  width: 100%;
+  box-sizing: border-box;
 }
 
-
-
+.chapter-menu-cfg-footer {
+  display: flex;
+  justify-content: space-between;
+}
+.chapter-menu-cfg-footer > div {
+  height: 1.5em;
+  line-height: 1.5em;
+  
+  margin: 0.2em 1em;
+  border-radius: 3em;
+  cursor: pointer;
+}
 
 
 /* header */
@@ -387,7 +417,8 @@
 .slides-side-element {
   position: absolute;
   width: 100%;
-  padding: 5px;
+  height: auto;
+  padding: 0.5em;
   box-sizing: border-box;
   cursor: pointer;
   transition: top 0.5s;
@@ -395,9 +426,39 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+
+  border-bottom: 1px solid var(--light-color);
 }
 .slides-side-element:hover {
   background-color: var(--light-color);
+}
+.slides-side-element > div {
+  display: flex;
+}
+.slides-side-element-number {
+  flex: 0 0 auto;
+  width: 1em;
+  line-height: 3em;
+  text-align: center;
+}
+.slides-side-element-number + div {
+  flex: 1 1 auto;
+  margin-left: 1em;
+}
+.slides-side-element-info {
+  overflow: hidden;
+}
+.slides-side-element-info > div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.slides-side-element-name {
+  color: var(--dark-color);
+}
+.slides-side-element-text {
+  font-size: 0.9em;
+  color: var(--main-color);
 }
 
 
