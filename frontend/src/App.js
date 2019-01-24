@@ -266,7 +266,7 @@ class App extends React.Component {
             <Drawer ref={this.drawer} />
 
             <main className="content">
-              <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+              <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%", zIndex: "2" }}>
                 {/*
                 setting react router route
                 <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
@@ -296,9 +296,9 @@ class App extends React.Component {
                   <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
 
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
-                  <Route exact strict path="/course/:id"  component={CourseInfo}/>
                   <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
-                  <Route exact strict path="/course/:id/:number"  component={CourseGet}/>
+                  <Route path="/course/:id/:number"  component={CourseGet}/>
+                  <Route path="/course/:id"  component={CourseInfo}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>
@@ -318,10 +318,7 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
+App.propTypes = {};
 
 App = withRouter(App);
 export default App;

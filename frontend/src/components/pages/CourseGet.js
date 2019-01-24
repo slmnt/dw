@@ -18,8 +18,7 @@ class CourseGet extends Component {
          *  CourseContent Rendering
          *      this.state.contents
          */
-        var u = '/getusercourseindex/'
-        axios.post(u,{
+        axios.post('/getusercourseindex/', {
             id:this.props.match.params.id,
             cid:this.props.match.params.number}
             ).then(response => {
@@ -29,19 +28,10 @@ class CourseGet extends Component {
     }
 
     render() {
-
-        const err = <div>No Such Contents</div>
-        let meg;
-
-        if(this.state.contents === "")
-            meg = err;
-        else
-            meg = null
-
         return (
             <div>
                 courseget
-                {meg}
+                {this.state.contents === "" && <div>No Such Contents</div>}
             </div>
         );
   	}

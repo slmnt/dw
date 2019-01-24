@@ -5,14 +5,21 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import styles from './DirTree.module.css';
 
 import logo from '../img/logo.svg';
+import UploadIcon from '../img/upload.svg';
 
 
 class DirTree extends React.Component {
+  /*
+    props
+      allowUpload
+      onUpload()
+  */
   constructor (props) {
     super(props);
     this.state = {
       fileData: {
-      }
+      },
+      dragging: false
     }
   }
   onToggleCollapse = (path) => {
@@ -67,9 +74,89 @@ class DirTree extends React.Component {
     f(dir);
     return re;
   }
+
+  onDragEnter = e => {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  onDragOver = e => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (e.target) {
+      console.log(e.target.dataset["filepath"])
+    }
+  }
+  onDrop = e => {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+  onUpload = (e) => {
+    var dt = e.dataTransfer;
+    var files = dt.files;
+  
+    var count = files.length;
+    console.log("File Count: " + count + "\n");
+
+    for (var i = 0; i < files.length; i++) {
+      console.log(" File " + i + ":\n(" + (typeof files[i]) + ") : <" + files[i] + " > " +
+              files[i].name + " " + files[i].size + "\n");
+    }
+  
+  }
+
+
+  onDragEnter = e => {
+    e.preventDefault();
+    this.setState({dragover: true});
+  }
+  onDragLeave = e => {
+    e.preventDefault();
+    this.setState({dragover: false});
+  }
+  onDragOver = e => {
+    e.preventDefault();
+  }
+  onDrop = e => {
+    console.log("drapp")
+    e.preventDefault();
+    
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    this.upload(files)
+  }
+
+  upload(files) {
+    const formData = new FormData();
+  
+    formData.append('path', '/src/a.c');
+    for (var i = 0; i < files.length; i++) {
+      formData.append('photos', files[i]);
+    }
+  
+    fetch('http://localhost:3000/api/upload/', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(response => console.log('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
+  
+  }
+
   render() {
     return (
       <div className={styles["dir-main"]}>
+          <div className={styles["dir-drop-zone"]}
+            style={{
+              opacity: this.state.dragover ? 1 : 0,
+              backgroundImage: "url(" + UploadIcon + ")",
+            }}
+            onDragEnter={this.onDragEnter}
+            onDragLeave={this.onDragLeave}
+            onDragOver={this.onDragOver}
+            onDrop={this.onDrop}
+          >
+          </div>
           <div className={styles["dir-header"]}>ディレクトリ</div>
           <div
             className={styles["dir-window"]}
