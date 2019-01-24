@@ -13,10 +13,10 @@ class Footer extends Component {
         <div className={styles.bottom}> 
           <div>
             <span>
-              Made with ❤ by がんくん
+              Made with ❤ by Kang Academy
             </span>
             <span>
-              © 2019 Kang Academy
+              © 2019 Stair Studio
             </span>
           </div>
           <div>

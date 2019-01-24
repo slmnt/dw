@@ -106,7 +106,9 @@ class UserCourse(models.Model):
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)
     likes = models.IntegerField(default=0)
+    users = models.IntegerField(default=0)
     createat = models.DateTimeField(default=timezone.now)
+    
 
 class UserCourseContent(models.Model):
     cid = models.IntegerField(default=-1)
@@ -121,10 +123,9 @@ class UserCourseContentIndex(models.Model):
     context = models.TextField()
 
 class UserCourseContentCode(models.Model):
-    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
+    root = models.ForeignKey('UserCourseContentIndex',on_delete=models.CASCADE)
     createat = models.DateTimeField(default=timezone.now)
     context = models.TextField()
-
 
 class UserCourseComment(models.Model):
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)

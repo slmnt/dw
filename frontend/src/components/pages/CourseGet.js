@@ -18,12 +18,13 @@ class CourseGet extends Component {
          *  CourseContent Rendering
          *      this.state.contents
          */
-        var u = '/getusercourseid/' + this.props.match.params.id + "/" + this.props.match.params.number
-        axios.get(u).then(response => {
-            // console.log(response.data[0])
-            if(typeof response.data[0] !== "object");
-            else
-                this.setState({contents: response.data[0]})
+        var u = '/getusercourseindex/'
+        axios.post(u,{
+            id:this.props.match.params.id,
+            cid:this.props.match.params.number}
+            ).then(response => {
+            console.log(response.data)
+            this.setState({contents: response.data})
         }).catch(e => console.log(e))
     }
 

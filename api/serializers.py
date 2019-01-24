@@ -75,7 +75,16 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model = UserInfo
         fields = ('__all__')
 
+#Use /courseSearch
 class UserCourseSerializer(serializers.ModelSerializer):
+    root = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserCourse
+        fields = ('id','root','title','createat','likes')
+
+#CourseInfo Use CourseInfo
+class UserCourseInfoSerializer(serializers.ModelSerializer):
     root = serializers.StringRelatedField()
     
     class Meta:
@@ -90,11 +99,11 @@ class UserCourseContentSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 class UserCourseContentinfoSerializer(serializers.ModelSerializer):
-    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
     
     class Meta:
         model = UserCourseContent
-        fields = ('title','createat','descriptoin')
+        fields = ('title','createat','descriptoin','cid')
+
 
 class AdsSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()
@@ -106,9 +115,13 @@ class AdsSerializer(serializers.ModelSerializer):
 
 class UserCourseCommentSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()
-    root = serializers.SlugRelatedField(read_only=True,slug_field='title')
     
     class Meta:
         model = UserCourseComment
-        fields = ('__all__')
+        fields = ('auth','comment','createat')
 
+class UserCourseContentIndexSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UserCourseContentIndex
+        fields = ('context','id')

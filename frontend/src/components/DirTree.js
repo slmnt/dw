@@ -1,4 +1,5 @@
 import React from 'react';   
+import { Scrollbars } from 'react-custom-scrollbars';
 
 
 import styles from './DirTree.module.css';
@@ -68,15 +69,18 @@ class DirTree extends React.Component {
   }
   render() {
     return (
-      <div
-        className={styles["dir-window"]}
-        style={ {
-          width: "100%"
-        } }
-      >
-        {
-          this.flatten(this.props.dir)
-        }
+      <div className={styles["dir-main"]}>
+          <div className={styles["dir-header"]}>ディレクトリ</div>
+          <div
+            className={styles["dir-window"]}
+            style={ {
+              width: "100%"
+            } }
+          >
+            {
+              this.flatten(this.props.dir)
+            }
+          </div>
       </div>
     )
   }

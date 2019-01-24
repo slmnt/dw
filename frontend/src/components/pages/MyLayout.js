@@ -64,7 +64,11 @@ class Mylayout extends Component {
     
     render() {
         return (
-            <div>
+            <div
+                style={{
+                    height: "100%"
+                }}
+            >
 
                 <div
                     style={{
@@ -72,7 +76,7 @@ class Mylayout extends Component {
                     lineHeight: "120%",
                     fontSize: "0.6em",
                     color: "#cccccc",
-                    height: "500px",
+                    height: "100%",
                     width: "100%",
                     }}
                 >
@@ -80,7 +84,8 @@ class Mylayout extends Component {
                         style={{
                             flex: "0 0 auto",
                             width: "200px",
-                            overflow: "hidden auto"
+                            overflow: "hidden auto",
+                            borderRight: "1px solid #666666",
                         }}
                     >
                         <DirTree dir={this.state.dir} openFile={path => {this.window.current.openTab(path);}} />
@@ -93,16 +98,7 @@ class Mylayout extends Component {
                         }}
                     >
                         <TextEditor ref={this.window} />
-                        <button onClick={() => this.runCode()}>実行</button>
                     </div>
-                </div>
-
-                <div
-                    style={{
-                        height: "300px",
-                        width: "300px",      
-                    }}
-                >
                 </div>
             </div>
         )
