@@ -523,7 +523,7 @@ class SlideEditor extends React.Component {
                   onClick={() => {this.clickSlide(v)}}
                 >
                   <div style={{width: "100%", height: "100%"}}>
-                    {i}: {v.name}
+                    {v.pos}: {v.name}
                   </div>
                 </div>);
               })
@@ -677,7 +677,7 @@ class Editor extends Component {
   }
 
 
-  moveBox(from, to) {
+  moveBox = (from, to) => {
     if (!this.slideEditor.current.getBox(to)) return;
 
     let target = this.slideEditor.current.getBox(from);
@@ -693,7 +693,7 @@ class Editor extends Component {
     this.setState({courseData: this.state.courseData})
   }
 
-  loadCourse(data) {
+  loadCourse = (data) => {
     //
     for (let ch of data.chapters) {
       for (let i in ch.slides) {
@@ -726,13 +726,17 @@ class Editor extends Component {
     this.setState({currentTab: id});
   }
 
+  openChapterMenu = () => {
+    
+  }
+
   render() {
     return (
       <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
             <input type="text" className={styles["course-name"]} ref={this.courseNameInput} />
-            <div className={styles["chapters-btn"]}>
+            <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
               チャプター一覧
             </div>
             <div className={styles["header-controls"]}>
