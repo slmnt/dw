@@ -54,14 +54,6 @@ class SignIn extends Component {
     console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
-
-    this.context.createUser({
-      uid: this.state.username,
-      pwd: this.state.passwd,
-      email: this.state.email,
-      fname: this.state.firstname,
-      lname: this.state.lastname
-    });
   }
 
   goBack = (e) => {
@@ -70,8 +62,8 @@ class SignIn extends Component {
     }
   }
 
-  handleChange = name => event => {
 
+  handleChange = name => event => {
     this.setState({
       [name]: event.target.value
     })
@@ -98,7 +90,7 @@ class SignIn extends Component {
           </div>
         </div>
 
-        <div className={styles.create_form}>
+        <form className={styles.create_form} name="Create">
           <div className={styles.form_layout}>
             <div className={styles.form_title}>
               会員登録
@@ -108,7 +100,7 @@ class SignIn extends Component {
                 <label>ID</label>
               </div>
               <div>
-                <input></input>
+                <input onChange={this.handleChange('username')} value={this.state.username} type="text"></input>
               </div>
             </div>
             <div>
@@ -116,7 +108,7 @@ class SignIn extends Component {
                 <label>Email</label>
               </div>
               <div>
-                <input></input>
+                <input onChange={this.handleChange('email')} value={this.state.email} type="email"></input>
               </div>
             </div>
             <div>
@@ -124,7 +116,7 @@ class SignIn extends Component {
                 <label>PASSWD</label>
               </div>
               <div>
-                <input type="password"></input>
+                <input onChange={this.handleChange('passwd')} value={this.state.passwd} type="password"></input>
               </div>
             </div>
             <div>
@@ -132,7 +124,7 @@ class SignIn extends Component {
                 <label>PASSWD</label>
               </div>
               <div>
-                <input type="password"></input>
+                <input onChange={this.handleChange('passwd2')} value={this.state.passwd2} type="password"></input>
               </div>
             </div>
             <div>
@@ -140,7 +132,7 @@ class SignIn extends Component {
                 <label>First_Name</label>
               </div>
               <div>
-                <input></input>
+                <input onChange={this.handleChange('firstname')} value={this.state.firstname} type="text"></input>
               </div>
             </div>
             <div>
@@ -148,7 +140,7 @@ class SignIn extends Component {
                 <label>Last_Name</label>
               </div>
               <div>
-                <input></input>
+                <input onChange={this.handleChange('lastname')} value={this.state.lastname} type="text"></input>
               </div>
             </div>
             <div>
@@ -156,7 +148,7 @@ class SignIn extends Component {
                 <label>性別</label>
               </div>
               <div>
-                <select>
+                <select id="gender" >
                   <option>---</option>
                   <option>男性</option>
                   <option>女性</option>
@@ -169,15 +161,15 @@ class SignIn extends Component {
                 <label>年齢</label>
               </div>
               <div>
-                <input type="date"></input>
+                <input id="age" type="date"></input>
               </div>
             </div>
           <div className={styles.form_btn}>
-            <a href="javascript:void(0)" >登録</a>
+            <a href="javascript:void(0)" onClick={(e) => this.submit(e)} >登録</a>
             <a href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
           </div>
           </div>
-        </div>
+        </form>
         <br/>
         <br/>
       </div>

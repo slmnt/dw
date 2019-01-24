@@ -94,7 +94,7 @@ class Login extends Component {
                 </div>
                 <div>
                   <div>
-                    <label>ID</label>
+                    <label>ユーザ名</label>
                   </div>
                   <div>
                     <input onChange={this.handleChange('name')}></input>
@@ -102,7 +102,7 @@ class Login extends Component {
                 </div>
                 <div>
                   <div>
-                    <label>PASSWD</label>
+                    <label>パスワード</label>
                   </div>
                   <div>
                     <input type="password" onChange={this.handleChange('password')}></input>
