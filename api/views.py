@@ -58,16 +58,16 @@ class UserAuthentic(APIView):
             #is_vaild check
             try:
                 if auth_user.is_active:
-                    pass
+                    return Response(status=status.HTTP_404_NOT_FOUND)
             except:
-                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
+                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
             #sended pwd check
             try:
                 pwd = request.data['pwd']
                 if check_password(pwd, auth_user.password):
                     pass
             except:
-                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
+                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
             v_user = authenticate(request=None,username=auth_user.username,password=pwd)
             if v_user is not None:
                 login(request,v_user)
@@ -77,7 +77,7 @@ class UserAuthentic(APIView):
                 return Response(status=status.HTTP_200_OK)
             else:
                 #now
-                return Response(data="1",status=status.HTTP_401_UNAUTHORIZED)
+                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
         else:
             return redirect("http://localhost:3000")
 
@@ -95,6 +95,7 @@ class CreateUser(APIView):
                 pwd = request.data['pwd']
                 email = request.data['email']
                 new_user = User(username=uname, email=email)
+                new_user.is_active = False
                 new_user.set_password(pwd)
             except:
                 return Response(data="1")
@@ -173,36 +174,6 @@ class CreateMUser(APIView):
 
 #required data
 # 'contents'
-class Addboard(viewsets.ModelViewSet):
-
-    def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            #check username
-            ctext = request.data['contents']
-            new_board = Testboard(text=ctext)
-            new_board.save()
-            boards = Testboard.objects.all().order_by('-id')
-            serializer = TestBoardSerializer(boards, many=True)                    
-            return Response(data=serializer.data,status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
-
-class Getboard(viewsets.ModelViewSet):
-
-    def get(self, request):
-        boards = Testboard.objects.all().order_by('-id')
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        #print(select)
-        if select == 'application/json':
-            serializer = TestBoardSerializer(boards, many=True)                    
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
-        #print(STATIC)
-        #cut section
-        #boards = Testboard.objects.all().order_by('-id')[start:end]
-
 #get board id 
 #ex) /api/igetboard/1
 class icodeget(generics.ListAPIView):
@@ -270,39 +241,6 @@ class Commentadd(viewsets.ModelViewSet):
         q = Comment.objects.all().filter(root=root).order_by('createat')
         s = CommentSerializer(q,many=True)
         return Response(data=s.data,status=status.HTTP_200_OK)
-
-class Getboardnum(viewsets.ModelViewSet):
-
-    def get(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        #print(select)
-        if select == 'application/json':
-            boards = Testboard.objects.all().count()                   
-            boards = int(boards / 7)
-            return Response(data=boards, status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
-
-class GetboardPage(viewsets.ModelViewSet):
-
-    def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        #print(select)
-        if select == 'application/json':
-            num = request.data['num']
-            #error
-            start = num * 7
-            end = (num + 1) * 7
-            print(start,end)
-            boards = Testboard.objects.all().order_by('-id')[start:end]
-            if boards.count() > 0:
-                serializer = TestBoardSerializer(boards, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
-            else:
-                return Response(status=status.HTTP_204_NO_CONTENT)
-
-        else:
-            return redirect("http://localhost:3000")
 
 class CodeSerial(viewsets.ModelViewSet):
 
@@ -381,10 +319,6 @@ class Python(viewsets.ModelViewSet):
     def post(self, request):
         #check username
         ctext = request.data['contents']
-        new_board = Testboard(text=ctext)
-        new_board.save()
-        filename = Code.objects.all().count()
-        filename += 1
         #create dump file   
         #open stdin stderr file
         output = open(STATIC + 'output.txt', 'w')
@@ -418,125 +352,6 @@ class Python(viewsets.ModelViewSet):
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
-class Java(viewsets.ModelViewSet):
-
-    def post(self, request):
-        #check username
-        ctext = request.data['contents']
-        new_board = Testboard(text=ctext)
-        new_board.save()
-        #create dump file
-        #open stdin stderr file
-        output = open(STATIC + 'output.txt', 'w')
-        inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + 'main.java', 'w')
-        pin.write(ctext)
-        pin.close()
-        #build subprocess 
-        cmd1 = "javac " + STATIC + 'main.java'
-        cmd2 = "java " + STATIC + 'main'
-        p = subprocess.Popen(cmd, stdout=output, stderr=output)
-        dump = ''
-        flag = True
-        #excete 
-        try:
-            #timeout value setting is service level
-            out, err = p.communicate(timeout=0.2)
-        except subprocess.TimeoutExpired:
-            p.kill()
-            out, err = p.communicate()
-            dump += 'timeout error'
-            flag = False
-        finally:
-            while flag:
-                temp = inn.readline()
-                if not temp:
-                    break
-                dump += str(temp)
-        inn.close()
-        output.close()
-        #return response
-        return Response(data=dump,status=status.HTTP_200_OK)
-
-class Clang(viewsets.ModelViewSet):
-
-    def post(self, request):
-        #check username
-        ctext = request.data['contents']
-        new_board = Testboard(text=ctext)
-        new_board.save()
-        #create dump file
-        #open stdin stderr file
-        output = open(STATIC + 'output.txt', 'w')
-        inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + 'test.c', 'w')
-        pin.write(ctext)
-        pin.close()
-        #build subprocess 
-        cmd1 = "gcc " + STATIC + 'test.c'
-        cmd2 = "./a.out"
-        p = subprocess.Popen(cmd, stdout=output, stderr=output)
-        dump = ''
-        flag = True
-        #excete 
-        try:
-            #timeout value setting is service level
-            out, err = p.communicate(timeout=0.2)
-        except subprocess.TimeoutExpired:
-            p.kill()
-            out, err = p.communicate()
-            dump += 'timeout error'
-            flag = False
-        finally:
-            while flag:
-                temp = inn.readline()
-                if not temp:
-                    break
-                dump += str(temp)
-        inn.close()
-        output.close()
-        #return response
-        return Response(data=dump,status=status.HTTP_200_OK)
-
-class Cpplang(viewsets.ModelViewSet):
-
-    def post(self, request):
-        #check username
-        ctext = request.data['contents']
-        new_board = Testboard(text=ctext)
-        new_board.save()
-        #create dump file
-        #open stdin stderr file
-        output = open(STATIC + 'output.txt', 'w')
-        inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + 'test.cpp', 'w')
-        pin.write(ctext)
-        pin.close()
-        #build subprocess 
-        cmd1 = "gcc " + STATIC + 'test.cpp'
-        cmd2 = "./a.out"
-        p = subprocess.Popen(cmd, stdout=output, stderr=output)
-        dump = ''
-        flag = True
-        #excete 
-        try:
-            #timeout value setting is service level
-            out, err = p.communicate(timeout=0.2)
-        except subprocess.TimeoutExpired:
-            p.kill()
-            out, err = p.communicate()
-            dump += 'timeout error'
-            flag = False
-        finally:
-            while flag:
-                temp = inn.readline()
-                if not temp:
-                    break
-                dump += str(temp)
-        inn.close()
-        output.close()
-        #return response
-        return Response(data=dump,status=status.HTTP_200_OK)
 
 class Getuser(viewsets.ModelViewSet):
 
@@ -550,13 +365,11 @@ class Getuser(viewsets.ModelViewSet):
 
 class CheckMailing(viewsets.ModelViewSet):
 
-    def get(self,request):
-        return Response(status=status.HTTP_200_OK)
-
     def post(self, request):
         crypt = request.data['code']
         try:
             c = CertiList.objects.get(code=crypt)
+            c.name.is_active = True
             c.delete()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -634,7 +447,7 @@ class GetUserCourseContentIndex(viewsets.ModelViewSet):
         serial = UserCourseContentIndexSerializer(obj,many=True)
         return Response(data=serial.data,status=status.HTTP_200_OK)
 
-class TestUpload(viewsets.ModelViewSet):
+class Upload(viewsets.ModelViewSet):
 
     def post(self, request):
         p = request.FILES['photos']
@@ -670,18 +483,68 @@ class CreateCourse(viewsets.ModelViewSet):
         new_course.save()
         return Response(status=status.HTTP_200_OK)
 
+class CreateChapter(viewsets.ModelViewSet):
+
+    #create chapter
+    #required
+    #user, courseid,title,desc
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        id = request.data['id']
+        title = request.data['title']
+        desc = request.data['desc']
+        course = UserCourse.objects.get(id=id)
+        #Auth Check
+        if root == course.root:
+            q = UserCourseContent.objects.all().filter(root=course)
+            cid = len(q) + 1
+            Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
+            Chapter.save()
+        return Response(status=status.HTTP_200_OK)
+
+class SlideCreate(viewsets.ModelViewSet):
+
+    #required
+    #user, courseid, chapterid, context
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        id = request.data['id']
+        cid = request.data['cid']
+        text = request.data['context']
+        course = UserCourse.objects.get(id=id)
+        if root == course.root:
+            q = UserCourseContent.objects.all().filter(root=course,cid=cid)
+            if q:
+                chapter = q.get()
+                slides = UserCourseContentIndex(root=chapter,context=text)
+                slides.save()
+        return Response(status=status.HTTP_200_OK)
+
+class ChapterSourceCodeCreate(viewsets.ModelViewSet):
+
+    #required
+    #user, courseid, chapterid,context
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        id = request.data['id']
+        cid = request.data['cid']
+        text = request.data['context']
+        course = UserCourse.objects.get(id=id)
+        if root == course.root:
+            q = UserCourseContent.objects.all().filter(root=course,cid=cid)
+            if q:
+                chapter = q.get()
+                slides = UserCourseContentCode(root=chapter,context=text)
+                slides.save()
+        return Response(status=status.HTTP_200_OK)
+
 class APItest(viewsets.ModelViewSet):
 
     def get(self,request):
         return Response(status=status.HTTP_200_OK)
 
-    #create chapter
     #required
-    #user, courseid
     def post(self, request):
         root = User.objects.get(username=request.user)
-        title = request.data['title']
-        desc = request.data['description']
-        new_course = UserCourse(title=title,descriptoin=desc,root=root)
-        new_course.save()
+        root.is_active = False
         return Response(status=status.HTTP_200_OK)
