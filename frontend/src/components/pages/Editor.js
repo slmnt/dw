@@ -363,7 +363,20 @@ class TestIFrame extends React.Component {
   _updateIframe() {
       const iframe = this.refs.iframe;
       const document = iframe.contentDocument;
-      document.body.innerHTML = this.props.content;
+      if (!document) return;
+      document.body.innerHTML = `
+        <html>
+          <body>
+            <style>
+              body {
+                overflow: hidden;
+                font-size: 0.6em;
+              }
+            </style>
+            ${this.props.content}
+          </body>
+        </html>
+      `;
       /*
       const head = document.getElementsByTagName('head')[0];
       this.props.stylesheets.forEach(url => {
@@ -377,9 +390,10 @@ class TestIFrame extends React.Component {
 
   render() {
       return (<iframe
-        allowFullScreen={true}
-        sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
-        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
+        style={{width: "100%", height: "100%", border: "none", pointerEvents: "none"}}
+        //allowFullScreen={true}
+        //"allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
+        //"geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
         ref="iframe"/>)
   }
 }
@@ -589,8 +603,11 @@ class SlideEditor extends React.Component {
                       {v.pos + 1}
                     </div>
                     <div className={styles["slides-side-element-info"]}>
+                      {/*
                       <div className={styles["slides-side-element-name"]}>{v.name}</div>
                       <div className={styles["slides-side-element-text"]}>{v.text}</div>
+                      */}
+                      <TestIFrame content={v.text}/>
                     </div>
                   </div>
                 </div>);
