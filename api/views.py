@@ -659,3 +659,29 @@ class TestUpload(viewsets.ModelViewSet):
             
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
+
+class CreateCouser(viewsets.ModelViewSet):
+
+
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        title = request.data['title']
+        desc = request.data['description']
+        new_course = UserCourse(title=title,descriptoin=desc,root=root)
+        new_course.save()
+        return Response(status=status.HTTP_200_OK)
+
+class APItest(viewsets.ModelViewSet):
+
+    def get(self,request):
+        return Response(status=status.HTTP_200_OK)
+
+    #create chapter
+    #required
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        title = request.data['title']
+        desc = request.data['description']
+        new_course = UserCourse(title=title,descriptoin=desc,root=root)
+        new_course.save()
+        return Response(status=status.HTTP_200_OK)
