@@ -110,7 +110,8 @@ class UserCourse(models.Model):
     users = models.IntegerField(default=0)
     createat = models.DateTimeField(default=timezone.now)
     
-
+######
+# Course Chapter
 class UserCourseContent(models.Model):
     cid = models.IntegerField(default=-1)
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
@@ -118,6 +119,8 @@ class UserCourseContent(models.Model):
     descriptoin = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
 
+######
+# Coutse Chapter Slides
 class UserCourseContentIndex(models.Model):
     root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
     createat = models.DateTimeField(default=timezone.now)

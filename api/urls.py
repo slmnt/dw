@@ -72,6 +72,10 @@ Upload = TestUpload.as_view({
     'post': 'post'
 })
 
+apitest = APItest.as_view({
+    'post': 'post',
+    'get': 'get'
+})
 
 urlpatterns = [
     path('authentic/',UserAuthentic.as_view()),
@@ -101,6 +105,6 @@ urlpatterns = [
     path('getusercourseindex/',Get_User_Course_index),
     path('getusercoursecomment/<id>',GetUserCourseComments.as_view()),
     path('upload/',Upload),
-
+    path('test',apitest)
 
 ]
