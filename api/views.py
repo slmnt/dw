@@ -450,7 +450,8 @@ class GetUserCourseContentIndex(viewsets.ModelViewSet):
 class Upload(viewsets.ModelViewSet):
 
     def post(self, request):
-        print(request.user)
+        if request.user:
+            print(request.user)
         p = request.FILES['files']
         dir = request.data['path'].split('/')
         path = STORAGE
@@ -485,7 +486,30 @@ class CreateCourse(viewsets.ModelViewSet):
         desc = request.data['desc']
         new_course = UserCourse(title=title,descriptoin=desc,root=root)
         new_course.save()
-        return Response(status=status.HTTP_200_OK)
+        queryset = new_course
+        serializer = UserCourseInfoSerializer(queryset)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+class UpdateCourse(viewsets.ModelViewSet):
+
+    #create Course
+    #required
+    #title, desc
+    def post(self, request):
+        root = User.objects.get(username=request.user)
+        id = request.data['id']
+        title = request.data['title']
+        desc = request.data['desc']
+        mycourse = UserCourse.objects.get(id=id)
+        if mycourse.root == root:
+            mycourse.title = title
+            mycourse.desc = desc
+            mycourse.save()
+
+        queryset = mycourse
+        serializer = UserCourseInfoSerializer(queryset)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
 
 class CreateChapter(viewsets.ModelViewSet):
 
@@ -495,18 +519,30 @@ class CreateChapter(viewsets.ModelViewSet):
     def post(self, request):
         root = User.objects.get(username=request.user)
         id = request.data['id']
+        cid = request.data['cid']
         title = request.data['title']
         desc = request.data['desc']
         course = UserCourse.objects.get(id=id)
         #Auth Check
         if root == course.root:
-            q = UserCourseContent.objects.all().filter(root=course)
-            cid = len(q) + 1
-            Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
-            Chapter.save()
-        return Response(status=status.HTTP_200_OK)
+            #Already create chapter check
+            q = UserCourseContent.objects.all().filter(root=course,cid=cid)
 
-class SlideCreate(viewsets.ModelViewSet):
+            #Update Chapter
+            if q:
+                chapter = q.get()
+                chapter.title = title
+                chapter.descriptoin = desc
+                chapter.save()
+
+            #Create New Chapter
+            else:
+                Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
+                Chapter.save()
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+
+class CreateSlide(viewsets.ModelViewSet):
 
     #required
     #user, courseid, chapterid, context
@@ -514,15 +550,23 @@ class SlideCreate(viewsets.ModelViewSet):
         root = User.objects.get(username=request.user)
         id = request.data['id']
         cid = request.data['cid']
+        sid = request.data['sid']
         text = request.data['context']
         course = UserCourse.objects.get(id=id)
         if root == course.root:
             q = UserCourseContent.objects.all().filter(root=course,cid=cid)
             if q:
                 chapter = q.get()
-                slides = UserCourseContentIndex(root=chapter,context=text)
-                slides.save()
-        return Response(status=status.HTTP_200_OK)
+                mod = UserCourseContentIndex.objects.all().filter(root=chapter,sid=sid)
+                if mod:
+                    slide = mod.get()
+                    slide.context = text
+                    slide.save()
+                else:                    
+                    slides = UserCourseContentIndex(root=chapter,context=text,sid=sid)
+                    slides.save()
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
 
 class ChapterSourceCodeCreate(viewsets.ModelViewSet):
 
