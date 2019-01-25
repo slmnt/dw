@@ -3,8 +3,8 @@
 }
 
 .main {
-    margin-left: calc(--unit * 3);
-    margin-right: calc(--unit * 3);
+    margin-left: calc(var(--unit) * 3);
+    margin-right: calc(var(--unit) * 3);
     padding: 2em 0;
 
     text-align: center;
@@ -104,11 +104,11 @@
 }
 
 .paper {
-    margin-top: calc(--unit * 5);
+    margin-top: calc(var(--unit) * 5);
     display: 'flex';
     flex-direction: 'column';
     align-items: 'center';
-    padding: calc(--unit * 2) calc(--unit * 3) calc(--unit * 3);
+    padding: calc(var(--unit) * 2) calc(var(--unit) * 3) calc(var(--unit) * 3);
 }
 .signup {
     color:"white";
@@ -120,9 +120,9 @@
 }
 .form {
     width: '100%';
-    margin-top: --unit;
+    margin-top: var(--unit);
 }
 .submit {
-    margin-top: calc(--unit * 3);
+    margin-top: calc(var(--unit) * 3);
     background-color:"#1abc9c";
 }
