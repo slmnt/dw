@@ -1005,9 +1005,15 @@ class Editor extends Component {
           </div>
           <div className={styles["middle-header"]}>
             <div className={styles.tablist}>
-              <div onClick={() => this.openTab(0)}>スライド</div>
-              <div onClick={() => this.openTab(1)}>コード</div>
-              <div onClick={() => this.openTab(2)}>答え</div>
+              <div className={this.state.currentTab === 0 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(0)}>
+                スライド
+              </div>
+              <div className={this.state.currentTab === 1 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(1)}>
+                コード
+              </div>
+              <div className={this.state.currentTab === 2 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(2)}>
+                答え
+              </div>
             </div>
             <div className={styles["chapter-name"]}>
               <TextBox ref={this.chapterNameInput} onUpdate={v => this.setChapterName(v)} />

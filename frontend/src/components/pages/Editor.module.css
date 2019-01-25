@@ -229,6 +229,7 @@
 
   font-size: 1.5em;  
   color: inherit;
+  margin: 0 0 0.5em 2em;
 }
 .chapters-btn {
   box-shadow: 0 1px 3px black;
@@ -236,7 +237,7 @@
   
   flex: 0 0 auto;
   padding: 0.5em 1em;
-  margin: 0 1em;
+  margin: 0 1em 0.5em 1em;
 
   cursor: pointer;
 }
@@ -280,7 +281,7 @@
   align-content: center;
 
   flex: 0 0 auto;
-  padding: 0 1em 0.5em 1em;
+  padding: 0 1em;
   border-bottom: 1px solid #1abc9c;
 }
 
@@ -291,14 +292,23 @@
   justify-content: flex-start;
   align-content: center;
 
+  border: 1px solid var(--light-color);
+  border-width: 1px 1px 0 1px;
 }
 .tablist > div {
   padding: 0.5em 1em;
-  background-color: darkgray;
+  background-color: white;
   cursor: pointer;
 }
 .tablist > div + div {
-  margin-left: 1em;
+  border-left: 1px solid var(--light-color);
+}
+.tablist > div:hover {
+  background-color: var(--light-color);
+}
+.tabitem-selected {
+  background-color: var(--main-color) !important;
+  color: white;
 }
 
 
