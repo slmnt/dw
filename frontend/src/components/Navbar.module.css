@@ -46,15 +46,9 @@
   margin-left: 0.5em;
 }
 
-.navigation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-}
-.navigation > div + div {
-  margin-left: 1em;
-}
+
+
+/* mobile menu */
 
 .mobileButton {
   position: relative;
@@ -86,6 +80,10 @@
 }
 
 
+
+/* menu */
+
+
 .rightMenu {
 }
 .rightMenu > div:hover {
@@ -93,10 +91,19 @@
   cursor: pointer;
 }
 .rightMenu > div + div {
-  margin-left: 1em;
+  margin-left: 3em;
 }
 
 
+.navmenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+.navmenu > div + div {
+  margin-left: 1em;
+}
 
 
 .avatar {
@@ -108,14 +115,17 @@
 
 
 .user-popup {
+  display: fixed;
+  flex-flow: column nowrap;
+
   position: absolute;
   height: 10em;
   width: 15em;
   right: 0;
   top: 100%;
 
-  background-color: #f6f6f6;
-  border-radius: 10%;
+  background-color: var(--light-color);
+  border-radius: 2em;
 
   box-shadow: 0px 0px 10px black;
 }

@@ -31,7 +31,11 @@ class NavBar extends React.Component {
         {
           this.state.showUserPopup &&
             <div className={styles["user-popup"]}>
-              skrr
+              <div>マイページ</div>
+              <div>コース管理</div>
+              <div>設定</div>
+              <div>ヘルプ</div>
+              <div>ログアウト</div>
             </div>
         }
         <div>
@@ -49,26 +53,25 @@ class NavBar extends React.Component {
         {this.props.children}
 
         <div className={styles.rightMenu}>
-          <div className={styles.navigation}>
-            <div>{"login: " + (this.context.isLoggedIn ? true : false) }</div>
-            <div><Link to="/getting-started">Getting Started</Link></div>
-            <div><Link to="/">コース</Link></div>
+          <div className={styles.navmenu}>
+            <div><Link to="/getting-started">はじめる</Link></div>
+            <div><Link to="/">コースを見る</Link></div>
+            <div><Link to="/">コースを作る</Link></div>
           </div>
-          {
-            !this.context.isLoggedIn ?
-              <React.Fragment>
-                <div><Link to="/login">ログイン</Link></div>
-                <div><Link to="/signup">会員登録</Link></div>
-              </React.Fragment>
-            :
-              <React.Fragment>
-                <div>
-                  {this.context.uid}
-                </div>
-                <div className={styles.avatar} onClick={() => this.setState({showUserPopup: !this.state.showUserPopup})}>
-                </div>
-              </React.Fragment>
-          }
+          <div className={styles.navmenu}>
+            {
+              !this.context.isLoggedIn ?
+                <React.Fragment>
+                  <div><Link to="/login">ログイン</Link></div>
+                  <div><Link to="/signup">会員登録</Link></div>
+                </React.Fragment>
+              :
+                <React.Fragment>
+                  <div className={styles.avatar} onClick={() => this.setState({showUserPopup: !this.state.showUserPopup})}>
+                  </div>
+                </React.Fragment>
+            }
+          </div>
         </div>
       </nav>
     );
