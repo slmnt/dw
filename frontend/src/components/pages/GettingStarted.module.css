@@ -4,6 +4,21 @@
   color: white;
 }
 
+.header {
+  font-size: 3em;
+  text-align: center;
+
+  height: 3em;
+  padding: 0.5em;
+
+  color: white;
+  background: linear-gradient(var(--dark-color), var(--light-color));
+}
+.header > div {
+  height: 100%;
+  width: 100%;
+}
+
 .huge-panel {
   width: 100%;
   height: 100%;
@@ -15,3 +30,25 @@
   box-sizing: border-box;
 }
 
+
+.footer {
+  font-size: 1.5em;
+  text-align: center;
+
+  height: 3em;
+  padding: 0.5em;
+
+  display: flex;
+  justify-content: space-between;
+
+  color: white;
+  background: linear-gradient(#452398, var(--light-color));
+}
+.footer > div {
+  border-radius: 3em;
+  background: white;
+  border: 0.2em solid blueviolet;
+  color: blue;
+
+  line-height: 1em;
+}
