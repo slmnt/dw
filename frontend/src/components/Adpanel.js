@@ -10,10 +10,8 @@ class Ad extends Component {
 
     constructor (props) {
         super(props);
-
     }
-    
-    
+        
     render() {
         return (
             <div className="Ad_body">

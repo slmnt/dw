@@ -8,7 +8,6 @@ import queryString from 'query-string';
 import axios from 'axios';
 import history from './modules/history';
 
-
 import './App.css';
 import {MainContext} from './contexts/main';
 
@@ -20,7 +19,6 @@ import Navbar from './components/Navbar';
 import Drawer from './components/Drawer'
 import Footer from './components/Footer';
 import Load from './components/Loading'
-import Back from './components/BackPlayer'
 //import Right from './components/Inter';
 
 // pages
@@ -31,9 +29,6 @@ import MyPage from './components/pages/MyPage';
 import UserInfo from './components/pages/UserInfo';
 
 import Right from './components/pages/MyLayout';
-import Boards from './components/pages/MyProgram';
-import Codeman from './components/code/codeman';
-import Boardid from './components/pages/BoardGet'
 import Tech from './components/pages/Techinfo'
 import Mail from './components/pages/EmailCertify'
 
@@ -283,10 +278,7 @@ class App extends React.Component {
                   <Route path="/main" render={() => <Main />}/>
 
                   <Route path="/right" component={Right} />
-                  <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-                  <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
-                  <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/tech"  component={Tech}/>
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>

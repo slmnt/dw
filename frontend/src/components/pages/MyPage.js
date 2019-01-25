@@ -22,8 +22,9 @@ class MyPage extends Component {
         })        
 
         axios.post('/test',{
-            title: "test",
-            description: "test"
+            id:2,
+            cid:1,
+            context: "test"
         }).then(response => {
             console.log(response)
         }).catch((e) => {

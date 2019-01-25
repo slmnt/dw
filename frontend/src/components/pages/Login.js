@@ -1,43 +1,11 @@
 import React, { Component } from 'react';
 
-// UI
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { Grid } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-
-//
-import classNames from 'classnames';
-
 //
 import styles from './Login.module.css';
 import {MainContext} from '../../contexts/main';
 
 //
 import { ReactComponent as Logo } from '../../img/logo.svg';
-
-
-
-const styles2 = theme => ({
-    button: {
-      margin: theme.spacing.unit,
-    },
-    input: {
-      display: 'none',
-    },
-    margin: {
-        margin: theme.spacing.unit,
-      },
-      textField: {
-        flexBasis: 280,
-      },    
-});
   
 class Login extends Component {
 
@@ -122,4 +90,4 @@ class Login extends Component {
 }
 Login.contextType = MainContext;
 
-export default withStyles(styles2)(Login);
+export default Login;
