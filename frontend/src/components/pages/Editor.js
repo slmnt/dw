@@ -14,6 +14,8 @@ import katex from 'katex';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+
+import api from '../../modules/api'
 /*
 import * as Quill from 'quill';
 import 'quill/dist/quill.snow.css';
@@ -406,6 +408,7 @@ class TextBox extends React.Component {
     )
   }
 }
+
 class TextArea extends React.Component {
   constructor(props) {
     super(props);
@@ -428,8 +431,6 @@ class TextArea extends React.Component {
     )
   }
 }
-
-
 
 class SlideEditor extends React.Component {
   constructor(props) {
@@ -714,10 +715,12 @@ class Editor extends Component {
     super(props);
     this.state = {
       courseData: {
+        id: 1,
         name: "testcoure",
+        desc: "",
         chapters: [
           {
-            name: "testhcapter",
+            name: "testhcapter1",
             desc: "",
             slides: [
               {
@@ -738,12 +741,14 @@ class Editor extends Component {
             ]
           },
           {
-            name: "ddwaw",
+            name: "testhcapter2",
+            desc: "",
             slides: [
             ]
           },
           {
-            name: "oppopo",
+            name: "testhcapter3",
+            desc: "sets??",
             slides: [
             ]
           }
@@ -784,6 +789,70 @@ class Editor extends Component {
   }
   componentDidMount() {
     this.loadCourse(this.state.courseData); // テスト test
+    
+    
+    /*
+    at this point, create course and get course id/title
+    const formData = new FormData();
+    formData.append('title','testtitle')
+    formData.append('desc','desc')
+
+    api.post('/api/createcourse/',{
+      body: formData
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
+    this.state.name = response.title
+    this.state.id = response.id
+    */
+  }
+
+  onSave = (e) => {
+    var chapters = this.state.courseData.chapters
+    
+    //update coursetitle
+    let formData = new FormData();
+    formData.append('id',this.state.courseData.id)
+    formData.append('title',this.state.courseData.name)
+    formData.append('desc',this.state.courseData.desc)
+    api.post('/api/createcourse/',{
+      body: formData
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
+
+    let idx = 0
+    for(let c of chapters){
+      idx += 1
+      let jdx = 0
+      let slides = c.slides
+      //at this point, craete chapter
+      //name, desc
+      let formData = new FormData();
+      formData.append('id',this.state.courseData.id)
+      formData.append('cid',idx)
+      formData.append('title',c.name)
+      formData.append('desc',c.desc)
+      api.post('/api/craetechapter/',{
+        body: formData
+      }).then(response => response.json())
+      .then(response => console.log('Success:', response))
+      for(let s of slides){
+        //at this point, craete slides
+        //name, desc
+        jdx += 1
+
+        let formData = new FormData();
+        formData.append('id',this.state.courseData.id)
+        formData.append('cid',idx)
+        formData.append('sid',jdx)
+        formData.append('title',s.name)
+        formData.append('context',s.text)
+        api.post('/api/createslide/',{
+          body: formData
+        }).then(response => response.json())
+        .then(response => console.log('Success:', response))
+        }
+
+    }
   }
 
 
@@ -950,10 +1019,6 @@ class Editor extends Component {
   }
 
 
-
-
-
-
   onDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData('chapter', e.currentTarget.dataset["chapter"]);
@@ -1000,7 +1065,7 @@ class Editor extends Component {
             <div className={styles["header-controls"]}>
               <div className={styles["discard-controls"]}><span>戻る</span></div>
               <div className={styles["preview-controls"]}><span>プレビュー</span></div>
-              <div className={styles["save-controls"]}><span>保存</span></div>
+              <div className={styles["save-controls"]} onClick={this.onSave} ><span>保存</span></div>
             </div>
           </div>
           <div className={styles["middle-header"]}>

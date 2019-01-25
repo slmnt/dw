@@ -98,6 +98,7 @@ class UserCourseContentIndex(models.Model):
     root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
     createat = models.DateTimeField(default=timezone.now)
     context = models.TextField()
+    sid = models.IntegerField(default=-1)
 
 class UserCourseContentCode(models.Model):
     root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
