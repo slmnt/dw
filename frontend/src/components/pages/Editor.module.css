@@ -33,6 +33,9 @@
 .textarea {
   width: 100%;
   height: 100%;
+
+  border: none;
+  outline-color: var(--main-color);
 }
 .textarea-container {
 
@@ -146,6 +149,9 @@
   width: 100%;
   box-sizing: border-box;
 }
+.chapter-menu-cfg-name {
+  height: 1.5em;
+}
 
 .chapter-menu-cfg-footer {
   display: flex;
@@ -154,7 +160,7 @@
 .chapter-menu-cfg-footer > div {
   height: 1.5em;
   line-height: 1.5em;
-  
+
   margin: 0.2em 1em;
   border-radius: 3em;
   cursor: pointer;

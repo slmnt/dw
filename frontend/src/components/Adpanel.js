@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Loading from './Loading'
 import './AdPanel.css'
 
-
 class Ad extends Component {
     state = {
         keyword: 'test'

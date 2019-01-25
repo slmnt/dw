@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-  test: {
-    backgroundColor: 'red'
-  }
-});
 
 class Left extends React.Component {
   
@@ -42,9 +36,6 @@ class Left extends React.Component {
   }
 }
 
-Left.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
+Left.propTypes = {};
 
-export default withStyles(styles, { withTheme: true })(Left);
+export default Left;

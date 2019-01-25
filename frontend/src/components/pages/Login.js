@@ -77,7 +77,7 @@ class Login extends Component {
                   </div>
                 </div>
               <div className={styles.form_btn}>
-                <a href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
+                <a className={styles.form_cancel} href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
                 <a href="javascript:void(0)" onClick={this.onClickLogin}>ログイン</a>
               </div>
               </div>
@@ -85,7 +85,7 @@ class Login extends Component {
             <br/>
             <br/>
           </div>    
-        )
+        );
   	}
 }
 Login.contextType = MainContext;
