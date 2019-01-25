@@ -660,8 +660,7 @@ class TestUpload(viewsets.ModelViewSet):
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
-class CreateCouser(viewsets.ModelViewSet):
-
+class CreateCourse(viewsets.ModelViewSet):
 
     def post(self, request):
         root = User.objects.get(username=request.user)
@@ -678,6 +677,7 @@ class APItest(viewsets.ModelViewSet):
 
     #create chapter
     #required
+    #user, courseid
     def post(self, request):
         root = User.objects.get(username=request.user)
         title = request.data['title']
