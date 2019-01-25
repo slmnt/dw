@@ -1,5 +1,4 @@
 import React from 'react';   
-import { Scrollbars } from 'react-custom-scrollbars';
 
 import * as monaco from 'monaco-editor';
 //Editor component path set localhost:3000/course/<:id>/edit 
@@ -11,6 +10,12 @@ import Term from './Term';
 import logo from '../img/logo.svg';
 
 class TextEditor extends React.Component {
+  /*
+    props
+        .getContent()
+        .onUpload()
+        .allowUpload
+  */
   constructor(props) {
       super(props);
 
@@ -26,6 +31,11 @@ class TextEditor extends React.Component {
       this.term = React.createRef();
       this.tabList = React.createRef();
       this.lastSizeUpdate = 0;
+
+      this.content = {
+        "/src/index.js": "const a = 0;",
+        "/app.js": "const あこどぉう = 'ういえおｋ';"
+      }
   }
   componentDidMount(){
     window.addEventListener("resize", this.updateEditorSize);
@@ -257,11 +267,14 @@ class TextEditor extends React.Component {
       return this.editor.getValue();
   }
   getContent(path) {
-      return {
-          "/src/index.js": "const a = 0;",
-          "/app.js": "const あこどぉう = 'ういえおｋ';"
-      }[path];
+      if (this.props.getContent) {
+          return this.props.getContent(path);
+      }
+      return this.content[path];
   }
+
+
+
   render() {
       const options = {
           selectOnLineNumbers: true

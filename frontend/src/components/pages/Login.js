@@ -18,7 +18,9 @@ import classNames from 'classnames';
 //
 import styles from './Login.module.css';
 import {MainContext} from '../../contexts/main';
-import {processRedirect} from '../../modules/misc';
+
+//
+import { ReactComponent as Logo } from '../../img/logo.svg';
 
 
 
@@ -76,6 +78,46 @@ class Login extends Component {
     };    
 
 	render() {
+        return (
+            <div className={styles.main}>
+            <div className={styles.top_logo}>
+              <Logo className={styles.logo_img}/>
+              <div className={styles.logo_title}>
+                MiniProg
+              </div>
+            </div>
+            
+            <div className={styles.create_form}>
+              <div className={styles.form_layout}>
+                <div className={styles.form_title}>
+                  ログイン
+                </div>
+                <div>
+                  <div>
+                    <label>ユーザ名</label>
+                  </div>
+                  <div>
+                    <input onChange={this.handleChange('name')}></input>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <label>パスワード</label>
+                  </div>
+                  <div>
+                    <input type="password" onChange={this.handleChange('password')}></input>
+                  </div>
+                </div>
+              <div className={styles.form_btn}>
+                <a href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
+                <a href="javascript:void(0)" onClick={this.onClickLogin}>ログイン</a>
+              </div>
+              </div>
+            </div>
+            <br/>
+            <br/>
+          </div>    
+        )
         return (
             <div className={styles.main}>
             <Grid container direction="column">

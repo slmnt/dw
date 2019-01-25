@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
 import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 import classNames from 'classnames';
@@ -12,11 +11,6 @@ import bridge from '../../img/bridge.jpeg';
 
 import Footer from '../Footer';
 
-const styles2 = theme => ({
-  main: {
-    fontFamily: "arial black,Yu Gothic",
-  }
-});
 
 class Main extends Component {
   static propTypes = {
@@ -36,7 +30,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div className={classNames(styles.body, this.props.classes.main)}>
+      <div className={styles.body}>
         <header className={styles.header}>
           <h1 className={styles.header_title}>
             <span className={styles.m}>M</span>in<span className = {styles.i}>i</span> <span className = {styles.p}>P</span>ro<span className = {styles.g}>g</span>
@@ -93,4 +87,4 @@ class Main extends Component {
   }
 }
 Main = withCookies(Main)  
-export default withStyles(styles2)(Main);
+export default Main;

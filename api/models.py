@@ -99,6 +99,7 @@ class UserInfo(models.Model):
     year = models.IntegerField(default=-1)
     gen = models.CharField(max_length=1)
     subscribed = models.IntegerField(default=0)
+    profile = models.CharField(max_length=500)
     level = models.IntegerField(default=0)
 
 class UserCourse(models.Model):

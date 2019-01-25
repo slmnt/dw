@@ -3,8 +3,161 @@
   flex-flow: column nowrap;
   height: 100%;
   width: 100%;
+}
+
+/* textbox */
+.textbox {
+  border: none;
+  text-overflow: ellipsis;
+  outline-color: var(--main-color);
+  padding-right: 1em;
+
+  height: 1em;
+  width: 100%;
+  line-height: 1em;
+  font-size: inherit;
+}
+.textbox:focus {
+  border-color: var(--main-color);
+}
+.textbox-container {
+  position: relative;
+
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+}
+
+/* text area */
+.textarea {
+  width: 100%;
+  height: 100%;
+}
+.textarea-container {
+
+}
+
+/* chapter menu */
+.chapter-menu-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+
+  padding: 10em;
+  box-sizing: border-box;
+
+  z-index: 10000000;
+}
+.chapter-menu-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #00000030;
+  z-index: 0;
+}
+.chapter-menu {
+  position: relative;
+  width: 100%;
+  max-width: 40em;
+  height: auto;
+  min-height: 20em;
+
+  overflow: hidden auto;
+
+  margin: auto;
+
+  padding: 1em 2em;
+
+  background-color: white;
+  border-radius: 0.5em;
+
+  z-index: 1;
+}
+.chapter-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+  padding: 0.5em;
+}
+.chapter-menu-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+}
+
+.chapter-menu-header-controls {
+  display: flex;
+}
+.chapter-menu-header-controls > div + div {
+  margin-left: 1em;
+}
+.chapter-menu-header-add {
+  margin-left: 1em;
+  cursor: pointer;
+}
+.chapter-menu-header-item {
+  cursor: pointer;
+}
+
+.chapter-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+}
+
+
+.chapter-menu-icon {
+  flex: 0 0 auto;
+
+  padding: 0.5em;
+  cursor: pointer;
+}
+.chapter-menu-item-info {
+  flex: 1 1 auto;
+  padding: 0.5em 1em;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+.chapter-menu-item-info:hover {
+  background-color: var(--light-color);
+  cursor: pointer;
+}
+.chapter-menu-item-name {
+  flex: 0 0 10em;
+  text-align: left;
+}
+
+
+.chapter-menu-cfg {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chapter-menu-cfg-footer {
+  display: flex;
+  justify-content: space-between;
+}
+.chapter-menu-cfg-footer > div {
+  height: 1.5em;
+  line-height: 1.5em;
   
-  overflow: hidden;
+  margin: 0.2em 1em;
+  border-radius: 3em;
+  cursor: pointer;
 }
 
 
@@ -15,7 +168,7 @@
   padding: 0.2em;
 
   overflow: hidden;
-  border-bottom: 1px solid #1abc9c;
+  white-space: nowrap;
 
   display: flex;
   flex-flow: row nowrap;
@@ -25,7 +178,10 @@
 }
 
 .course-name {
-  display: block;
+  display: flex;
+  align-items: center;
+  align-content: center;
+
   height: 1em;
   line-height: 1em;
   font-size: 2em;
@@ -33,10 +189,19 @@
   margin-left: 0.5em;
 
 }
+.course-name-tag {
+  font-size: 0.7em;
+  margin-right: 0.5em;
+}
 .chapters-btn {
   box-shadow: 0 1px 3px black;
   border-radius: 1em;
+  
+  flex: 0 0 auto;
   padding: 0.5em 1em;
+  margin: 0 1em;
+
+  cursor: pointer;
 }
 .discard-btn {
 
@@ -54,7 +219,7 @@
   align-content: center;
   justify-content: space-between;
 
-  margin: 0 2em;
+  margin: 0 1em;
   color: white;
 }
 .header-controls > div {
@@ -71,16 +236,24 @@
   vertical-align: middle;
 }
 
+/* middle */
+.middle-header {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+
+  flex: 0 0 auto;
+  padding: 0 1em 0.5em 1em;
+  border-bottom: 1px solid #1abc9c;
+}
+
+
 /* tab */
 .tablist {
   display: flex;
   justify-content: flex-start;
   align-content: center;
 
-  flex: 0 0 auto;
-
-  padding: 0.2em 1em;
-  border-bottom: 1px solid #1abc9c;
 }
 .tablist > div {
   padding: 0.5em 1em;
@@ -131,7 +304,7 @@
 .slides-footer {
   flex: 0 0 auto;
   width: 100%;
-  height: 100px;
+  height: 10px;
   
   overflow: scroll hidden;
 }
@@ -139,8 +312,9 @@
   display: flex;
   justify-content: space-between;
   align-content: center;
-  padding: 0.2em 0em;
-  min-height: 1.5em;
+  align-items: center;
+  padding: 0.2em 1em;
+  min-height: 2em;
 }
 .slides-header-control {
   display: flex;
@@ -167,24 +341,42 @@
 }
 
 .slides-name {
-  display: block;
-  font-size: 1.5em;
-  height: 1em;
-  line-height: 1em;
+  display: flex;
+  align-items: center;
+  align-content: center;
 
-  padding: 0em 1em;
-  
+  font-size: 1.5em;  
   color: inherit;
 
 }
 
+.slides-name-tag {
+  font-size: 0.7em;
+  margin-right: 0.5em;
+}
+
+.course-name {
+  display: flex;
+  align-items: center;
+  align-content: center;
+
+  height: 1em;
+  line-height: 1em;
+  font-size: 2em;
+
+  margin-left: 0.5em;
+
+}
+.course-name-tag {
+  font-size: 0.7em;
+  margin-right: 0.5em;
+}
 /* slides: side */
 .slides-side-container {
   flex: 0 0 auto;
   width: 15em;
   height: 100%;
   
-  padding: 1em 0em;
   overflow: hidden scroll;
   
   scrollbar-width: thin;
@@ -201,6 +393,20 @@
   background: #00000000;
 }
 
+.slides-side-header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+
+  height: 1.35em;
+  padding: 0.5em 1em;
+  border-bottom: 1px solid var(--light-color);
+}
+.slides-side-header-add {
+  cursor: pointer;
+}
+
 .slides-side {
   height: 100%;
   width: 100%;
@@ -211,7 +417,8 @@
 .slides-side-element {
   position: absolute;
   width: 100%;
-  padding: 5px;
+  height: auto;
+  padding: 0.5em;
   box-sizing: border-box;
   cursor: pointer;
   transition: top 0.5s;
@@ -219,10 +426,42 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+
+  border-bottom: 1px solid var(--light-color);
 }
 .slides-side-element:hover {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--light-color);
 }
+.slides-side-element > div {
+  display: flex;
+}
+.slides-side-element-number {
+  flex: 0 0 auto;
+  width: 1em;
+  line-height: 3em;
+  text-align: center;
+}
+.slides-side-element-number + div {
+  flex: 1 1 auto;
+  margin-left: 1em;
+}
+.slides-side-element-info {
+  overflow: hidden;
+}
+.slides-side-element-info > div {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.slides-side-element-name {
+  color: var(--dark-color);
+}
+.slides-side-element-text {
+  font-size: 0.9em;
+  color: var(--main-color);
+}
+
+
 
 /* slides:preview */
 

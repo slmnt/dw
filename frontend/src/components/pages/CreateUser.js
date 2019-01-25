@@ -1,13 +1,5 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
 
 import axios from 'axios';
 import Loading from '../Loading'
@@ -15,19 +7,7 @@ import Loading from '../Loading'
 import styles from './CreateUser.module.css';
 import {MainContext} from '../../contexts/main';
 
-
-const styles2 = theme => ({
-  main: {
-    fontFamily:"arial black,Yu Gothic",
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 500,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-
-});
-
+import { ReactComponent as Logo } from '../../img/logo.svg';
 
 class SignIn extends Component {
 
@@ -74,18 +54,16 @@ class SignIn extends Component {
     console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
-
-    this.context.createUser({
-      uid: this.state.username,
-      pwd: this.state.passwd,
-      email: this.state.email,
-      fname: this.state.firstname,
-      lname: this.state.lastname
-    });
   }
 
-  handleChange = name => event => {
+  goBack = (e) => {
+    if(window.confirm('本当にキャンセルしますか？')){
+      this.props.history.goBack()
+    }
+  }
 
+
+  handleChange = name => event => {
     this.setState({
       [name]: event.target.value
     })
@@ -99,85 +77,107 @@ class SignIn extends Component {
   }
 
   render() {
-    const { classes } = this.props;
 
     if(this.state.load)
       this.checkpasswd()
 
     return (
       <div className={styles.main}>
-      <CssBaseline />
-      <Paper className={styles.paper}>
-        <Typography component="h2" className={styles.signup}>
-          Mini Prog 会員登録
-        </Typography>
-        <form className={styles.form}>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="id">ID(半角英数字)</InputLabel>
-            <Input 
-            name="id" type="text" id="id" autoComplete="username" 
-            autoFocus
-            value={this.state.username} 
-            onChange={this.handleChange('username')}/>
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">パスワード</InputLabel>
-            <Input value={this.state.passwd} onChange={this.handleChange('passwd')} name="password" type="password" id="password" autoComplete="new-password" />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">パスワード確認</InputLabel>
-            <Input 
-              value={this.state.passwd2}
-              onChange={this.handleChange('passwd2')}
-              name="password" 
-              type="password" 
-              id="password_c" 
-              autoComplete="new-password" 
-              error={this.state.flag}
-              />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">メールアドレス</InputLabel>
-            <Input id="email" name="email" autoComplete="email" 
-            value={this.state.email}
-            onChange={this.handleChange('email')} />
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="first">名(例:太郎)</InputLabel>
-            <Input name="first" type="text" id="first" 
-            autoComplete="given-name" value={this.state.firstname}
-            onChange={this.handleChange('firstname')}/>
-          </FormControl>
-          <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="last">性(例:山田)</InputLabel>
-            <Input name="last" type="text" id="last" 
-            autoComplete="family-name" value={this.state.lastname}
-            onChange={this.handleChange('lastname')}/>
-          </FormControl>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={styles.submit}
-            type="submit"
-          >
-            登録
-          </Button>
+        <div className={styles.top_logo}>
+          <Logo className={styles.logo_img}/>
+          <div className={styles.logo_title}>
+            MiniProg
+          </div>
+        </div>
+
+        <form className={styles.create_form} name="Create">
+          <div className={styles.form_layout}>
+            <div className={styles.form_title}>
+              会員登録
+            </div>
+            <div>
+              <div>
+                <label>ID</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('username')} value={this.state.username} type="text"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>Email</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('email')} value={this.state.email} type="email"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>PASSWD</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('passwd')} value={this.state.passwd} type="password"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>PASSWD</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('passwd2')} value={this.state.passwd2} type="password"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>First_Name</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('firstname')} value={this.state.firstname} type="text"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>Last_Name</label>
+              </div>
+              <div>
+                <input onChange={this.handleChange('lastname')} value={this.state.lastname} type="text"></input>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>性別</label>
+              </div>
+              <div>
+                <select id="gender" >
+                  <option>---</option>
+                  <option>男性</option>
+                  <option>女性</option>
+                  <option>わからない</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div>
+                <label>年齢</label>
+              </div>
+              <div>
+                <input id="age" type="date"></input>
+              </div>
+            </div>
+          <div className={styles.form_btn}>
+            <a href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
+            <a href="javascript:void(0)" onClick={(e) => this.submit(e)} >登録</a>
+          </div>
+          </div>
         </form>
-      </Paper>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-    </div>
+        <br/>
+        <br/>
+      </div>
     );
   }
 }
 
-SignIn.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+SignIn.propTypes = {};
 SignIn.contextType = MainContext;
 
-export default withStyles(styles2)(SignIn);
+export default SignIn;

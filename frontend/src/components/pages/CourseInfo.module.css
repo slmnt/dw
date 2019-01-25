@@ -52,6 +52,7 @@
 }
 .header-container > div + div {
   flex: 0 0 auto;
+  font-size: 1.2em;
 }
 
 .middle-container {
@@ -64,6 +65,7 @@
   align-items: center;
   align-content: center;
 
+  margin-right: 0.5em;
 }
 
 /* tab */
@@ -102,12 +104,17 @@
 
 
 /* chapter */
+.chapter-container {
+  
+}
 .chapter-list {
   font-size: 1em;
+  border: 1px solid #1abc9c60;
+  border-width: 1px 1px 0 1px;
 }
 .chapter-list > div {
   padding: 2em 3em;
-  border: 1px solid #1abc9c60;
+  border-bottom: 1px solid #1abc9c60;
 }
 .chapter-header {
   display: flex;
@@ -132,6 +139,9 @@
 
 
 /* review */
+.review-container {
+
+}
 .review-list {
   padding: 1em 2em;
   font-size: 1em;

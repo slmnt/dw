@@ -91,7 +91,7 @@ class Courseinfo extends Component {
                                     ({this.state.contents.users})
                                 </span>
                             </div>
-                            <div style={{fontSize: "0.8em"}}>
+                            <div style={{fontSize: "1.2em"}}>
                                 <UserPanel username={this.state.contents.root} desc="I'm Fucking Awesome PG! TIME TO DIE!"/>
                             </div>
                         </div>
@@ -107,41 +107,48 @@ class Courseinfo extends Component {
                     </div>
                     <div className={styles["tab-content"]}>
                         {
-                        this.state.currentTab === 0 ?
-                            <div className={styles["chapter-list"]}>
-                            {
-                                this.state.chapters.map((v, i) => {
-                                    return <div key={i}>
-                                        <div className={styles["chapter-header"]}>
-                                            <div className={styles["chapter-name"]}>
-                                                <a>{v.title}</a>
+                            this.state.currentTab === 0 ?
+                            <div className={styles["chapter-container"]}>
+                                <div className={styles["chapter-list"]}>
+                                    {
+                                        this.state.chapters.map((v, i) => {
+                                            return <div key={i}>
+                                                <div className={styles["chapter-header"]}>
+                                                    <div className={styles["chapter-name"]}>
+                                                        <a>{v.title}</a>
+                                                    </div>
+                                                    <Link to={this.props.location.pathname +"/" + v.cid} className={styles["chapter-start-button"]}>
+                                                        開始
+                                                    </Link>
+                                                </div>
+                                                <div className={styles["chapter-desc"]}>
+                                                    {v.descriptoin}
+                                                </div>
                                             </div>
-                                            <Link to={this.props.location.pathname +"/" + v.cid} className={styles["chapter-start-button"]}>
-                                                開始
-                                            </Link>
-                                        </div>
-                                        <div className={styles["chapter-desc"]}>
-                                            {v.descriptoin}
-                                        </div>
-                                    </div>
-                                })
-                            }
-                        </div>
+                                        })
+                                    }
+                                </div>
+                            </div>
                         :
-                            <div className={styles["review-list"]}>
-                            {
-                                this.state.reviews.map((v, i) => {
-                                    return <div key={i}>
-                                        <UserPanel username={v.auth} desc="I'm Fucking Awesome PG! TIME TO DIE!"/>
-                                        <div className={styles["review-text"]}>
-                                            {v.comment}
+                            <div className={styles["review-container"]}>
+                                <div>
+                                    <textarea></textarea>
+                                </div>
+                                <div className={styles["review-list"]}>
+                                {
+                                    this.state.reviews.map((v, i) => {
+                                        return <div key={i}>
+                                            <UserPanel username={v.auth || "Monta"} desc="Kang the polyglot will destroy you"/>
+                                            <div className={styles["review-text"]}>
+                                                {v.comment}
+                                            </div>
+                                            <div className={styles["review-info"]}>
+                                                {this.convertdata(v.createat)}
+                                            </div>
                                         </div>
-                                        <div className={styles["review-info"]}>
-                                            {this.convertdata(v.createat)}
-                                        </div>
-                                    </div>
-                                })
-                            }
+                                    })
+                                }
+                                </div>
                             </div>
                         }
                     </div>

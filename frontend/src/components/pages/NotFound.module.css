@@ -9,7 +9,7 @@
 .back {
   height: 100vh;
   width: 100%;
-  background: linear-gradient(145deg, #00c1da, #003bca);
+  background: linear-gradient(145deg, #1abc9c, #74db8a);
 
   display: flex;
   justify-content: center;

@@ -12,6 +12,7 @@ a {
 :root {
     --main-color: #1abc9c;
     --dark-color: #0f7561;
+    --light-color: #b0f9eb;
     --nice-border-color: #666666;
     --bg-color: white;
 }
@@ -50,7 +51,6 @@ a {
 .content {
     flex: 1 1 0;
     width: 100%;
-    overflow: hidden;
 }
 
 /* mobile menu */

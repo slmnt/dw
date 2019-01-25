@@ -68,6 +68,9 @@ Get_User_Course_index = GetUserCourseContentIndex.as_view({
     'post': 'post'    
 })
 
+Upload = TestUpload.as_view({
+    'post': 'post'
+})
 
 
 urlpatterns = [
@@ -96,6 +99,8 @@ urlpatterns = [
     path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
     path('getusercourseid/',Get_User_Course_info),
     path('getusercourseindex/',Get_User_Course_index),
-    path('getusercoursecomment/<id>',GetUserCourseComments.as_view())
+    path('getusercoursecomment/<id>',GetUserCourseComments.as_view()),
+    path('upload/',Upload),
+
 
 ]

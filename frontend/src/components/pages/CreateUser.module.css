@@ -3,11 +3,102 @@
 }
 
 .main {
-    font-family:"arial black,Yu Gothic";
     margin-left: calc(--unit * 3);
     margin-right: calc(--unit * 3);
+    padding: 2em 0;
+
+    text-align: center;
+    font-family:"arial black,Yu Gothic";
     background-color:"#f2f7ff";
+
 }
+
+.top_logo {
+    width: 100%;
+    height: auto;
+}
+.logo_img {
+    width: 5em;
+    height: 5em;
+}
+.logo_title {
+    font-family: arial black,Yu Gothic;
+    color: var(--main-color);
+    text-align: center;
+    margin: auto;
+    height: auto;
+}
+
+.create_form{
+    margin: auto;
+    width: 80%;
+    padding: 2em 0;
+}
+.form_layout{
+    padding: 2em;
+    margin: auto;
+    display: block;
+    width: 70%;
+    text-align: left;    
+    border: 1px solid #1abc9c60;;
+}
+
+.form_logo{
+    display: block;
+    text-align: center;
+    padding-bottom: 1em;
+    padding-top: 0.5em;
+}
+.form_title{
+    display: block;
+    text-align: center;
+    font-size: 25px;
+}
+
+
+.form_layout > div{
+    padding-top: 0.5em;
+    padding-bottom: 1em;
+}
+.form_layout > div > div{
+    width: 45%;
+    display: inline-block;
+    text-align: right;
+}
+
+.form_layout > div  > div + div{
+    text-align: center;
+}
+
+.form_btn{
+    margin-top: 1em;
+    text-align: center;
+}
+
+.form_btn > a{
+    color: white;
+    flex: 0 0 auto;
+
+    border-radius: 0.5em;
+    background-color: #1abc9c;
+    padding: 0.5em 2em;
+    cursor: pointer;
+
+    margin-left: 1em;
+  }
+
+.form_btn > a:active{
+    background-color: #28ddb9;
+}
+
+.form_submit{
+
+}
+
+.form_cancel{
+
+}
+
 .password_error{
     outline-color: red
 }
