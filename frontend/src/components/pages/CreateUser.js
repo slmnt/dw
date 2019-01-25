@@ -165,7 +165,7 @@ class SignIn extends Component {
               </div>
             </div>
           <div className={styles.form_btn}>
-            <a href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
+            <a className={styles.form_cancel} href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
             <a href="javascript:void(0)" onClick={(e) => this.submit(e)} >登録</a>
           </div>
           </div>

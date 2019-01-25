@@ -109,7 +109,7 @@ class Login extends Component {
                   </div>
                 </div>
               <div className={styles.form_btn}>
-                <a href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
+                <a className={styles.form_cancel} href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
                 <a href="javascript:void(0)" onClick={this.onClickLogin}>ログイン</a>
               </div>
               </div>
@@ -117,58 +117,7 @@ class Login extends Component {
             <br/>
             <br/>
           </div>    
-        )
-        return (
-            <div className={styles.main}>
-            <Grid container direction="column">
-                <Grid container item justify="center" >
-                <Grid item xs={6}>
-                <Card>
-                    <CardContent>
-                        <TextField
-                        required
-                        id="outlined-required"
-                        label="Required"
-                        value={this.state.name}
-                        onChange={this.handleChange('name')}
-                        variant="outlined"
-                        className={classNames(this.props.classes.margin, this.props.classes.textField)}
-                        />
-                        <TextField
-                        id="outlined-adornment-password"
-                        className={classNames(this.props.classes.margin, this.props.classes.textField)}
-                        variant="outlined"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        label="Password"
-                        value={this.state.password}
-                        onChange={this.handleChange('password')}
-                        InputProps={{
-                            endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="Toggle password visibility"
-                                onClick={this.handleClickShowPassword}
-                                >
-                                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                            ),
-                        }}
-                        />
-                        <br/>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickLogin}>
-                            Submit
-                        </Button>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickDrop}>
-                            Drop
-                        </Button>
-                    </CardContent>
-                </Card>
-                </Grid>
-                </Grid>
-            </Grid>
-            </div>
-		);
+        );
   	}
 }
 Login.contextType = MainContext;

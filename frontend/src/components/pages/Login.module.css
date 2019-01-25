@@ -96,7 +96,8 @@
 }
 
 .form_cancel{
-
+  background-color: var(--light-color) !important;
+  color: var(--dark-color) !important;
 }
 
 .password_error{

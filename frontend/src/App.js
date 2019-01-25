@@ -136,6 +136,7 @@ class App extends React.Component {
   }
   componentDidMount(){
     //this.updateLoginState()
+    this.loginWithCookie();
   }
   componentDidUpdate(){
   }
