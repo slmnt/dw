@@ -7,6 +7,8 @@ import logo from '../img/logo.svg';
 import UploadIcon from '../img/upload.svg';
 
 
+import api from '../modules/api';
+
 class DirTree extends React.Component {
   /*
     props
@@ -95,7 +97,6 @@ class DirTree extends React.Component {
   
     var count = files.length;
     console.log("File Count: " + count + "\n");
-
     for (var i = 0; i < files.length; i++) {
       console.log(" File " + i + ":\n(" + (typeof files[i]) + ") : <" + files[i] + " > " +
               files[i].name + " " + files[i].size + "\n");
@@ -131,12 +132,11 @@ class DirTree extends React.Component {
   
     formData.append('path', '/src/a.c');
     for (var i = 0; i < files.length; i++) {
-      formData.append('photos', files[i]);
+      formData.append('files', files[i]);
     }
-  
-    fetch('http://localhost:8000/api/upload/', {
-      method: 'POST',
-      body: formData
+
+    api.get('/api/upload/', {
+      body: formData,
     })
     .then(response => response.json())
     .then(response => console.log('Success:', JSON.stringify(response)))

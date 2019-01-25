@@ -450,7 +450,8 @@ class GetUserCourseContentIndex(viewsets.ModelViewSet):
 class Upload(viewsets.ModelViewSet):
 
     def post(self, request):
-        p = request.FILES['photos']
+        print(request.user)
+        p = request.FILES['files']
         dir = request.data['path'].split('/')
         path = STORAGE
         for name in dir:
@@ -475,10 +476,13 @@ class Upload(viewsets.ModelViewSet):
 
 class CreateCourse(viewsets.ModelViewSet):
 
+    #create Course
+    #required
+    #title, desc
     def post(self, request):
         root = User.objects.get(username=request.user)
         title = request.data['title']
-        desc = request.data['description']
+        desc = request.data['desc']
         new_course = UserCourse(title=title,descriptoin=desc,root=root)
         new_course.save()
         return Response(status=status.HTTP_200_OK)
