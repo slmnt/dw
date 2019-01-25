@@ -32,6 +32,9 @@ class NavBar extends React.Component {
   hidePopup = () => {
     this.setState({showUserPopup: false});
   }
+  onClickPopup = e => {
+    if (e.target !== e.currentTarget) this.hidePopup();
+  }
 
   render() {
     /* flexbox で全て解決 */
@@ -41,7 +44,7 @@ class NavBar extends React.Component {
           this.state.showUserPopup &&
             <React.Fragment>
               <div className={styles["user-popup-bg"]} onClick={this.hidePopup}></div>
-              <div className={styles["user-popup"]}>
+              <div className={styles["user-popup"]} onClick={this.onClickPopup}>
                 <div><Link to="/mypage">マイページ</Link></div>
                 <div><Link to="/mypage">コース管理</Link></div>
                 <div><Link to="/mypage">設定</Link></div>

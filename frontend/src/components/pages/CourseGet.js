@@ -37,6 +37,6 @@ class CourseGet extends Component {
   	}
 }
 
-CourseGet.PropTypes = PropTypes;
+CourseGet.PropTypes = {};
 
 export default CourseGet;

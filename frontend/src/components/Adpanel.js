@@ -23,6 +23,6 @@ class Ad extends Component {
   	}
 }
 
-Ad.PropTypes = PropTypes;
+Ad.PropTypes = {};
 
 export default Ad;

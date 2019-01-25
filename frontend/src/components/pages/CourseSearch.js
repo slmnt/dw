@@ -88,6 +88,6 @@ class CourseSearch extends Component {
   	}
 }
 
-CourseSearch.PropTypes = PropTypes;
+CourseSearch.PropTypes = {};
 
 export default CourseSearch;

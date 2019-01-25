@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './UserInfo.module.css';
 import { ReactComponent as Logo } from '../../img/logo.svg';
 
-class Userinfo extends Component {
+class UserInfo extends Component {
     getUserData = () => {
 
     }
@@ -37,6 +37,6 @@ class Userinfo extends Component {
   	}
 }
 
-Userinfo.PropTypes = PropTypes;
+UserInfo.PropTypes = {};
 
-export default Userinfo;
+export default UserInfo;

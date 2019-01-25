@@ -133,10 +133,10 @@ class App extends React.Component {
     })
 
 
+    //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
+    this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
   componentDidMount(){
-    //this.updateLoginState()
-    this.loginWithCookie();
   }
   componentDidUpdate(){
   }

@@ -10,6 +10,8 @@
   border: none;
   text-overflow: ellipsis;
   outline-color: var(--main-color);
+  border: 1px solid var(--light-color);
+  padding-left: 0.3em;
   padding-right: 1em;
 
   height: 1em;
@@ -34,11 +36,12 @@
   width: 100%;
   height: 100%;
 
-  border: none;
-  outline-color: var(--main-color);
+  border: 1px solid var(--light-color);
+    outline-color: var(--main-color);
 }
 .textarea-container {
-
+  width: 100%;
+  height: 100%;
 }
 
 /* chapter menu */
@@ -68,7 +71,6 @@
   width: 100%;
   max-width: 40em;
   height: auto;
-  min-height: 20em;
 
   overflow: hidden auto;
 
@@ -146,24 +148,44 @@
 
 
 .chapter-menu-cfg {
+  display: flex;
+  flex-flow: column nowrap;
+
   width: 100%;
   box-sizing: border-box;
+  padding: 0 0.5;
 }
 .chapter-menu-cfg-name {
-  height: 1.5em;
+  font-size: 1.2em;
+}
+.chapter-menu-cfg-desc {
+  font-size: 1.2em;
+  height: 10em;
 }
 
 .chapter-menu-cfg-footer {
   display: flex;
   justify-content: space-between;
+
+  padding-top: 2em;
 }
 .chapter-menu-cfg-footer > div {
   height: 1.5em;
   line-height: 1.5em;
 
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+.chapter-menu-cfg-footer-btn {
   margin: 0.2em 1em;
+  padding: 0.5em 1em;
   border-radius: 3em;
   cursor: pointer;
+}
+.chapter-menu-cfg-footer-savebtn {
+  background-color: var(--main-color);
 }
 
 
@@ -198,6 +220,15 @@
 .course-name-tag {
   font-size: 0.7em;
   margin-right: 0.5em;
+}
+
+.chapter-name {
+  display: flex;
+  align-items: center;
+  align-content: center;
+
+  font-size: 1.5em;  
+  color: inherit;
 }
 .chapters-btn {
   box-shadow: 0 1px 3px black;
