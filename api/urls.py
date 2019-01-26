@@ -71,13 +71,16 @@ craeteslide = CreateSlide.as_view({
 updatecourse = UpdateCourse.as_view({
     'post': 'post'
 })
-
+disableuser = DisableUser.as_view({
+    'post': 'post'
+})
 urlpatterns = [
 
     #User Authentic
     path('authentic/',UserAuthentic.as_view()),
     path('cookieauth/',cokkie),
     path('logout/',Logout.as_view()),
+    path('deleteuser/',disableuser),
 
     path('createuser/',CreateUser.as_view()),
     path('createmuser/',CreateMUser.as_view()),

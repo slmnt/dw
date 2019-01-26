@@ -52,91 +52,82 @@ send_mail(
 class UserAuthentic(APIView):
 
     def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            #sended username check
-            try:
-                auth_user = User.objects.get(username=request.data['uid'])
-            except:
-                return Response(data="1")
-            #is_vaild check
-            try:
-                if auth_user.is_active:
-                    return Response(status=status.HTTP_404_NOT_FOUND)
-            except:
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-            #sended pwd check
-            try:
-                pwd = request.data['pwd']
-                if check_password(pwd, auth_user.password):
-                    pass
-            except:
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-            v_user = authenticate(request=None,username=auth_user.username,password=pwd)
-            if v_user is not None:
-                login(request,v_user)
-                #check live user moedls
-                #cookie login expiry set
-                request.session.set_expiry(432000)
-                return Response(status=status.HTTP_200_OK)
-            else:
-                #now
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        #sended username check
+        try:
+            auth_user = User.objects.get(username=request.data['uid'])
+        except:
+            return Response(data="1")
+        #is_vaild check
+        try:
+            if auth_user.is_active == False:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        #sended pwd check
+        try:
+            pwd = request.data['pwd']
+            if check_password(pwd, auth_user.password):
+                pass
+        except:
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        v_user = authenticate(username=auth_user.username,password=pwd)
+        if v_user is not None:
+            login(request,v_user)
+            #check live user moedls
+            #cookie login expiry set
+            request.session.set_expiry(432000)
+            return Response(status=status.HTTP_200_OK)
         else:
-            return redirect("http://localhost:3000")
+            #now
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
 
 #required data
 # 'uid' 'pwd' 'email' 'fname' 'lname
 class CreateUser(APIView):
 
     def post(self, request):
-        #print(request.data)
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            #check username
-            try:
-                uname = request.data['uid']
-                pwd = request.data['pwd']
-                email = request.data['email']
-                new_user = User(username=uname, email=email)
-                new_user.is_active = False
-                new_user.set_password(pwd)
-            except:
-                return Response(data="1")
-            #check first name
-            try:
-                new_user.first_name = request.data['fname']
-            except:
-                pass
-            #check last name
-            try:
-                new_user.last_name = request.data['lname']
-            except:
-                pass
-            new_user.save()
-            try:
-                u = User.objects.get(username=uname)
-                h = SHA256.new()
-                h.update(uname.encode('utf-8'))
-                #print(uname)
-                code = h.hexdigest()
-                c = CertiList(name=u,code=str(code))
-                c.save()
-                print(u)
-            except:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+        #check username
+        try:
+            uname = request.data['uid']
+            pwd = request.data['pwd']
+            email = request.data['email']
+            new_user = User(username=uname, email=email)
+            new_user.is_active = False
+            new_user.set_password(pwd)
+        except:
+            return Response(data="1")
+        #check first name
+        try:
+            new_user.first_name = request.data['fname']
+        except:
+            pass
+        #check last name
+        try:
+            new_user.last_name = request.data['lname']
+        except:
+            pass
+        new_user.save()
+        try:
+            u = User.objects.get(username=uname)
+            h = SHA256.new()
+            h.update(uname.encode('utf-8'))
+            #print(uname)
+            code = h.hexdigest()
+            c = CertiList(name=u,code=str(code))
+            c.save()
+            print(u)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            body = "http://localhost:3000/checkmail/" + code + "/"
-            send_mail(
-                'mail check',
-                str(body),
-                'miniprog2018@gmail.com',
-                [str(email)],
-                fail_silently=False,
-            )
-            return Response(data=uname,status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
+        body = "http://localhost:3000/checkmail/" + code + "/"
+        send_mail(
+            'mail check',
+            str(body),
+            'miniprog2018@gmail.com',
+            [str(email)],
+            fail_silently=False,
+        )
+        return Response(data=uname,status=status.HTTP_200_OK)
 
 class CreateMUser(APIView):
 
@@ -283,24 +274,21 @@ class Logout(APIView):
 
 
 #Need Security policy 
-#one client multi users?
 class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
-        #print(request.user)
-        if str(request.user) == 'AnonymousUser':
-            return Response(status=status.HTTP_201_CREATED)
-
-        else:            
-            if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
-                return HttpResponse(str(request.user),status=status.HTTP_200_OK)
-            else:
-                try:
-                    uid = User.objects.get(username=str(request.user))
-                except:
-                    return Response(status=status.HTTP_201_CREATED)
-                logout(request)
-                return HttpResponse('logout',status=status.HTTP_201_CREATED)
+        if request.user:
+            user = User.objects.get(username=request.user)
+            if user.is_active:
+                if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
+                    return HttpResponse(str(request.user),status=status.HTTP_200_OK)
+                else:
+                    try:
+                        uid = User.objects.get(username=str(request.user))
+                    except:
+                        return Response(status=status.HTTP_201_CREATED)
+                    logout(request)
+                    return HttpResponse('logout',status=status.HTTP_201_CREATED)
 
         #print(dir(request.session))
         #print(request.session._get_session())
@@ -643,10 +631,43 @@ class ChapterSourceCodeCreate(viewsets.ModelViewSet):
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
+class GetUser(viewsets.ModelViewSet):
+
+    def get(self,request):
+        data = {'ok':200}
+        queryset = UserInfo.objects.all()
+        serializers = UserInfoSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class GEtUserCourses(viewsets.ModelViewSet):
+
+    def post(self, request):
+        username = request.data['name']
+        target = User.objects.get(username=username)
+        queryset = UserCourse.objects.all().filter(root=target)
+        serializers = UserCourseSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class DisableUser(viewsets.ModelViewSet):
+
+    def post(self, request):
+        target = User.objects.get(username=request.user)
+        target.is_active = False
+        target.save()
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
+#Remain apis
+# User Create api
+# User Info Search api
+# Course info Search api
+# User Directory Structure get api
 class APItest(viewsets.ModelViewSet):
 
     def get(self,request):
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
         data = {'ok':200}
