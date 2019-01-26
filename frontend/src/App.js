@@ -43,7 +43,7 @@ import Terms from './components/pages/Terms';
 import Privacy from './components/pages/Privacy';
 import NotFound from './components/pages/NotFound';
 
-
+import api from './modules/api'
 
 
 axios.defaults.baseURL = '/api';
@@ -123,6 +123,9 @@ class App extends React.Component {
   
   componentWillMount(){
     
+    api.post('/api/test',{}).then(response => response.json())
+    .then(response => console.log('Success:', response))
+
     this.setState({
       bid: localStorage.getItem("bid")
     })

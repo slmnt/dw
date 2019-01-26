@@ -1,10 +1,14 @@
-from api import models as m
-from api import serializers as s
-from django.shortcuts import render,redirect
-from .models import *
-from .serializers import *
 import os
 import re
+import shutil
+import subprocess
+from datetime import datetime
+
+from api import models as m
+from api import serializers as s
+from back.settings import BASE_DIR
+from .models import *
+from .serializers import *
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -21,16 +25,16 @@ from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.contrib.auth.hashers import check_password
 from django.contrib.sessions.models import Session
 
+from django.shortcuts import render,redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.mail import send_mail
 
-from datetime import datetime
-import subprocess
 from Crypto.Hash import SHA256
-from back.settings import BASE_DIR
 # Create your views here.
 
+DOCKDIR = BASE_DIR + '//docker//python//'
+DOCKFILES = BASE_DIR + '//docker//'
 STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
 """
@@ -352,6 +356,59 @@ class Python(viewsets.ModelViewSet):
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
+class PythonByDocker(viewsets.ModelViewSet):
+
+    #1 Copy userfolder body
+    #2 Build Docker Image -- clear
+    #   docker build --tag pybox DOCKERDIR
+    #3 Run Docker Image -- clear
+    #   docker run pybox
+    #4 Send Client printed result
+    def post(self, request):
+        USER_STORAGE = STORAGE + str(request.user)
+
+        #Clear DOcker Folder
+        shutil.rmtree(DOCKDIR)
+        #Copy User DIR
+        shutil.copytree(USER_STORAGE,DOCKDIR)
+        #Copy Dockerfile
+        #Required -> Fix Dodcerfile
+        #               Adjust Copy Directory/Run File
+        shutil.copy(DOCKFILES+'Dockerfile',DOCKDIR)
+
+        #create dump file   
+        #open stdin stderr file
+        with open(STATIC + 'output.txt', 'w') as output, open(STATIC + 'output.txt', 'r') as read_result, open(os.devnull,'a') as pipe:
+            #build subprocess 
+            cmd1 = "docker build --tag pybox " + DOCKDIR
+            cmd2 = "docker run pybox"
+            p1 = subprocess.Popen(cmd1.split(),stdout=pipe,stderr=pipe)
+            p2 = subprocess.Popen(cmd2.split(), stdout=output, stderr=output)
+            dump = ''
+            flag = True
+            #excete 
+            try:
+                #timeout value setting is service level
+                out, err = p1.communicate(timeout=1)
+            except subprocess.TimeoutExpired:
+                p1.kill()
+                out, err = p1.communicate()
+            try:
+                #timeout value setting is service level
+                out, err = p2.communicate()
+            except subprocess.TimeoutExpired:
+                p2.kill()
+                out, err = p2.communicate()
+                dump += 'timeout error'
+                flag = False
+            finally:
+                while flag:
+                    temp = read_result.readline()
+                    if not temp:
+                        break
+                    dump += temp
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)
 
 class Getuser(viewsets.ModelViewSet):
 
@@ -451,26 +508,25 @@ class Upload(viewsets.ModelViewSet):
 
     def post(self, request):
         if request.user:
-            print(request.user)
-        p = request.FILES['files']
-        dir = request.data['path'].split('/')
-        path = STORAGE
-        for name in dir:
-            pattern = '.*\..*'
-            r = re.match(pattern,name)
-            if r:
-                path += name
-            else:
-                path += name + '//'
-                if not os.path.exists(path):
-                    os.makedirs(path)
+            name = str(request.user)
+            p = request.FILES['files']
+            dir = request.data['path'].split('/')
+            dir = [name] + dir
+            path = STORAGE
 
-        with open(path,mode='wb+') as f:
-            print(p.size)
-            d = 0            
-            for line in p:
-                d += len(line)
-                f.write(line)
+            for name in dir:
+                pattern = '.*\..*'
+                r = re.match(pattern,name)
+                if r:
+                    path += name
+                else:
+                    path += name + '//'
+                    if not os.path.exists(path):
+                        os.makedirs(path)
+
+            with open(path,mode='wb+') as f:
+                for line in p:
+                    f.write(line)
             
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
@@ -584,15 +640,15 @@ class ChapterSourceCodeCreate(viewsets.ModelViewSet):
                 chapter = q.get()
                 slides = UserCourseContentCode(root=chapter,context=text)
                 slides.save()
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
 
 class APItest(viewsets.ModelViewSet):
 
     def get(self,request):
         return Response(status=status.HTTP_200_OK)
 
-    #required
     def post(self, request):
-        root = User.objects.get(username=request.user)
-        root.is_active = False
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+

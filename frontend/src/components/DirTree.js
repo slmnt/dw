@@ -135,7 +135,7 @@ class DirTree extends React.Component {
       formData.append('files', files[i]);
     }
 
-    api.fetch('/api/upload/', {
+    api.fetch('POST','/api/upload/', {
       body: formData,
     })
     .then(response => response.json())
