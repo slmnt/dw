@@ -5,9 +5,12 @@ import styles from './DirTree.module.css';
 
 import logo from '../img/logo.svg';
 import UploadIcon from '../img/upload.svg';
-
+import { ReactComponent as AddIcon } from '../img/add.svg';
+import { ReactComponent as CreateFolderIcon } from '../img/create-folder.svg';
 
 import api from '../modules/api';
+
+
 
 class DirTree extends React.Component {
   /*
@@ -20,8 +23,44 @@ class DirTree extends React.Component {
     this.state = {
       fileData: {
       },
-      dragging: false
+      dragging: false,
+      
+      showContextMenu: false,
+      contextTarget: null,
+
+      copyFrom: null,
+
+      showRenameBox: false,
+      renamingPath: null,
     }
+    this.menu = [
+      ["新しいファイル", () => {
+        this.createNewFile(this.state.contextTarget, "新しいファイル");
+        this.closeContextMenu();
+      }],
+      ["新しいフォルダ", () => {
+        this.createNewFolder(this.state.contextTarget, "新しいフォルダ");
+        this.closeContextMenu();
+      }],
+      ["コピー", () => {
+        this.setCopyFrom(this.state.contextTarget);
+        this.closeContextMenu();
+      }],
+      ["貼り付け", () => {
+        this.copy(this.state.copyFrom, this.state.contextTarget);
+        this.closeContextMenu();
+      }],
+      ["名前変更", () => {
+        this.enableRenameBox(this.state.contextTarget);
+        this.closeContextMenu();
+      }],
+      ["削除", () => {
+        this.delete(this.state.contextTarget);
+        this.closeContextMenu();
+      }],
+    ];
+    this.contextMenu = React.createRef();
+    this.renameBox = React.createRef();
   }
   onToggleCollapse = (path) => {
     let s = this.state.fileData[path] && this.state.fileData[path].collapsing;
@@ -76,21 +115,7 @@ class DirTree extends React.Component {
     return re;
   }
 
-  onDragEnter = e => {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-  onDragOver = e => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.target) {
-      console.log(e.target.dataset["filepath"])
-    }
-  }
-  onDrop = e => {
-    e.stopPropagation();
-    e.preventDefault();
-  }
+
   onUpload = (e) => {
     var dt = e.dataTransfer;
     var files = dt.files;
@@ -107,9 +132,11 @@ class DirTree extends React.Component {
 
   onDragEnter = e => {
     e.preventDefault();
+    console.log(e.dataTransfer)
     this.setState({dragover: true});
   }
   onDragLeave = e => {
+    if (e.target != e.currentTarget) return;
     e.preventDefault();
     this.setState({dragover: false});
   }
@@ -120,11 +147,22 @@ class DirTree extends React.Component {
     console.log("drapp")
     e.preventDefault();
     
+    const item = e.target.closest("[data-filepath]");
+    const path = item && item.dataset["filepath"];
+
+
     const dt = e.dataTransfer;
     const files = dt.files;
-    this.upload(files)
+    //this.upload(files)
 
     this.setState({dragover: false});
+  }
+
+  onDropItem = () => {
+
+  }
+  onDropFile = e => {
+    this.upload(e.dataTransfer.files);
   }
 
   upload(files) {
@@ -144,26 +182,150 @@ class DirTree extends React.Component {
   
   }
 
+
+  /* context menu */
+  openContextMenu = (x, y, e) => {
+    this.setState({
+      showContextMenu: true,
+      contextTarget: e && e.dataset["filepath"]
+    });
+    this.contextMenu.current.style.left = x + "px";
+    this.contextMenu.current.style.top = y + "px";
+  }
+  closeContextMenu = () => {
+    this.setState({showContextMenu: false});
+  }
+  onContextMenu = e => {
+    e.preventDefault();
+    const item = e.target.closest("[data-filepath]");
+    this.openContextMenu(e.clientX, e.clientY, item);
+
+    return false;
+  }
+
+  /* rename box */
+  enableRenameBox = (path) => {
+    const e = document.querySelector(`[data-filepath='${path}'] > div > a`);
+    if (!e) return;
+    const rect = e.getBoundingClientRect();
+    
+    this.renameBox.current.style.left = rect.x + "px";
+    this.renameBox.current.style.top = rect.y + "px";
+    this.renameBox.current.style.width = rect.width + "px";
+    this.renameBox.current.style.height = rect.height + "px";
+    this.renameBox.current.value = e.innerHTML;
+
+    window.setTimeout(() => {
+      this.renameBox.current.focus();
+      this.renameBox.current.select();
+    }, 0)
+
+    this.setState({
+      showRenameBox: true,
+      renamingPath: path,
+    });
+  }
+  disableRenameBox = () => {
+    this.setState({showRenameBox: false});
+  }
+  onRenameKeyDown = e => {
+    if(e.keyCode == 13) {
+      this.rename(this.state.renamingPath, this.renameBox.current.value);
+    }
+  }
+
+
+  setCopyFrom = path => {
+    this.setState({copyFrom: path});
+  }
+
+  /* 操作 (外部) */
+  createNewFile = (path, name) => {
+    //this.props.create
+    console.log("create file:", path, name)
+  }
+  createNewFolder = (path, name) => {
+    //this.props.create
+    console.log("create folder:", path, name)
+  }
+  copy = (from, to) => {
+    //copyFrom
+    //this.props.copy
+    console.log("copy:", from, to)
+  }
+  delete = (path) => {
+    //this.props.delete
+    console.log("delete:", path)
+  }
+  rename = (path, name) => {
+    //this.props.rename
+    console.log("rename:", path, name)
+  }
+
   render() {
     return (
       <div className={styles["dir-main"]}>
-          <div className={styles["dir-drop-zone"]}
+          <input type="text"
+            className={styles.rename}
+            onKeyDown={this.onRenameKeyDown}
+            onInput={this.onRenameInput}
+            ref={this.renameBox}
+            style={{display: this.state.showRenameBox ? "block" : "none"}}
+          />
+
+          <div className={styles["context-menu"]}
             style={{
-              opacity: this.state.dragover ? 1 : 0,
-              backgroundImage: "url(" + UploadIcon + ")",
+              display: this.state.showContextMenu ? "block" : "none",
             }}
-            onDragEnter={this.onDragEnter}
-            onDragLeave={this.onDragLeave}
-            onDragOver={this.onDragOver}
-            onDrop={this.onDrop}
+            ref={this.contextMenu}
+          >
+            {
+              this.menu.map((v, i) => {
+                return (
+                <div key={i} className={styles["context-menu-item"]} onClick={v[1]}>
+                  {v[0]}
+                </div>
+                )
+              })
+            }
+          </div>
+          <div
+            className={styles["context-menu-item-dummy"]}
+            style={{display: this.state.showContextMenu || this.state.showRenameBox ? "block" : "none"}}
+            onClick={() => {
+              this.closeContextMenu();
+              this.disableRenameBox();
+            }}
+            onContextMenu={this.ContextMenu}
           >
           </div>
-          <div className={styles["dir-header"]}>ディレクトリ</div>
+
+          <div className={styles["dir-drop-zone"]}
+            style={{
+              display: this.state.dragover ? "block" : "none",
+              backgroundImage: "url(" + UploadIcon + ")",
+            }}
+          >
+          </div>
+          <div className={styles["dir-header"]}>
+            <span>ディレクトリ</span>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "auto"}} onClick={() => this.createNewFile("/", "新しいファイル")}>
+              <AddIcon />
+            </div>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "0.5em"}} onClick={() => this.createNewFolder("/", "新しいフォルダ")}>
+              <CreateFolderIcon />
+            </div>
+          </div>
           <div
             className={styles["dir-window"]}
             style={ {
               width: "100%"
             } }
+            onDragEnter={this.onDragEnter}
+            onDragLeave={this.onDragLeave}
+            onDragOver={this.onDragOver}
+            onDrop={this.onDrop}
+            onContextMenu={this.onContextMenu}    
           >
             {
               this.flatten(this.props.dir)

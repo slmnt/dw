@@ -3,6 +3,7 @@
   flex-flow: column nowrap;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 /* textbox */
@@ -37,7 +38,9 @@
   height: 100%;
 
   border: 1px solid var(--light-color);
-    outline-color: var(--main-color);
+  outline-color: var(--main-color);
+
+  font-size: inherit;
 }
 .textarea-container {
   width: 100%;
@@ -97,6 +100,7 @@
   align-items: center;
   align-content: center;
 
+  font-weight: bold;
 }
 
 .chapter-menu-header-controls {
@@ -120,7 +124,13 @@
   align-content: center;
 
 }
-
+.chapter-menu-item + .chapter-menu-item {
+  border-top: 1px solid var(--main-color);
+}
+.chapter-menu-item:hover {
+  background-color: var(--light-color);
+  cursor: pointer;
+}
 
 .chapter-menu-icon {
   flex: 0 0 auto;
@@ -137,10 +147,7 @@
   align-items: center;
   align-content: center;
 }
-.chapter-menu-item-info:hover {
-  background-color: var(--light-color);
-  cursor: pointer;
-}
+
 .chapter-menu-item-name {
   flex: 0 0 10em;
   text-align: left;
@@ -153,10 +160,10 @@
 
   width: 100%;
   box-sizing: border-box;
-  padding: 0 0.5;
+  padding: 0 0.5em;
 }
 .chapter-menu-cfg-name {
-  font-size: 1.2em;
+  font-size: 1.6em;
 }
 .chapter-menu-cfg-desc {
   font-size: 1.2em;
@@ -179,13 +186,14 @@
   align-items: center;
 }
 .chapter-menu-cfg-footer-btn {
-  margin: 0.2em 1em;
+  margin: 0.2em 0.5em;
   padding: 0.5em 1em;
   border-radius: 3em;
   cursor: pointer;
 }
 .chapter-menu-cfg-footer-savebtn {
   background-color: var(--main-color);
+  color: white;
 }
 
 
@@ -230,20 +238,20 @@
 
   font-size: 1.5em;  
   color: inherit;
-  margin: 0 0 0.5em 2em;
+  margin: 0 0 0.5em 1em;
 }
 .chapters-btn {
   box-shadow: 0 1px 3px black;
   border-radius: 1em;
   
   flex: 0 0 auto;
-  padding: 0.5em 1em;
+  padding: 0.3em 1em;
   margin: 0 1em 0.5em 1em;
 
   cursor: pointer;
 }
 .discard-btn {
-
+  background-color: var(--nice-border-color) !important;
 }
 .preview-btn {
 
@@ -263,7 +271,7 @@
 }
 .header-controls > div {
   height: 1.5em;
-  padding: 0.5em;
+  padding: 0.5em 1.5em;
   margin: 0 0.2em;
 
   cursor: pointer;
@@ -284,7 +292,9 @@
   flex: 0 0 auto;
   padding: 0 1em;
   margin-top: 0.6em;
-  border-bottom: 1px solid #1abc9c;
+  border-bottom: 2px solid #1abc9c;
+
+  white-space: nowrap;
 }
 
 
@@ -327,7 +337,6 @@
 
 
 
-
 /* slides */
 .slides-main-container {
   display: flex;
@@ -336,6 +345,7 @@
   flex: 1 1 auto;
   width: 100%;
   height: 100%;
+
 }
 .slides-main-container-2 {
   display: flex;
@@ -349,6 +359,9 @@
   flex: 1 1 auto;
   width: auto;
   height: 0px;
+
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .slides-footer {
   flex: 0 0 auto;
@@ -404,6 +417,16 @@
   margin-right: 0.5em;
 }
 
+.slide-editor {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: initial;
+
+  background-color: var(--bg-color);
+}
+
+
 .course-name {
   display: flex;
   align-items: center;
@@ -426,27 +449,34 @@
   width: 15em;
   height: 100%;
   
-  border-right: 1px solid var(--main-color);
+  border-right: 2px solid var(--main-color);
+
+  display: flex;
+  flex-flow: column;
 }
 
 .slides-side-header {
+  flex: 0 0 auto;
+
   display: flex;
   justify-content: space-between;
   align-content: center;
   align-items: center;
 
-  height: 1.35em;
+  height: 1.4em;
   padding: 0.5em 1em;
   border-bottom: 1px solid var(--main-color);
 }
-.slides-side-header-add {
+.slides-side-header-icon {
   cursor: pointer;
 }
 
 .slides-side {
-  height: 100%;
+  flex: 1 1 auto;
+
+  height: auto;
   width: 100%;
-  overflow: hidden scroll;
+  overflow: hidden auto;
   
   scrollbar-width: thin;
   scrollbar-color: #555 rgba(0, 0, 0, 0);
@@ -477,7 +507,7 @@
   overflow: hidden;
   white-space: nowrap;
 
-  border-bottom: 1px solid var(--light-color);
+  border: 1px solid var(--light-color);
 }
 .slides-side-element:hover {
   background-color: var(--light-color);
@@ -512,8 +542,6 @@
 }
 
 
-
-/* slides:preview */
 
 
 

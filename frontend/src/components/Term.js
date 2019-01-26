@@ -1,5 +1,6 @@
 import React from 'react';   
 
+import ansiEscapes from 'ansi-escapes';
 
 import 'xterm/src/xterm.css';
 import './Term.css';
@@ -19,7 +20,18 @@ Terminal.applyAddon(search);
 Terminal.applyAddon(webLinks);
 Terminal.applyAddon(winptyCompat);
 
-
+//
+const ESC = '\u001B[';
+const CU = ESC + 'A';
+const CD = ESC + 'B';
+const CF = ESC + 'C';
+const CB = ESC + 'D';
+const DSR = /\u001B\[(.+);(.+)R/;
+const CUU = /\u001B\[(.*)A/; // cursor up
+const CUD = /\u001B\[(.*)B/; // cursor down
+const CUF = /\u001B\[(.*)C/; // cursor right (forward)
+const CUB = /\u001B\[(.*)D/; // cursor left (backward)
+  
 class Term extends React.Component {
     /*
       props
@@ -30,6 +42,11 @@ class Term extends React.Component {
       super(props);
       this.state = {
       }
+    }
+
+    componentWillUnmount() {
+      this.term.dispose();
+      this.term = null;
     }
     
     termRef = element => {
@@ -51,8 +68,8 @@ class Term extends React.Component {
       term.fit();
       term.focus();
 
-      this.runFakeTerminal(this.term)
-      term.write('Hello from \x1B[1;3;31mがんくん the polyglot\x1B[0m $ ');
+      this.runTerminal(this.term)
+      term.write('Hello from \x1B[1;3;31mがんくん the polyglot\x1B[0m');
       term.prompt();
 
 
@@ -80,32 +97,114 @@ class Term extends React.Component {
       element.style.height = term._core.viewport._viewportElement.getBoundingClientRect().height + "px";
     }
   
-    runFakeTerminal(term) {
+    runTerminal(term) {
       if (term._initialized) {
         return;
       }
     
       term._initialized = true;
+
+      /*
+      x, y: 現在の位置
+      ix, iy: ユーザ入力の開始
+      mx, my: 最先端
+      allowInput: ユーザが入力可能かどうか
+      */
+      term.mx = 0;
+      term.my = 0;
+      term.promptStr = '$ ';
+      term.cmd = '';
     
+      //
       term.prompt = () => {
-        term.write('\r\n$ ');
+        term.write('\r\n' + term.promptStr);
+        term.allowInput = true;
+        term._dsr_clbk = () => {
+          term.ix = term.x;
+          term.iy = term.y;
+          //console.log("first", term.x, term.y);
+        };
       };
+      term.insertToCommand = (key, n) => {
+        term.write(key);
+        term.write(term.cmd.substring(n));
+        term.cmd = term.cmd.substring(0, n) + key + term.cmd.substring(n);
+      }
+      term.setComand = (text, ox, oy) => {
+        term.cmd = text;
+        term.write(ansiEscapes.cursorTo(term.ix, term.iy));
+        term.write(term.cmd);
+        if (ox && oy) {
+          term.write(ansiEscapes.cursorTo(ox, term.oy));
+        }
+      }
+      term.runCommand = () => {
+        this.runCommand(term.cmd);
+        term.cmd = '';
+      }
+      term.isOutOfInput = (rx, ry) => {
+        const f = term.x + rx >= term.ix && term.y + ry == term.iy || term.y + ry > term.iy;
+        const b = term.x + rx <= term.mx && term.y + ry <= term.my;
+        /*
+        console.log(term.x + rx, term.y + ry)
+        console.log(term.ix, term.iy)
+        console.log(term.mx, term.my)
+        console.log(f, b)
+        */
+        return !f || !b;
+      }
+      term.cmdCharN = (x, y) => {
+        let n = 0;
+        if (y > term.iy) {
+          n += Math.max(0, y - term.y - 1) * term.cols;
+          n += term.cols - term.ix;
+        } else {
+          n += x - term.ix + 1;
+        }
+        return n;
+      }
     
-      term._core.register(term.addDisposableListener('key', (key, ev) => {
-        const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
-        
-        console.log(term)
-        console.log(term._core)
-        console.log(ev.keyCode, ev);
-        console.log(term.x, term.y);
-        if (ev.keyCode === 13) { // enter
-          term.prompt();
-        } else if (ev.keyCode === 8) { // backspace
-         // Do not delete the prompt
-          if (term.x > 2) {
+
+      term.on('data', d => {
+        const m = d.match(DSR);
+
+        if (m) {
+          term.x = parseInt(m[2]);
+          term.y = parseInt(m[1]);
+          if (term.x > term.mx) term.mx = term.x;
+          if (term.y > term.my) term.my = term.y;
+          if (term._dsr_clbk) {
+            term._dsr_clbk();
+            term._dsr_clbk = null;
           }
-          term.write('\b \b');
+        } else {
+          term.write(ansiEscapes.cursorGetPosition);
+        }
+      });
+      term._core.register(term.addDisposableListener('key', (key, ev) => {
+        if (!term.allowInput) return;
+        const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
+                
+        if (ev.keyCode === 13) { // enter
+          term.runCommand();
+          term.prompt();
+          console.log(term)
+          term.selectLines(1,2);
+        } else if (ev.keyCode === 8) { // backspace
+          if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
+            if (term.x == 1) {
+              term.write(ansiEscapes.cursorTo(term.cols + 2, term.y - 2));
+              term.write(' ');
+            }
+            term.write('\b \b');
+          }
         } else if (printable) {
+          //console.log(key)
+          if (key == CU && term.isOutOfInput(0, -1)) return;
+          else if (key == CD && term.isOutOfInput(0, 1)) return;
+          else if (key == CF && term.isOutOfInput(1, 0)) return;
+          else if (key == CB && term.isOutOfInput(-1, 0)) return;
+
           term.write(key);
         }
       }));
@@ -115,14 +214,21 @@ class Term extends React.Component {
       }));
     }
 
-    resize() {
-      this.term.resize();
+
+    updateTerminalSize() {
+      const cols = parseInt((document.getElementById(`opt-cols`)).value, 10);
+      const rows = parseInt((document.getElementById(`opt-rows`)).value, 10);
+      const width = (cols * this.term._core.renderer.dimensions.actualCellWidth + this.term._core.viewport.scrollBarWidth).toString() + 'px';
+      const height = (rows * this.term._core.renderer.dimensions.actualCellHeight).toString() + 'px';
+      const terminalContainer = document.getElementById('terminal-container');
+      terminalContainer.style.width = width;
+      terminalContainer.style.height = height;
       this.term.fit();
-      console.log("ressss")
     }
     
     runCommand(text) {
-
+      if (this.props.onRunCmd) this.props.onRunCmd(text);
+      console.log("run cmd:", text);
     }
     getOutput(text) {
 

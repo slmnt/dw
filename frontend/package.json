@@ -8,6 +8,7 @@
     "@ckeditor/ckeditor5-build-classic": "^11.2.0",
     "@ckeditor/ckeditor5-react": "^1.1.0",
     "@svgr/webpack": "2.4.1",
+    "ansi-escapes": "^3.1.0",
     "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",

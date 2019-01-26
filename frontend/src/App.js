@@ -260,7 +260,7 @@ class App extends React.Component {
             <Drawer ref={this.drawer} />
 
             <main className="content">
-              <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%", zIndex: "2" }}>
+              <Scrollbars className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
                 setting react router route
                 <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>

@@ -92,7 +92,7 @@ class Courseinfo extends Component {
                                 </span>
                             </div>
                             <div style={{fontSize: "1.2em"}}>
-                                <UserPanel username={this.state.contents.root} desc="I'm Fucking Awesome PG! TIME TO DIE!"/>
+                                <UserPanel username={this.state.contents.root} desc="Kang the polyglot will destroy you"/>
                             </div>
                         </div>
                         <div>

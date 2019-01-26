@@ -9,18 +9,13 @@ import DirTree from '../DirTree';
 import 'highlight.js/styles/vs.css'
 import hljs from 'highlight.js';
 
-import katex from 'katex';
-
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 import api from '../../modules/api'
-/*
-import * as Quill from 'quill';
-import 'quill/dist/quill.snow.css';
-import '../Quill.css';
-*/
+
+import logo from '../../img/logo.svg';
 
 import { ReactComponent as EditIcon } from '../../img/edit.svg';
 import { ReactComponent as DragHandleIcon } from '../../img/drag-handle.svg';
@@ -43,314 +38,6 @@ hljs.configure({
   useBR: false,
 });
 
-// katex
-window.katex = katex;
-
-// quill-markdown-shortcuts
-/*
-(() => {
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-  var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Quill.js Plugin - Markdown Shortcuts
-
-  function MarkdownShortcuts(quill, options) {
-    var _this = this;
-
-    _classCallCheck(this, MarkdownShortcuts);
-
-    this.quill = quill;
-    this.options = options;
-
-    this.matches = [{
-      name: 'header',
-      pattern: /^(#){1,6}\s/g,
-      action: function action(text, selection) {
-        var size = text.trim().length;
-        // Need to defer this action https://github.com/quilljs/quill/issues/1134
-        setTimeout(function () {
-          _this.quill.formatLine(selection.index, 0, 'header', size);
-          _this.quill.deleteText(selection.index - text.length, text.length);
-        }, 0);
-      }
-    }, {
-      name: 'blockquote',
-      pattern: /^(>)\s/g,
-      action: function action(text, selection) {
-        // Need to defer this action https://github.com/quilljs/quill/issues/1134
-        setTimeout(function () {
-          _this.quill.formatLine(selection.index, 1, 'blockquote', true);
-          _this.quill.deleteText(selection.index - 2, 2);
-        }, 0);
-      }
-    }, {
-      name: 'code-block',
-      pattern: /^`{3}(?:\s|\n)/g,
-      action: function action(text, selection) {
-        // Need to defer this action https://github.com/quilljs/quill/issues/1134
-        setTimeout(function () {
-          _this.quill.formatLine(selection.index, 1, 'code-block', true);
-          _this.quill.deleteText(selection.index - 4, 4);
-        }, 0);
-      }
-    }, {
-      name: 'bolditalic',
-      pattern: /(?:\*|_){3}(.+?)(?:\*|_){3}/g,
-      action: function action(text, selection, pattern, lineStart) {
-        var match = pattern.exec(text);
-
-        var annotatedText = match[0];
-        var matchedText = match[1];
-        var startIndex = lineStart + match.index;
-
-        if (text.match(/^([*_ \n]+)$/g)) return;
-
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, annotatedText.length);
-          _this.quill.insertText(startIndex, matchedText, { bold: true, italic: true });
-          _this.quill.format('bold', false);
-        }, 0);
-      }
-    }, {
-      name: 'bold',
-      pattern: /(?:\*|_){2}(.+?)(?:\*|_){2}/g,
-      action: function action(text, selection, pattern, lineStart) {
-        var match = pattern.exec(text);
-
-        var annotatedText = match[0];
-        var matchedText = match[1];
-        var startIndex = lineStart + match.index;
-
-        if (text.match(/^([*_ \n]+)$/g)) return;
-
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, annotatedText.length);
-          _this.quill.insertText(startIndex, matchedText, { bold: true });
-          _this.quill.format('bold', false);
-        }, 0);
-      }
-    }, {
-      name: 'italic',
-      pattern: /(?:\*|_){1}(.+?)(?:\*|_){1}/g,
-      action: function action(text, selection, pattern, lineStart) {
-        var match = pattern.exec(text);
-
-        var annotatedText = match[0];
-        var matchedText = match[1];
-        var startIndex = lineStart + match.index;
-
-        if (text.match(/^([*_ \n]+)$/g)) return;
-
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, annotatedText.length);
-          _this.quill.insertText(startIndex, matchedText, { italic: true });
-          _this.quill.format('italic', false);
-        }, 0);
-      }
-    }, {
-      name: 'strikethrough',
-      pattern: /(?:~~)(.+?)(?:~~)/g,
-      action: function action(text, selection, pattern, lineStart) {
-        var match = pattern.exec(text);
-
-        var annotatedText = match[0];
-        var matchedText = match[1];
-        var startIndex = lineStart + match.index;
-
-        if (text.match(/^([*_ \n]+)$/g)) return;
-
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, annotatedText.length);
-          _this.quill.insertText(startIndex, matchedText, { strike: true });
-          _this.quill.format('strike', false);
-        }, 0);
-      }
-    }, {
-      name: 'code',
-      pattern: /(?:`)(.+?)(?:`)/g,
-      action: function action(text, selection, pattern, lineStart) {
-        var match = pattern.exec(text);
-
-        var annotatedText = match[0];
-        var matchedText = match[1];
-        var startIndex = lineStart + match.index;
-
-        if (text.match(/^([*_ \n]+)$/g)) return;
-
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, annotatedText.length);
-          _this.quill.insertText(startIndex, matchedText, { code: true });
-          _this.quill.format('code', false);
-          _this.quill.insertText(_this.quill.getSelection(), ' ');
-        }, 0);
-      }
-    }, {
-      name: 'hr',
-      pattern: /^([-*]\s?){3}/g,
-      action: function action(text, selection) {
-        var startIndex = selection.index - text.length;
-        setTimeout(function () {
-          _this.quill.deleteText(startIndex, text.length);
-
-          _this.quill.insertEmbed(startIndex + 1, 'hr', true, Quill.sources.USER);
-          _this.quill.insertText(startIndex + 2, "\n", Quill.sources.SILENT);
-          _this.quill.setSelection(startIndex + 2, Quill.sources.SILENT);
-        }, 0);
-      }
-    }, {
-      name: 'asterisk-ul',
-      pattern: /^(\*|\+)\s$/g,
-      action: function action(text, selection, pattern) {
-        setTimeout(function () {
-          _this.quill.formatLine(selection.index, 1, 'list', 'unordered');
-          _this.quill.deleteText(selection.index - 2, 2);
-        }, 0);
-      }
-    }, {
-      name: 'image',
-      pattern: /(?:!\[(.+?)\])(?:\((.+?)\))/g,
-      action: function action(text, selection, pattern) {
-        var startIndex = text.search(pattern);
-        var matchedText = text.match(pattern)[0];
-        // const hrefText = text.match(/(?:!\[(.*?)\])/g)[0]
-        var hrefLink = text.match(/(?:\((.*?)\))/g)[0];
-        var start = selection.index - matchedText.length - 1;
-        if (startIndex !== -1) {
-          setTimeout(function () {
-            _this.quill.deleteText(start, matchedText.length);
-            _this.quill.insertEmbed(start, 'image', hrefLink.slice(1, hrefLink.length - 1));
-          }, 0);
-        }
-      }
-    }, {
-      name: 'link',
-      pattern: /(?:\[(.+?)\])(?:\((.+?)\))/g,
-      action: function action(text, selection, pattern) {
-        var startIndex = text.search(pattern);
-        var matchedText = text.match(pattern)[0];
-        var hrefText = text.match(/(?:\[(.*?)\])/g)[0];
-        var hrefLink = text.match(/(?:\((.*?)\))/g)[0];
-        var start = selection.index - matchedText.length - 1;
-        if (startIndex !== -1) {
-          setTimeout(function () {
-            _this.quill.deleteText(start, matchedText.length);
-            _this.quill.insertText(start, hrefText.slice(1, hrefText.length - 1), 'link', hrefLink.slice(1, hrefLink.length - 1));
-          }, 0);
-        }
-      }
-    }];
-
-    // Handler that looks for insert deltas that match specific characters
-    this.quill.on('text-change', function (delta, oldContents, source) {
-      for (var i = 0; i < delta.ops.length; i++) {
-        if (delta.ops[i].hasOwnProperty('insert')) {
-          if (delta.ops[i].insert === ' ') {
-            _this.onSpace();
-          } else if (delta.ops[i].insert === '\n') {
-            _this.onEnter();
-          }
-        }
-      }
-    });
-  }
-  _createClass(MarkdownShortcuts, [{
-    key: 'onSpace',
-    value: function onSpace() {
-      var selection = this.quill.getSelection();
-      if (!selection) return;
-
-      var _quill$getLine = this.quill.getLine(selection.index),
-          _quill$getLine2 = _slicedToArray(_quill$getLine, 2),
-          line = _quill$getLine2[0],
-          offset = _quill$getLine2[1];
-
-      var text = line.domNode.textContent;
-      var lineStart = selection.index - offset;
-      if (typeof text !== 'undefined' && text) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = this.matches[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var match = _step.value;
-
-            var matchedText = text.match(match.pattern);
-            if (matchedText) {
-              // We need to replace only matched text not the whole line
-              console.log('matched', match.name, text);
-              match.action(text, selection, match.pattern, lineStart);
-              return;
-            }
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      }
-    }
-  }, {
-    key: 'onEnter',
-    value: function onEnter() {
-      var selection = this.quill.getSelection();
-      if (!selection) return;
-
-      var _quill$getLine3 = this.quill.getLine(selection.index),
-          _quill$getLine4 = _slicedToArray(_quill$getLine3, 2),
-          line = _quill$getLine4[0],
-          offset = _quill$getLine4[1];
-
-      var text = line.domNode.textContent + ' ';
-      var lineStart = selection.index - offset;
-      selection.length = selection.index++;
-      if (typeof text !== 'undefined' && text) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = this.matches[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var match = _step2.value;
-
-            var matchedText = text.match(match.pattern);
-            if (matchedText) {
-              console.log('matched', match.name, text);
-              match.action(text, selection, match.pattern, lineStart);
-              return;
-            }
-          }
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-      }
-    }
-  }]);
-
-  Quill.register('modules/markdownShortcuts', MarkdownShortcuts)
-})();
-*/
 
 //
 class TestIFrame extends React.Component {
@@ -454,8 +141,9 @@ class SlideEditor extends React.Component {
       boxHeight: 70,
       draggingBox: null, //参照
       boxInitialPos: null,
-
+      selectingBox: null,
     }
+    this.text = "";
   }
   editorRef(element) {
     /* quill.js
@@ -541,6 +229,9 @@ class SlideEditor extends React.Component {
       if (v.pos === pos) return v;
     }
   }
+  getText = () => {
+    return this.text;
+  }
 
   onDragStart = (e) => {
     e.dataTransfer.effectAllowed = 'copy'
@@ -568,6 +259,10 @@ class SlideEditor extends React.Component {
     e.preventDefault();
   }
 
+  onOpenSlide = slide => {
+    this.setState({selectingBox: slide});
+  }
+
   clickSlide = (slide) => {
     this.props.openSlide(slide);
   }
@@ -578,8 +273,9 @@ class SlideEditor extends React.Component {
       <div className={styles["slides-main-container"]}>
         <div className={styles["slides-side-container"]}>
           <div className={styles["slides-side-header"]}>
-            <div>スライド一覧</div>
-            <AddIcon className={styles["slides-side-header-add"]} onClick={this.props.addBlankSlide} />
+            <div>スライド一覧 ({this.props.currentChapter && this.props.currentChapter.slides.length})</div>
+            <AddIcon className={styles["slides-side-header-icon"]} onClick={this.props.addBlankSlide} style={{marginLeft: "auto"}} />
+            <DeleteIcon className={styles["slides-side-header-icon"]} onClick={() => this.props.removeSlide(this.state.selectingBox)} style={{marginLeft: "0.5em"}} />
           </div>
           <div className={styles["slides-side"]} style={{position: "relative"}}
             onDragOver={this.onDragOver}
@@ -594,6 +290,8 @@ class SlideEditor extends React.Component {
                   style={{
                     height: this.state.boxHeight + "px",
                     top: v.pos * this.state.boxHeight + "px",
+                    borderWidth: this.state.selectingBox == v ? "2px 1px" : "0 0 1px 0",
+                    borderColor: this.state.selectingBox == v ? "var(--main-color)" : "var(--light-color)",
                     zIndex: this.draggingBox === v ? 1 : 0
                   }}
                   onClick={() => {this.clickSlide(v)}}
@@ -618,14 +316,20 @@ class SlideEditor extends React.Component {
         </div>
 
         <div className={styles["slides-main-container-2"]}>
-          <div className={styles["slides-main"]}>
+          <div className={styles["slides-main"]} style={{ backgroundImage: "url(" + logo + ")" }}>
             <div style={{width: "100%", height: "100%"}}>
+              {/*
               <div className={styles["slides-header"]}>
                 <div className={styles["slides-header-control"]}>
                   <div><div>Markdown</div></div>
                 </div>
               </div>
-              <div id="editorContainer" style={{width: "100%", height: "100%"}}>
+              */}
+              <div className={styles["slide-editor"]}
+                style={{
+                  opacity: this.props.currentSlide ? "1" : "0"
+                }}
+              >
                 {/*
                 <div ref={this.editorRef}>
                 </div>
@@ -636,15 +340,25 @@ class SlideEditor extends React.Component {
                     config={{
                       height: "550px",
                       width: "100%",
-                      autoGrow_minHeight: "100%"
+                      fullPage: false,
+                      autoGrow_maxHeight: "100%",
+                      resize_enabled: true,
+                      resize_minWidth: 200,
+                      resize_minHeight: 400,
+                      resize_dir: 'vertical',
+                      //removePlugins: 'size,autogrow',
                     }}
                     onInit={ editor => {
                         // You can store the "editor" and use when it is needed.
                         console.log( 'Editor is ready to use!', editor );
+                        console.log(editor)
+                        console.log(this)
+                        this.slideInitialized = true;
+                        //editor.resize('200', '400', true)
                     } }
                     onChange={ ( event, editor ) => {
-                        const data = editor.getData();
-                        this.props.setSlideText(data);
+                        this.text = editor.getData();
+                        // this.props.setSlideText(data);
                     } }
                     onBlur={ editor => {
                         console.log( 'Blur.', editor );
@@ -706,7 +420,12 @@ class FileEditor extends React.Component {
           >
           {/*
           */}
-          <DirTree dir={this.props.directory} openFile={path => {this.window.current.openTab(path);}} />
+          <DirTree dir={this.props.directory}
+            openFile={path => {this.window.current.openTab(path);}}
+            //rename
+            //delete
+            //create
+          />
 
           </div>
           <div
@@ -807,7 +526,7 @@ class Editor extends Component {
   componentDidMount() {
     this.loadCourse(this.state.courseData); // テスト test
     
-    
+    this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
     /*
     at this point, create course and get course id/title
     const formData = new FormData();
@@ -822,11 +541,17 @@ class Editor extends Component {
     this.state.id = response.id
     */
   }
+  componentWillUnmount(){
+    window.clearInterval(this.slideUpdateTimer);
+  }
 
   onSave = (e) => {
     var chapters = this.state.courseData.chapters
     
-    //update coursetitle
+    // sort slides
+    this.sortSlides();
+
+    // update coursetitle
     let formData = new FormData();
     formData.append('id',this.state.courseData.id)
     formData.append('title',this.state.courseData.name)
@@ -912,25 +637,34 @@ class Editor extends Component {
     this.setState({currentChapter: chapter}, () => {
       //this.chapterNameInput.current.value = chapter.name;
       this.setChapterNameText(chapter.name);
+
+      const c = this.getSlide(0);
+      this.openSlide(c); // slide がない場合もそのまま
     });
   }
   openSlide = (slide) => {
+    this.applySlideChanges();
     this.setState({currentSlide: slide}, () => {
     });
+    this.slideEditor.current.onOpenSlide(slide);
   }
   openTab = (id) => {
     this.setState({currentTab: id});
   }
 
   openChapterMenu = () => {
-    this.setState({showChapterMenu: true});
+    this.setState({showChapterMenu: true, chapterMenuConfig: -1});
   }
   closeChapterMenu = () => {
     this.setState({showChapterMenu: false});
   }
   
   openChapterMenuCfg = (id) => {
+    const ch = this.getChapter(id);
+    if (!ch) return;
     this.setState({chapterMenuConfig: id});
+    this.chapterMenuNameInput.current.setValue(ch.name);
+    this.chapterMenuDescInput.current.setValue(ch.desc);
   }
   closeChapterMenuCfg = () => {
     this.setState({chapterMenuConfig: -1});
@@ -966,10 +700,11 @@ class Editor extends Component {
     this.chapterNameInput.current.setValue(name);
   }
   saveChapterMenuCfg = () => {
-    if (!this.state.currentChapter) return;
-    this.state.currentChapter.name = this.chapterMenuNameInput.current.getValue();
-    this.state.currentChapter.desc = this.chapterMenuDescInput.current.getValue();
-    this.setChapterNameText(this.state.currentChapter.name);
+    const ch = this.getChapter(this.state.chapterMenuConfig);
+    if (!ch) return;
+    ch.name = this.chapterMenuNameInput.current.getValue();
+    ch.desc = this.chapterMenuDescInput.current.getValue();
+    if (ch == this.state.currentChapter) this.setChapterNameText(ch.name);
     this.setState({courseData: this.state.courseData});
   }
 
@@ -986,7 +721,10 @@ class Editor extends Component {
     if (!this.state.courseData) return;
     let id = typeof ch === 'number' ? ch : this.state.courseData.chapters.indexOf(ch);
     this.state.courseData.chapters.splice(id, 1);
-    this.setState({courseData: this.state.courseData});
+    this.setState({courseData: this.state.courseData}, ch == this.state.currentChapter && (() => {
+      const c = this.getChapter(0);
+      if (c) this.openChapter(c);
+    }));
   }
   moveChapter = (from, to) => {
     if (!this.state.courseData.chapters[to]) return;
@@ -1014,6 +752,9 @@ class Editor extends Component {
   }
 
   // slide
+  getSlide = id => {
+    return this.state.currentChapter && this.state.currentChapter.slides[id];
+  }
   setSlideText = text => {
     if (!this.state.currentSlide) return;
     this.state.currentSlide.text = text;
@@ -1021,6 +762,10 @@ class Editor extends Component {
   }
   addBlankSlide = () => {
     if (!this.state.currentChapter) return;
+    if (this.state.currentChapter.slides.length > 30) {
+      console.log("スライドの最大枚数突破");
+      return;
+    }
     this.state.currentChapter.slides.push({
       name: "スライド",
       text: "",
@@ -1032,6 +777,28 @@ class Editor extends Component {
     if (!this.state.currentChapter) return;
     let id = typeof slide === 'number' ? slide : this.state.currentChapter.slides.indexOf(slide);
     this.state.currentChapter.slides.splice(id, 1);
+    this.setState({courseData: this.state.courseData}, slide == this.state.currentSlide && (() => {
+      const c = this.getSlide(0);
+      this.openSlide(c);
+
+      this.sortSlides();
+    }));
+  }
+  applySlideChanges = () => {
+    if (!this.slideEditor || !this.state.currentSlide || !this.slideEditor.current.slideInitialized) return;
+
+    const text = this.slideEditor.current.getText();
+    if (text != this.state.currentSlide.text) this.setSlideText(text);
+  }
+  sortSlides = () => {
+    if (!this.state.currentChapter) return;
+    let slides = this.state.currentChapter.slides;
+    slides.sort(function (a, b) {
+      return a.pos - b.pos;
+    });
+    for (let i in slides) {
+      slides[i].pos = parseInt(i);
+    }
     this.setState({courseData: this.state.courseData});
   }
 
@@ -1076,13 +843,15 @@ class Editor extends Component {
         <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles["course-name"]}>
-              <div className={styles["course-name-tag"]}><span>コース作成: </span></div>
+              <div className={styles["course-name-tag"]}><span>コース編集: </span></div>
               <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
             </div>
             <div className={styles["header-controls"]}>
-              <div className={styles["discard-controls"]}><span>戻る</span></div>
-              <div className={styles["preview-controls"]}><span>プレビュー</span></div>
-              <div className={styles["save-controls"]} onClick={this.onSave} ><span>保存</span></div>
+              <div className={styles["discard-btn"]}><span>キャンセル</span></div>
+              {/*
+              <div className={styles["preview-btn"]}><span>プレビュー</span></div>
+              */}
+              <div className={styles["save-btn"]} onClick={this.onSave} ><span>保存</span></div>
             </div>
           </div>
           <div className={styles["middle-header"]}>
@@ -1098,10 +867,11 @@ class Editor extends Component {
               </div>
             </div>
             <div className={styles["chapter-name"]}>
+              <div style={{fontSize: "0.6em"}}>チャプター: </div>
               <TextBox ref={this.chapterNameInput} onUpdate={v => this.setChapterName(v)} />
             </div>
             <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
-              チャプター: {this.state.currentChapter && this.state.currentChapter.name}
+              チャプター編集
             </div>
             <div className={styles["chapter-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
               <div className={styles["chapter-menu"]}>
@@ -1136,7 +906,7 @@ class Editor extends Component {
                           キャンセル
                         </div>
                         <div className={classNames(styles["chapter-menu-cfg-footer-btn"], styles["chapter-menu-cfg-footer-savebtn"])} onClick={() => {this.saveChapterMenuCfg(); this.closeChapterMenuCfg();} } >
-                          完了
+                          保存
                         </div>
                       </div>
                     </div>
@@ -1183,7 +953,7 @@ class Editor extends Component {
             <div style={{backgroundColor: "var(--bg-color)", zIndex: "0"}}>
             </div>
             <div style={{zIndex: this.state.currentTab === 0 ? "1" : "-1"}} >
-              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} setSlideText={this.setSlideText} addBlankSlide={this.addBlankSlide} />
+              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} setSlideText={this.setSlideText} addBlankSlide={this.addBlankSlide} removeSlide={this.removeSlide} />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
               <FileEditor directory={this.state.courseData.directory} />

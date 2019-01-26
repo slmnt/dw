@@ -48,7 +48,7 @@ class TextEditor extends React.Component {
     if (this.editor) {
         let rect = this.editorContainer.getBoundingClientRect();
         this.onEditorResize(rect.width, rect.height);
-        this.term.current.resize();
+        this.term.current.updateTerminalSize();
 
         this.lastSizeUpdate = e.timeStamp;
     }
@@ -78,7 +78,7 @@ class TextEditor extends React.Component {
   onEditorResize(width, height) {
       console.log(width, height)
       this.editor.layout({width, height});
-      this.tabList.current.style.width = width + "px"
+      //this.tabList.current.style.width = width + "px"
   }
   setEditorScroll(top, left) {
       this.editor.setScrollPosition({scrollTop: top, scrollLeft: left});
