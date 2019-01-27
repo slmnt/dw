@@ -138,7 +138,7 @@ class Courseinfo extends Component {
                                 {
                                     this.state.reviews.map((v, i) => {
                                         return <div key={i}>
-                                            <UserPanel username={v.auth || "Monta"} desc="Kang the polyglot will destroy you"/>
+                                            <UserPanel username={v.auth || "Monta"} desc="Winter is comming"/>
                                             <div className={styles["review-text"]}>
                                                 {v.comment}
                                             </div>

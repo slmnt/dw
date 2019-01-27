@@ -1,7 +1,9 @@
 import os
 import re
+import json
 import shutil
 import subprocess
+
 from datetime import datetime
 
 from api import models as m
@@ -670,6 +672,8 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = {'ok':200}
+        data = {}
+        data['key'] = 'value'
+        json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 

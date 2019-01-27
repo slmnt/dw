@@ -214,9 +214,7 @@ class App extends React.Component {
     this.setState({ data: this.state.data });
   }
   drop = () => {
-    axios.post('dropliveuser/',{
-        uid: this.state.name,
-    }).then(response => {
+    axios.get('logout/').then(response => {
         // console.log(response)
         this.removeLoginState();
     }).catch(e => {
@@ -264,7 +262,7 @@ class App extends React.Component {
         <div className="page">
           <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
+            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()} logout={() => this.drop()} >
             </Navbar>
             
             <Drawer ref={this.drawer} />

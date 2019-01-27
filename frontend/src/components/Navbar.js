@@ -16,6 +16,7 @@ class NavBar extends React.Component {
     this.state = {
       showUserPopup: false
     };
+    console.log(this.props)
   }
   onClickMenu = e => {
     if (this.props.onClickMenu) {
@@ -49,7 +50,7 @@ class NavBar extends React.Component {
                 <div><Link to="/mypage">コース管理</Link></div>
                 <div><Link to="/mypage">設定</Link></div>
                 <div><Link to="/mypage">ヘルプ</Link></div>
-                <div><Link to="/mypage">ログアウト</Link></div>
+                <div><Link to="/" onClick={this.props.logout} >ログアウト</Link></div>
               </div>
             </React.Fragment>
         }

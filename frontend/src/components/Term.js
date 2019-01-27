@@ -69,7 +69,7 @@ class Term extends React.Component {
       term.focus();
 
       this.runTerminal(this.term)
-      term.write('Hello from \x1B[1;3;31mがんくん the polyglot\x1B[0m');
+      term.write('Hello from \x1B[1;3;31mPlayer Monta\x1B[0m');
       term.prompt();
 
 
@@ -167,7 +167,6 @@ class Term extends React.Component {
 
       term.on('data', d => {
         const m = d.match(DSR);
-
         if (m) {
           term.x = parseInt(m[2]);
           term.y = parseInt(m[1]);
@@ -205,6 +204,7 @@ class Term extends React.Component {
           else if (key == CF && term.isOutOfInput(1, 0)) return;
           else if (key == CB && term.isOutOfInput(-1, 0)) return;
 
+          term.cmd += key
           term.write(key);
         }
       }));
@@ -227,8 +227,8 @@ class Term extends React.Component {
     }
     
     runCommand(text) {
-      if (this.props.onRunCmd) this.props.onRunCmd(text);
       console.log("run cmd:", text);
+      if (this.props.onRunCmd) this.props.onRunCmd(text);
     }
     getOutput(text) {
 

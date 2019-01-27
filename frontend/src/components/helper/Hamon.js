@@ -11,13 +11,13 @@ class Hamon extends React.Component {
     //this.visible = false;
   }
   onClick = e => {
-    console.log("hamn")
+    //console.log("hamn")
     let hamon = e.currentTarget;
     let rect = hamon.parentNode.parentNode.getBoundingClientRect();
 
-    console.log(rect.width, rect.height)
+    //console.log(rect.width, rect.height)
     let size = Math.max(rect.width, rect.height);
-    console.log(size)
+    //console.log(size)
     hamon.style.width = size + "px";
     hamon.style.height = size + "px";
 
