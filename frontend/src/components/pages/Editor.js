@@ -311,12 +311,12 @@ class SlideEditor extends React.Component {
                         console.log( 'Editor is ready to use!', editor );
                         console.log(editor)
                         console.log(this)
-                        this.slideInitialized = true;
                         //editor.resize('200', '400', true)
-                    } }
+                      } }
                     onChange={ ( event, editor ) => {
-                        this.text = editor.getData();
-                        // this.props.setSlideText(data);
+                      this.slideInitialized = true;
+                      this.text = editor.getData();
+                      // this.props.setSlideText(data);
                     } }
                     onBlur={ editor => {
                         console.log( 'Blur.', editor );
@@ -422,18 +422,15 @@ class Editor extends Component {
             desc: "",
             slides: [
               {
-                name: "sl whataa awana aw we 1   wd dwa",
-                text: "dwwdw",
+                text: "dwwdw1",
                 pos: -1
               },
               {
-                name: "wish we could turn back time",
-                text: "dwwdw",
+                text: "dwwdw2",
                 pos: -1
               },
               {
-                name: "to the good old days",
-                text: "dwwdw",
+                text: "dwwdw3",
                 pos: -1
               }
             ]
@@ -755,6 +752,8 @@ class Editor extends Component {
     if (!this.slideEditor || !this.state.currentSlide || !this.slideEditor.current.slideInitialized) return;
 
     const text = this.slideEditor.current.getText();
+    //console.log("init: ", this.slideEditor.current.slideInitialized)
+    //console.log(text)
     if (text != this.state.currentSlide.text) this.setSlideText(text);
   }
   sortSlides = () => {
