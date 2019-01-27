@@ -14,7 +14,7 @@
 /*  header */
 .header {
     color: #f2f7ff;
-    background-color: #1abc9c;
+    background-color: var(--main-color);
     text-align: center;
     padding: 50px;
 }
@@ -46,7 +46,7 @@
 }
 .main_contents_title {
     color: #f2f7ff;
-    background-color: #1abc9c;
+    background-color: var(--main-color);
     padding: 50px;
     /*margin: 50px 100px 0px 100px;*/
 }

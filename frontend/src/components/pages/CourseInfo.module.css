@@ -39,7 +39,7 @@
 }
 .start-button {
   border-radius: 0.5em;
-  background-color: #1abc9c;
+  background-color: var(--main-color);
   padding: 0.5em;
   cursor: pointer;
   color: white;
@@ -78,7 +78,7 @@
 }
 .tab-list > div {
   flex: 0 0 auto;
-  color: #1abc9c;
+  color: var(--main-color);
   border-right: 1px solid #1abc9c60;
   padding: 0.2em 0;
 
@@ -130,7 +130,7 @@
   flex: 0 0 auto;
 
   border-radius: 0.5em;
-  background-color: #1abc9c;
+  background-color: var(--main-color);
   padding: 0.5em 2em;
   cursor: pointer;
 

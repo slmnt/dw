@@ -1,6 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import classNames from 'classnames';
 
 import TextEditor from '../TextEditor';
 import DirTree from '../DirTree';
@@ -178,55 +179,60 @@ class CourseGet extends Component {
         return (
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
-                    <div>{this.state.courseName}</div>
-                    <div>/</div>
-                    <div>{this.state.chapterName}</div>
-                    <div>答えを見る</div>
-                    <div>前のチャプター</div>
-                    <div>次のチャプター</div>
+                    <div className={styles["header-title"]}>
+                        <div>{this.state.courseName}</div>
+                        <div>/</div>
+                        <div>{this.state.chapterName}</div>
+                    </div>
+                    <div className={styles["header-controls"]}>
+                        <div>答えを見る</div>
+                        <div>前のチャプター</div>
+                        <div>次のチャプター</div>
+                    </div>
                 </div>
 
-                <div className={styles["slide-container"]} style={{display: this.state.showSlide ? "" : "none"}}>
-                    <div className={styles["slide-header"]}>
-                        <span className={styles["slide-header-title"]} onClick={this.openIntro}>スライド</span>
-                        <span><SlideIcon /></span>
-                        <span className={styles["slide-controls-btn"]} onClick={this.hideSlide}><PrevIcon/></span>
-                    </div>
-                    <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId == -1 ? "" : "none"}}>
-                        <div className={styles["slide-intro-name"]}>
-                            チャプター {this.state.chapterId + 1}: {this.state.chapterName}
-                        </div>
-                        <div className={styles["slide-intro-desc"]}>
-                            {this.state.chapterDesc}
-                        </div>
-                        <div className={styles["slide-intro-start"]} onClick={this.toFirstSlide}>
-                            開始
-                        </div>
-                    </div>
-                    <div className={styles["slide-content"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
-                        <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || "test"} />
-                    </div>
-                    <div className={styles["slide-controls"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
-                        <div className={styles["slide-controls-icon"]} onClick={this.toFirstSlide}><FirstIcon /></div>
-                        <div className={styles["slide-controls-icon"]} onClick={this.toPrevSlide}><PrevIcon /></div>
-                        <div className={styles["slide-controls-num"]}>
-                            (
-                            <span style={{fontSize: "2em"}}>
-                                {this.state.currentSlideId + 1}
-                            </span>
-                            <sub>
-                                /{this.state.slides.length}
-                            </sub>
-                            )
-                        </div>
-                        <div className={styles["slide-controls-icon"]} onClick={this.toNextSlide}><NextIcon /></div>
-                        <div className={styles["slide-controls-icon"]} onClick={this.toLastSlide}><LastIcon /></div>
-                    </div>
-                </div>
+
                 <div className={styles["editor-container"]}>
-                    <div className={styles["slide-collapsed"]}>
-                        <span onClick={this.showSlide}><SlideIcon /></span>
+                    <div className={styles["slide-collapsed"]} onClick={this.showSlide}>
+                        <span className={styles["slide-collapsed-btn"]}><SlideIcon /></span>
+                        <span>スライド</span>
                     </div>
+                    <div className={styles["slide-container"]} style={{display: this.state.showSlide ? "" : "none"}}>
+                        <div className={styles["slide-header"]}>
+                            <span className={styles["slide-header-title"]} onClick={this.openIntro}>スライド</span>
+                            <span><SlideIcon /></span>
+                            <span className={styles["slide-header-collapse-btn"]} onClick={this.hideSlide}><PrevIcon/></span>
+                        </div>
+                        <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId == -1 ? "" : "none"}}>
+                            <div className={styles["slide-intro-name"]}>
+                                チャプター {parseInt(this.state.chapterId) + 1}: {this.state.chapterName}
+                            </div>
+                            <div className={styles["slide-intro-desc"]}>
+                                {this.state.chapterDesc}
+                            </div>
+                            <div className={styles["slide-intro-start"]} onClick={this.toFirstSlide}>
+                                開始
+                            </div>
+                        </div>
+                        <div className={styles["slide-content"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
+                            <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || "test"} />
+                        </div>
+                        <div className={styles["slide-controls"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
+                            <div className={styles["slide-controls-icon"]} onClick={this.toFirstSlide}><FirstIcon /></div>
+                            <div className={styles["slide-controls-icon"]} style={{width: "2.5em", height: "2.5em"}} onClick={this.toPrevSlide}><PrevIcon /></div>
+                            <div className={styles["slide-controls-num"]}>
+                                <span style={{fontSize: "2em"}}>
+                                    {this.state.currentSlideId + 1}
+                                </span>
+                                <sub style={{fontSize: "1.4em"}}>
+                                    /{this.state.slides.length}
+                                </sub>
+                            </div>
+                            <div className={styles["slide-controls-icon"]} style={{width: "2.5em", height: "2.5em"}} onClick={this.toNextSlide}><NextIcon /></div>
+                            <div className={styles["slide-controls-icon"]} onClick={this.toLastSlide}><LastIcon /></div>
+                        </div>
+                    </div>
+                    
                     <div className={styles["dirtree-container"]}>
                         {/*
                         */}

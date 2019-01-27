@@ -6,8 +6,8 @@
     padding: 2em 0;
 
     text-align: center;
-    font-family:"arial black,Yu Gothic";
-    background-color:"#f2f7ff";
+    font-family: arial black,Yu Gothic;
+    background-color: #f2f7ff;
 
 }
 
@@ -37,8 +37,8 @@
     margin: auto;
     display: block;
     width: 70%;
-    text-align: left;    
-    border: 1px solid #1abc9c60;;
+    text-align: left;
+    border: 1px solid #1abc9c60;
 }
 
 .form_logo{
@@ -78,7 +78,7 @@
     flex: 0 0 auto;
 
     border-radius: 0.5em;
-    background-color: #1abc9c;
+    background-color: var(--main-color);
     padding: 0.5em 2em;
     cursor: pointer;
 
@@ -104,24 +104,24 @@
 
 .paper {
     margin-top: 5em;
-    display: 'flex';
-    flex-direction: 'column';
-    align-items: 'center';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 2em 3em 3em;
 }
 .signup {
-    color:"white";
-    background-color:"#1abc9c";
-    width:"100%";
-    text-align:"center";
-    padding:"5px";
+    color: white;
+    background-color: var(--main-color);
+    width: 100%;
+    text-align: center;
+    padding: 5px;
     font-size: 20;
 }
 .form {
-    width: '100%';
+    width: 100%;
     margin-top: 1em;
 }
 .submit {
     margin-top: 3em;
-    background-color:"#1abc9c";
+    background-color: var(--main-color);
 }

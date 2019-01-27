@@ -14,10 +14,25 @@
 
   white-space: nowrap;
 
+  padding: 0 1em;
   height: 4em;
   border-bottom: 2px solid var(--main-color);
 }
-
+.header > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-title > div {
+  font-size: 1.5em;
+}
+.header-controls > div {
+  border-radius: 3em;
+  padding: 0.5em 1em;
+  background-color: var(--main-color);
+  color: white;
+  margin: 0 0.5em;
+}
 
 
 /* slide */
@@ -29,6 +44,8 @@
   left: 0;
   z-index: 5;
   background-color: white;
+  color: var(--dark-color);
+  font-size: 1.5em;
 
   display: flex;
   flex-flow: column nowrap;
@@ -44,6 +61,7 @@
   justify-content: center;
   
   font-size: 1.5em;
+  padding: 0.7em 0;
   
   border-bottom: 1px solid var(--light-color);
 }
@@ -57,11 +75,12 @@
 .slide-header-collapse-btn {
   position: absolute;
   right: 0;
-  border-radius: 100%;
-  border: 1px solid var(--light-color);
+  border-left: 1px solid var(--light-color);
 }
 .slide-header-collapse-btn > svg {
   vertical-align: middle;
+  width: 2em;
+  height: 2em;
 }
 
 
@@ -80,12 +99,12 @@
 }
 .slide-intro-desc {
   flex: 1 1 auto;
-  font-size: 1.2em;
+  font-size: 1.5em;
   padding: 0 4em;
 }
 .slide-intro-start {
   font-size: 1.5em;
-  padding: 0.5em 2em;
+  padding: 1em 3em;
   margin: 1em auto 4em auto;
   width: 2.5em;
   text-align: center;
@@ -111,7 +130,7 @@
   justify-content: center;
 
   width: 100%;
-  padding: 1em 0;
+  padding: 1em 0 4em 0;
   border-top: 1px solid var(--light-color);
 
   fill: var(--main-color);
@@ -137,18 +156,35 @@
 }
 
 
+
 /* collapsing slide */
 .slide-collapsed {
-  height: 100%;
-  width: 2em;
+  width: 4em;
   top: 0;
   left: 0;
   background-color: white;
+  color: var(--dark-color);
   border-right: 2px solid var(--main-color);
+
+  padding: 1em 0.1em;
+
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  writing-mode: vertical-rl;
+  font-size: 1.8em;
+  
+  cursor: pointer;
+}
+.slide-collapsed-btn {
+  margin-bottom: 1em;
 }
 
 /* editor */
 .editor-container {
+  position: relative;
+
   flex: 1 1 auto;
 
   display: flex;
