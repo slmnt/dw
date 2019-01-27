@@ -323,11 +323,11 @@ class Python(viewsets.ModelViewSet):
         #open stdin stderr file
         output = open(STATIC + 'output.txt', 'w')
         inn = open(STATIC + 'output.txt', 'r')
-        pin = open(STATIC + str(filename) + '.py', 'w', encoding='utf-8')
+        pin = open(STATIC + 'tmp.py', 'w', encoding='utf-8')
         pin.write(ctext)
         pin.close()
         #build subprocess 
-        cmd = "python " + STATIC + str(filename) + '.py'
+        cmd = "python " + STATIC + 'tmp.py'
         p = subprocess.Popen(cmd.split(), stdout=output, stderr=output)
         dump = ''
         flag = True

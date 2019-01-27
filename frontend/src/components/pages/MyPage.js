@@ -21,10 +21,8 @@ class MyPage extends Component {
             //this.props.history.push('login')
         })        
 
-        axios.post('/test',{
-            id:2,
-            cid:1,
-            context: "test"
+        axios.post('/test/',{
+            contents: "print('test')"
         }).then(response => {
             console.log(response)
         }).catch((e) => {
