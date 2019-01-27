@@ -25,7 +25,6 @@ import Load from './components/Loading'
 import Main from './components/pages/Main'; 
 import Login from './components/pages/Login';
 import CreateUser from './components/pages/CreateUser';
-import MyPage from './components/pages/MyPage';
 import UserInfo from './components/pages/UserInfo';
 
 import Right from './components/pages/MyLayout';
@@ -293,7 +292,7 @@ class App extends React.Component {
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
-                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+                  <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
                   <Route path="/user/:id"  component={UserInfo}/>
 
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>

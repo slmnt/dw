@@ -9,7 +9,8 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
-import api from '../../modules/api'
+import api from '../../modules/api';
+import styles from './CourseGet.module.css';
 
 
 class CourseGet extends Component {
@@ -20,6 +21,7 @@ class CourseGet extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            currentSlide: null,
             directory: { // directory structure
                 children: [
                   {
@@ -58,44 +60,51 @@ class CourseGet extends Component {
 
     render() {
         return (
-            <div
-                style={{
-                display: "flex",
-                lineHeight: "120%",
-                fontSize: "0.6em",
-                color: "#cccccc",
-                height: "100%",
-                width: "100%",
-                }}
-            >
-                <div
-                    style={{
-                        flex: "0 0 auto",
-                        width: "200px",
-                        overflow: "hidden auto",
-                        borderRight: "1px solid #666666",
-                    }}
-                >
-                    {/*
-                    */}
-                    <DirTree dir={this.state.directory} openFile={path => {this.window.current.openTab(path);}} />
+            <div className={styles["main"]}>
+                <div className={styles["slides-container"]}>
+                    <CKEditor
+                        editor={ ClassicEditor }
+                        data={this.state.currentSlide && this.state.currentSlide.text || "test"}
+                        config={{
+                            removePlugins: 'toolbar',
+                        }}
+                        onInit={ editor => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log( 'Editor is ready to use!', editor );
+                            console.log(editor)
+                            console.log(this)
+                            this.slideInitialized = true;
+                            //editor.resize('200', '400', true)
+                        } }
+                        onChange={ ( event, editor ) => {
+                            this.text = editor.getData();
+                            // this.props.setSlideText(data);
+                        } }
+                        onBlur={ editor => {
+                            console.log( 'Blur.', editor );
+                        } }
+                        onFocus={ editor => {
+                            console.log( 'Focus.', editor );
+                        } }
+                    />
                 </div>
-                <div
-                    style={{
-                        flex: "1 1 auto",
-                        height: "100%",
-                        width: "100%",      
-                    }}
-                >
-                    <TextEditor ref={this.window} />
-                    {/*
-                    */}
-                </div>
-            </div>  
+                <div className={styles["editor-container"]}>
+                    <div className={styles["dirtree-container"]}>
+                        {/*
+                        */}
+                        <DirTree dir={this.state.directory} openFile={path => {this.window.current.openTab(path);}} />
+                    </div>
+                    <div className={styles["textditor-container"]}>
+                        <TextEditor ref={this.window} />
+                        {/*
+                        */}
+                    </div>
+                </div>  
+            </div>
         );
   	}
 }
 
-CourseGet.PropTypes = {};
+CourseGet.propTypes = {};
 
 export default CourseGet;

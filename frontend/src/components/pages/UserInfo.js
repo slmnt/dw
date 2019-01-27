@@ -4,10 +4,50 @@ import PropTypes from 'prop-types';
 import styles from './UserInfo.module.css';
 import { ReactComponent as Logo } from '../../img/logo.svg';
 
+import axios from 'axios';
+import api from '../../modules/api';
+
 class UserInfo extends Component {
+    /*
+    props
+        isMypage
+    */
+    constructor(props){
+        super(props)
+
+        this.state = {
+            userinfo: {}
+        };
+        this.set = props.set
+    }
+    componentDidMount(){
+        console.log(this.props.match)
+
+        axios.get('/user/').then(response => {
+            this.setState({userinfo: response.data})
+        }).catch((e) => {
+            //this.props.history.push('login')
+        })        
+
+        axios.post('/test',{
+            id:2,
+            cid:1,
+            context: "test"
+        }).then(response => {
+            console.log(response)
+        }).catch((e) => {
+            console.log(e)
+        })        
+
+    }
     getUserData = () => {
 
     }
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+    
     render() {
         return (
             <div className={styles["main"]}>
@@ -37,6 +77,6 @@ class UserInfo extends Component {
   	}
 }
 
-UserInfo.PropTypes = {};
+UserInfo.propTypes = {};
 
 export default UserInfo;

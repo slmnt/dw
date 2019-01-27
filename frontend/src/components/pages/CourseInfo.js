@@ -9,10 +9,8 @@ import Rating from '../Rating';
 
 class Courseinfo extends Component {
     state = {
-        info: "",
-        currentTab: 0,
-
         contents: {
+            id: 123,
             title: "peeton",
             descriptoin: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
             root: "",
@@ -31,7 +29,9 @@ class Courseinfo extends Component {
                 comment: "11/10 would not play again",
                 createat: "2019/01/22 19:45",
             }
-        ]
+        ],
+
+        currentTab: 0,
     }
 
     constructor (props) {
@@ -117,7 +117,7 @@ class Courseinfo extends Component {
                                                     <div className={styles["chapter-name"]}>
                                                         <a>{v.title}</a>
                                                     </div>
-                                                    <Link to={this.props.location.pathname +"/" + v.cid} className={styles["chapter-start-button"]}>
+                                                    <Link to={"/course/" + this.state.contents.id + "/" + (i + 1)} className={styles["chapter-start-button"]}>
                                                         開始
                                                     </Link>
                                                 </div>
