@@ -25,6 +25,9 @@ import { ReactComponent as CrossIcon } from '../../img/cross.svg';
 import { ReactComponent as ThreeDots } from '../../img/three-dots.svg';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 
+import { ReactComponent as SlideIcon } from '../../img/align-left.svg';
+import { ReactComponent as CodeIcon } from '../../img/code.svg';
+import { ReactComponent as AnsIcon } from '../../img/spellcheck.svg';
 
 /*
 問題
@@ -263,7 +266,7 @@ class SlideEditor extends React.Component {
                       <div className={styles["slides-side-element-name"]}>{v.name}</div>
                       <div className={styles["slides-side-element-text"]}>{v.text}</div>
                       */}
-                      <TestIFrame content={v.text}/>
+                      <TestIFrame content={v.text} ignoreEvents={true}/>
                     </div>
                   </div>
                 </div>);
@@ -899,12 +902,15 @@ class Editor extends Component {
             <div className={styles.tablist}>
               <div className={this.state.currentTab === 0 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(0)}>
                 スライド
+                <SlideIcon />
               </div>
               <div className={this.state.currentTab === 1 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(1)}>
                 コード
+                <CodeIcon />
               </div>
               <div className={this.state.currentTab === 2 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(2)}>
                 答え
+                <AnsIcon />
               </div>
             </div>
             <div className={styles["chapter-name"]}>

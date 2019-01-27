@@ -198,15 +198,16 @@ class Term extends React.Component {
         } else if (ev.keyCode === 8) { // backspace
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
             if (term.insertMode) {
+              // 一旦クリア
               let ni = term.cmdCharN(term.ix, term.iy);
               term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
               term.write(' '.repeat(term.cmdCharN(term.mx, term.my) - ni + 1));
               term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
-              
+              // cmd を調整
               let n = term.cmdCharN(term.x, term.y);
               term.cmd = term.cmd.substring(0, n - 2) + term.cmd.substring(n - 1);
               console.log(term.cmd);
-
+              // 書き込み
               term.write(term.cmd);
               term.write(ansiEscapes.cursorTo(term.x - 2, term.y - 1));
             } else {

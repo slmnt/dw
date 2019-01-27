@@ -17,7 +17,7 @@ class TestIFrame extends Component {
             <style>
               body {
                 overflow: hidden;
-                font-size: 0.6em;
+                font-size: ${this.props.fontSize || 0.6}em;
               }
             </style>
             ${this.props.content}
@@ -37,11 +37,12 @@ class TestIFrame extends Component {
 
   render() {
       return (<iframe
-        style={{width: "100%", height: "100%", border: "none", pointerEvents: "none"}}
+        style={{width: "100%", height: "100%", border: "none", pointerEvents: this.props.ignoreEvents ? "none" : ""}}
         //allowFullScreen={true}
         //"allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
         //"geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
-        ref="iframe"/>)
+        ref="iframe"
+      />)
   }
 }
 
