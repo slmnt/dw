@@ -269,7 +269,7 @@ class userinfo(viewsets.ModelViewSet):
 
 class Logout(APIView):
 
-    def get(self, request):
+    def post(self, request):
         logout(request)
         return HttpResponse('logout',status=status.HTTP_200_OK)
 

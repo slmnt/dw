@@ -34,7 +34,7 @@ class Login extends Component {
         this.context.login(this.state.name, this.state.password);
     }
     onClickDrop = () => {
-        this.context.drop();
+        this.context.logout();
     }
 
     handleChange = prop => event => {

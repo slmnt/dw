@@ -4,9 +4,7 @@ import axios from 'axios';
 
 import TextEditor from '../TextEditor';
 import DirTree from '../DirTree';
-
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import TestIFrame from '../TestIFrame';
 
 
 import api from '../../modules/api';
@@ -21,6 +19,9 @@ class CourseGet extends Component {
     constructor (props) {
         super(props);
         this.state = {
+            courseId: this.props.match.params.id,
+            chapterId: this.props.match.params.ch,
+            
             currentSlide: null,
             directory: { // directory structure
                 children: [
@@ -49,6 +50,8 @@ class CourseGet extends Component {
          *  CourseContent Rendering
          *      this.state.contents
          */
+
+
         axios.post('/getusercourseindex/', {
             id:this.props.match.params.id,
             cid:this.props.match.params.number}
@@ -61,32 +64,9 @@ class CourseGet extends Component {
     render() {
         return (
             <div className={styles["main"]}>
-                <div className={styles["slides-container"]}>
-                    <CKEditor
-                        editor={ ClassicEditor }
-                        data={this.state.currentSlide && this.state.currentSlide.text || "test"}
-                        config={{
-                            removePlugins: 'toolbar',
-                        }}
-                        onInit={ editor => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log( 'Editor is ready to use!', editor );
-                            console.log(editor)
-                            console.log(this)
-                            this.slideInitialized = true;
-                            //editor.resize('200', '400', true)
-                        } }
-                        onChange={ ( event, editor ) => {
-                            this.text = editor.getData();
-                            // this.props.setSlideText(data);
-                        } }
-                        onBlur={ editor => {
-                            console.log( 'Blur.', editor );
-                        } }
-                        onFocus={ editor => {
-                            console.log( 'Focus.', editor );
-                        } }
-                    />
+                <div className={styles["slide-container"]}>
+                    <TestIFrame content={this.state.currentSlide && this.state.currentSlide.text || "test"} />
+                    <div className={styles["slide-controls"]}></div>
                 </div>
                 <div className={styles["editor-container"]}>
                     <div className={styles["dirtree-container"]}>

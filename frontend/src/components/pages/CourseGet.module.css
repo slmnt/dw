@@ -3,14 +3,18 @@
   height: 100%;
 }
 
-.slides-container {
+.slide-container {
   position: absolute;
   height: 100%;
   width: 50em;
   z-index: 5;
   background-color: white;
 }
-
+.slide-controls {
+  width: 100%;
+  height: 2em;
+  border: 1px solid black;
+}
 
 .editor-container {
   display: flex;

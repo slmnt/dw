@@ -187,7 +187,6 @@ class Term extends React.Component {
         if (ev.keyCode === 13) { // enter
           term.runCommand();
           term.prompt();
-          console.log(term)
           term.selectLines(1,2);
         } else if (ev.keyCode === 8) { // backspace
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
@@ -204,8 +203,10 @@ class Term extends React.Component {
           else if (key == CF && term.isOutOfInput(1, 0)) return;
           else if (key == CB && term.isOutOfInput(-1, 0)) return;
 
-          term.cmd += key
-          term.write(key);
+          //term.cmd += key
+          let n = term.cmdCharN(term.x, term.y);
+          term.insertToCommand(key, n);
+          //term.write(key);
         }
       }));
     
@@ -230,8 +231,8 @@ class Term extends React.Component {
       console.log("run cmd:", text);
       if (this.props.onRunCmd) this.props.onRunCmd(text);
     }
-    getOutput(text) {
-
+    getOutput(data) {
+      this.term.write(data);
     }
     render() {
         return (

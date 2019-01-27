@@ -16,12 +16,12 @@ class UserInfo extends Component {
         super(props)
 
         this.state = {
-            userinfo: {}
+            userId: this.props.isMyPage || !this.props.match ? -1 : this.props.match.params.id,
+            userinfo: {},
         };
         this.set = props.set
     }
     componentDidMount(){
-        console.log(this.props.match)
 
         axios.get('/user/').then(response => {
             this.setState({userinfo: response.data})
@@ -66,9 +66,9 @@ class UserInfo extends Component {
                         </div>
                     </div>
                     <div className={styles["overview"]}>
-                        <div>overview</div>
+                        <div className={styles["overview-title"]}>情報</div>
                         <div className={styles["courses"]}>
-                            <div>コース一覧</div>
+                            <div className={styles["courses-title"]}>コース一覧</div>
                         </div>
                     </div>
                 </div>
