@@ -269,7 +269,7 @@ class userinfo(viewsets.ModelViewSet):
 
 class Logout(APIView):
 
-    def get(self, request):
+    def post(self, request):
         logout(request)
         return HttpResponse('logout',status=status.HTTP_200_OK)
 
@@ -364,7 +364,10 @@ class PythonByDocker(viewsets.ModelViewSet):
         #Copy Dockerfile
         #Required -> Fix Dodcerfile
         #               Adjust Copy Directory/Run File
-        shutil.copy(DOCKFILES+'Dockerfile',DOCKDIR)
+        #shutil.copy(DOCKFILES+'Dockerfile',DOCKDIR)
+        with open(DOCKDIR + 'Dockerfile','w') as f:
+            f.write('FROM python:3\nCOPY . /src\nWORKDIR /src\nCMD [ "python", "./src/index.py" ]')
+
 
         #create dump file   
         #open stdin stderr file

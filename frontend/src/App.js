@@ -214,7 +214,7 @@ class App extends React.Component {
     this.setState({ data: this.state.data });
   }
   drop = () => {
-    axios.get('logout/').then(response => {
+    axios.post('logout/').then(response => {
         // console.log(response)
         this.removeLoginState();
     }).catch(e => {
