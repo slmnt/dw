@@ -1,10 +1,14 @@
-from api import models as m
-from api import serializers as s
-from django.shortcuts import render,redirect
-from .models import *
-from .serializers import *
 import os
 import re
+import shutil
+import subprocess
+from datetime import datetime
+
+from api import models as m
+from api import serializers as s
+from back.settings import BASE_DIR
+from .models import *
+from .serializers import *
 
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -21,16 +25,16 @@ from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.contrib.auth.hashers import check_password
 from django.contrib.sessions.models import Session
 
+from django.shortcuts import render,redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.mail import send_mail
 
-from datetime import datetime
-import subprocess
 from Crypto.Hash import SHA256
-from back.settings import BASE_DIR
 # Create your views here.
 
+DOCKDIR = BASE_DIR + '//docker//python//'
+DOCKFILES = BASE_DIR + '//docker//'
 STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
 """
@@ -48,91 +52,82 @@ send_mail(
 class UserAuthentic(APIView):
 
     def post(self, request):
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            #sended username check
-            try:
-                auth_user = User.objects.get(username=request.data['uid'])
-            except:
-                return Response(data="1")
-            #is_vaild check
-            try:
-                if auth_user.is_active:
-                    return Response(status=status.HTTP_404_NOT_FOUND)
-            except:
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-            #sended pwd check
-            try:
-                pwd = request.data['pwd']
-                if check_password(pwd, auth_user.password):
-                    pass
-            except:
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-            v_user = authenticate(request=None,username=auth_user.username,password=pwd)
-            if v_user is not None:
-                login(request,v_user)
-                #check live user moedls
-                #cookie login expiry set
-                request.session.set_expiry(432000)
-                return Response(status=status.HTTP_200_OK)
-            else:
-                #now
-                return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        #sended username check
+        try:
+            auth_user = User.objects.get(username=request.data['uid'])
+        except:
+            return Response(data="1")
+        #is_vaild check
+        try:
+            if auth_user.is_active == False:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        #sended pwd check
+        try:
+            pwd = request.data['pwd']
+            if check_password(pwd, auth_user.password):
+                pass
+        except:
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+        v_user = authenticate(username=auth_user.username,password=pwd)
+        if v_user is not None:
+            login(request,v_user)
+            #check live user moedls
+            #cookie login expiry set
+            request.session.set_expiry(432000)
+            return Response(status=status.HTTP_200_OK)
         else:
-            return redirect("http://localhost:3000")
+            #now
+            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
 
 #required data
 # 'uid' 'pwd' 'email' 'fname' 'lname
 class CreateUser(APIView):
 
     def post(self, request):
-        #print(request.data)
-        select = request.META['HTTP_ACCEPT'].split(',')[0]
-        if select == 'application/json':
-            #check username
-            try:
-                uname = request.data['uid']
-                pwd = request.data['pwd']
-                email = request.data['email']
-                new_user = User(username=uname, email=email)
-                new_user.is_active = False
-                new_user.set_password(pwd)
-            except:
-                return Response(data="1")
-            #check first name
-            try:
-                new_user.first_name = request.data['fname']
-            except:
-                pass
-            #check last name
-            try:
-                new_user.last_name = request.data['lname']
-            except:
-                pass
-            new_user.save()
-            try:
-                u = User.objects.get(username=uname)
-                h = SHA256.new()
-                h.update(uname.encode('utf-8'))
-                #print(uname)
-                code = h.hexdigest()
-                c = CertiList(name=u,code=str(code))
-                c.save()
-                print(u)
-            except:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+        #check username
+        try:
+            uname = request.data['uid']
+            pwd = request.data['pwd']
+            email = request.data['email']
+            new_user = User(username=uname, email=email)
+            new_user.is_active = False
+            new_user.set_password(pwd)
+        except:
+            return Response(data="1")
+        #check first name
+        try:
+            new_user.first_name = request.data['fname']
+        except:
+            pass
+        #check last name
+        try:
+            new_user.last_name = request.data['lname']
+        except:
+            pass
+        new_user.save()
+        try:
+            u = User.objects.get(username=uname)
+            h = SHA256.new()
+            h.update(uname.encode('utf-8'))
+            #print(uname)
+            code = h.hexdigest()
+            c = CertiList(name=u,code=str(code))
+            c.save()
+            print(u)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            body = "http://localhost:3000/checkmail/" + code + "/"
-            send_mail(
-                'mail check',
-                str(body),
-                'miniprog2018@gmail.com',
-                [str(email)],
-                fail_silently=False,
-            )
-            return Response(data=uname,status=status.HTTP_200_OK)
-        else:
-            return redirect("http://localhost:3000")
+        body = "http://localhost:3000/checkmail/" + code + "/"
+        send_mail(
+            'mail check',
+            str(body),
+            'miniprog2018@gmail.com',
+            [str(email)],
+            fail_silently=False,
+        )
+        return Response(data=uname,status=status.HTTP_200_OK)
 
 class CreateMUser(APIView):
 
@@ -279,24 +274,21 @@ class Logout(APIView):
 
 
 #Need Security policy 
-#one client multi users?
 class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
-        #print(request.user)
-        if str(request.user) == 'AnonymousUser':
-            return Response(status=status.HTTP_201_CREATED)
-
-        else:            
-            if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
-                return HttpResponse(str(request.user),status=status.HTTP_200_OK)
-            else:
-                try:
-                    uid = User.objects.get(username=str(request.user))
-                except:
-                    return Response(status=status.HTTP_201_CREATED)
-                logout(request)
-                return HttpResponse('logout',status=status.HTTP_201_CREATED)
+        if request.user:
+            user = User.objects.get(username=request.user)
+            if user.is_active:
+                if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
+                    return HttpResponse(str(request.user),status=status.HTTP_200_OK)
+                else:
+                    try:
+                        uid = User.objects.get(username=str(request.user))
+                    except:
+                        return Response(status=status.HTTP_201_CREATED)
+                    logout(request)
+                    return HttpResponse('logout',status=status.HTTP_201_CREATED)
 
         #print(dir(request.session))
         #print(request.session._get_session())
@@ -352,6 +344,59 @@ class Python(viewsets.ModelViewSet):
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
+class PythonByDocker(viewsets.ModelViewSet):
+
+    #1 Copy userfolder body
+    #2 Build Docker Image -- clear
+    #   docker build --tag pybox DOCKERDIR
+    #3 Run Docker Image -- clear
+    #   docker run pybox
+    #4 Send Client printed result
+    def post(self, request):
+        USER_STORAGE = STORAGE + str(request.user)
+
+        #Clear DOcker Folder
+        shutil.rmtree(DOCKDIR)
+        #Copy User DIR
+        shutil.copytree(USER_STORAGE,DOCKDIR)
+        #Copy Dockerfile
+        #Required -> Fix Dodcerfile
+        #               Adjust Copy Directory/Run File
+        shutil.copy(DOCKFILES+'Dockerfile',DOCKDIR)
+
+        #create dump file   
+        #open stdin stderr file
+        with open(STATIC + 'output.txt', 'w') as output, open(STATIC + 'output.txt', 'r') as read_result, open(os.devnull,'a') as pipe:
+            #build subprocess 
+            cmd1 = "docker build --tag pybox " + DOCKDIR
+            cmd2 = "docker run pybox"
+            p1 = subprocess.Popen(cmd1.split(),stdout=pipe,stderr=pipe)
+            p2 = subprocess.Popen(cmd2.split(), stdout=output, stderr=output)
+            dump = ''
+            flag = True
+            #excete 
+            try:
+                #timeout value setting is service level
+                out, err = p1.communicate(timeout=1)
+            except subprocess.TimeoutExpired:
+                p1.kill()
+                out, err = p1.communicate()
+            try:
+                #timeout value setting is service level
+                out, err = p2.communicate()
+            except subprocess.TimeoutExpired:
+                p2.kill()
+                out, err = p2.communicate()
+                dump += 'timeout error'
+                flag = False
+            finally:
+                while flag:
+                    temp = read_result.readline()
+                    if not temp:
+                        break
+                    dump += temp
+        #return response
+        return Response(data=dump,status=status.HTTP_200_OK)
 
 class Getuser(viewsets.ModelViewSet):
 
@@ -451,26 +496,25 @@ class Upload(viewsets.ModelViewSet):
 
     def post(self, request):
         if request.user:
-            print(request.user)
-        p = request.FILES['files']
-        dir = request.data['path'].split('/')
-        path = STORAGE
-        for name in dir:
-            pattern = '.*\..*'
-            r = re.match(pattern,name)
-            if r:
-                path += name
-            else:
-                path += name + '//'
-                if not os.path.exists(path):
-                    os.makedirs(path)
+            name = str(request.user)
+            p = request.FILES['files']
+            dir = request.data['path'].split('/')
+            dir = [name] + dir
+            path = STORAGE
 
-        with open(path,mode='wb+') as f:
-            print(p.size)
-            d = 0            
-            for line in p:
-                d += len(line)
-                f.write(line)
+            for name in dir:
+                pattern = '.*\..*'
+                r = re.match(pattern,name)
+                if r:
+                    path += name
+                else:
+                    path += name + '//'
+                    if not os.path.exists(path):
+                        os.makedirs(path)
+
+            with open(path,mode='wb+') as f:
+                for line in p:
+                    f.write(line)
             
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
@@ -584,15 +628,48 @@ class ChapterSourceCodeCreate(viewsets.ModelViewSet):
                 chapter = q.get()
                 slides = UserCourseContentCode(root=chapter,context=text)
                 slides.save()
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
 
+class GetUser(viewsets.ModelViewSet):
+
+    def get(self,request):
+        data = {'ok':200}
+        queryset = UserInfo.objects.all()
+        serializers = UserInfoSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class GEtUserCourses(viewsets.ModelViewSet):
+
+    def post(self, request):
+        username = request.data['name']
+        target = User.objects.get(username=username)
+        queryset = UserCourse.objects.all().filter(root=target)
+        serializers = UserCourseSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class DisableUser(viewsets.ModelViewSet):
+
+    def post(self, request):
+        target = User.objects.get(username=request.user)
+        target.is_active = False
+        target.save()
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
+#Remain apis
+# User Create api
+# User Info Search api
+# Course info Search api
+# User Directory Structure get api
 class APItest(viewsets.ModelViewSet):
 
     def get(self,request):
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
 
-    #required
     def post(self, request):
-        root = User.objects.get(username=request.user)
-        root.is_active = False
-        return Response(status=status.HTTP_200_OK)
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+

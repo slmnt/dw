@@ -43,7 +43,7 @@ import Terms from './components/pages/Terms';
 import Privacy from './components/pages/Privacy';
 import NotFound from './components/pages/NotFound';
 
-
+import api from './modules/api'
 
 
 axios.defaults.baseURL = '/api';
@@ -122,11 +122,18 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-    
+    /*    
+    const formData = new FormData();
+    formData.append('name','admin')
+    api.post('/api/test',{
+      body: formData      
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
+
     this.setState({
       bid: localStorage.getItem("bid")
     })
-
+    */
 
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
@@ -222,8 +229,11 @@ class App extends React.Component {
       console.log(response)
     })
   }
-  deleteUser = () => {
 
+  deleteUser = () => {
+    api.post('/api/deleteuser/',{
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
   }
 
 
