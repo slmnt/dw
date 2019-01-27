@@ -9,6 +9,7 @@ import { ReactComponent as Arrow } from '../img/arrow-drop-down.svg';
 
 import {MainContext} from '../contexts/main';
 import Hamon from './helper/Hamon';
+import RedirectLink from './RedirectLink';
 
 class NavBar extends React.Component {
   constructor(props){
@@ -47,10 +48,10 @@ class NavBar extends React.Component {
               <div className={styles["user-popup-bg"]} onClick={this.hidePopup}></div>
               <div className={styles["user-popup"]} onClick={this.onClickPopup}>
                 <div><Link to="/mypage">マイページ</Link></div>
-                <div><Link to="/mypage">コース管理</Link></div>
-                <div><Link to="/mypage">設定</Link></div>
-                <div><Link to="/mypage">ヘルプ</Link></div>
-                <div><Link to="/" onClick={this.props.logout} >ログアウト</Link></div>
+                <div><Link to="/mypage/courses">コース管理</Link></div>
+                <div><Link to="/settings">設定</Link></div>
+                <div><Link to="/help">ヘルプ</Link></div>
+                <div><Link to="/" onClick={() => this.context.logout()} >ログアウト</Link></div>
               </div>
             </React.Fragment>
         }
@@ -78,8 +79,8 @@ class NavBar extends React.Component {
             {
               !this.context.isLoggedIn ?
                 <React.Fragment>
-                  <div><Link to="/login">ログイン</Link></div>
-                  <div><Link to="/signup">会員登録</Link></div>
+                  <div><RedirectLink to="/login">ログイン</RedirectLink></div>
+                  <div><RedirectLink to="/signup">会員登録</RedirectLink></div>
                 </React.Fragment>
               :
                 <React.Fragment>

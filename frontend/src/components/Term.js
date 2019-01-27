@@ -114,6 +114,8 @@ class Term extends React.Component {
       term.my = 0;
       term.promptStr = '$ ';
       term.cmd = '';
+
+      term.insertMode = true;
     
       //
       term.prompt = () => {
@@ -127,8 +129,13 @@ class Term extends React.Component {
       };
       term.insertToCommand = (key, n) => {
         term.write(key);
-        term.write(term.cmd.substring(n));
-        term.cmd = term.cmd.substring(0, n) + key + term.cmd.substring(n);
+        if (key.length == 1) {
+          window.setTimeout(() => {
+            term.write(term.cmd.substring(n - 1));
+            term.write(ansiEscapes.cursorTo(term.x - 1, term.y - 1));
+            term.cmd = term.cmd.substring(0, n - 1) + (key.length == 1 ? key : "") + term.cmd.substring(n - 1);
+          }, 0);
+        }
       }
       term.setComand = (text, ox, oy) => {
         term.cmd = text;
@@ -187,15 +194,29 @@ class Term extends React.Component {
         if (ev.keyCode === 13) { // enter
           term.runCommand();
           term.prompt();
-          console.log(term)
           term.selectLines(1,2);
         } else if (ev.keyCode === 8) { // backspace
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
-            if (term.x == 1) {
-              term.write(ansiEscapes.cursorTo(term.cols + 2, term.y - 2));
-              term.write(' ');
+            if (term.insertMode) {
+              // 一旦クリア
+              let ni = term.cmdCharN(term.ix, term.iy);
+              term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
+              term.write(' '.repeat(term.cmdCharN(term.mx, term.my) - ni + 1));
+              term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
+              // cmd を調整
+              let n = term.cmdCharN(term.x, term.y);
+              term.cmd = term.cmd.substring(0, n - 2) + term.cmd.substring(n - 1);
+              console.log(term.cmd);
+              // 書き込み
+              term.write(term.cmd);
+              term.write(ansiEscapes.cursorTo(term.x - 2, term.y - 1));
+            } else {
+              if (term.x == 1) {
+                term.write(ansiEscapes.cursorTo(term.cols + 2, term.y - 2));
+                term.write(' ');
+              }
+              term.write('\b \b');
             }
-            term.write('\b \b');
           }
         } else if (printable) {
           //console.log(key)
@@ -204,8 +225,14 @@ class Term extends React.Component {
           else if (key == CF && term.isOutOfInput(1, 0)) return;
           else if (key == CB && term.isOutOfInput(-1, 0)) return;
 
-          term.cmd += key
-          term.write(key);
+          
+          if (term.insertMode) {
+            let n = term.cmdCharN(term.x, term.y);
+            term.insertToCommand(key, n);
+          } else {
+            term.cmd += key
+            term.write(key);
+          }
         }
       }));
     
@@ -230,8 +257,8 @@ class Term extends React.Component {
       console.log("run cmd:", text);
       if (this.props.onRunCmd) this.props.onRunCmd(text);
     }
-    getOutput(text) {
-
+    getOutput(data) {
+      this.term.write(data);
     }
     render() {
         return (

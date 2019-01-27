@@ -311,6 +311,12 @@
   padding: 0.5em 1em;
   background-color: white;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+}
+.tablist > div > svg {
+  margin-left: 0.5em;
 }
 .tablist > div + div {
   border-left: 1px solid var(--light-color);
@@ -321,6 +327,7 @@
 .tabitem-selected {
   background-color: var(--main-color) !important;
   color: white;
+  fill: white;
 }
 
 

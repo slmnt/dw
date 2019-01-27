@@ -35,11 +35,11 @@ class DirTree extends React.Component {
     }
     this.menu = [
       ["新しいファイル", () => {
-        this.createNewFile(this.state.contextTarget, "新しいファイル");
+        this.createNew(this.state.contextTarget, "新しいファイル");
         this.closeContextMenu();
       }],
       ["新しいフォルダ", () => {
-        this.createNewFolder(this.state.contextTarget, "新しいフォルダ");
+        this.createNew(this.state.contextTarget, "新しいフォルダ", true);
         this.closeContextMenu();
       }],
       ["コピー", () => {
@@ -84,7 +84,7 @@ class DirTree extends React.Component {
             if (d.children) {
               this.onToggleCollapse(path);
             } else {
-              if (this.props.openFile) this.props.openFile(path);
+              if (this.props.onOpenFile) this.props.onOpenFile(path);
             }
           }).bind(this)}
         >
@@ -173,7 +173,7 @@ class DirTree extends React.Component {
       formData.append('files', files[i]);
     }
 
-    api.fetch('POST','/api/upload/', {
+    api.post('/api/upload/', {
       body: formData,
     })
     .then(response => response.json())
@@ -187,7 +187,7 @@ class DirTree extends React.Component {
   openContextMenu = (x, y, e) => {
     this.setState({
       showContextMenu: true,
-      contextTarget: e && e.dataset["filepath"]
+      contextTarget: e && e.dataset["filepath"] || "/"
     });
     this.contextMenu.current.style.left = x + "px";
     this.contextMenu.current.style.top = y + "px";
@@ -231,6 +231,7 @@ class DirTree extends React.Component {
   onRenameKeyDown = e => {
     if(e.keyCode == 13) {
       this.rename(this.state.renamingPath, this.renameBox.current.value);
+      this.disableRenameBox();
     }
   }
 
@@ -240,26 +241,23 @@ class DirTree extends React.Component {
   }
 
   /* 操作 (外部) */
-  createNewFile = (path, name) => {
-    //this.props.create
-    console.log("create file:", path, name)
-  }
-  createNewFolder = (path, name) => {
-    //this.props.create
-    console.log("create folder:", path, name)
+  createNew = (path, name, isFolder) => {
+    if (isFolder) console.log("create folder:", path, name)
+    else console.log("create file:", path, name)
+    
+    this.props.create(path, name, isFolder);
   }
   copy = (from, to) => {
-    //copyFrom
-    //this.props.copy
     console.log("copy:", from, to)
+    this.props.copy(from, to);
   }
   delete = (path) => {
-    //this.props.delete
     console.log("delete:", path)
+    this.props.delete(path);
   }
   rename = (path, name) => {
-    //this.props.rename
     console.log("rename:", path, name)
+    this.props.rename(path, name);
   }
 
   render() {
@@ -309,10 +307,10 @@ class DirTree extends React.Component {
           </div>
           <div className={styles["dir-header"]}>
             <span>ディレクトリ</span>
-            <div className={styles["dir-header-icon"]} style={{marginLeft: "auto"}} onClick={() => this.createNewFile("/", "新しいファイル")}>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "auto"}} onClick={() => this.createNew("/", "新しいファイル")}>
               <AddIcon />
             </div>
-            <div className={styles["dir-header-icon"]} style={{marginLeft: "0.5em"}} onClick={() => this.createNewFolder("/", "新しいフォルダ")}>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "0.5em"}} onClick={() => this.createNew("/", "新しいフォルダ", true)}>
               <CreateFolderIcon />
             </div>
           </div>

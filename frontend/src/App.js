@@ -25,7 +25,6 @@ import Load from './components/Loading'
 import Main from './components/pages/Main'; 
 import Login from './components/pages/Login';
 import CreateUser from './components/pages/CreateUser';
-import MyPage from './components/pages/MyPage';
 import UserInfo from './components/pages/UserInfo';
 
 import Right from './components/pages/MyLayout';
@@ -89,7 +88,7 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      drop: this.drop
+      logout: this.logout
     }
   };
 
@@ -103,7 +102,7 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      drop: this.drop
+      logout: this.logout
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -213,12 +212,12 @@ class App extends React.Component {
     this.state.data.uid = '';
     this.setState({ data: this.state.data });
   }
-  drop = () => {
+  logout = () => {
     axios.post('logout/').then(response => {
         // console.log(response)
-        this.removeLoginState();
+        this.clearLoginState();
     }).catch(e => {
-        console.log("error: dropliveuser", e)
+        console.log("error: logout", e)
     });
   }
 
@@ -262,7 +261,7 @@ class App extends React.Component {
         <div className="page">
           <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()} logout={() => this.drop()} >
+            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
             </Navbar>
             
             <Drawer ref={this.drawer} />
@@ -291,12 +290,12 @@ class App extends React.Component {
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
-                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+                  <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
                   <Route path="/user/:id"  component={UserInfo}/>
 
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
-                  <Route path="/course/:id/:number"  component={CourseGet}/>
+                  <Route path="/course/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:id"  component={CourseInfo}/>
 
                   <Route path="/about" component={About}/>

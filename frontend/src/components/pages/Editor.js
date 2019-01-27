@@ -5,6 +5,7 @@ import styles from './Editor.module.css';
 
 import TextEditor from '../TextEditor';
 import DirTree from '../DirTree';
+import TestIFrame from '../TestIFrame';
 
 import 'highlight.js/styles/vs.css'
 import hljs from 'highlight.js';
@@ -24,6 +25,9 @@ import { ReactComponent as CrossIcon } from '../../img/cross.svg';
 import { ReactComponent as ThreeDots } from '../../img/three-dots.svg';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
 
+import { ReactComponent as SlideIcon } from '../../img/align-left.svg';
+import { ReactComponent as CodeIcon } from '../../img/code.svg';
+import { ReactComponent as AnsIcon } from '../../img/spellcheck.svg';
 
 /*
 問題
@@ -40,50 +44,7 @@ hljs.configure({
 
 
 //
-class TestIFrame extends React.Component {
-  componentDidMount() {
-      this._updateIframe();
-  }
-  componentDidUpdate() {
-      this._updateIframe();
-  }
-  _updateIframe() {
-      const iframe = this.refs.iframe;
-      const document = iframe.contentDocument;
-      if (!document) return;
-      document.body.innerHTML = `
-        <html>
-          <body>
-            <style>
-              body {
-                overflow: hidden;
-                font-size: 0.6em;
-              }
-            </style>
-            ${this.props.content}
-          </body>
-        </html>
-      `;
-      /*
-      const head = document.getElementsByTagName('head')[0];
-      this.props.stylesheets.forEach(url => {
-          const ref = document.createElement('link');
-          ref.rel = 'stylesheet';
-          ref.type = 'text/css';
-          ref.href = url;
-          head.appendChild(ref);
-      });*/
-  }
 
-  render() {
-      return (<iframe
-        style={{width: "100%", height: "100%", border: "none", pointerEvents: "none"}}
-        //allowFullScreen={true}
-        //"allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"
-        //"geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor"
-        ref="iframe"/>)
-  }
-}
 
 
 class TextBox extends React.Component {
@@ -305,7 +266,7 @@ class SlideEditor extends React.Component {
                       <div className={styles["slides-side-element-name"]}>{v.name}</div>
                       <div className={styles["slides-side-element-text"]}>{v.text}</div>
                       */}
-                      <TestIFrame content={v.text}/>
+                      <TestIFrame content={v.text} ignoreEvents={true}/>
                     </div>
                   </div>
                 </div>);
@@ -353,12 +314,12 @@ class SlideEditor extends React.Component {
                         console.log( 'Editor is ready to use!', editor );
                         console.log(editor)
                         console.log(this)
-                        this.slideInitialized = true;
                         //editor.resize('200', '400', true)
-                    } }
+                      } }
                     onChange={ ( event, editor ) => {
-                        this.text = editor.getData();
-                        // this.props.setSlideText(data);
+                      this.slideInitialized = true;
+                      this.text = editor.getData();
+                      // this.props.setSlideText(data);
                     } }
                     onBlur={ editor => {
                         console.log( 'Blur.', editor );
@@ -397,6 +358,9 @@ class FileEditor extends React.Component {
     }
     this.window = React.createRef();
   }
+  renameTab = (path, name) => {
+    this.window.current.renameTab(path, name);
+  }
 
   render() {
     return (
@@ -421,10 +385,11 @@ class FileEditor extends React.Component {
           {/*
           */}
           <DirTree dir={this.props.directory}
-            openFile={path => {this.window.current.openTab(path);}}
-            //rename
-            //delete
-            //create
+            onOpenFile={path => {this.window.current.openTab(path);}}
+            rename={this.props.rename}
+            delete={this.props.delete}
+            copy={this.props.copy}
+            create={this.props.create}
           />
 
           </div>
@@ -460,18 +425,15 @@ class Editor extends Component {
             desc: "",
             slides: [
               {
-                name: "sl whataa awana aw we 1   wd dwa",
-                text: "dwwdw",
+                text: "dwwdw1",
                 pos: -1
               },
               {
-                name: "wish we could turn back time",
-                text: "dwwdw",
+                text: "dwwdw2",
                 pos: -1
               },
               {
-                name: "to the good old days",
-                text: "dwwdw",
+                text: "dwwdw3",
                 pos: -1
               }
             ]
@@ -489,8 +451,12 @@ class Editor extends Component {
             ]
           }
         ],
-        files: [], // base 64?
+        files: { // text or url
+          "/src/index.js": "const a = 0;",
+          "/app.js": "const あこどぉう = 'ういえおｋ';"
+        },
         directory: { // directory structure
+          name: "", // root
           children: [
             {
               name: "src",
@@ -522,6 +488,7 @@ class Editor extends Component {
     this.chapterMenuDescInput = React.createRef();
 
     this.slideEditor = React.createRef();
+    this.fileEditor = React.createRef();
   }
   componentDidMount() {
     this.loadCourse(this.state.courseData); // テスト test
@@ -788,6 +755,8 @@ class Editor extends Component {
     if (!this.slideEditor || !this.state.currentSlide || !this.slideEditor.current.slideInitialized) return;
 
     const text = this.slideEditor.current.getText();
+    //console.log("init: ", this.slideEditor.current.slideInitialized)
+    //console.log(text)
     if (text != this.state.currentSlide.text) this.setSlideText(text);
   }
   sortSlides = () => {
@@ -837,6 +806,81 @@ class Editor extends Component {
     e.preventDefault();
   }
 
+
+
+  /* file */
+  findFile = (path) => {
+    if (path == "/") { // root
+      return { parent: null, file: this.state.courseData.directory, index: 0 };
+    }
+
+    const tree = path.split('/')
+    tree.shift();
+    
+    let index = 0;
+    let file = null;
+    let parent = this.state.courseData.directory;
+
+    while (parent.children && parent.children.length > 0) {
+      index = parent.children.findIndex((v) => v.name == tree[0]);
+      file = parent.children[index];
+      if (!file) return null;
+
+      tree.shift();
+      if (tree.length == 0) break;
+      parent = file;
+    }
+    return { parent, file, index };
+  }
+
+
+  createDir = (path, name, isFolder) => {
+    const data = this.findFile(path);
+    if (!data || !data.file || !data.file.children) return; // folder のみ
+
+    const dup = data.file.children.find((v) => v.name == name);
+    if (dup) {
+      console.log("同じ名前のファイルが存在します:", name);
+      return;
+    }
+
+    data.file.children.push({
+      name: name,
+      children: isFolder && []
+    });
+    this.setState({courseData: this.state.courseData});
+  }
+  renameDir = (path, name) => {
+    const data = this.findFile(path);
+    if (!data) return;
+
+    this.updateTabName(path, name); // TextEditor も更新
+
+    data.file.name = name;
+    this.setState({courseData: this.state.courseData});
+  }
+  deleteDir = (path) => {
+    const data = this.findFile(path);
+    if (!data || !data.parent) return;
+    
+    data.parent.children.splice(data.index, 1);
+    this.setState({courseData: this.state.courseData});
+  }
+  copyDir = (from, to) => {
+
+  }
+
+
+  updateTabName = (path, name) => {
+    this.fileEditor.current.renameTab(path, name);
+  }
+  getContent = (path) => {
+    return this.state.courseData.files[path];
+  }
+  onSaveTab = () => {
+
+  }
+
   render() {
     return (
       <div style={{height: "100%"}}>
@@ -858,12 +902,15 @@ class Editor extends Component {
             <div className={styles.tablist}>
               <div className={this.state.currentTab === 0 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(0)}>
                 スライド
+                <SlideIcon />
               </div>
               <div className={this.state.currentTab === 1 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(1)}>
                 コード
+                <CodeIcon />
               </div>
               <div className={this.state.currentTab === 2 ? styles["tabitem-selected"] : ""} onClick={() => this.openTab(2)}>
                 答え
+                <AnsIcon />
               </div>
             </div>
             <div className={styles["chapter-name"]}>
@@ -953,10 +1000,28 @@ class Editor extends Component {
             <div style={{backgroundColor: "var(--bg-color)", zIndex: "0"}}>
             </div>
             <div style={{zIndex: this.state.currentTab === 0 ? "1" : "-1"}} >
-              <SlideEditor ref={this.slideEditor} courseData={this.state.courseData} currentChapter={this.state.currentChapter} currentSlide={this.state.currentSlide} moveBox={this.moveBox} openSlide={this.openSlide} setSlideText={this.setSlideText} addBlankSlide={this.addBlankSlide} removeSlide={this.removeSlide} />
+              <SlideEditor ref={this.slideEditor}
+                courseData={this.state.courseData}
+                currentChapter={this.state.currentChapter}
+                currentSlide={this.state.currentSlide}
+                moveBox={this.moveBox}
+                openSlide={this.openSlide}
+                setSlideText={this.setSlideText}
+                addBlankSlide={this.addBlankSlide}
+                removeSlide={this.removeSlide}
+              />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
-              <FileEditor directory={this.state.courseData.directory} />
+              <FileEditor ref={this.fileEditor}
+                directory={this.state.courseData.directory}
+                getContent={this.getContent}
+                onSaveTab={this.onSaveTab}
+
+                create={this.createDir}
+                copy={this.copyDir}
+                rename={this.renameDir}
+                delete={this.deleteDir}
+              />
             </div>
           </div>
 
