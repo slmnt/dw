@@ -148,7 +148,6 @@ class App extends React.Component {
     console.log('error')
   }
 
-
   login = (name, password, callback) => {
     //console.log(name, password)
     axios.post('authentic/',{

@@ -73,7 +73,7 @@ class Main extends Component {
                 <p>興味があれば、誰でも簡単にプログラミングが学べるよう、わかりやすい解説、見易い、そして、学ぶ意欲を掻き立てるようなデザインを心がけて作成しております。</p>
               </div>
               <div className={classNames(styles["f-grid-item"], styles["tile"], styles["main-contents-2"])}>
-                <DoneIcon className={styles["tile-icon"]}/>
+                <CodeIcon className={styles["tile-icon"]}/>
                 <h4>コードの結果をすぐに確認できる</h4>
                 <p>用意されている、又は自分で書いたソースコードをネットで実行し、その結果をすぐに確認することで、思い通りに動いているか、エラーがないかどうかをすぐに確認することが出来ます。</p>
               </div>

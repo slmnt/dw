@@ -75,6 +75,7 @@ class UserInfo(models.Model):
     subscribed = models.IntegerField(default=0)
     profile = models.CharField(max_length=500)
     level = models.IntegerField(default=0)
+    models.ImageField(upload_to='images/')
 
 class UserCourse(models.Model):
     root = models.ForeignKey(User,on_delete=models.CASCADE)

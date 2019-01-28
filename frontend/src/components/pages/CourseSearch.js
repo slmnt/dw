@@ -26,10 +26,10 @@ class CourseSearch extends Component {
                     id: 1,
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 },
@@ -37,10 +37,10 @@ class CourseSearch extends Component {
                     id: 1,
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 },
@@ -48,10 +48,10 @@ class CourseSearch extends Component {
                     id: 1,
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 }

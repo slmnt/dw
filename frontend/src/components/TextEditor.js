@@ -8,6 +8,8 @@ import styles from './TextEditor.module.css';
 import Term from './Term';
 
 import logo from '../img/logo.svg';
+import fileIcon from '../img/file.svg';
+
 
 class TextEditor extends React.Component {
   /*
@@ -222,6 +224,15 @@ class TextEditor extends React.Component {
       }).bind(this));
       
   }
+  updateCurrentTab(path, callback) {
+    if (path === this.state.currentTab) return;
+
+    let tab =  this.getTab(path);
+    if (!tab) return;
+
+    this.saveTabState(tab)
+    this.setState({tabs: this.state.tabs}, callback);
+  }
   moveTab(path, to) {
       let from = this.getTabIndex(path);
       let newTabs = [];
@@ -261,6 +272,13 @@ class TextEditor extends React.Component {
       }
       return -1;
   }
+  getTabValue = (path) => {
+    if (path === this.state.currentTab) {
+        return this.editor.getValue();
+    }
+    let tab =  this.getTab(path);
+    return tab && tab.value;
+  }
   noTab() {
       for (let v of this.state.tabs) {
           if (v.name) return false;
@@ -293,6 +311,8 @@ class TextEditor extends React.Component {
   onSave = () => {
       this.props.onSaveTab();
   }
+
+
 
 
   render() {
@@ -344,7 +364,7 @@ class TextEditor extends React.Component {
                     <span
                         className={styles["window-tab-image"]}
                         style={{
-                            backgroundImage: "url(" + logo + ")",
+                            backgroundImage: "url(" + fileIcon + ")",
                         }}
                     >
                     </span>
@@ -395,15 +415,14 @@ class TextEditor extends React.Component {
         <div className={styles["term-container"]}>
             <div className={styles["term-tablist"]}>
                 <div>ターミナル</div>
-                <div>???</div>
-                <div onClick={this.toggleTerm}>舌</div>
+                <div onClick={this.toggleTerm}>‗</div>
             </div>
             <div className={styles["term-wrapper"]}
                 style={{
                     display: this.state.showTerm && "block" || "none"
                 }}
             >
-                <Term height={200} ref={this.term} />
+                <Term height={200} ref={this.term} run={this.props.run}/>
             </div>
         </div>
       </div>

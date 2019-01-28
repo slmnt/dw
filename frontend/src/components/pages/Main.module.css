@@ -70,6 +70,9 @@
     margin: 25px;
     border: 2px solid;
 }
+.tile > p {
+    font-size: 0.8em;
+}
 .tile-icon {
     width: 6em;
     height: 6em;

@@ -17,7 +17,6 @@ class NavBar extends React.Component {
     this.state = {
       showUserPopup: false
     };
-    console.log(this.props)
   }
   onClickMenu = e => {
     if (this.props.onClickMenu) {
@@ -40,6 +39,8 @@ class NavBar extends React.Component {
 
   render() {
     /* flexbox で全て解決 */
+    // console.log(this.context)
+
     return (
       <nav className={styles.main}>
         {
@@ -73,7 +74,7 @@ class NavBar extends React.Component {
           <div className={styles.navmenu}>
             <div><Link to="/getting-started">はじめる</Link></div>
             <div><Link to="/">コースを見る</Link></div>
-            <div><Link to="/">コースを作る</Link></div>
+            <div><Link to={"/course/" + this.context.uid + "/edit"}>コースを作る</Link></div>
           </div>
           <div className={styles.navmenu}>
             {

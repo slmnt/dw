@@ -58,6 +58,9 @@
   line-height: 1em;
   cursor: pointer;
 }
+.footer > span:hover {
+  background-color: var(--light-color);
+}
 
 
 /* 飛び出し */

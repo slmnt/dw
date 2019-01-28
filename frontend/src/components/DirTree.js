@@ -4,7 +4,9 @@ import React from 'react';
 import styles from './DirTree.module.css';
 
 import logo from '../img/logo.svg';
-import UploadIcon from '../img/upload.svg';
+import uploadIcon from '../img/upload.svg';
+import fileIcon from '../img/file.svg';
+
 import { ReactComponent as AddIcon } from '../img/add.svg';
 import { ReactComponent as CreateFolderIcon } from '../img/create-folder.svg';
 
@@ -93,7 +95,7 @@ class DirTree extends React.Component {
               className={styles["dir-label-image"]}
               style={{
                 marginLeft: stack.length * 1 + "em",
-                backgroundImage: "url(" + (!d.children ? logo : `"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E"` ) + ")",
+                backgroundImage: "url(" + (!d.children ? fileIcon : `"data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E"` ) + ")",
                 transform: "rotate(" + (d.children ? this.state.fileData[path] && this.state.fileData[path].collapsing && "-45" || "0" : "0") + "deg)"
               }}
             >
@@ -301,7 +303,7 @@ class DirTree extends React.Component {
           <div className={styles["dir-drop-zone"]}
             style={{
               display: this.state.dragover ? "block" : "none",
-              backgroundImage: "url(" + UploadIcon + ")",
+              backgroundImage: "url(" + uploadIcon + ")",
             }}
           >
           </div>

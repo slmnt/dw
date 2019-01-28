@@ -74,6 +74,13 @@ updatecourse = UpdateCourse.as_view({
 disableuser = DisableUser.as_view({
     'post': 'post'
 })
+courseupload = CourseUpload.as_view({
+    'post': 'post'
+})
+pythonbydocker = PythonByDocker.as_view({
+    'post': 'post'
+})
+
 urlpatterns = [
 
     #User Authentic
@@ -88,6 +95,7 @@ urlpatterns = [
 
     #Excute python project/code
     path('python/',python),
+    path('dockpy',pythonbydocker),
 
     path('code/',codesec),
     path('user/',user),
@@ -115,6 +123,7 @@ urlpatterns = [
     path('createcourse/',createcourse),
     path('craetechapter/',createchapter),
     path('createslide/',craeteslide),
+    path('courseupload/',courseupload),
 
     #User Course Update
     path('updatecourse/',updatecourse),

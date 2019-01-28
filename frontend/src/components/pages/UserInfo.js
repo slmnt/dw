@@ -104,13 +104,16 @@ class UserInfo extends Component {
                                 desc wda dwa dwa wa dw adw a dwa aw w aw a
                             </div>
                             <div className={styles["misc-info"]}>
-                                国: Kang Republic
+                                国: Democratic Republic of the Awaji
                             </div>
-                            <div className={styles["profile-controls"]}>
-                                <button className={styles["profile-controls-editbtn"]}>
-                                    編集する
-                                </button>
-                            </div>
+                            {
+                                this.state.isMyPage &&
+                                <div className={styles["profile-controls"]}>
+                                    <button className={styles["profile-controls-editbtn"]}>
+                                        編集する
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
                     <div className={styles["overview"]}>

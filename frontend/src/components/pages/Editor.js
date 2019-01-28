@@ -41,12 +41,7 @@ hljs.configure({
   languages: ['javascript', 'ruby', 'python'],
   useBR: false,
 });
-
-
 //
-
-
-
 class TextBox extends React.Component {
   constructor(props) {
     super(props);
@@ -311,9 +306,9 @@ class SlideEditor extends React.Component {
                     }}
                     onInit={ editor => {
                         // You can store the "editor" and use when it is needed.
-                        console.log( 'Editor is ready to use!', editor );
-                        console.log(editor)
-                        console.log(this)
+                        //console.log( 'Editor is ready to use!', editor );
+                        //console.log(editor)
+                        //console.log(this)
                         //editor.resize('200', '400', true)
                       } }
                     onChange={ ( event, editor ) => {
@@ -362,6 +357,10 @@ class FileEditor extends React.Component {
     this.window.current.renameTab(path, name);
   }
 
+  getTabValue = (path) => {
+    return this.window.current.getTabValue(path);
+  }
+
   render() {
     return (
       <div
@@ -400,7 +399,7 @@ class FileEditor extends React.Component {
                   width: "100%",      
               }}
           >
-              <TextEditor ref={this.window} />
+              <TextEditor ref={this.window} run={this.props.runterminal}/>
             {/*
             */}
 
@@ -421,33 +420,13 @@ class Editor extends Component {
         desc: "",
         chapters: [
           {
-            name: "testhcapter1",
+            name: "Chapter01",
             desc: "",
             slides: [
               {
-                text: "dwwdw1",
-                pos: -1
-              },
-              {
-                text: "dwwdw2",
-                pos: -1
-              },
-              {
-                text: "dwwdw3",
+                text: "Pleas Input something this area",
                 pos: -1
               }
-            ]
-          },
-          {
-            name: "testhcapter2",
-            desc: "",
-            slides: [
-            ]
-          },
-          {
-            name: "testhcapter3",
-            desc: "sets??",
-            slides: [
             ]
           }
         ],
@@ -456,7 +435,7 @@ class Editor extends Component {
           "/app.js": "const あこどぉう = 'ういえおｋ';"
         },
         directory: { // directory structure
-          name: "", // root
+          name: "", // root (名前なし)
           children: [
             {
               name: "src",
@@ -496,23 +475,76 @@ class Editor extends Component {
     this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
     /*
     at this point, create course and get course id/title
-    const formData = new FormData();
+    this.state.name = response.title
+    this.state.id = response.id
+    */
+    let formData = new FormData();
     formData.append('title','testtitle')
     formData.append('desc','desc')
 
     api.post('/api/createcourse/',{
       body: formData
     }).then(response => response.json())
-    .then(response => console.log('Success:', response))
-    this.state.name = response.title
-    this.state.id = response.id
-    */
+    .then(response => this.setState({
+      name: response.title,
+      id: response.id
+    }))
+
   }
   componentWillUnmount(){
     window.clearInterval(this.slideUpdateTimer);
   }
 
+  getDirtree = (root,path,base_url) => {
+    var set = RegExp(/\w*\.\w*/);
+    if(set.test(path)){
+      let text = this.getTabValue(path)
+      if(text){
+        let formData = new FormData();
+        formData.append('base_url',base_url)
+        formData.append(path,text)
+        api.post('/api/courseupload/',{
+          body:formData
+        })
+      }
+    }
+
+    if(root.children){
+      for(let c of root.children){
+          this.getDirtree(c,path + '/' + c.name,base_url)
+      }
+    }
+  }
+  getTabValue = (path) => {
+    return this.fileEditor.current.getTabValue(path);
+  }
+
+  runTerminal = (cmd) => {
+    let cmds = cmd.split(' ')
+    let base_url = "Course/" + this.state.id
+    // console.log(cmds,base_url)
+
+    switch(cmds[0]){
+      case "javac":
+      case "gcc":
+      case "ruby":
+      case "python":
+        //Upload Dir tree, Running this cmd
+        this.getDirtree(this.state.courseData.directory,'',base_url)
+        let formData = new FormData();
+        formData.append('cmd',cmds[1])
+        formData.append('url',base_url)
+        api.post('/api/dockpy',{
+          body: formData
+        })  
+        break
+      default:
+        break
+    }
+  }
+
   onSave = (e) => {
+    let base_url = "Course/" + this.state.id
     var chapters = this.state.courseData.chapters
     
     // sort slides
@@ -525,8 +557,7 @@ class Editor extends Component {
     formData.append('desc',this.state.courseData.desc)
     api.post('/api/createcourse/',{
       body: formData
-    }).then(response => response.json())
-    .then(response => console.log('Success:', response))
+    })
 
     let idx = 0
     for(let c of chapters){
@@ -542,8 +573,7 @@ class Editor extends Component {
       formData.append('desc',c.desc)
       api.post('/api/craetechapter/',{
         body: formData
-      }).then(response => response.json())
-      .then(response => console.log('Success:', response))
+      })
       for(let s of slides){
         //at this point, craete slides
         //name, desc
@@ -557,10 +587,11 @@ class Editor extends Component {
         formData.append('context',s.text)
         api.post('/api/createslide/',{
           body: formData
-        }).then(response => response.json())
-        .then(response => console.log('Success:', response))
-        }
+        })
+      }
 
+      this.getDirtree(this.state.courseData.directory,'',base_url)
+      console.log("runnnig")
     }
   }
 
@@ -1021,6 +1052,8 @@ class Editor extends Component {
                 copy={this.copyDir}
                 rename={this.renameDir}
                 delete={this.deleteDir}
+
+                runterminal={this.runTerminal}
               />
             </div>
           </div>

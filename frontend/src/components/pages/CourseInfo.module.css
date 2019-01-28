@@ -157,6 +157,10 @@
 
   resize: none;
 }
+.review-send {
+  outline-color: var(--main-color);
+  border-color: var(--main-color);
+}
 
 .review-list {
   padding: 1em 2em;

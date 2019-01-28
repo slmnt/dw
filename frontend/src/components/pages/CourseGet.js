@@ -239,10 +239,10 @@ class CourseGet extends Component {
                         */}
                         <DirTree dir={this.state.directory}
                             openFile={path => {this.window.current.openTab(path);}}
-                            rename={this.props.rename}
-                            delete={this.props.delete}
-                            copy={this.props.copy}
-                            create={this.props.create}                
+                            rename={this.renameDir}
+                            delete={this.deleteDir}
+                            copy={this.copyDir}
+                            create={this.createDir}                
                         />
                     </div>
                     <div className={styles["textditor-container"]}>
