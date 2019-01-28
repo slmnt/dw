@@ -80,6 +80,9 @@ courseupload = CourseUpload.as_view({
 pythonbydocker = PythonByDocker.as_view({
     'post': 'post'
 })
+getusertree = getUserTree.as_view({
+    'post': 'post'
+})
 
 urlpatterns = [
 
@@ -124,6 +127,7 @@ urlpatterns = [
     path('craetechapter/',createchapter),
     path('createslide/',craeteslide),
     path('courseupload/',courseupload),
+    path('usercoursetree/',getusertree),
 
     #User Course Update
     path('updatecourse/',updatecourse),

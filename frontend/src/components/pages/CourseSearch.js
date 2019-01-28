@@ -12,7 +12,6 @@ import styles from './CourseSearch.module.css';
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
-
 class CourseSearch extends Component {
     
     constructor (props) {

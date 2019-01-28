@@ -690,7 +690,7 @@ class CourseUpload(viewsets.ModelViewSet):
                 for u in urls:
                     pattern = '.*\..*'
                     r = re.match(pattern,u)
-                    if r:#if file
+                    if r:#if file                        
                         p += '//' + u
                     else:#if dir
                         p += '//' + u
@@ -704,11 +704,50 @@ class CourseUpload(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
+def getTree(path,json,currentpath):
+
+    for data in os.listdir(path):
+        if os.path.isdir(os.path.join(path, data)):
+            new = os.path.join(path, data)
+            getTree(new,json,currentpath+'/'+data)
+        elif data is None :
+            pass
+        else:
+            context = ''
+            with open(os.path.join(path, data),'rb') as f:
+                while True:
+                    line = f.readline()
+                    if not line:
+                        break
+                    context += line.decode('utf-8')
+            #print(os.path.join(path, data))
+            #print(currentpath+'/'+str(data))
+            p = currentpath+'/'+str(data)
+            json[p] = context
+            #print(context)
+
+    return json
+
+
+class getUserTree(viewsets.ModelViewSet):
+
+    #required
+    #url: base_url
+    def post(self, request):
+        data = {}
+        target = request.data['url'] 
+        path = STORAGE + str(request.user)
+        for p in target.split('/'):
+            path = os.path.join(path,p)
+
+        data = getTree(path,data,'')
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 #Remain apis
 # User Create api
 # User Info Search api
 # Course info Search api
-# User Directory Structure get api
 class APItest(viewsets.ModelViewSet):
 
     def get(self,request):
@@ -716,8 +755,6 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = {}
-        data['key'] = 'value'
-        json_data = json.dumps(data)
+        data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
