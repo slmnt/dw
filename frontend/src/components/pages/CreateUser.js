@@ -113,7 +113,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>PASSWD</label>
+                <label>パスワード</label>
               </div>
               <div>
                 <input onChange={this.handleChange('passwd')} value={this.state.passwd} type="password"></input>
@@ -121,7 +121,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>PASSWD</label>
+                <label>パスワード再入力</label>
               </div>
               <div>
                 <input onChange={this.handleChange('passwd2')} value={this.state.passwd2} type="password"></input>
@@ -129,7 +129,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>First_Name</label>
+                <label>名(名前)</label>
               </div>
               <div>
                 <input onChange={this.handleChange('firstname')} value={this.state.firstname} type="text"></input>
@@ -137,7 +137,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>Last_Name</label>
+                <label>姓(苗字)</label>
               </div>
               <div>
                 <input onChange={this.handleChange('lastname')} value={this.state.lastname} type="text"></input>

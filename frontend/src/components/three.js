@@ -12,7 +12,7 @@ const styles = theme => ({
     },
 })
 
-class three extends Component {
+class Three extends Component {
 
     constructor(props){
         super(props)
@@ -47,9 +47,9 @@ class three extends Component {
   	}
 }
 
-three.propTypes = {
+Three.propTypes = {
     //classes: PropTypes.object.isRequired,
     //theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(three);
+export default withStyles(styles)(Three);
