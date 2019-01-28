@@ -29,9 +29,12 @@
 .header-controls > div {
   border-radius: 3em;
   padding: 0.5em 1em;
+  margin: 0 0.5em;
+
   background-color: var(--main-color);
   color: white;
-  margin: 0 0.5em;
+
+  cursor: pointer;
 }
 
 
@@ -75,12 +78,23 @@
 .slide-header-collapse-btn {
   position: absolute;
   right: 0;
+  width: 2.5em;
+  height: 2.5em;
   border-left: 1px solid var(--light-color);
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
 }
 .slide-header-collapse-btn > svg {
   vertical-align: middle;
   width: 2em;
   height: 2em;
+}
+.slide-header-collapse-btn:hover {
+  background-color: var(--light-color);
 }
 
 

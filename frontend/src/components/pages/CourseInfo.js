@@ -80,7 +80,7 @@ class Courseinfo extends Component {
                                 {this.state.contents.title}
                             </div>
                             <div className={styles["start-button"]}>
-                                初めから / 続きから
+                                <Link to={`/course/${this.state.courseId}/1`}>始める</Link>
                             </div>
                         </div>
                         <div className={styles["middle-container"]}>
@@ -133,8 +133,9 @@ class Courseinfo extends Component {
                             </div>
                         :
                             <div className={styles["review-container"]}>
-                                <div>
-                                    <textarea></textarea>
+                                <div className={styles["review-post"]}>
+                                    <div>書く</div>
+                                    <textarea className={styles["review-textarea"]}></textarea>
                                 </div>
                                 <div className={styles["review-list"]}>
                                 {

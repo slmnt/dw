@@ -26,6 +26,7 @@ import Main from './components/pages/Main';
 import Login from './components/pages/Login';
 import CreateUser from './components/pages/CreateUser';
 import UserInfo from './components/pages/UserInfo';
+import UserSearch from './components/pages/UserSearch'
 
 import Right from './components/pages/MyLayout';
 import Tech from './components/pages/Techinfo'
@@ -292,7 +293,9 @@ class App extends React.Component {
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
                   <Route path="/user/:id"  component={UserInfo}/>
+                  <Route path="/search/user"  component={UserSearch}/>
 
+                  <Route path="/search/course"  component={CourseSearch}/>
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
                   <Route path="/course/:id/:ch"  component={CourseGet}/>
@@ -302,6 +305,9 @@ class App extends React.Component {
                   <Route path="/getting-started" component={GettingStarted}/>
                   <Route path="/terms" component={Terms}/>
                   <Route path="/privacy" component={Privacy}/>
+
+                  <Route path="/help"  component={NotFound}/>
+                  <Route path="/settings"  component={NotFound}/>
 
                   <Route path="/test"  component={CourseInfo} />
 

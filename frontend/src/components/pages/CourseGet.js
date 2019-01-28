@@ -1,4 +1,5 @@
 import React, { Component } from 'react';   
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import classNames from 'classnames';
@@ -180,9 +181,9 @@ class CourseGet extends Component {
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
                     <div className={styles["header-title"]}>
-                        <div>{this.state.courseName}</div>
+                        <div><Link to={`/course/${this.state.courseId}`}>{this.state.courseName}</Link></div>
                         <div>/</div>
-                        <div>{this.state.chapterName}</div>
+                        <div><Link to={`/course/${this.state.courseId}/${this.state.chapterId}`}>{this.state.chapterName}</Link></div>
                     </div>
                     <div className={styles["header-controls"]}>
                         <div>答えを見る</div>
@@ -219,7 +220,7 @@ class CourseGet extends Component {
                         </div>
                         <div className={styles["slide-controls"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
                             <div className={styles["slide-controls-icon"]} onClick={this.toFirstSlide}><FirstIcon /></div>
-                            <div className={styles["slide-controls-icon"]} style={{width: "2.5em", height: "2.5em"}} onClick={this.toPrevSlide}><PrevIcon /></div>
+                            <div className={styles["slide-controls-icon"]} onClick={this.toPrevSlide}><PrevIcon style={{width: "2.5em", height: "2.5em"}}/></div>
                             <div className={styles["slide-controls-num"]}>
                                 <span style={{fontSize: "2em"}}>
                                     {this.state.currentSlideId + 1}
@@ -228,7 +229,7 @@ class CourseGet extends Component {
                                     /{this.state.slides.length}
                                 </sub>
                             </div>
-                            <div className={styles["slide-controls-icon"]} style={{width: "2.5em", height: "2.5em"}} onClick={this.toNextSlide}><NextIcon /></div>
+                            <div className={styles["slide-controls-icon"]} onClick={this.toNextSlide}><NextIcon style={{width: "2.5em", height: "2.5em"}} /></div>
                             <div className={styles["slide-controls-icon"]} onClick={this.toLastSlide}><LastIcon /></div>
                         </div>
                     </div>

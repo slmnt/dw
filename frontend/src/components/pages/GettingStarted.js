@@ -9,22 +9,22 @@ class GettingStarted extends Component {
         
         <div className={styles["header"]}>
           <div>
-            ～をしよう
+            MiniProg で ~ を ~ !!!
           </div>
         </div>
 
 
         <div className={styles["huge-panel"]}>
-          1. 会員登録
+          1. コースを作る
         </div>
         <div className={styles["huge-panel"]}>
-          2. コースを開始
+          2. 公開
         </div>
         <div className={styles["huge-panel"]}>
-          3. ???
+          3. コースを受けてみる
         </div>
         <div className={styles["huge-panel"]}>
-          4. profit
+          4. 共有
         </div>
 
 
