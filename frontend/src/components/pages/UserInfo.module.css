@@ -32,6 +32,7 @@
 }
 .user-info {
   margin-top: 2em;
+  padding: 0 0.5em;
 }
 .name {
   font-size: 1.2em;
@@ -40,7 +41,27 @@
 .desc {
 
 }
+.misc-info {
+  margin-top: 2em;
 
+  font-size: 0.8em;
+  color: var(--nice-border-color);
+}
+
+.profile-controls {
+  margin-top: 2em;
+}
+.profile-controls-editbtn {
+  font-size: 1em;
+
+  background-color: white;
+  border: 1px solid var(--main-color);
+  outline-color: var(--main-color);
+  border-radius: 0.3em;
+}
+.profile-controls-editbtn:hover {
+  background-color: var(--light-color);
+}
 
 /* overview */
 .overview {
@@ -58,10 +79,13 @@
   border: 1px solid var(--light-color);
 }
 .courses-title {
-  padding: 0.1em 0.5em;
+  padding: 0.1em 1em;
   font-size: 1.2em;
 }
 
+.see-all {
+  padding: 0.5em 1em;
+}
 
 
 

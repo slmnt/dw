@@ -1,6 +1,9 @@
 import React, { Component } from 'react';   
 import styles from './GettingStarted.module.css';
 
+import Footer from '../Footer';
+
+
 class GettingStarted extends Component {
   render() {
     return (
@@ -14,30 +17,69 @@ class GettingStarted extends Component {
         </div>
 
 
-        <div className={styles["huge-panel"]}>
-          1. コースを作る
+        <div className={styles["slide-block-container"]}>
+        <div className={styles["slide-block-left"]}>
+          <div className={styles["slide-block-bg"]}>
+          </div>
+          <div className={styles["slide-block-body"]}>
+            <div className={styles["slide-block-title"]}>
+              1. コースを作る
+            </div>
+            <div className={styles["slide-block-desc"]}>
+              数多くの言語に対応しております。
+            </div>
+          </div>
         </div>
-        <div className={styles["huge-panel"]}>
-          2. 公開
+        <div className={styles["slide-block-left"]}>
+          <div className={styles["slide-block-bg"]}>
+          </div>
+          <div className={styles["slide-block-body"]}>
+            <div className={styles["slide-block-title"]}>
+              2. 公開
+            </div>
+            <div className={styles["slide-block-desc"]}>
+              数多くの言語に対応しております。
+            </div>
+          </div>
         </div>
-        <div className={styles["huge-panel"]}>
-          3. コースを受けてみる
+        <div className={styles["slide-block-left"]}>
+          <div className={styles["slide-block-bg"]}>
+          </div>
+          <div className={styles["slide-block-body"]}>
+            <div className={styles["slide-block-title"]}>
+              3. コースを受けてみる
+            </div>
+            <div className={styles["slide-block-desc"]}>
+              数多くの言語に対応しております。
+            </div>
+          </div>
         </div>
-        <div className={styles["huge-panel"]}>
-          4. 共有
+        <div className={styles["slide-block-left"]}>
+          <div className={styles["slide-block-bg"]}>
+          </div>
+          <div className={styles["slide-block-body"]}>
+            <div className={styles["slide-block-title"]}>
+              4. 共有
+            </div>
+            <div className={styles["slide-block-desc"]}>
+              数多くの言語に対応しております。
+            </div>
+          </div>
         </div>
 
+        </div>
 
         <div className={styles["footer"]}>
-          <div>
+          <span>
             登録
-          </div>
-          <div>
+          </span>
+          <span>
             コースを見る
-          </div>
+          </span>
         </div>
 
 
+        <Footer />
       </div>
     )
   }

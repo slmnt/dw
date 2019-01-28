@@ -1,7 +1,10 @@
 .main {
   height: 100%;
-  font-size: 3em;
-  color: white;
+  color: inherit;
+
+  font-size: 1.5em;
+
+  font-family: arial black,Yu Gothic;
 }
 
 .header {
@@ -36,19 +39,89 @@
   text-align: center;
 
   height: 3em;
-  padding: 0.5em;
+  padding: 0.5em 3em;
 
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   color: white;
-  background: linear-gradient(#452398, var(--light-color));
 }
-.footer > div {
+.footer > span {
+  padding: 0.5em;
+
   border-radius: 3em;
   background: white;
-  border: 0.2em solid blueviolet;
-  color: blue;
+  border: 0.1em solid var(--main-color);
+  color: var(--dark-blue);
 
   line-height: 1em;
+  cursor: pointer;
 }
+.footer > span:hover {
+  background-color: var(--light-color);
+}
+
+
+/* 飛び出し */
+.slide-block-container {
+  color: var(--dark-darker);
+}
+.slide-block-left, .slide-block-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  min-height: 30em;
+  overflow: hidden;
+}
+.slide-block-left {
+  justify-content: flex-start;
+}
+.slide-block-right {
+  justify-content: flex-end;
+}
+
+.slide-block-body {
+  width: 50%;
+  height: 100%;
+  padding: 2em;
+  z-index: 1;
+}
+.slide-block-title {
+  font-size: 2em;
+  font-weight: bold;
+}
+.slide-block-desc {
+  color: var(--dark-darker);
+}
+
+.slide-block-bg {
+  position: absolute;
+  left: 60%;
+  transform: rotate(30deg);
+  background: linear-gradient(var(--main-color), var(--dark-blue));
+
+  width: 100%;
+  height: 400%;
+}
+.slide-block-bg2 {
+  position: absolute;
+  right: 60%;
+  transform: rotate(30deg);
+  background: linear-gradient(var(--main-color), var(--dark-blue));
+
+  width: 100%;
+  height: 400%;
+}
+.slide-block-bg3 {
+  position: absolute;
+  left: 60%;
+  transform: rotate(0deg);
+  background: linear-gradient(var(--main-color), var(--dark-blue));
+
+  width: 100%;
+  height: 400%;
+}
+
+

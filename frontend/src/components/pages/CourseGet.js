@@ -44,6 +44,9 @@ class CourseGet extends Component {
                 "slide33",
             ],
 
+            files: {
+
+            },
             directory: { // directory structure
                 children: [
                   {
@@ -174,7 +177,15 @@ class CourseGet extends Component {
 
     }
 
+    updateTabName = (path, name) => {
+        this.window.current.renameTab(path, name);
+    }
+    getContent = (path) => {
+        return this.state.files[path];
+    }
+    onSaveTab = () => {
 
+    }
 
     render() {
         return (
@@ -238,15 +249,15 @@ class CourseGet extends Component {
                         {/*
                         */}
                         <DirTree dir={this.state.directory}
-                            openFile={path => {this.window.current.openTab(path);}}
-                            rename={this.props.rename}
-                            delete={this.props.delete}
-                            copy={this.props.copy}
-                            create={this.props.create}                
+                            onOpenFile={path => {this.window.current.openTab(path);}}
+                            rename={this.renameDir}
+                            delete={this.deleteDir}
+                            copy={this.copyDir}
+                            create={this.createDir}                
                         />
                     </div>
                     <div className={styles["textditor-container"]}>
-                        <TextEditor ref={this.window} />
+                        <TextEditor ref={this.window} run={this.props.runterminal}/>
                         {/*
                         */}
                     </div>

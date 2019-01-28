@@ -118,6 +118,8 @@ class Term extends React.Component {
       term.cmd = '';
 
       term.insertMode = true;
+      term.history = [];
+      term.historyIndex = -1;
     
       //
       term.prompt = () => {
@@ -129,6 +131,29 @@ class Term extends React.Component {
           //console.log("first", term.x, term.y);
         };
       };
+
+
+      term.pushHistory = (cmd) => {
+        term.history.push(cmd);
+      }
+      term.moveHistory = (value) => {
+        if (term.historyIndex == -1)
+          term.historyIndex = term.history.length - 1;
+        else
+          term.historyIndex += value;
+        
+        if (term.historyIndex < 0) term.historyIndex = 0;
+        else if (term.historyIndex >= term.history.length) term.historyIndex = term.history.length - 1;
+
+        const txt = term.history[term.historyIndex];
+        if (txt) {
+          term.clearCommand();
+          term.write(txt);
+          term.cmd = txt;
+        }
+      }
+
+
       term.insertToCommand = (key, n) => {
         term.write(key);
         if (key.length == 1) {
@@ -155,8 +180,13 @@ class Term extends React.Component {
         }
       }
       term.runCommand = () => {
+        console.log(term.cmd);
+
         this.runCommand(term.cmd);
+        term.pushHistory(term.cmd);
         term.cmd = '';
+        term.historyIndex = -1;
+
       }
       term.isOutOfInput = (rx, ry) => {
         const f = term.x + rx >= term.ix && term.y + ry == term.iy || term.y + ry > term.iy;
@@ -226,10 +256,15 @@ class Term extends React.Component {
           }
         } else if (printable) {
           //console.log(key)
-          if (key == CU && term.isOutOfInput(0, -1)) return;
-          else if (key == CD && term.isOutOfInput(0, 1)) return;
-          else if (key == CF && term.isOutOfInput(1, 0)) return;
+          if (key == CU && term.isOutOfInput(0, -1)) {
+            term.moveHistory(-1);
+            return;
+          } else if (key == CD && term.isOutOfInput(0, 1)) {
+            term.moveHistory(1);
+            return;
+          } else if (key == CF && term.isOutOfInput(1, 0)) return;
           else if (key == CB && term.isOutOfInput(-1, 0)) return;
+
 
           
           if (term.insertMode) {

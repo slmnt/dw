@@ -3,12 +3,37 @@ import { Link } from 'react-router-dom';
  
 import styles from './Footer.module.css';
 
+import { ReactComponent as Logo } from '../img/logo.svg';
+
+
 class Footer extends Component {
   render() {
     return (
-      <footer>
-        <div className={styles.footer}>
-          <p>Coming soon</p>
+      <footer className={styles.main}>
+        <div className={styles["main-footer"]}>
+          <div className={styles["nav-container"]}>
+            <div className={styles["nav-block"]}>
+              <span>トップページ</span>
+              <span>はじめる</span>
+              <span>nav2</span>
+            </div>
+            <div className={styles["nav-block"]}>
+              <span>コース検索</span>
+              <span>ユーザ検索</span>
+              <span>nav2</span>
+            </div>
+            <div className={styles["nav-block"]}>
+              <span>about</span>
+              <span>nav2</span>
+              <span>nav2</span>
+            </div>
+          </div>
+          <div className={styles["logo-block"]}>
+            <span>
+              <Logo style={{width: "3em", height: "3em"}}/>
+            </span>
+            <span style={{color: "var(--main-color)"}}>MiniProg</span>
+          </div>
         </div>
         <div className={styles.bottom}> 
           <div>

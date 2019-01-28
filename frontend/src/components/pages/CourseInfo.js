@@ -39,6 +39,7 @@ class Courseinfo extends Component {
             currentTab: 0,
         }
 
+        this.reviewTextarea = React.createRef();
     }
     setTab(id) {
         this.setState({currentTab: id});
@@ -66,6 +67,10 @@ class Courseinfo extends Component {
             this.setState({reviews: response.data})
         }).catch(e => console.log(e))
 
+    }
+
+    sendReview = () => {
+        console.log("send");
     }
 
     //<UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png"/>
@@ -135,7 +140,8 @@ class Courseinfo extends Component {
                             <div className={styles["review-container"]}>
                                 <div className={styles["review-post"]}>
                                     <div>書く</div>
-                                    <textarea className={styles["review-textarea"]}></textarea>
+                                    <textarea className={styles["review-textarea"]} ref={this.reviewTextarea}></textarea>
+                                    <button className={styles["review-send"]} onClick={this.sendReview}>送信</button>
                                 </div>
                                 <div className={styles["review-list"]}>
                                 {

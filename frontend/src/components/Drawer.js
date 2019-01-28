@@ -23,7 +23,7 @@ class Drawer extends Component {
                 ['ログアウト', '/'],
                 ['text editor (right)', '/right'],
                 ['board', '/board'],
-                ['courseSearch','/courseSearch'],
+                ['courseSearch','/search/course'],
                 ['test course get', '/course/123/'],
                 ['test course edit', '/course/123/edit'],
                 ['test'],

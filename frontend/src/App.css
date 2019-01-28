@@ -16,10 +16,12 @@ a {
     --nice-border-color: #666666;
     --nice-text-color: #cccccc;
     --bg-color: white;
+    --gray-color: #868e96;
 
     --dark-lighter: #3c3c3c;
     --dark-darker: #252526;
     --dark-blue: #094771;
+
 }
 
 /* tweak */

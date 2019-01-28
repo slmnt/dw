@@ -16,6 +16,11 @@
     background-color: var(--main-color);
     text-align: center;
     padding: 50px;
+    height: 25em;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
 }
 .header-title {
     font-size: 70px;
@@ -29,6 +34,7 @@
 .header-sub-title {
     font-size: 30px;
     padding-bottom: 30px;
+    margin-top: 0;
 }
 
 /* main */
@@ -45,7 +51,7 @@
 }
 .main-contents-title {
     color: #f2f7ff;
-    background-color: var(--main-color);
+    background: linear-gradient(to right, var(--main-color), var(--dark-blue));
     padding: 50px;
     /*margin: 50px 100px 0px 100px;*/
 }
@@ -53,7 +59,7 @@
 
 /* タイル */
 .tile-container {
-    color: var(--dark-blue);
+    color: var(--dark-darker);
 }
 .tile-header {
     color: var(--dark-darker);
@@ -64,28 +70,28 @@
     margin: 25px;
     border: 2px solid;
 }
+.tile > p {
+    font-size: 0.8em;
+}
 .tile-icon {
     width: 6em;
     height: 6em;
 }
 .main-contents-1 {
     border-color: #e74c3c;
-    color: var(--dark-darker);
     fill: #e74c3c;
 }
 .main-contents-2 {
     border-color: #3498db;
-    color: var(--dark-blue);
     fill: #3498db;
 }
 .main-contents-3 {
     border-color: #f1c40f;
-    color: var(--main-color);
     fill: #f1c40f;
 }
 .main-contents-4 {
     border-color: #2ecc71;
-    color: black;
+    fill: #2ecc71;
 }
 
 
@@ -139,17 +145,25 @@
 
 
 /* 飛び出し */
-.slide-block {
+.slide-block-left, .slide-block-right {
     position: relative;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
 
-    min-height: 20em;
+    min-height: 30em;
+    overflow: hidden;
 }
+.slide-block-left {
+    justify-content: flex-start;
+}
+.slide-block-right {
+    justify-content: flex-end;
+}
+
 .slide-block-body {
     width: 50%;
     height: 100%;
+    z-index: 1;
 }
 .slide-block-title {
     font-size: 2em;
@@ -159,4 +173,30 @@
     color: var(--dark-darker);
 }
 
+.slide-block-bg {
+    position: absolute;
+    left: 60%;
+    transform: rotate(30deg);
+    background: linear-gradient(var(--main-color), var(--dark-blue));
 
+    width: 100%;
+    height: 400%;
+}
+.slide-block-bg2 {
+    position: absolute;
+    right: 60%;
+    transform: rotate(30deg);
+    background: linear-gradient(var(--main-color), var(--dark-blue));
+
+    width: 100%;
+    height: 400%;
+}
+.slide-block-bg3 {
+    position: absolute;
+    left: 60%;
+    transform: rotate(0deg);
+    background: linear-gradient(var(--main-color), var(--dark-blue));
+
+    width: 100%;
+    height: 400%;
+}

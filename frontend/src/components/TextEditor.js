@@ -8,6 +8,8 @@ import styles from './TextEditor.module.css';
 import Term from './Term';
 
 import logo from '../img/logo.svg';
+import fileIcon from '../img/file.svg';
+
 
 class TextEditor extends React.Component {
   /*
@@ -197,7 +199,7 @@ class TextEditor extends React.Component {
   activateTab(path) {
       if (path === this.state.currentTab) return;
 
-      let tab =  this.getTab(path);
+      let tab = this.getTab(path);
       if (!tab) return;
       
       let newState = {
@@ -362,7 +364,7 @@ class TextEditor extends React.Component {
                     <span
                         className={styles["window-tab-image"]}
                         style={{
-                            backgroundImage: "url(" + logo + ")",
+                            backgroundImage: "url(" + fileIcon + ")",
                         }}
                     >
                     </span>
