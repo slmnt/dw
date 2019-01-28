@@ -104,6 +104,9 @@
 .navmenu > div + div {
   margin-left: 1em;
 }
+.navmenu > div:hover {
+  font-weight: bold;
+}
 
 
 .avatar {

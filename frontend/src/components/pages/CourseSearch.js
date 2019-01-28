@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 
 import api from '../../modules/api';
 import Loading from '../Loading'
+import CourseList from '../CourseList';
 import Ad from '../AdPanel'
 import styles from './CourseSearch.module.css';
 
-import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
 
@@ -23,6 +23,7 @@ class CourseSearch extends Component {
             context: [],
             courses: [
                 {
+                    id: 1,
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
@@ -33,6 +34,7 @@ class CourseSearch extends Component {
                     authorId: 12
                 },
                 {
+                    id: 1,
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
@@ -43,6 +45,7 @@ class CourseSearch extends Component {
                     authorId: 12
                 },
                 {
+                    id: 1,
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
@@ -121,43 +124,7 @@ class CourseSearch extends Component {
                     <div className={styles["ad-container"]}>
                         <Ad/>
                     </div>
-                    <div className={styles["course-container"]}>
-                        {
-                            this.state.courses.map((v, i) => {
-                                return (
-                                    <div key={i} className={styles["course-item"]}>
-                                        <div className={styles["course-item-score"]}>
-                                            <div><FavIcon /></div>
-                                            <div>{v.likes}</div>
-                                        </div>
-                                        <div className={styles["course-item-main"]}>
-                                            <div className={styles["course-item-top"]}>
-                                                <Link to={"/course/" + this.state.id} className={styles["course-item-title"]}>
-                                                    {v.title}
-                                                </Link>
-                                                <Link to={"/user/" + v.authorId} className={styles["course-item-user"]}>
-                                                    <span className={styles["course-item-user-avatar"]}>
-                                                        <img src={v.authorAvatar}></img>
-                                                    </span>
-                                                    <span className={styles["course-item-user-name"]}>
-                                                        {v.author}
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                            <div className={styles["course-item-bottom"]}>
-                                                <div className={styles["course-item-desc"]}>
-                                                    {v.desc}
-                                                </div>
-                                                <div className={styles["course-item-date"]}>
-                                                    {v.date}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        }
-                    </div>
+                    <CourseList courses={this.state.courses} />
                 </div>
             </div>
         );
