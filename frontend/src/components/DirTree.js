@@ -146,16 +146,17 @@ class DirTree extends React.Component {
     e.preventDefault();
   }
   onDrop = e => {
-    console.log("drapp")
+    console.log("upload to:", path)
     e.preventDefault();
     
     const item = e.target.closest("[data-filepath]");
     const path = item && item.dataset["filepath"];
 
-
     const dt = e.dataTransfer;
     const files = dt.files;
     //this.upload(files)
+
+    if (this.props.onUpload) this.props.onUpload(files, path);
 
     this.setState({dragover: false});
   }

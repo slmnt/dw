@@ -199,7 +199,7 @@ class TextEditor extends React.Component {
   activateTab(path) {
       if (path === this.state.currentTab) return;
 
-      let tab =  this.getTab(path);
+      let tab = this.getTab(path);
       if (!tab) return;
       
       let newState = {
