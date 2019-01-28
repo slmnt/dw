@@ -14,7 +14,12 @@ a {
     --dark-color: #0f7561;
     --light-color: #b0f9eb;
     --nice-border-color: #666666;
+    --nice-text-color: #cccccc;
     --bg-color: white;
+
+    --dark-lighter: #3c3c3c;
+    --dark-darker: #252526;
+    --dark-blue: #094771;
 }
 
 /* tweak */
@@ -51,6 +56,9 @@ a {
 .content {
     flex: 1 1 0;
     width: 100%;
+}
+.react-scrollbar > div + div {
+    z-index: 2;
 }
 
 /* mobile menu */

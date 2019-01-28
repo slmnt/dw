@@ -1,39 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
-
-class Totest(models.Model):
-    memo = models.TextField()
-
-class TestUser(models.Model):
-    uid = models.CharField(max_length=10)
-    pwd = models.CharField(max_length=20)
-
-class TestUserF(models.Model):
-    uid = models.ForeignKey('TestUser',on_delete=models.CASCADE)
-    profie = models.TextField()
-    email = models.EmailField(max_length=30)
-
-class TestUserAuth(models.Model):
-    uid = models.ForeignKey('TestUser',on_delete=models.CASCADE)
-    auth = models.BooleanField(default=False)
-
-class TestUserLive(models.Model):
-    uid = models.OneToOneField(User,on_delete=models.CASCADE)
-    live = models.BooleanField(default=False)
-
-class Testboard(models.Model):
-    text = models.TextField()
-
-class Stuff(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    quantity = models.IntegerField(default=0, blank=True)
-
 class Codetype(models.Model):
     description = models.CharField(max_length=15)
 
+#Dont USE
 class Code(models.Model):
     title = models.CharField(max_length=15,default='null')
     auth = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
@@ -47,15 +21,16 @@ class Code(models.Model):
     def __unicode__(self):
         return '%d' % (self.id)
 
+#Dont USE
 class Comment(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
     coments = models.CharField(max_length=1000)
     createat = models.DateTimeField(default=timezone.now)
     root = models.ForeignKey('Code',on_delete=models.CASCADE)
 
+#Dont USE
 class Open(models.Model):
     root = models.ForeignKey(Code,on_delete=models.CASCADE)
-
 
 class Techinfo(models.Model):
     title = models.CharField(max_length=15)
@@ -63,7 +38,6 @@ class Techinfo(models.Model):
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     count = models.IntegerField(default=0)
-
 
 class Usertechinfo(models.Model):
     title = models.CharField(max_length=15,default='null')
@@ -110,7 +84,8 @@ class UserCourse(models.Model):
     users = models.IntegerField(default=0)
     createat = models.DateTimeField(default=timezone.now)
     
-
+######
+# Course Chapter
 class UserCourseContent(models.Model):
     cid = models.IntegerField(default=-1)
     root = models.ForeignKey('UserCourse',on_delete=models.CASCADE)
@@ -118,13 +93,16 @@ class UserCourseContent(models.Model):
     descriptoin = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
 
+######
+# Coutse Chapter Slides
 class UserCourseContentIndex(models.Model):
     root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
     createat = models.DateTimeField(default=timezone.now)
     context = models.TextField()
+    sid = models.IntegerField(default=-1,validators=[MinValueValidator(-1), MaxValueValidator(30)])
 
 class UserCourseContentCode(models.Model):
-    root = models.ForeignKey('UserCourseContentIndex',on_delete=models.CASCADE)
+    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
     createat = models.DateTimeField(default=timezone.now)
     context = models.TextField()
 

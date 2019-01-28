@@ -8,13 +8,10 @@ import queryString from 'query-string';
 import axios from 'axios';
 import history from './modules/history';
 
-
 import './App.css';
 import {MainContext} from './contexts/main';
 
 // UI
-import { withStyles } from '@material-ui/core/styles';
-
 import { Scrollbars } from 'react-custom-scrollbars';
 
 // parts
@@ -22,19 +19,15 @@ import Navbar from './components/Navbar';
 import Drawer from './components/Drawer'
 import Footer from './components/Footer';
 import Load from './components/Loading'
-import Back from './components/BackPlayer'
 //import Right from './components/Inter';
 
 // pages
 import Main from './components/pages/Main'; 
 import Login from './components/pages/Login';
 import CreateUser from './components/pages/CreateUser';
-import MyPage from './components/pages/MyPage';
+import UserInfo from './components/pages/UserInfo';
 
 import Right from './components/pages/MyLayout';
-import Boards from './components/pages/MyProgram';
-import Codeman from './components/code/codeman';
-import Boardid from './components/pages/BoardGet'
 import Tech from './components/pages/Techinfo'
 import Mail from './components/pages/EmailCertify'
 
@@ -49,7 +42,7 @@ import Terms from './components/pages/Terms';
 import Privacy from './components/pages/Privacy';
 import NotFound from './components/pages/NotFound';
 
-
+import api from './modules/api'
 
 
 axios.defaults.baseURL = '/api';
@@ -95,7 +88,7 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      drop: this.drop
+      logout: this.logout
     }
   };
 
@@ -109,7 +102,7 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      drop: this.drop
+      logout: this.logout
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -128,15 +121,23 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-    
+    /*    
+    const formData = new FormData();
+    formData.append('name','admin')
+    api.post('/api/test',{
+      body: formData      
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
+
     this.setState({
       bid: localStorage.getItem("bid")
     })
+    */
 
-
+    //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
+    this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
   componentDidMount(){
-    //this.updateLoginState()
   }
   componentDidUpdate(){
   }
@@ -211,14 +212,12 @@ class App extends React.Component {
     this.state.data.uid = '';
     this.setState({ data: this.state.data });
   }
-  drop = () => {
-    axios.post('dropliveuser/',{
-        uid: this.state.name,
-    }).then(response => {
+  logout = () => {
+    axios.post('logout/').then(response => {
         // console.log(response)
-        this.removeLoginState();
+        this.clearLoginState();
     }).catch(e => {
-        console.log("error: dropliveuser", e)
+        console.log("error: logout", e)
     });
   }
 
@@ -227,8 +226,11 @@ class App extends React.Component {
       console.log(response)
     })
   }
-  deleteUser = () => {
 
+  deleteUser = () => {
+    api.post('/api/deleteuser/',{
+    }).then(response => response.json())
+    .then(response => console.log('Success:', response))
   }
 
 
@@ -265,7 +267,7 @@ class App extends React.Component {
             <Drawer ref={this.drawer} />
 
             <main className="content">
-              <Scrollbars disablehorizontalscrolling="true" style={{ width: "100%", height: "100%", zIndex: "2" }}>
+              <Scrollbars className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
                 setting react router route
                 <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
@@ -283,19 +285,17 @@ class App extends React.Component {
                   <Route path="/main" render={() => <Main />}/>
 
                   <Route path="/right" component={Right} />
-                  <Route exact strict path="/Boards" render={() => <Boards go={this.gomypagechild}/>} />
-                  <Route exact strict path="/Boards/:id" component={Boardid}/>
                   <Route path="/certify/:code" component={Mail}/>
-                  <Route path="/codemain" render={() => <Codeman testprops={this.testprops} get={this.getlan} set={this.setlan}/>}/>
                   <Route path="/tech"  component={Tech}/>
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
-                  <ProtectedRoute path="/mypage" component={MyPage} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+                  <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+                  <Route path="/user/:id"  component={UserInfo}/>
 
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
-                  <Route path="/course/:id/:number"  component={CourseGet}/>
+                  <Route path="/course/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:id"  component={CourseInfo}/>
 
                   <Route path="/about" component={About}/>

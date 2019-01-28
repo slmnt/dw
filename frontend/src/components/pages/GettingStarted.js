@@ -5,7 +5,15 @@ class GettingStarted extends Component {
   render() {
     return (
       <div className={styles.main}>
-        get started
+        
+        
+        <div className={styles["header"]}>
+          <div>
+            ～をしよう
+          </div>
+        </div>
+
+
         <div className={styles["huge-panel"]}>
           1. 会員登録
         </div>
@@ -18,6 +26,18 @@ class GettingStarted extends Component {
         <div className={styles["huge-panel"]}>
           4. profit
         </div>
+
+
+        <div className={styles["footer"]}>
+          <div>
+            登録
+          </div>
+          <div>
+            コースを見る
+          </div>
+        </div>
+
+
       </div>
     )
   }

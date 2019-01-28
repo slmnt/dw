@@ -1,8 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 import Loading from './Loading'
-import './Adpanel.css'
-
+import './AdPanel.css'
 
 class Ad extends Component {
     state = {
@@ -11,10 +10,8 @@ class Ad extends Component {
 
     constructor (props) {
         super(props);
-
     }
-    
-    
+        
     render() {
         return (
             <div className="Ad_body">
@@ -24,6 +21,6 @@ class Ad extends Component {
   	}
 }
 
-Ad.PropTypes = PropTypes;
+Ad.propTypes = {};
 
 export default Ad;

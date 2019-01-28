@@ -2,40 +2,54 @@
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden auto;
+  overflow: hidden;
   background-color: #252525;
 
+  display: flex;
+  flex-flow: column nowrap;
+
   font-size: 1.2em;
+}
+
+.dir-window {
+  flex: 1 1 auto;
+
+  height: 100%;
+  padding: 1em 1em;
+  box-sizing: border-box;
+  overflow: hidden auto;
 
   scrollbar-width: thin;
   scrollbar-color: #555  #00000000;
 }
-.dir-main::-webkit-scrollbar {
+.dir-window::-webkit-scrollbar {
   width: 5px;
 }
-.dir-main::-webkit-scrollbar-thumb {
+.dir-window::-webkit-scrollbar-thumb {
   background: #555; 
 }
-.dir-main::-webkit-scrollbar-track {
+.dir-window::-webkit-scrollbar-track {
   background: #00000000;
 }
 
-.dir-window {
-  height: 100%;
-  padding: 1em 1em;
-  box-sizing: border-box;
-}
-.dir-window::-webkit-scrollbar {
-  background-color: red;
-}
-.dir-window::-webkit-scrollbar-thumb {
-  background: #666; 
-}
 .dir-header {
+  flex: 0 0 auto;
+
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   height: 1em;
   color: #cccccc;
   padding: 1em 2em;
   border-bottom: 1px solid #666666;
+}
+.dir-header-icon {
+  cursor: pointer;
+}
+.dir-header-icon > svg {
+  fill: white;
 }
 
 .dir-item {
@@ -77,6 +91,55 @@
   background-repeat: no-repeat;
   background-position: center;
   background-color: var(--main-color);
-  opacity: 0.2;
+  background-size: 30%;
+  opacity: 0.6;
+
+  pointer-events: none;
 }
 
+
+
+
+/* rename */
+.rename {
+  position: fixed;
+  padding: 0 0.3em;
+
+  outline: none;
+  border: 1px solid var(--main-color);
+  background-color: var(--dark-lighter);
+
+  font-size: inherit;
+  color: inherit;
+
+  z-index: 2;
+}
+
+
+/* context-menu */
+.context-menu {
+  position: fixed;
+
+  width: 10em;
+  box-shadow: 0 1px 10px black;
+  background-color: inherit;
+
+  padding: 0.5em 0;
+  z-index: 2;
+}
+.context-menu-item {
+  cursor: pointer;
+  padding: 0.4em 1em;
+  margin: 0.1em 0;
+}
+.context-menu-item + .context-menu-item {
+}
+.context-menu-item:hover {
+  background-color: var(--dark-blue);
+}
+.context-menu-item-dummy {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}

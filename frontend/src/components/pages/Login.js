@@ -1,43 +1,11 @@
 import React, { Component } from 'react';
 
-// UI
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import { Grid } from '@material-ui/core';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-
-//
-import classNames from 'classnames';
-
 //
 import styles from './Login.module.css';
 import {MainContext} from '../../contexts/main';
 
 //
 import { ReactComponent as Logo } from '../../img/logo.svg';
-
-
-
-const styles2 = theme => ({
-    button: {
-      margin: theme.spacing.unit,
-    },
-    input: {
-      display: 'none',
-    },
-    margin: {
-        margin: theme.spacing.unit,
-      },
-      textField: {
-        flexBasis: 280,
-      },    
-});
   
 class Login extends Component {
 
@@ -66,7 +34,7 @@ class Login extends Component {
         this.context.login(this.state.name, this.state.password);
     }
     onClickDrop = () => {
-        this.context.drop();
+        this.context.logout();
     }
 
     handleChange = prop => event => {
@@ -109,7 +77,7 @@ class Login extends Component {
                   </div>
                 </div>
               <div className={styles.form_btn}>
-                <a href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
+                <a className={styles.form_cancel} href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
                 <a href="javascript:void(0)" onClick={this.onClickLogin}>ログイン</a>
               </div>
               </div>
@@ -117,60 +85,9 @@ class Login extends Component {
             <br/>
             <br/>
           </div>    
-        )
-        return (
-            <div className={styles.main}>
-            <Grid container direction="column">
-                <Grid container item justify="center" >
-                <Grid item xs={6}>
-                <Card>
-                    <CardContent>
-                        <TextField
-                        required
-                        id="outlined-required"
-                        label="Required"
-                        value={this.state.name}
-                        onChange={this.handleChange('name')}
-                        variant="outlined"
-                        className={classNames(this.props.classes.margin, this.props.classes.textField)}
-                        />
-                        <TextField
-                        id="outlined-adornment-password"
-                        className={classNames(this.props.classes.margin, this.props.classes.textField)}
-                        variant="outlined"
-                        type={this.state.showPassword ? 'text' : 'password'}
-                        label="Password"
-                        value={this.state.password}
-                        onChange={this.handleChange('password')}
-                        InputProps={{
-                            endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                aria-label="Toggle password visibility"
-                                onClick={this.handleClickShowPassword}
-                                >
-                                {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                            </InputAdornment>
-                            ),
-                        }}
-                        />
-                        <br/>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickLogin}>
-                            Submit
-                        </Button>
-                        <Button variant="outlined" color="primary" className={this.props.classes.button} onClick={this.onClickDrop}>
-                            Drop
-                        </Button>
-                    </CardContent>
-                </Card>
-                </Grid>
-                </Grid>
-            </Grid>
-            </div>
-		);
+        );
   	}
 }
 Login.contextType = MainContext;
 
-export default withStyles(styles2)(Login);
+export default Login;

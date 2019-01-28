@@ -48,7 +48,7 @@ class TextEditor extends React.Component {
     if (this.editor) {
         let rect = this.editorContainer.getBoundingClientRect();
         this.onEditorResize(rect.width, rect.height);
-        this.term.current.resize();
+        this.term.current.updateTerminalSize();
 
         this.lastSizeUpdate = e.timeStamp;
     }
@@ -78,7 +78,7 @@ class TextEditor extends React.Component {
   onEditorResize(width, height) {
       console.log(width, height)
       this.editor.layout({width, height});
-      this.tabList.current.style.width = width + "px"
+      //this.tabList.current.style.width = width + "px"
   }
   setEditorScroll(top, left) {
       this.editor.setScrollPosition({scrollTop: top, scrollLeft: left});
@@ -139,7 +139,7 @@ class TextEditor extends React.Component {
       let tab = {
           path: path,
           name: path.substring(path.lastIndexOf('/') + 1),
-          value: this.getContent(path) || "const a = 0;",
+          value: this.getContent(path) || "",
           scroll: null,
           selections: null,
           cursor: null,
@@ -158,12 +158,16 @@ class TextEditor extends React.Component {
       let tabId = this.getTabIndex(path);
       let newTabs = Array.from(this.state.tabs);
       newTabs.splice(tabId, 1);
+
+      let isCurrentTab = path === this.state.currentTab;
+
       this.setState({
           tabs: newTabs,
-          currentTab: null
+          currentTab: isCurrentTab ? null : this.state.currentTab
       }, (() => {
-          if (path === this.state.currentTab && this.state.tabs.length > 0) {
+          if (isCurrentTab && this.state.tabs.length > 0) {
               let i = tabId > 0 ? tabId - 1 : 0;
+              console.log(isCurrentTab, tabId, i)
               this.activateTab(this.state.tabs[i].path);
           } else if (this.state.tabs.length === 0) {
             this.hideEditor();
@@ -273,6 +277,22 @@ class TextEditor extends React.Component {
       return this.content[path];
   }
 
+
+  renameTab = (path, name) => {
+      const tab = this.getTab(path);
+      if (!tab) return;
+
+      let newPath = tab.path.split('/');
+      newPath.pop();
+      newPath.push(name);
+
+      tab.path = newPath.join('/');
+      tab.name = name;
+      this.setState({tabs: this.state.tabs});
+  }
+  onSave = () => {
+      this.props.onSaveTab();
+  }
 
 
   render() {
