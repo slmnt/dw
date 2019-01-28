@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 import api from '../../modules/api';
 import Loading from '../Loading'
-import Ad from '../AdPanel'
 import styles from './CourseSearch.module.css';
+import Ad from '../AdPanel'
 
 import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
@@ -25,30 +25,30 @@ class CourseSearch extends Component {
                 {
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 },
                 {
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 },
                 {
                     title: "course1",
                     desc: "croues1desc",
-                    likes: 21,
+                    likes: 100000,
                     date: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    author: "Dr. Monta",
                     authorAvatar: "",
                     authorId: 12
                 }
