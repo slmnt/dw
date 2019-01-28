@@ -59,7 +59,7 @@ class NavBar extends React.Component {
         <div>
           <div className={styles.mobileButton} onClick={this.onClickMenu}>
             <Ham className={styles.hamburger}/>
-            <Hamon color="#1abc9c" />
+            <Hamon color="var(--main-color)" />
           </div>
           
           <Link to="/" className={styles.logo}>

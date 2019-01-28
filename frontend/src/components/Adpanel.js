@@ -1,7 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 import Loading from './Loading'
-import './AdPanel.css'
+import styles from './AdPanel.module.css'
 
 class Ad extends Component {
     state = {
@@ -14,7 +14,7 @@ class Ad extends Component {
         
     render() {
         return (
-            <div className="Ad_body">
+            <div className={styles.main}>
                 test ad
             </div>
         );

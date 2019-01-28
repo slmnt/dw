@@ -1,19 +1,18 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
+import Loading from '../Loading';
+import Ad from '../AdPanel';
 import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
-import api from '../../modules/api';
-import Loading from '../Loading'
-import Ad from '../AdPanel'
-import styles from './CourseSearch.module.css';
+import styles from './UserSearch.module.css';
 
 import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
 
-class CourseSearch extends Component {
+class UserSearch extends Component {
     
     constructor (props) {
         super(props);
@@ -21,37 +20,28 @@ class CourseSearch extends Component {
         this.state = {
             keyword: 'test',
             context: [],
-            courses: [
+            users: [
                 {
-                    title: "course1",
+                    author: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
-
-                    author: "Kang the greatest",
-                    authorAvatar: "",
-                    authorId: 12
+                    avatar: "",
+                    id: 12
                 },
                 {
-                    title: "course1",
+                    author: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
-
-                    author: "Kang the greatest",
-                    authorAvatar: "",
-                    authorId: 12
+                    avatar: "",
+                    id: 12
                 },
                 {
-                    title: "course1",
+                    author: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
-
-                    author: "Kang the greatest",
-                    authorAvatar: "",
-                    authorId: 12
-                }
+                    avatar: "",
+                    id: 12
+                },
             ],
         }
 
@@ -62,7 +52,7 @@ class CourseSearch extends Component {
         var u = '/getusercourse'
         axios.get(u).then(response => {
             this.setState({
-                cours: response.data
+                users: response.data
             })
         }).catch(e => console.log(e))
     }
@@ -164,6 +154,6 @@ class CourseSearch extends Component {
   	}
 }
 
-CourseSearch.propTypes = {};
+UserSearch.propTypes = {};
 
-export default CourseSearch;
+export default UserSearch;

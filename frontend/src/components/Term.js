@@ -42,6 +42,7 @@ class Term extends React.Component {
       super(props);
       this.state = {
       }
+      this.termElement = null;
     }
 
     componentWillUnmount() {
@@ -54,6 +55,7 @@ class Term extends React.Component {
           // unmount
           return;
       }
+      this.termElement = element;
       let rect = element.getBoundingClientRect();
       element.style.width = rect.width + "px";
       element.style.height = (this.props.height || rect.height) + "px";
@@ -69,7 +71,7 @@ class Term extends React.Component {
       term.focus();
 
       this.runTerminal(this.term)
-      term.write('Hello from \x1B[1;3;31mPlayer Monta\x1B[0m');
+      term.write('Hello from \x1B[1;3;31mPresident Kang\x1B[0m');
       term.prompt();
 
 
@@ -137,7 +139,14 @@ class Term extends React.Component {
           }, 0);
         }
       }
-      term.setComand = (text, ox, oy) => {
+      term.clearCommand = () => {
+        if (!term.mx || !term.ix) return;
+        term.write(ansiEscapes.eraseEndLine);
+        term.write(ansiEscapes.cursorNextLine);
+        term.write(ansiEscapes.eraseLines(term.my - term.y));
+        term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
+      }
+      term.setCommand = (text, ox, oy) => {
         term.cmd = text;
         term.write(ansiEscapes.cursorTo(term.ix, term.iy));
         term.write(term.cmd);
@@ -199,14 +208,11 @@ class Term extends React.Component {
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
             if (term.insertMode) {
               // 一旦クリア
-              let ni = term.cmdCharN(term.ix, term.iy);
-              term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
-              term.write(' '.repeat(term.cmdCharN(term.mx, term.my) - ni + 1));
-              term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
+              term.clearCommand();
               // cmd を調整
               let n = term.cmdCharN(term.x, term.y);
               term.cmd = term.cmd.substring(0, n - 2) + term.cmd.substring(n - 1);
-              console.log(term.cmd);
+              //console.log(term.cmd);
               // 書き込み
               term.write(term.cmd);
               term.write(ansiEscapes.cursorTo(term.x - 2, term.y - 1));
@@ -243,11 +249,13 @@ class Term extends React.Component {
 
 
     updateTerminalSize() {
-      const cols = parseInt((document.getElementById(`opt-cols`)).value, 10);
-      const rows = parseInt((document.getElementById(`opt-rows`)).value, 10);
+      return;
+      if (!this.term) return;
+      const cols = this.term.cols;
+      const rows = this.term.rows;
       const width = (cols * this.term._core.renderer.dimensions.actualCellWidth + this.term._core.viewport.scrollBarWidth).toString() + 'px';
       const height = (rows * this.term._core.renderer.dimensions.actualCellHeight).toString() + 'px';
-      const terminalContainer = document.getElementById('terminal-container');
+      const terminalContainer = this.termElement;
       terminalContainer.style.width = width;
       terminalContainer.style.height = height;
       this.term.fit();

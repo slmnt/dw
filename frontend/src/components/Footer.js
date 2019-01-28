@@ -13,7 +13,7 @@ class Footer extends Component {
         <div className={styles.bottom}> 
           <div>
             <span>
-              Made with ❤ by Monta Academy
+              Made with ❤ by Kang Academy
             </span>
             <span>
               © 2019 Stair Studio

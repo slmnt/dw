@@ -9,7 +9,7 @@
   height: 2em;
   padding: 0.5em 1em;
 
-  background-color: #ffffff;
+  background-color: white;
   box-shadow: 0px 0px 2px black;
 
   white-space: nowrap;
@@ -87,7 +87,7 @@
 .rightMenu {
 }
 .rightMenu > div:hover {
-  color: #14836d;
+  color: var(--dark-color);
   cursor: pointer;
 }
 .rightMenu > div + div {
