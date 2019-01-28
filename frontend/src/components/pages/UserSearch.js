@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 
 import styles from './UserSearch.module.css';
 
+import api from '../../modules/api';
+
 import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
@@ -22,21 +24,21 @@ class UserSearch extends Component {
             context: [],
             users: [
                 {
-                    author: "Kang the greatest",
+                    name: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
                     avatar: "",
                     id: 12
                 },
                 {
-                    author: "Kang the greatest",
+                    name: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
                     avatar: "",
                     id: 12
                 },
                 {
-                    author: "Kang the greatest",
+                    name: "Kang the greatest",
                     desc: "croues1desc",
                     likes: 21,
                     avatar: "",
@@ -49,6 +51,7 @@ class UserSearch extends Component {
     }
 
     componentDidMount(){
+        return
         var u = '/getusercourse'
         axios.get(u).then(response => {
             this.setState({
@@ -62,6 +65,7 @@ class UserSearch extends Component {
     }
 
     onSearch = (e) => {
+        const q = this.searchBox.current.value;
         console.log(this.langOption.current.selectedIndex)
         /*
         api.get();
@@ -73,7 +77,7 @@ class UserSearch extends Component {
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
                     <div className={styles["title-container"]}>
-                        コース検索
+                        ユーザ検索
                     </div>
                     <div className={styles["search-container"]}>
                         <span className={styles["search-box-container"]}>
@@ -81,7 +85,7 @@ class UserSearch extends Component {
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
-                                onChange={this.handleChange}
+                                ref={this.searchBox}
                                 >
                             </input>
                             <span className={styles["search-box-icon"]} onClick={this.onSearch}>
@@ -90,20 +94,6 @@ class UserSearch extends Component {
                         </span>
                     </div>
                     <div className={styles["option-container"]}>
-                        <select className={styles["search-dropdown"]} ref={this.langOption}>
-                            <option value="">--言語--</option>
-                            <option value="c">C</option>
-                            <option value="cpp">CPP</option>
-                            <option value="java">Java</option>
-                            <option value="python">Python</option>
-                        </select>
-                        <select className={styles["search-dropdown"]}>
-                            <option value="">--言語--</option>
-                            <option value="c">C</option>
-                            <option value="cpp">CPP</option>
-                            <option value="java">Java</option>
-                            <option value="python">Python</option>
-                        </select>
                     </div>
                 </div>
                 
@@ -113,34 +103,24 @@ class UserSearch extends Component {
                     </div>
                     <div className={styles["course-container"]}>
                         {
-                            this.state.courses.map((v, i) => {
+                            this.state.users.map((v, i) => {
                                 return (
                                     <div key={i} className={styles["course-item"]}>
                                         <div className={styles["course-item-score"]}>
                                             <div><FavIcon /></div>
                                             <div>{v.likes}</div>
                                         </div>
+                                        <span className={styles["course-item-user-avatar"]}>
+                                            <img src={v.avatar}></img>
+                                        </span>
                                         <div className={styles["course-item-main"]}>
-                                            <div className={styles["course-item-top"]}>
-                                                <Link to={"/course/" + this.state.id} className={styles["course-item-title"]}>
-                                                    {v.title}
-                                                </Link>
-                                                <Link to={"/user/" + v.authorId} className={styles["course-item-user"]}>
-                                                    <span className={styles["course-item-user-avatar"]}>
-                                                        <img src={v.authorAvatar}></img>
-                                                    </span>
-                                                    <span className={styles["course-item-user-name"]}>
-                                                        {v.author}
-                                                    </span>
-                                                </Link>
-                                            </div>
-                                            <div className={styles["course-item-bottom"]}>
-                                                <div className={styles["course-item-desc"]}>
-                                                    {v.desc}
-                                                </div>
-                                                <div className={styles["course-item-date"]}>
-                                                    {v.date}
-                                                </div>
+                                            <Link to={"/user/" + v.id} className={styles["course-item-user"]}>
+                                                <span className={styles["course-item-user-name"]}>
+                                                    {v.name}
+                                                </span>
+                                            </Link>
+                                            <div className={styles["course-item-desc"]}>
+                                                {v.desc}
                                             </div>
                                         </div>
                                     </div>

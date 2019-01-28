@@ -75,6 +75,7 @@ class CourseSearch extends Component {
     }
 
     onSearch = (e) => {
+        const q = this.searchBox.current.value;
         console.log(this.langOption.current.selectedIndex)
         /*
         api.get();
@@ -94,7 +95,7 @@ class CourseSearch extends Component {
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
-                                onChange={this.handleChange}
+                                ref={this.searchBox}
                                 >
                             </input>
                             <span className={styles["search-box-icon"]} onClick={this.onSearch}>

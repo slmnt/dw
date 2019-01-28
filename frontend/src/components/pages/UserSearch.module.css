@@ -82,16 +82,23 @@
 .course-container {
     flex: 1 1 auto;
     padding: 0 5%;
+
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    align-content: flex-start;
 }
 .course-item {
+    flex: 1 1 50%;
+    box-sizing: border-box;
+
     display: flex;
 
-    min-height: 3em;
     padding: 0.5em 0em;
 
     font-size: 1.2em;
 }
-.course-item + .course-item {
+.course-item + .course-item + .course-item {
     border-top: 1px solid var(--light-color);
 }
 
@@ -140,13 +147,14 @@
     border-radius: 100%;
     background-color: violet;
 
-    width: 1.5em;
-    height: 1.5em;
+    width: 3em;
+    height: 3em;
+
+    margin-left: 0.8em;
 }
 .course-item-user-name {
     flex: 1 1 auto;
     color: var(--main-color);
-    margin-left: 0.5em;
 }
 .course-item-date {
     color: var(--nice-border-color);

@@ -51,7 +51,7 @@
 .profile-controls {
   margin-top: 2em;
 }
-.profile-controls-editbtn {
+.profile-controls-btn {
   font-size: 1em;
 
   background-color: white;
@@ -59,9 +59,29 @@
   outline-color: var(--main-color);
   border-radius: 0.3em;
 }
-.profile-controls-editbtn:hover {
+.profile-controls-btn:hover {
   background-color: var(--light-color);
 }
+
+.profile-controls-text {
+  outline-color: var(--main-color);
+  border: 1px solid var(--light-color);
+  font-size: inherit;
+  border-radius: 0.2em;
+}
+
+
+.profile-edit-row {
+  display: flex;
+  margin: 0.5em 0;
+  white-space: nowrap;
+}
+.profile-edit-row > * + * {
+  flex: 1 1 auto;
+  margin-left: 1em;
+}
+
+
 
 /* overview */
 .overview {
