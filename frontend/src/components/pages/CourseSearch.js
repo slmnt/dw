@@ -12,7 +12,6 @@ import Ad from '../AdPanel'
 import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
-
 class CourseSearch extends Component {
     
     constructor (props) {
