@@ -4,10 +4,50 @@ import PropTypes from 'prop-types';
 import styles from './UserInfo.module.css';
 import { ReactComponent as Logo } from '../../img/logo.svg';
 
-class Userinfo extends Component {
+import axios from 'axios';
+import api from '../../modules/api';
+
+class UserInfo extends Component {
+    /*
+    props
+        isMypage
+    */
+    constructor(props){
+        super(props)
+
+        this.state = {
+            userId: this.props.isMyPage || !this.props.match ? -1 : this.props.match.params.id,
+            userinfo: {},
+        };
+        this.set = props.set
+    }
+    componentDidMount(){
+
+        axios.get('/user/').then(response => {
+            this.setState({userinfo: response.data})
+        }).catch((e) => {
+            //this.props.history.push('login')
+        })        
+
+        axios.post('/test',{
+            id:2,
+            cid:1,
+            context: "test"
+        }).then(response => {
+            console.log(response)
+        }).catch((e) => {
+            console.log(e)
+        })        
+
+    }
     getUserData = () => {
 
     }
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
+    
     render() {
         return (
             <div className={styles["main"]}>
@@ -26,9 +66,9 @@ class Userinfo extends Component {
                         </div>
                     </div>
                     <div className={styles["overview"]}>
-                        <div>overview</div>
+                        <div className={styles["overview-title"]}>情報</div>
                         <div className={styles["courses"]}>
-                            <div>コース一覧</div>
+                            <div className={styles["courses-title"]}>コース一覧</div>
                         </div>
                     </div>
                 </div>
@@ -37,6 +77,6 @@ class Userinfo extends Component {
   	}
 }
 
-Userinfo.PropTypes = PropTypes;
+UserInfo.propTypes = {};
 
-export default Userinfo;
+export default UserInfo;
