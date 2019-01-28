@@ -503,10 +503,9 @@ class Editor extends Component {
         let formData = new FormData();
         formData.append('base_url',base_url)
         formData.append(path,text)
-        api.post('/api/test',{
+        api.post('/api/courseupload/',{
           body:formData
-        }).then(response => response.json())
-        .then(response => console.log('Success:', response))    
+        })
       }
     }
 
@@ -532,6 +531,12 @@ class Editor extends Component {
       case "python":
         //Upload Dir tree, Running this cmd
         this.getDirtree(this.state.courseData.directory,'',base_url)
+        let formData = new FormData();
+        formData.append('cmd',cmds[1])
+        formData.append('url',base_url)
+        api.post('/api/dockpy',{
+          body: formData
+        })  
         break
       default:
         break
@@ -585,7 +590,8 @@ class Editor extends Component {
         })
       }
 
-        this.getDirtree(this.state.courseData.directory,'',base_url)
+      this.getDirtree(this.state.courseData.directory,'',base_url)
+      console.log("runnnig")
     }
   }
 

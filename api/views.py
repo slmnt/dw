@@ -273,8 +273,6 @@ class Logout(APIView):
         logout(request)
         return HttpResponse('logout',status=status.HTTP_200_OK)
 
-
-
 #Need Security policy 
 class CookieAuthTest(viewsets.ModelViewSet):
 
@@ -355,9 +353,17 @@ class PythonByDocker(viewsets.ModelViewSet):
     #   docker run pybox
     #4 Send Client printed result
     def post(self, request):
-        USER_STORAGE = STORAGE + str(request.user)
-
+        print(request.data['cmd'])
+        name = str(request.user)
+        USER_STORAGE = STORAGE + name + '//' + request.data['url']
+        #USER_STORAGE = STORAGE + str(request.user)
         #Clear DOcker Folder
+        try:
+            if not os.path.exists(DOCKDIR):
+                os.makedirs(DOCKDIR)
+        except:
+            pass
+
         shutil.rmtree(DOCKDIR)
         #Copy User DIR
         shutil.copytree(USER_STORAGE,DOCKDIR)
@@ -366,8 +372,8 @@ class PythonByDocker(viewsets.ModelViewSet):
         #               Adjust Copy Directory/Run File
         #shutil.copy(DOCKFILES+'Dockerfile',DOCKDIR)
         with open(DOCKDIR + 'Dockerfile','w') as f:
-            f.write('FROM python:3\nCOPY . /src\nWORKDIR /src\nCMD [ "python", "./src/index.py" ]')
-
+            meg = 'FROM python:3\n\nCOPY . .\n\nWORKDIR .\n\nCMD [ "python","' + str(request.data['cmd'])  +'"]\n'
+            f.write(meg)
 
         #create dump file   
         #open stdin stderr file
@@ -400,6 +406,7 @@ class PythonByDocker(viewsets.ModelViewSet):
                     if not temp:
                         break
                     dump += temp
+        print(dump)
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
@@ -662,6 +669,41 @@ class DisableUser(viewsets.ModelViewSet):
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
+
+class CourseUpload(viewsets.ModelViewSet):
+
+    #required
+    #base_url,[files]
+    def post(self, request):
+        name = str(request.user)
+        path = STORAGE + name + '//' + request.data['base_url']
+        #1 Check URL,
+        #2 Make Files to base url
+
+        for url in request.data:
+            p = path
+            urls = url.split('/')
+            
+            if url == 'base_url':
+                pass
+            else:
+                for u in urls:
+                    pattern = '.*\..*'
+                    r = re.match(pattern,u)
+                    if r:#if file
+                        p += '//' + u
+                    else:#if dir
+                        p += '//' + u
+                        if not os.path.exists(p):
+                            os.makedirs(p)
+                with open(p,'wb') as f:
+                    f.write(request.data[url].encode('utf-8'))
+
+        data = {}
+        data['key'] = 'value'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 #Remain apis
 # User Create api
 # User Info Search api
@@ -674,22 +716,6 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        name = str(request.user)
-        path = STORAGE + name
-
-        #1 Check URL,
-        #2 Make Files to base url
-        #3 running code
-        #print(path)
-        for url in request.data:
-            p = path
-            urls = url.split('/')
-            for u in urls:
-                if u:
-                    p += '//' + u
-            with open(p,'wb') as f:
-                f.write(request.data[url].encode('utf-8'))
-
         data = {}
         data['key'] = 'value'
         json_data = json.dumps(data)
