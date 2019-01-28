@@ -129,7 +129,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>名</label>
+                <label>名(名前)</label>
               </div>
               <div>
                 <input onChange={this.handleChange('firstname')} value={this.state.firstname} type="text"></input>
@@ -137,7 +137,7 @@ class SignIn extends Component {
             </div>
             <div>
               <div>
-                <label>姓</label>
+                <label>姓(苗字)</label>
               </div>
               <div>
                 <input onChange={this.handleChange('lastname')} value={this.state.lastname} type="text"></input>
