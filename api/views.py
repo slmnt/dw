@@ -727,9 +727,12 @@ def getTree(path,json,currentpath):
             #print(context)
 
     return json
-    
+
+
 class getUserTree(viewsets.ModelViewSet):
 
+    #required
+    #url: base_url
     def post(self, request):
         data = {}
         target = request.data['url'] 
