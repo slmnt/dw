@@ -15,17 +15,17 @@ class Footer extends Component {
             <div className={styles["nav-block"]}>
               <span>トップページ</span>
               <span>はじめる</span>
-              <span>nav2</span>
+              <span>マイページ</span>
             </div>
             <div className={styles["nav-block"]}>
+              <span>会員登録</span>
               <span>コース検索</span>
               <span>ユーザ検索</span>
-              <span>nav2</span>
             </div>
             <div className={styles["nav-block"]}>
               <span>about</span>
-              <span>nav2</span>
-              <span>nav2</span>
+              <span>Policy</span>
+              <span>Help</span>
             </div>
           </div>
           <div className={styles["logo-block"]}>
@@ -38,7 +38,7 @@ class Footer extends Component {
         <div className={styles.bottom}> 
           <div>
             <span>
-              Made with ❤ by Kang Academy
+              Made with ☆ by Kang Academy
             </span>
             <span>
               © 2019 Stair Studio

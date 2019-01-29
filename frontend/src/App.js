@@ -279,14 +279,15 @@ class App extends React.Component {
                 })}>
                   <Back id={this.state.bid}/>
                 </div>
+                  <Route path="/main" render={() => <Main />}/>
+                  <Route path="/right" component={Right} />
+                  <Route path="/tech"  component={Tech}/>
+                  <Route path="/test"  component={CourseInfo} />
                 */}
                 <Switch>
                   <Route exact path="/"  render={() => <Main />}/>
-                  <Route path="/main" render={() => <Main />}/>
 
-                  <Route path="/right" component={Right} />
                   <Route path="/certify/:code" component={Mail}/>
-                  <Route path="/tech"  component={Tech}/>
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
@@ -307,8 +308,6 @@ class App extends React.Component {
 
                   <Route path="/help"  component={NotFound}/>
                   <Route path="/settings"  component={NotFound}/>
-
-                  <Route path="/test"  component={CourseInfo} />
 
                   <Route component={NotFound}/>
                 </Switch>
