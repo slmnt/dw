@@ -169,3 +169,4 @@ typings/
 
 # docker backup file
 *.tar
+.vscode/settings.json
