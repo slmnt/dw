@@ -78,7 +78,7 @@ class Drawer extends Component {
                         this.state.items.map((v, i) => {
                             if (v[0] == '-') {
                                 return (
-                                    <div style={{
+                                    <div key={i} style={{
                                         height: "0.5em",
                                         width: "80%",
                                         borderBottom: "1px solid var(--light-color)",
