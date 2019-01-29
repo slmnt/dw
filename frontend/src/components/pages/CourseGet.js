@@ -197,9 +197,9 @@ class CourseGet extends Component {
                         <div><Link to={`/course/${this.state.courseId}/${this.state.chapterId}`}>{this.state.chapterName}</Link></div>
                     </div>
                     <div className={styles["header-controls"]}>
-                        <div>答えを見る</div>
-                        <div>前のチャプター</div>
-                        <div>次のチャプター</div>
+                        <div className={styles["header-controls-ans"]}>答えを見る</div>
+                        <div className={styles["header-controls-btn"]}>前のチャプター</div>
+                        <div className={styles["header-controls-btn"]}>次のチャプター</div>
                     </div>
                 </div>
 

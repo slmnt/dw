@@ -106,6 +106,7 @@ class UserInfo extends Component {
                 this.setState({
                     courses: response.data
                 })
+            })
         }
 
 

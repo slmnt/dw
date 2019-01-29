@@ -31,10 +31,15 @@
   padding: 0.5em 1em;
   margin: 0 0.5em;
 
-  background-color: var(--main-color);
   color: white;
 
   cursor: pointer;
+}
+.header-controls-btn {
+  background-color: var(--main-color);
+}
+.header-controls-ans {
+  background-color: var(--dark-blue);
 }
 
 
