@@ -414,8 +414,8 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      id: 1,
       courseData: {
-        id: 1,
         name: "testcoure",
         desc: "",
         chapters: [
@@ -552,7 +552,7 @@ class Editor extends Component {
 
     // update coursetitle
     let formData = new FormData();
-    formData.append('id',this.state.courseData.id)
+    formData.append('id',this.state.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
     api.post('/api/updatecourse/',{
@@ -561,7 +561,7 @@ class Editor extends Component {
     .then(response => console.log(response))
     .catch(error => console.error('Error:', error));
 
-
+    this.sleep(500)
     let idx = 0
     for(let c of chapters){
       idx += 1
@@ -570,7 +570,7 @@ class Editor extends Component {
       //at this point, craete chapter
       //name, desc
       let formData = new FormData();
-      formData.append('id',this.state.courseData.id)
+      formData.append('id',this.state.id)
       formData.append('cid',idx)
       formData.append('title',c.name)
       formData.append('desc',c.desc)
@@ -579,14 +579,15 @@ class Editor extends Component {
       }).then(response => response.json())
       .then(response => console.log(response))
       .catch(error => console.error('Error:', error));
-  
+      this.sleep(500)
+
       for(let s of slides){
         //at this point, craete slides
         //name, desc
         jdx += 1
 
         let formData = new FormData();
-        formData.append('id',this.state.courseData.id)
+        formData.append('id',this.state.id)
         formData.append('cid',idx)
         formData.append('sid',jdx)
         formData.append('title',s.name)
@@ -596,7 +597,8 @@ class Editor extends Component {
         }).then(response => response.json())
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error));
-    
+        this.sleep(500)
+
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
@@ -604,6 +606,14 @@ class Editor extends Component {
     }
   }
 
+  sleep(waitMsec) {
+    var startMsec = new Date();
+  
+    // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
+    while (new Date() - startMsec < waitMsec);
+  }
+  
+  
 
   moveBox = (from, to) => {
     if (!this.slideEditor.current.getBox(to)) return;

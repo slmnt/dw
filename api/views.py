@@ -595,7 +595,7 @@ class CreateChapter(viewsets.ModelViewSet):
 
             #Create New Chapter
             else:
-                Chapter = UserCourseContent.create(root=course,title=title,descriptoin=desc,cid=cid)
+                Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
                 Chapter.save()
                 serializers = UserCourseContentSerializer(Chapter)
                 return Response(data=serializers.data,status=status.HTTP_200_OK)
