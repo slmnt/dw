@@ -93,7 +93,7 @@ class Main extends Component {
         
 
 
-          <h3 className={styles["nice-header"]}>ステップ</h3>
+          <h3 className={styles["nice-header"]}>３ つのステップ</h3>
           <div className={styles["slide-block-left"]}>
             <div className={styles["slide-block-bg-left"]}>
             </div>
@@ -138,7 +138,7 @@ class Main extends Component {
                 今すぐ始めよう
               </div>
               <div className={styles["continue-btn"]}>
-                会員登録
+                <Link to="/signup">会員登録</Link>
               </div>
           </div>
         

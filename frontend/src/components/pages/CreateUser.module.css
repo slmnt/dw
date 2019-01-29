@@ -32,6 +32,11 @@
     width: 80%;
     padding: 2em 0;
 }
+.create_form input, .create_form select {
+    background: inherit;
+    border: 1px solid var(--main-color);
+}
+
 .form_layout{
     padding: 2em;
     margin: auto;

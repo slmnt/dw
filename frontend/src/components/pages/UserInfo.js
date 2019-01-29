@@ -76,15 +76,16 @@ class UserInfo extends Component {
         })
           
         if(this.props.match.params.id === "undefined"){
-            axios.post('/getusercourseinfo/',{
-                name: this.props.match.params.id
-            }).then(response => {
-                this.setState({
-                    courses: response.data
+        }else{
+                axios.post('/getusercourseinfo/',{
+                    name: this.props.match.params.id
+                }).then(response => {
+                    this.setState({
+                        courses: response.data
+                    })
+                }).catch((e) => {
+                    //this.props.history.push('login')
                 })
-            }).catch((e) => {
-                //this.props.history.push('login')
-            })
         }
 
 

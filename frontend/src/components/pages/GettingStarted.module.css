@@ -51,7 +51,7 @@
   padding: 0.5em;
 
   border-radius: 3em;
-  background: white;
+  background: var(--bg-color);
   border: 0.1em solid var(--main-color);
   color: var(--dark-blue);
 
