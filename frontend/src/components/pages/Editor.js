@@ -561,7 +561,6 @@ class Editor extends Component {
     .then(response => console.log(response))
     .catch(error => console.error('Error:', error));
 
-    this.sleep(500)
     let idx = 0
     for(let c of chapters){
       idx += 1
@@ -579,7 +578,6 @@ class Editor extends Component {
       }).then(response => response.json())
       .then(response => console.log(response))
       .catch(error => console.error('Error:', error));
-      this.sleep(500)
 
       for(let s of slides){
         //at this point, craete slides
@@ -597,23 +595,13 @@ class Editor extends Component {
         }).then(response => response.json())
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error));
-        this.sleep(500)
 
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
       // console.log("runnnig")
     }
-  }
-
-  sleep(waitMsec) {
-    var startMsec = new Date();
-  
-    // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
-    while (new Date() - startMsec < waitMsec);
-  }
-  
-  
+  }  
 
   moveBox = (from, to) => {
     if (!this.slideEditor.current.getBox(to)) return;
