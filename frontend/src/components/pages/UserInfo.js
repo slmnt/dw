@@ -160,7 +160,9 @@ class UserInfo extends Component {
                         </Switch>
                     </div>
                     <div className={styles["overview"]}>
-                        <div className={styles["overview-title"]}>/</div>
+                        {/*
+                        <div className={styles["overview-title"]}></div>
+                        */}
                         <div className={styles["courses"]}>
                             <div className={styles["courses-title"]}>コース一覧</div>
                             <CourseList courses={this.state.courses} />

@@ -13,19 +13,16 @@ class Footer extends Component {
         <div className={styles["main-footer"]}>
           <div className={styles["nav-container"]}>
             <div className={styles["nav-block"]}>
-              <span>トップページ</span>
-              <span>はじめる</span>
-              <span>nav2</span>
+              <span><Link to="/">トップページ</Link></span>
+              <span><Link to="/getting-started">はじめる</Link></span>
             </div>
             <div className={styles["nav-block"]}>
-              <span>コース検索</span>
-              <span>ユーザ検索</span>
-              <span>nav2</span>
+              <span><Link to="/search/course">コース検索</Link></span>
+              <span><Link to="/search/user">ユーザ検索</Link></span>
+              <span><Link to="/">コースを作る</Link></span>
             </div>
             <div className={styles["nav-block"]}>
-              <span>about</span>
-              <span>nav2</span>
-              <span>nav2</span>
+              <span><Link to="/about">about</Link></span>
             </div>
           </div>
           <div className={styles["logo-block"]}>

@@ -44,26 +44,25 @@ class Main extends Component {
           <p className={styles["header-sub-title"]}>
             For all people who study programming.
           </p>
+          <div className={styles["welcome-container"]}>
+            <div className={styles["signin-btn"]}>
+              <Link to="/signup">新規会員登録</Link>
+            </div>
+          </div>
         </header>
 
         <div className={styles.main}>
           <div className={styles["main-title"]} style={{
-            background: `linear-gradient(to top, rgba(100, 100, 100, 0.5) 0%, rgba(151, 217, 225, 0.5) 100%),url(${bridge})`,
+            background: `linear-gradient(to top, rgba(100, 100, 100, 0.2) 0%, rgba(85, 80, 123, 0.9) 100%), url(${bridge})`,
           }}>
             <div className={styles.rapper}>
               <p>幅広い年齢層を対象にプログラミング学習を行えるシステム。</p>
               <h2>『Mini Prog』</h2>
             </div>
-            <div className={styles["welcome-container"]}>
-              <div className={styles["signin-btn"]}>
-                <Link to="/signup">新規会員登録</Link>
-              </div>
-              <div className={styles["start-btn"]}>
-                <Link to="/getting-started">はじめてみる</Link>
-              </div>
-            </div>
           </div>
+          {/*
           <h3 className={styles["main-contents-title"]}>サービスの特徴</h3>
+          */}
           <div className={styles["tile-container"]} style={{padding: "0 25px"}}>
             <h3 className={styles["tile-header"]}>サービスの特徴</h3>
             <div className={styles["f-grid"]}>
@@ -93,7 +92,7 @@ class Main extends Component {
           </div>
         
           <div className={styles["slide-block-left"]}>
-            <div className={styles["slide-block-bg"]}>
+            <div className={styles["slide-block-bg-left"]}>
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
@@ -105,7 +104,7 @@ class Main extends Component {
             </div>
           </div>
           <div className={styles["slide-block-right"]}>
-            <div className={styles["slide-block-bg2"]}>
+            <div className={styles["slide-block-bg-right"]}>
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
@@ -117,7 +116,7 @@ class Main extends Component {
             </div>
           </div>
           <div className={styles["slide-block-left"]}>
-            <div className={styles["slide-block-bg3"]}>
+            <div className={styles["slide-block-bg-left"]}>
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
@@ -127,6 +126,17 @@ class Main extends Component {
                 数多くの言語に対応しております。
               </div>
             </div>
+          </div>
+
+
+
+          <div className={styles["continue"]}>
+              <div className={styles["continue-title"]}>
+                今すぐ始めよう
+              </div>
+              <div className={styles["continue-btn"]}>
+                会員登録
+              </div>
           </div>
         
         </div>

@@ -16,13 +16,17 @@ class Drawer extends Component {
             items: [
                 // [name, url] or [name & url]
                 ['トップ', '/'],
-                ['はじめる', '/'],
-                ['コース一覧', '/'],
-                //['コースを作る', '/'],
+                ['はじめる', '/getting-started'],
+                ['-'],
+                ['コース検索', '/search/course'],
+                ['ユーザ検索', '/search/user'],
+                ['コースを作る', '/'],
+                ['-'],
                 ['マイページ','/mypage'],
                 ['ログアウト', '/'],
-                ['text editor (right)', '/right'],
-                ['board', '/board'],
+                ['掲示板', '/board'],
+                ['-'],
+                //['text editor (right)', '/right'],
                 ['courseSearch','/search/course'],
                 ['test course get', '/course/123/'],
                 ['test course edit', '/course/123/edit'],
@@ -72,6 +76,16 @@ class Drawer extends Component {
                     </div>
                     {
                         this.state.items.map((v, i) => {
+                            if (v[0] == '-') {
+                                return (
+                                    <div style={{
+                                        height: "0.5em",
+                                        width: "80%",
+                                        borderBottom: "1px solid var(--light-color)",
+                                        margin: "0 auto 0.5em auto",
+                                    }}></div>
+                                )
+                            }
                             return (
                                 <Link key={i} to={v[1] || v[0]} className={styles.item} onClick={this.onClickDrawerItem}>
                                     {v[0]}
