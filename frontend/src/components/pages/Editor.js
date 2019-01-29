@@ -555,9 +555,12 @@ class Editor extends Component {
     formData.append('id',this.state.courseData.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
-    api.post('/api/createcourse/',{
+    api.post('/api/updatecourse/',{
       body: formData
-    })
+    }).then(response => response.json())
+    .then(response => console.log(response))
+    .catch(error => console.error('Error:', error));
+
 
     let idx = 0
     for(let c of chapters){
@@ -573,7 +576,10 @@ class Editor extends Component {
       formData.append('desc',c.desc)
       api.post('/api/craetechapter/',{
         body: formData
-      })
+      }).then(response => response.json())
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error));
+  
       for(let s of slides){
         //at this point, craete slides
         //name, desc
@@ -587,11 +593,14 @@ class Editor extends Component {
         formData.append('context',s.text)
         api.post('/api/createslide/',{
           body: formData
-        })
+        }).then(response => response.json())
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error));
+    
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
-      console.log("runnnig")
+      // console.log("runnnig")
     }
   }
 
