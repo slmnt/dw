@@ -159,7 +159,8 @@
 }
 .review-send {
   outline-color: var(--main-color);
-  border-color: var(--main-color);
+  border: 1px solid var(--main-color);
+  background: white;
 }
 
 .review-list {

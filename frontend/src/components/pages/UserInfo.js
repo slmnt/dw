@@ -158,6 +158,21 @@ class UserInfo extends Component {
                                     </div>
                                 )
                             }} />
+                            <Route render={() => {
+                                return (
+                                    <div className={styles["user-info"]}>
+                                        <div className={styles["name"]}>
+                                            name
+                                        </div>
+                                        <div className={styles["desc"]}>
+                                            desc wda dwa dwa wa dw adw a dwa aw w aw a
+                                        </div>
+                                        <div className={styles["misc-info"]}>
+                                            国: Democratic Republic of the Awaji
+                                        </div>
+                                    </div>
+                                )
+                            }} />
                         </Switch>
                     </div>
                     <div className={styles["overview"]}>
