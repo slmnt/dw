@@ -51,7 +51,7 @@ class UserCourseSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserCourse
-        fields = ('id','root','title','createat','likes')
+        fields = ('id','root','title','createat','likes','descriptoin')
 
 #CourseInfo Use CourseInfo
 class UserCourseInfoSerializer(serializers.ModelSerializer):

@@ -122,13 +122,13 @@ class App extends React.Component {
   }
   
   componentWillMount(){
+    /*    
     const formData = new FormData();
     formData.append('url','Course/1')
     api.post('/api/test',{
       body: formData      
     }).then(response => response.json())
     .then(response => console.log('Success:', response))
-    /*    
 
     this.setState({
       bid: localStorage.getItem("bid")

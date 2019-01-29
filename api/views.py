@@ -655,7 +655,7 @@ class GEtUserCourses(viewsets.ModelViewSet):
 
     def post(self, request):
         username = request.data['name']
-        target = User.objects.get(username=username)
+        target = User.objects.get(id=username)
         queryset = UserCourse.objects.all().filter(root=target)
         serializers = UserCourseSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
@@ -744,17 +744,46 @@ class getUserTree(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
+class SearchCourse(generics.ListAPIView):
+    serializer_class = UserCourseSerializer
+    
+    #type 0 root name
+    #type 1 title
+    #type 2 description
+    def get_queryset(self):
+        text = self.kwargs['text']
+        ty = self.kwargs['type']
+        if ty == '0':
+            try:
+                user = User.objects.get(username=text)
+            except:
+                return []
+            queryset = UserCourse.objects.filter(root=user).order_by('-id')
+        elif ty == '1':
+            queryset = UserCourse.objects.filter(title__contains=text).order_by('-id')
+        else:
+            queryset = UserCourse.objects.filter(descriptoin__contains=text).order_by('-id')
+
+        return queryset
+
+class SearchUser(generics.ListAPIView):
+    serializer_class = UserInfoSerializer
+    
+    def get_queryset(self):
+        text = self.kwargs['text']
+        try:
+            user = User.objects.get(username=text)
+        except:
+            return []
+        queryset = UserInfo.objects.filter(root=user)
+        return queryset
+
+
+
 #Remain apis
 # User Create api
-# User Info Search api
-# Course info Search api
-class APItest(viewsets.ModelViewSet):
-
-    def get(self,request):
-        data = {'ok':200}
-        return Response(data=data,status=status.HTTP_200_OK)
-
-    def post(self, request):
-        data = {'ok':200}
-        return Response(data=data,status=status.HTTP_200_OK)
-
+class APItest(generics.ListAPIView):
+    serializer_class = UserInfoSerializer
+    
+    def get_queryset(self):
+        return []

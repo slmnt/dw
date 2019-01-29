@@ -61,21 +61,27 @@ class CourseSearch extends Component {
     }
 
     componentDidMount(){
-        var u = '/getusercourse'
+        var u = '/getusercourse/'
         axios.get(u).then(response => {
             this.setState({
-                cours: response.data
+                courses: response.data
             })
         }).catch(e => console.log(e))
     }
     
     handleChange = (event) => {
         this.setState({keyword: event.target.value});
+
     }
 
     onSearch = (e) => {
-        const q = this.searchBox.current.value;
-        console.log(this.langOption.current.selectedIndex)
+
+        let path = '/api/searchcourse/' + this.state.keyword + '/' + this.langOption.current.selectedIndex
+        api.get(path).then(response => response.json())
+        .then(response => this.setState({
+            courses: response
+        })).catch()
+    
         /*
         api.get();
         */
@@ -94,7 +100,7 @@ class CourseSearch extends Component {
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
-                                ref={this.searchBox}
+                                onChange={this.handleChange}
                                 >
                             </input>
                             <span className={styles["search-box-icon"]} onClick={this.onSearch}>
@@ -104,11 +110,9 @@ class CourseSearch extends Component {
                     </div>
                     <div className={styles["option-container"]}>
                         <select className={styles["search-dropdown"]} ref={this.langOption}>
-                            <option value="">--言語--</option>
-                            <option value="c">C</option>
-                            <option value="cpp">CPP</option>
-                            <option value="java">Java</option>
-                            <option value="python">Python</option>
+                            <option value="c">名前</option>
+                            <option value="cpp">タイトル</option>
+                            <option value="java">説明</option>
                         </select>
                         <select className={styles["search-dropdown"]}>
                             <option value="">--言語--</option>
