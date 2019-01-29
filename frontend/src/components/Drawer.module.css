@@ -8,7 +8,8 @@
     min-height: 100vh;
     background-color: white;
     z-index: 1;
-
+    
+    transition-timing-function: cubic-bezier(.1, 1, .2, 0.8);
     transition: left 0.5s;
     scrollbar-width: thin;
     scrollbar-color: var(--light-color) rgba(0, 0, 0, 0);
@@ -58,6 +59,7 @@
     cursor: pointer;
 
     margin-left: auto;
+    transition-timing-function: cubic-bezier(.1, 1, .2, 0.8);
     transition: background-color 0.5s;
 }
 .close-button:hover {
