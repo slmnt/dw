@@ -55,12 +55,10 @@ Get_User_Course_index = GetUserCourseContentIndex.as_view({
 Upload = Upload.as_view({
     'post': 'post'
 })
-"""
 apitest = APItest.as_view({
     'post': 'post',
     'get': 'get'
 })
-"""
 createcourse = CreateCourse.as_view({
     'post': 'post'
 })
@@ -85,11 +83,18 @@ pythonbydocker = PythonByDocker.as_view({
 getusertree = getUserTree.as_view({
     'post': 'post'
 })
-
 getusercourse = GEtUserCourses.as_view({
     'post': 'post'
 })
-
+mypageuserget = MypageUserget.as_view({
+    'get': 'get'
+})
+mypageusercourseget = MypageUSerCourseget.as_view({
+    'get': 'get'
+})
+searchuserinfoget = SearchUserinfoget.as_view({
+    'post': 'post'
+})
 urlpatterns = [
 
     #User Authentic
@@ -145,8 +150,14 @@ urlpatterns = [
 
     #UserSearch
     path('searchuser/<text>',SearchUser.as_view()),
+    path('searchuserinfo/',searchuserinfoget),
 
     #path('test',apitest),
-    path('test/<text>',APItest.as_view())
+    path('test',apitest),
+
+    #mypage
+    path('mypageuserget/',mypageuserget),
+    path('mypagecourseget/',mypageusercourseget),
+
 
 ]

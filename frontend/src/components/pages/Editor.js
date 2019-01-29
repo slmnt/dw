@@ -414,8 +414,8 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      id: 1,
       courseData: {
-        id: 1,
         name: "testcoure",
         desc: "",
         chapters: [
@@ -552,12 +552,14 @@ class Editor extends Component {
 
     // update coursetitle
     let formData = new FormData();
-    formData.append('id',this.state.courseData.id)
+    formData.append('id',this.state.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
-    api.post('/api/createcourse/',{
+    api.post('/api/updatecourse/',{
       body: formData
-    })
+    }).then(response => response.json())
+    .then(response => console.log(response))
+    .catch(error => console.error('Error:', error));
 
     let idx = 0
     for(let c of chapters){
@@ -567,34 +569,39 @@ class Editor extends Component {
       //at this point, craete chapter
       //name, desc
       let formData = new FormData();
-      formData.append('id',this.state.courseData.id)
+      formData.append('id',this.state.id)
       formData.append('cid',idx)
       formData.append('title',c.name)
       formData.append('desc',c.desc)
       api.post('/api/craetechapter/',{
         body: formData
-      })
+      }).then(response => response.json())
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error));
+
       for(let s of slides){
         //at this point, craete slides
         //name, desc
         jdx += 1
 
         let formData = new FormData();
-        formData.append('id',this.state.courseData.id)
+        formData.append('id',this.state.id)
         formData.append('cid',idx)
         formData.append('sid',jdx)
         formData.append('title',s.name)
         formData.append('context',s.text)
         api.post('/api/createslide/',{
           body: formData
-        })
+        }).then(response => response.json())
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error));
+
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
-      console.log("runnnig")
+      // console.log("runnnig")
     }
-  }
-
+  }  
 
   moveBox = (from, to) => {
     if (!this.slideEditor.current.getBox(to)) return;

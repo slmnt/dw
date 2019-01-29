@@ -30,7 +30,7 @@ function fetch_timeout(method, url, option, nocookie,timeout=10000) {
 
 
 export default {
-  post: (url, option) => {return fetch_extend('POST', url, option)},
+  post: (url, option) => {return fetch_timeout('POST', url, option)},
   get: (url, option, nocokie) => {return fetch_extend('GET', url, option, nocokie)},
   fetch: fetch_extend
 }
