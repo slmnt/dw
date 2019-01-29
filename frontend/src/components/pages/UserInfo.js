@@ -31,9 +31,9 @@ class UserInfo extends Component {
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
+                    createat: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    root: "Kang the greatest",
                     authorAvatar: "",
                     authorId: 12
                 },
@@ -42,9 +42,9 @@ class UserInfo extends Component {
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
+                    createat: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    root: "Kang the greatest",
                     authorAvatar: "",
                     authorId: 12
                 },
@@ -53,9 +53,9 @@ class UserInfo extends Component {
                     title: "course1",
                     desc: "croues1desc",
                     likes: 21,
-                    date: "2025/02/31",
+                    createat: "2025/02/31",
 
-                    author: "Kang the greatest",
+                    root: "Kang the greatest",
                     authorAvatar: "",
                     authorId: 12
                 }
@@ -68,22 +68,23 @@ class UserInfo extends Component {
     }
     componentDidMount(){
 
-
         axios.get('/user/').then(response => {
+            console.log(response.data)
             this.setState({userinfo: response.data})
         }).catch((e) => {
             //this.props.history.push('login')
         })        
 
-        axios.post('/test',{
-            id:2,
-            cid:1,
-            context: "test"
+        axios.post('/getusercourseinfo/',{
+            name: this.props.match.params.id
         }).then(response => {
-            console.log(response)
+            this.setState({
+                courses: response.data
+            })
         }).catch((e) => {
-            console.log(e)
+            //this.props.history.push('login')
         })        
+
 
     }
     getUserData = () => {

@@ -27,10 +27,10 @@ class Drawer extends Component {
                 ['掲示板', '/board'],
                 ['-'],
                 //['text editor (right)', '/right'],
-                ['courseSearch','/search/course'],
-                ['test course get', '/course/123/'],
-                ['test course edit', '/course/123/edit'],
-                ['test'],
+                //['courseSearch','/search/course'],
+                //['test course get', '/course/123/'],
+                //['test course edit', '/course/123/edit'],
+                //['test'],
             ],
         }
     }

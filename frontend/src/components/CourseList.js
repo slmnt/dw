@@ -15,6 +15,10 @@ class CourseList extends Component {
         this.state = {
         };
     }
+    convertdata(date){
+        var time = new Date(date)
+        return time.toLocaleString()
+    }
     
     render() {
         return (
@@ -37,7 +41,7 @@ class CourseList extends Component {
                                             <img src={v.authorAvatar}></img>
                                         </span>
                                         <span className={styles["course-item-user-name"]}>
-                                            {v.author}
+                                            {v.root}
                                         </span>
                                     </Link>
                                 </div>
@@ -46,7 +50,7 @@ class CourseList extends Component {
                                         {v.desc}
                                     </div>
                                     <div className={styles["course-item-date"]}>
-                                        {v.date}
+                                        {this.convertdata(v.createat)}
                                     </div>
                                 </div>
                             </div>

@@ -24,23 +24,23 @@ class UserSearch extends Component {
             context: [],
             users: [
                 {
-                    name: "Kang the greatest",
-                    desc: "croues1desc",
-                    likes: 21,
+                    root: "Dr. MOnta",
+                    profile: "croues1desc",
+                    subscribed: 21,
                     avatar: "",
                     id: 12
                 },
                 {
-                    name: "Kang the greatest",
-                    desc: "croues1desc",
-                    likes: 21,
+                    root: "Kang the greatest",
+                    profile: "croues1desc",
+                    subscribed: 21,
                     avatar: "",
                     id: 12
                 },
                 {
-                    name: "Kang the greatest",
-                    desc: "croues1desc",
-                    likes: 21,
+                    root: "Kang the greatest",
+                    profile: "croues1desc",
+                    subscribed: 21,
                     avatar: "",
                     id: 12
                 },
@@ -51,13 +51,13 @@ class UserSearch extends Component {
     }
 
     componentDidMount(){
-        return
-        var u = '/getusercourse'
+
+        var u = '/getuser'
         axios.get(u).then(response => {
             this.setState({
                 users: response.data
             })
-        }).catch(e => console.log(e))
+        }).catch(e => console.log(e))        
     }
     
     handleChange = (event) => {
@@ -65,11 +65,10 @@ class UserSearch extends Component {
     }
 
     onSearch = (e) => {
-        const q = this.searchBox.current.value;
-        console.log(this.langOption.current.selectedIndex)
-        /*
-        api.get();
-        */
+       let path = '/api/searchuser/' + this.state.keyword
+       api.get(path).then(response => response.json())
+       .then(response => this.setState({users: response})).catch()
+
     }
     
     render() {
@@ -85,7 +84,7 @@ class UserSearch extends Component {
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
-                                ref={this.searchBox}
+                                onChange={this.handleChange}
                                 >
                             </input>
                             <span className={styles["search-box-icon"]} onClick={this.onSearch}>
@@ -108,7 +107,7 @@ class UserSearch extends Component {
                                     <div key={i} className={styles["course-item"]}>
                                         <div className={styles["course-item-score"]}>
                                             <div><FavIcon /></div>
-                                            <div>{v.likes}</div>
+                                            <div>{v.subscribed}</div>
                                         </div>
                                         <span className={styles["course-item-user-avatar"]}>
                                             <img src={v.avatar}></img>
@@ -116,11 +115,11 @@ class UserSearch extends Component {
                                         <div className={styles["course-item-main"]}>
                                             <Link to={"/user/" + v.id} className={styles["course-item-user"]}>
                                                 <span className={styles["course-item-user-name"]}>
-                                                    {v.name}
+                                                    {v.root}
                                                 </span>
                                             </Link>
                                             <div className={styles["course-item-desc"]}>
-                                                {v.desc}
+                                                {v.profile}
                                             </div>
                                         </div>
                                     </div>

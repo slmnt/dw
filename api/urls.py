@@ -55,10 +55,12 @@ Get_User_Course_index = GetUserCourseContentIndex.as_view({
 Upload = Upload.as_view({
     'post': 'post'
 })
+"""
 apitest = APItest.as_view({
     'post': 'post',
     'get': 'get'
 })
+"""
 createcourse = CreateCourse.as_view({
     'post': 'post'
 })
@@ -81,6 +83,10 @@ pythonbydocker = PythonByDocker.as_view({
     'post': 'post'
 })
 getusertree = getUserTree.as_view({
+    'post': 'post'
+})
+
+getusercourse = GEtUserCourses.as_view({
     'post': 'post'
 })
 
@@ -112,6 +118,8 @@ urlpatterns = [
     path('getuser/',Get_User),
 
     #User Course Get
+    path('getusercourseinfo/',getusercourse),
+
     path('getusercourse/',Get_User_Course),
     path('getusercoursec/',Get_User_Course_content),
     path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
@@ -132,6 +140,13 @@ urlpatterns = [
     #User Course Update
     path('updatecourse/',updatecourse),
 
-    path('test',apitest)
+    #Course Search
+    path('searchcourse/<text>/<type>',SearchCourse.as_view()),
+
+    #UserSearch
+    path('searchuser/<text>',SearchUser.as_view()),
+
+    #path('test',apitest),
+    path('test/<text>',APItest.as_view())
 
 ]
