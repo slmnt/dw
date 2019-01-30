@@ -391,6 +391,8 @@ class FileEditor extends React.Component {
             delete={this.props.delete}
             copy={this.props.copy}
             create={this.props.create}
+
+            onUpload={this.props.onUpload}
           />
 
           </div>
@@ -1057,6 +1059,24 @@ class Editor extends Component {
   onSaveTab = () => {
 
   }
+  onUpload = (files, path) => {
+    if (!path) return;
+
+    const formData = new FormData();
+  
+    formData.append('path', `/Course/${this.state.id}${path}`);
+    for (var i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+
+    api.post('/api/upload/', {
+      body: formData,
+    })
+    .then(api.parseJson)
+    .then(response => console.log('Success:', JSON.stringify(response)))
+    .catch(error => console.error('Error:', error));
+  
+  }
 
   render() {
     return (
@@ -1193,6 +1213,7 @@ class Editor extends Component {
                 directory={this.state.courseData.directory}
                 getContent={this.getContent}
                 onSaveTab={this.onSaveTab}
+                onUpload={this.onUpload}
 
                 create={this.createDir}
                 copy={this.copyDir}

@@ -12,6 +12,7 @@ import { ReactComponent as CreateFolderIcon } from '../img/create-folder.svg';
 
 import api from '../modules/api';
 
+import {MainContext} from '../contexts/main';
 
 
 class DirTree extends React.Component {
@@ -150,11 +151,10 @@ class DirTree extends React.Component {
     e.preventDefault();
     
     const item = e.target.closest("[data-filepath]");
-    const path = item && item.dataset["filepath"];
+    const path = item && item.dataset["filepath"] || "/";
 
     const dt = e.dataTransfer;
     const files = dt.files;
-    //this.upload(files)
 
     if (this.props.onUpload) this.props.onUpload(files, path);
 
@@ -166,23 +166,6 @@ class DirTree extends React.Component {
   }
   onDropFile = e => {
     this.upload(e.dataTransfer.files);
-  }
-
-  upload(files) {
-    const formData = new FormData();
-  
-    formData.append('path', '/src/a.c');
-    for (var i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    api.post('/api/upload/', {
-      body: formData,
-    })
-    .then(api.parseJson)
-    .then(response => console.log('Success:', JSON.stringify(response)))
-    .catch(error => console.error('Error:', error));
-  
   }
 
 
@@ -336,6 +319,7 @@ class DirTree extends React.Component {
     )
   }
 }
+DirTree.contextType = MainContext;
 
 export default DirTree;
 
