@@ -37,7 +37,7 @@ class CourseList extends Component {
                                     <Link to={`/course/${this.context.uid}/${v.id}`} className={styles["course-item-title"]}>
                                         {v.title}
                                     </Link>
-                                    <Link to={"/user/" + v.authorId} className={styles["course-item-user"]}>
+                                    <Link to={"/user/" + v.id} className={styles["course-item-user"]}>
                                         <span className={styles["course-item-user-avatar"]}>
                                             <img src={v.authorAvatar}></img>
                                         </span>

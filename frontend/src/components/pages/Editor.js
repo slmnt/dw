@@ -761,6 +761,7 @@ class Editor extends Component {
     }
   }
   openChapter = (chapter) => {
+    if (!chapter) return;
     this.setState({currentChapter: chapter}, () => {
       //this.chapterNameInput.current.value = chapter.name;
       this.setChapterNameText(chapter.name);
