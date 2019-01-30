@@ -155,7 +155,7 @@ urlpatterns = [
     path('updatecourse/',updatecourse),
 
     #Course Search
-    path('searchcourse/<text>/<type>',SearchCourse.as_view()),
+    path('searchcourse/<text>',SearchCourse.as_view()),
 
 
     #UserSearch

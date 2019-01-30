@@ -31,6 +31,7 @@ from django.shortcuts import render,redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.db.models import Q
 
 from Crypto.Hash import SHA256
 # Create your views here.
@@ -760,18 +761,13 @@ class SearchCourse(generics.ListAPIView):
     #type 2 description
     def get_queryset(self):
         text = self.kwargs['text']
-        ty = self.kwargs['type']
-        if ty == '0':
-            try:
-                user = User.objects.get(username=text)
-            except:
-                return []
-            queryset = UserCourse.objects.filter(root=user).order_by('-id')
-        elif ty == '1':
-            queryset = UserCourse.objects.filter(title__contains=text).order_by('-id')
-        else:
-            queryset = UserCourse.objects.filter(descriptoin__contains=text).order_by('-id')
-
+        try:
+            user = User.objects.get(username=text)
+            queryset = UserCourse.objects.filter( 
+                Q(root=user) | Q(title__contains=text) | Q(descriptoin__contains=text)).order_by('-id')
+        except:
+            queryset = UserCourse.objects.filter( 
+                Q(title__contains=text) | Q(descriptoin__contains=text)).order_by('-id')
         return queryset
 
 class SearchUser(generics.ListAPIView):

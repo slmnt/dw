@@ -104,6 +104,7 @@ class CourseGet extends Component {
         }).then(api.parseJson).then(response => {
             if (!response) return;
             Object.assign(this.state.files, response);
+            console.log(this.state.files)
             this.importDir(response);
             this.setState({files: this.state.files})
         });
@@ -228,6 +229,7 @@ class CourseGet extends Component {
         this.window.current.renameTab(path, name);
     }
     getContent = (path) => {
+        console.log(this.state.files[path])
         return this.state.files[path];
     }
     onSaveTab = () => {

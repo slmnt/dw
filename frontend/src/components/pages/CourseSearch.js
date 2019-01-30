@@ -78,7 +78,7 @@ class CourseSearch extends Component {
 
     onSearch = (e) => {
 
-        let path = '/api/searchcourse/' + this.state.keyword + '/' + this.langOption.current.selectedIndex
+        let path = '/api/searchcourse/' + this.state.keyword
         api.get(path).then(api.parseJson)
         .then(response => this.setState({
             courses: response
@@ -110,20 +110,6 @@ class CourseSearch extends Component {
                                 <SearchIcon/>
                             </span>
                         </span>
-                    </div>
-                    <div className={styles["option-container"]}>
-                        <select className={styles["search-dropdown"]} ref={this.langOption}>
-                            <option value="c">名前</option>
-                            <option value="cpp">タイトル</option>
-                            <option value="java">説明</option>
-                        </select>
-                        <select className={styles["search-dropdown"]}>
-                            <option value="">--言語--</option>
-                            <option value="c">C</option>
-                            <option value="cpp">CPP</option>
-                            <option value="java">Java</option>
-                            <option value="python">Python</option>
-                        </select>
                     </div>
                 </div>
                 

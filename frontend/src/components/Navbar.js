@@ -103,6 +103,9 @@ class NavBar extends React.Component {
                 </React.Fragment>
               :
                 <React.Fragment>
+                  <div>
+                    {this.context.uid}
+                  </div>
                   <div className={styles.avatar} onClick={this.showPopup}>
                   </div>
                   <Arrow onClick={this.showPopup} />
