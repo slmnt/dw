@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+import api from '../../modules/api'
 import styles from './CourseInfo.module.css';
 import UserPanel from '../UserPanel';
 import Rating from '../Rating';
@@ -70,7 +71,15 @@ class Courseinfo extends Component {
     }
 
     sendReview = () => {
-        console.log("send");
+
+        api.ex_post('/api/test',{
+            id: this.props.match.params.id,
+            comment: this.reviewTextarea.current.value
+        }).then(response => response.json())
+        .then(response => {
+            this.setState({reviews: response})
+        })
+
     }
 
     //<UserPanel username="Kang the polyglot" desc="I can speak Korean, Japanese and English fluently." avatar=".png"/>

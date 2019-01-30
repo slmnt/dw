@@ -842,11 +842,13 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        user = User.objects.get(usernmae=request.data['username'])
-        queryset = UserInfo(root=user,gen=request.data['gen'],age=request.data['age'],birth=request.data['birth'])
-        queryset.save()
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
+        id = request.data['id']
+        comment = request.data['comment']
+        target = UserCourse.objects.get(id=id)
+        new = UserCourseComment(root=target,auth=request.user,comment=comment)
+        new.save()
+        #UserCourseComment
+        queryset = UserCourseComment.objects.all().filter(root=target).order_by('-createat')
+        serializers = UserCourseCommentSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
 
