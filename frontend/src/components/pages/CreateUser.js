@@ -1,7 +1,7 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
 
-import axios from 'axios';
+import api from '../../modules/api'
 import Loading from '../Loading'
 
 import styles from './CreateUser.module.css';
@@ -49,11 +49,41 @@ class SignIn extends Component {
     })
   }
 
+  convertAge(user_age){
+    let now = new Date()
+    now = now.getFullYear() + ((now.getMonth() + 1) / 12) + (now.getDay() / 30)
+    let ages = new Date(user_age)
+    ages = ages.getFullYear() + ((ages.getMonth() + 1) / 12) + (ages.getDay() / 30)
+
+    return parseInt(now - ages)
+  }
+
   submit(e){    
     e.preventDefault()
     console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
+    let gen = document.getElementById('gender')
+    let age = document.getElementById('age')
+
+    api.ex_post('/api/createuser/',{
+      uid: this.state.username,
+      pwd: this.state.passwd,
+      email: this.state.email,
+      fname: this.state.firstname,
+      lname: this.state.lastname
+    }).then(response => response.json())
+    .then(response => {
+      api.ex_post('/api/createuserinfo/',{
+        username: this.state.username,
+        gen: gen.value,
+        birth: age.value
+      }).then(response => response.json())
+      .then(response => console.log(response))  
+    })
+
+
+
   }
 
   goBack = (e) => {
