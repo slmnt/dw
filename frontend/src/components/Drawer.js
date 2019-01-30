@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import history from 'history';
 
 import styles from './Drawer.module.css'
 import { ReactComponent as Arrow } from '../img/arrow-back.svg';
 
+import history from '../modules/history';
+import api from '../modules/api';
+
+import {MainContext} from '../contexts/main';
 
 class Drawer extends Component {
 
@@ -20,7 +23,7 @@ class Drawer extends Component {
                 ['-'],
                 ['コース検索', '/search/course'],
                 ['ユーザ検索', '/search/user'],
-                ['コースを作る', '/'],
+                ['コースを作る', '/', this.createCourse],
                 ['-'],
                 ['マイページ','/mypage'],
                 ['ログアウト', '/'],
@@ -51,6 +54,28 @@ class Drawer extends Component {
         this.setState({
           isDrawerOpen: false
         })
+    }
+    createCourse = () => {
+        if (!this.context.uid) {
+            history.push('/login');
+            this.close();
+            return;
+        }
+
+        let formData = new FormData();
+        formData.append('title','testtitle')
+        formData.append('desc','desc')
+    
+        api.post('/api/createcourse/',{
+          body: formData
+        }).then(api.parseJson)
+        .then(response => {
+          history.push(`/course/${this.context.uid}/${response.id}/edit`);
+          //name: response.title,
+          //id: response.id
+        })
+
+        this.close();
     }
       
     render() {
@@ -87,6 +112,11 @@ class Drawer extends Component {
                                 )
                             }
                             return (
+                                v[2] ?
+                                <a className={styles.item} onClick={this.createCourse}>
+                                    {v[0]}
+                                </a>
+                                :
                                 <Link key={i} to={v[1] || v[0]} className={styles.item} onClick={this.onClickDrawerItem}>
                                     {v[0]}
                                 </Link>
@@ -100,4 +130,6 @@ class Drawer extends Component {
 }
 
 Drawer.propTypes = {};
+Drawer.contextType = MainContext;
+
 export default Drawer;
