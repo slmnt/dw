@@ -68,46 +68,26 @@ class UserInfo extends Component {
     }
     componentDidMount(){
 
-        axios.get('/user/').then(response => {
-            // console.log(response.data)
-            this.setState({userinfo: response.data})
-        }).catch((e) => {
-            //this.props.history.push('login')
-        })
-
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
-            axios.get('/mypagecourseget/').then(response => {
-                this.setState({
-                    courses: response.data
-                })
-            }).catch((e) => {//this.props.history.push('login')
-            })
-            axios.get('/mypageuserget/').then(response => {
-                // console.log(response.data)
-                this.setState({userinfo: response.data})
-            }).catch((e) => {//this.props.history.push('login')
-            })
-
+            api.get('/api/mypagecourseget/').then(response => response.json())
+            .then(response => this.setState({courses: response}))
+            
+            api.get('/api/mypageuserget/').then(response => response.json())
+            .then(response => this.setState({userinfo: response}))
     
         }else{
             //user search
-            axios.post('/searchuserinfo/',{
+            api.ex_post('/api/searchuserinfo/',{
                 name: this.props.match.params.id
-            }).then(response => {
-                this.setState({userinfo: response.data})
-            }).catch((e) => {
-                //this.props.history.push('login')
-            })
+            }).then(response => response.json())
+            .then(response => this.setState({userinfo: response}))
+            
 
-
-            axios.post('/getusercourseinfo/',{
+            api.ex_post('/api/getusercourseinfo/',{
                 name: this.props.match.params.id
-            }).then(response => {
-                this.setState({
-                    courses: response.data
-                })
-            })
+            }).then(response => response.json())
+            .then(response => this.setState({courses: response}))            
         }
     }
     getUserData = () => {
