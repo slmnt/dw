@@ -18,9 +18,10 @@ class CourseSearch extends Component {
         super(props);
 
         this.state = {
-            keyword: 'test',
+            keyword: '',
             context: [],
             courses: [
+                /*
                 {
                     id: 1,
                     title: "course1",
@@ -54,6 +55,7 @@ class CourseSearch extends Component {
                     authorAvatar: "",
                     authorId: 12
                 }
+                */
             ],
         }
 
@@ -96,7 +98,8 @@ class CourseSearch extends Component {
                     </div>
                     <div className={styles["search-container"]}>
                         <span className={styles["search-box-container"]}>
-                            <input 
+                            <input
+                                placeholder="..."
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
@@ -125,9 +128,11 @@ class CourseSearch extends Component {
                 </div>
                 
                 <div className={styles["container"]}>
+                    {/*
                     <div className={styles["ad-container"]}>
                         <Ad/>
                     </div>
+                    */}
                     <CourseList courses={this.state.courses} />
                 </div>
             </div>

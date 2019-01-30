@@ -1,7 +1,7 @@
 /* container: course */
 .course-container {
   flex: 1 1 auto;
-  padding: 0 5%;
+  padding: 0 15%;
 }
 .course-item {
   display: flex;
@@ -71,4 +71,12 @@
 .course-item-date {
   color: var(--nice-border-color);
   font-size: 0.8em;
+}
+
+
+
+@media (min-width: 1300px) {
+  .course-container {
+    padding: 0 20%;
+  }
 }

@@ -10,6 +10,7 @@ import TestIFrame from '../TestIFrame';
 
 
 import api from '../../modules/api';
+import history from '../../modules/history';
 import {MainContext} from '../../contexts/main';
 
 import styles from './CourseGet.module.css';
@@ -33,36 +34,26 @@ class CourseGet extends Component {
             courseId: this.props.match.params.id,
             chapterId: this.props.match.params.ch,
 
-            courseName: "coursename",
+            courseName: "",
             
-            chapterName: "chaptername",
-            chapterDesc: "chapterdesc",
+            chapterName: "",
+            chapterDesc: "",
 
             showSlide: true,
             currentSlideId: -1,
             slides: [
-                "slide11",
-                "slide22",
-                "slide33",
+                "",
+                "",
+                "",
             ],
+
+            showAnswer: false,
 
             files: {
 
             },
             directory: { // directory structure
                 children: [
-                  {
-                    name: "src",
-                    children: [
-                      {
-                        name: "index.js"
-                      }
-                    ]
-                  },
-                  { name: "app.js" },
-                  { name: "app1.js" },
-                  { name: "app2.js" },
-                  { name: "app3.js" },
                 ]
             }   
         }
@@ -84,11 +75,13 @@ class CourseGet extends Component {
             cid:this.state.chapterId
         }).then(api.parseJson)
         .then(response => {
-            this.setState({
-                courseName: response.root,
-                chapterName: response.title,
-                chapterDesc: response.description
-            })
+            if (response) {
+                this.setState({
+                    courseName: response.root,
+                    chapterName: response.title,
+                    chapterDesc: response.description
+                })
+            }
         })
         
 
@@ -241,19 +234,29 @@ class CourseGet extends Component {
 
     }
 
+    goToChaper = (v) => {
+        let cid = parseInt(this.state.chapterId) + parseInt(v);
+        if (v >= 0) {
+            history.push(`/course/${this.context.uid}/${this.state.courseId}/${cid}`);
+        }
+    }
+    showAnswer = (v) => {
+        this.setState({showAnswer: v});
+    }
+
     render() {
         return (
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
                     <div className={styles["header-title"]}>
-                        <div><Link to={`/course/${this.state.courseId}`}>{this.state.courseName}</Link></div>
+                        <div><Link to={`/course/${this.context.uid}/${this.state.courseId}`}>{this.state.courseName}</Link></div>
                         <div>/</div>
-                        <div><Link to={`/course/${this.state.courseId}/${this.state.chapterId}`}>{this.state.chapterName}</Link></div>
+                        <div>{this.state.chapterName}</div>
                     </div>
                     <div className={styles["header-controls"]}>
-                        <div className={styles["header-controls-ans"]}>答えを見る</div>
-                        <div className={styles["header-controls-btn"]}>前のチャプター</div>
-                        <div className={styles["header-controls-btn"]}>次のチャプター</div>
+                        <div className={styles["header-controls-ans"]} onClick={() => this.showAnswer(true)}>答えを見る</div>
+                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(-1)}>前のチャプター</div>
+                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(1)}>次のチャプター</div>
                     </div>
                 </div>
 

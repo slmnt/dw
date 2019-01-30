@@ -433,12 +433,13 @@ class Editor extends Component {
           }
         ],
         files: { // text or url
-          "/src/index.js": "const a = 0;",
-          "/app.js": "const あこどぉう = 'ういえおｋ';"
+          //"/src/index.js": "const a = 0;",
+          //"/app.js": "const あこどぉう = 'ういえおｋ';"
         },
         directory: { // directory structure
           name: "", // root (名前なし)
           children: [
+            /*
             {
               name: "src",
               children: [
@@ -451,6 +452,7 @@ class Editor extends Component {
             { name: "app1.js" },
             { name: "app2.js" },
             { name: "app3.js" },
+            */
           ]
         },
       },
@@ -518,7 +520,7 @@ class Editor extends Component {
     window.clearInterval(this.slideUpdateTimer);
   }
 
-  getDirtree = (root,path,base_url) => {
+  getDirtree = (root, path, base_url) => {
     var set = RegExp(/\w*\.\w*/);
     if(set.test(path)){
       let text = this.getTabValue(path)
@@ -568,14 +570,17 @@ class Editor extends Component {
     let cmds = cmd.split(' ')
     let base_url = "Course/" + this.state.id
     // console.log(cmds,base_url)
-
+    
+    this.executeCode(cmds, base_url);
+  }
+  executeCode = (cmds, base_url) => {
     switch(cmds[0]){
       case "javac":
       case "gcc":
       case "ruby":
       case "python":
         //Upload Dir tree, Running this cmd
-        this.getDirtree(this.state.courseData.directory,'',base_url)
+        this.getDirtree(this.state.courseData.directory, '', base_url)
         let formData = new FormData();
         formData.append('cmd',cmds[1])
         formData.append('url',base_url)
@@ -787,9 +792,12 @@ class Editor extends Component {
   }
   removeChapter = (ch) => {
     if (!this.state.courseData) return;
+    
     let id = typeof ch === 'number' ? ch : this.state.courseData.chapters.indexOf(ch);
+    let currentId = this.state.courseData.chapters.indexOf(this.state.currentChapter);
     this.state.courseData.chapters.splice(id, 1);
-    this.setState({courseData: this.state.courseData}, ch == this.state.currentChapter && (() => {
+
+    this.setState({courseData: this.state.courseData}, ch === currentId && (() => {
       const c = this.getChapter(0);
       if (c) this.openChapter(c);
     }) || undefined);
@@ -843,9 +851,12 @@ class Editor extends Component {
   }
   removeSlide = (slide) => {
     if (!this.state.currentChapter) return;
+    
     let id = typeof slide === 'number' ? slide : this.state.currentChapter.slides.indexOf(slide);
+    let currentId = this.state.currentChapter.slides.indexOf(this.state.currentSlide);
     this.state.currentChapter.slides.splice(id, 1);
-    this.setState({courseData: this.state.courseData}, slide == this.state.currentSlide && (() => {
+    
+    this.setState({courseData: this.state.courseData}, slide == currentId && (() => {
       const c = this.getSlide(0);
       this.openSlide(c);
 
@@ -1125,6 +1136,10 @@ class Editor extends Component {
 
                 runterminal={this.runTerminal}
               />
+            </div>
+            <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
+              答えを記入
+              <TextArea />
             </div>
           </div>
 

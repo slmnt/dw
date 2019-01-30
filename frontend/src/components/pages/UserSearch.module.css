@@ -89,7 +89,7 @@
     align-content: flex-start;
 }
 .course-item {
-    flex: 1 1 50%;
+    flex: 1 1 100%;
     box-sizing: border-box;
 
     display: flex;
@@ -165,3 +165,11 @@
 
 
 
+
+
+
+@media (min-width: 1300px) {
+    .course-container {
+        padding: 0 15%;
+    }
+}
