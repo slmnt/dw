@@ -113,7 +113,7 @@ class Drawer extends Component {
                             }
                             return (
                                 v[2] ?
-                                <a className={styles.item} onClick={this.createCourse}>
+                                <a key={i} className={styles.item} onClick={this.createCourse}>
                                     {v[0]}
                                 </a>
                                 :

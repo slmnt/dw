@@ -192,13 +192,14 @@ class TextEditor extends React.Component {
   loadTabState(tab) {
       if (!tab) return;
 
-      if (tab.value) this.editor.setValue(tab.value);
+      this.editor.setValue(tab.value || "");
       if (tab.scroll) this.editor.setScrollPosition(tab.scroll);
       if (tab.cursor) this.editor.setPosition(tab.cursor);
       if (tab.selections) this.editor.setSelections(tab.selections);
   }
   activateTab(path) {
       if (path === this.state.currentTab) return;
+
 
       let tab = this.getTab(path);
       if (!tab) return;
@@ -309,7 +310,15 @@ class TextEditor extends React.Component {
 
       tab.path = newPath.join('/');
       tab.name = name;
-      this.setState({tabs: this.state.tabs});
+
+      console.log(path, this.state.currentTab)
+
+      this.setState({tabs: this.state.tabs}, () => {
+        console.log(path, this.state.currentTab)
+        if (path === this.state.currentTab) {
+            this.activateTab(tab.path);
+        }
+      });
   }
   onSave = () => {
       this.props.onSaveTab();
