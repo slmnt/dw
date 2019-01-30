@@ -83,7 +83,7 @@ class UserSearch extends Component {
                     <div className={styles["search-container"]}>
                         <span className={styles["search-box-container"]}>
                             <input 
-                                placeholder="キーワードを入力してください..."
+                                placeholder="..."
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 

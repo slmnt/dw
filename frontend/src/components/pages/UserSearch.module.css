@@ -94,7 +94,9 @@
 
     display: flex;
 
-    padding: 0.5em 0em;
+    padding: 0.5em 1.5em;
+    margin-bottom: 1.2em;
+    border: 1px solid var(--main-color);
 
     font-size: 1.2em;
 }
