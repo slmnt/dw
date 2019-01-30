@@ -43,6 +43,8 @@
   padding: 0.5em 2em;
   cursor: pointer;
   color: white;
+
+  margin: 0 0 0 auto;
 }
 .start-button {
   border-radius: 0.5em;
@@ -188,3 +190,9 @@
   text-align: right;
 }
 
+
+@media (min-width: 1300px) {
+  .container {
+    width: 60%;
+  }
+}

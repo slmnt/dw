@@ -47,11 +47,27 @@ function fetch_post(url,body,timeout=10000) {
   ]);
 }
 
+function parseJson(response) {
+  if (!response.ok) {
+    console.log("api network error:", response.status, response.statusText, response);
+    return;
+  }
+
+  let r;
+  try {
+    r = response.json();
+  } catch (e) {
+    console.log(e)
+  }
+  return r;
+}
+
 
 export default {
   post: (url, option) => {return fetch_timeout('POST', url, option)},
   ex_post: (url, body) => {return fetch_post(url,body)},
   get: (url, option, nocokie) => {return fetch_extend('GET', url, option, nocokie)},
-  fetch: fetch_extend
+  fetch: fetch_extend,
+  parseJson,
 }
 

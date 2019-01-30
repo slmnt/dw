@@ -20,9 +20,10 @@ class UserSearch extends Component {
         super(props);
 
         this.state = {
-            keyword: 'test',
+            keyword: '',
             context: [],
             users: [
+                /*
                 {
                     root: "Dr. MOnta",
                     profile: "croues1desc",
@@ -44,6 +45,7 @@ class UserSearch extends Component {
                     avatar: "",
                     id: 12
                 },
+                */
             ],
         }
 
@@ -66,7 +68,7 @@ class UserSearch extends Component {
 
     onSearch = (e) => {
        let path = '/api/searchuser/' + this.state.keyword
-       api.get(path).then(response => response.json())
+       api.get(path).then(api.parseJson)
        .then(response => this.setState({users: response})).catch()
 
     }
@@ -81,6 +83,7 @@ class UserSearch extends Component {
                     <div className={styles["search-container"]}>
                         <span className={styles["search-box-container"]}>
                             <input 
+                                placeholder="..."
                                 onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.onSearch(e)} 
                                 className={styles["search-box"]} 
                                 value={this.state.keyword} 
@@ -97,9 +100,11 @@ class UserSearch extends Component {
                 </div>
                 
                 <div className={styles["container"]}>
+                    {/*
                     <div className={styles["ad-container"]}>
                         <Ad/>
                     </div>
+                    */}
                     <div className={styles["course-container"]}>
                         {
                             this.state.users.map((v, i) => {

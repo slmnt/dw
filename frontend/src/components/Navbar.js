@@ -47,7 +47,7 @@ class NavBar extends React.Component {
 
     api.post('/api/createcourse/',{
       body: formData
-    }).then(response => response.json())
+    }).then(api.parseJson)
     .then(response => {
       history.push(`/course/${this.context.uid}/${response.id}/edit`);
       //name: response.title,
@@ -103,6 +103,9 @@ class NavBar extends React.Component {
                 </React.Fragment>
               :
                 <React.Fragment>
+                  <div>
+                    {this.context.uid}
+                  </div>
                   <div className={styles.avatar} onClick={this.showPopup}>
                   </div>
                   <Arrow onClick={this.showPopup} />

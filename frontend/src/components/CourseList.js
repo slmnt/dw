@@ -5,6 +5,7 @@ import styles from './CourseList.module.css';
 
 import axios from 'axios';
 import api from '../modules/api';
+import {MainContext} from '../contexts/main';
 
 import { ReactComponent as FavIcon } from '../img/fav.svg';
 
@@ -33,7 +34,7 @@ class CourseList extends Component {
                             </div>
                             <div className={styles["course-item-main"]}>
                                 <div className={styles["course-item-top"]}>
-                                    <Link to={"/course/" + v.id} className={styles["course-item-title"]}>
+                                    <Link to={`/course/${this.context.uid}/${v.id}`} className={styles["course-item-title"]}>
                                         {v.title}
                                     </Link>
                                     <Link to={"/user/" + v.authorId} className={styles["course-item-user"]}>
@@ -62,5 +63,6 @@ class CourseList extends Component {
         );
   	}
 }
+CourseList.contextType = MainContext;
 
 export default CourseList;

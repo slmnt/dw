@@ -11,6 +11,7 @@ import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as search from 'xterm/lib/addons/search/search';
 import * as webLinks from 'xterm/lib/addons/webLinks/webLinks';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
+import api from '../modules/api';
 
 let Terminal = xterm.Terminal;
 Terminal.applyAddon(attach);
@@ -183,6 +184,7 @@ class Term extends React.Component {
         console.log(term.cmd);
 
         this.runCommand(term.cmd);
+
         term.pushHistory(term.cmd);
         term.cmd = '';
         term.historyIndex = -1;

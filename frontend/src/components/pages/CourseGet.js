@@ -10,6 +10,9 @@ import TestIFrame from '../TestIFrame';
 
 
 import api from '../../modules/api';
+import history from '../../modules/history';
+import {MainContext} from '../../contexts/main';
+
 import styles from './CourseGet.module.css';
 
 import { ReactComponent as PrevIcon } from '../../img/arrow-back.svg';
@@ -31,36 +34,26 @@ class CourseGet extends Component {
             courseId: this.props.match.params.id,
             chapterId: this.props.match.params.ch,
 
-            courseName: "coursename",
+            courseName: "",
             
-            chapterName: "chaptername",
-            chapterDesc: "chapterdesc",
+            chapterName: "",
+            chapterDesc: "",
 
             showSlide: true,
             currentSlideId: -1,
             slides: [
-                "slide11",
-                "slide22",
-                "slide33",
+                "",
+                "",
+                "",
             ],
+
+            showAnswer: false,
 
             files: {
 
             },
             directory: { // directory structure
                 children: [
-                  {
-                    name: "src",
-                    children: [
-                      {
-                        name: "index.js"
-                      }
-                    ]
-                  },
-                  { name: "app.js" },
-                  { name: "app1.js" },
-                  { name: "app2.js" },
-                  { name: "app3.js" },
                 ]
             }   
         }
@@ -75,18 +68,21 @@ class CourseGet extends Component {
          */
 
         this.openIntro();
-
+        
         // console.log(this.state.courseId)
         api.ex_post('/api/getchapterinfo/',{
             id: this.state.courseId,
-            cid:this.state.chapterId}).then(response => response.json())
-            .then(response => {
+            cid:this.state.chapterId
+        }).then(api.parseJson)
+        .then(response => {
+            if (response) {
                 this.setState({
                     courseName: response.root,
                     chapterName: response.title,
                     chapterDesc: response.description
                 })
-            })
+            }
+        })
         
 
         //Done
@@ -101,7 +97,42 @@ class CourseGet extends Component {
             this.setState({slides: s})
         }).catch(e => console.log(e))
 
+
+        //
+        api.ex_post('/api/usercoursetree/',{
+            url: `/Course/${this.state.courseId}/`,
+        }).then(api.parseJson).then(response => {
+            if (!response) return;
+            Object.assign(this.state.files, response);
+            console.log(this.state.files)
+            this.importDir(response);
+            this.setState({files: this.state.files})
+        });
     }
+
+    importDir = (files) => {
+        for (let path in files) {
+            const list = path.split('/');
+            let obj = this.state.directory;
+            for (const dir of list) {
+                if (dir !== '') {
+                    let c = obj.children.find(v => v.name === dir);
+                    if (!c) {
+                        let newFile = { name: dir };
+                        if (dir !== list[list.length - 1]) {
+                            newFile.children = [];
+                        }
+                        
+                        obj.children.push(newFile);
+                        c = obj.children[obj.children.length - 1];
+                    }
+                    obj = c;
+                }
+            }
+        }
+        //console.log(this.state.directory)
+    }
+
 
     showSlide = () => {
         this.setState({showSlide: true});
@@ -198,10 +229,21 @@ class CourseGet extends Component {
         this.window.current.renameTab(path, name);
     }
     getContent = (path) => {
+        console.log(this.state.files[path])
         return this.state.files[path];
     }
     onSaveTab = () => {
 
+    }
+
+    goToChaper = (v) => {
+        let cid = parseInt(this.state.chapterId) + parseInt(v);
+        if (v >= 0) {
+            history.push(`/course/${this.context.uid}/${this.state.courseId}/${cid}`);
+        }
+    }
+    showAnswer = (v) => {
+        this.setState({showAnswer: v});
     }
 
     render() {
@@ -209,14 +251,14 @@ class CourseGet extends Component {
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
                     <div className={styles["header-title"]}>
-                        <div><Link to={`/course/${this.state.courseId}`}>{this.state.courseName}</Link></div>
+                        <div><Link to={`/course/${this.context.uid}/${this.state.courseId}`}>{this.state.courseName}</Link></div>
                         <div>/</div>
-                        <div><Link to={`/course/${this.state.courseId}/${this.state.chapterId}`}>{this.state.chapterName}</Link></div>
+                        <div>{this.state.chapterName}</div>
                     </div>
                     <div className={styles["header-controls"]}>
-                        <div className={styles["header-controls-ans"]}>答えを見る</div>
-                        <div className={styles["header-controls-btn"]}>前のチャプター</div>
-                        <div className={styles["header-controls-btn"]}>次のチャプター</div>
+                        <div className={styles["header-controls-ans"]} onClick={() => this.showAnswer(true)}>答えを見る</div>
+                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(-1)}>前のチャプター</div>
+                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(1)}>次のチャプター</div>
                     </div>
                 </div>
 
@@ -285,5 +327,7 @@ class CourseGet extends Component {
 }
 
 CourseGet.propTypes = {};
+CourseGet.contextType = MainContext;
+
 
 export default CourseGet;

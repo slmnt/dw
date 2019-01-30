@@ -14,8 +14,9 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 
-
+import {MainContext} from '../../contexts/main';
 import api from '../../modules/api'
+import history from '../../modules/history';
 
 import logo from '../../img/logo.svg';
 
@@ -415,7 +416,7 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      id: this.props.id,
+      id: this.props.match.params.id,
       courseData: {
         name: "testcoure",
         desc: "",
@@ -432,12 +433,13 @@ class Editor extends Component {
           }
         ],
         files: { // text or url
-          "/src/index.js": "const a = 0;",
-          "/app.js": "const あこどぉう = 'ういえおｋ';"
+          //"/src/index.js": "const a = 0;",
+          //"/app.js": "const あこどぉう = 'ういえおｋ';"
         },
         directory: { // directory structure
           name: "", // root (名前なし)
           children: [
+            /*
             {
               name: "src",
               children: [
@@ -450,6 +452,7 @@ class Editor extends Component {
             { name: "app1.js" },
             { name: "app2.js" },
             { name: "app3.js" },
+            */
           ]
         },
       },
@@ -474,32 +477,24 @@ class Editor extends Component {
     this.loadCourse(this.state.courseData); // テスト test
     
     this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
-    /*
-    at this point, create course and get course id/title
-    this.state.name = response.title
-    this.state.id = response.id
-    */
-    this.setState({
-      id: this.props.match.params.id
-    })
-    // console.log(this.props.match.params)
-    // console.log(this.props)
 
+
+    //
     var u = '/getusercourseid/';
-    axios.post(u,{id:this.props.match.params.id}).then(response => {
+    axios.post(u, {id:this.state.id}).then(response => {
       // Course
       console.log(response.data)
     }).catch(e => console.log(e))
 
     let chapters = []
-    u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+    u = '/getCourseInfoContentsInfo/' + this.state.id
     axios.get(u).then(response => {
       // Chapter
  
       chapters = response.data
       for(let c of chapters){
         axios.post('/getusercourseindex/', {
-          id: this.props.match.params.id,
+          id: this.state.id,
           cid: c.cid
         }).then(response => {
             //Slide
@@ -510,8 +505,14 @@ class Editor extends Component {
   
     }).catch(e => console.log(e))
 
-    /*
-    */
+    api.ex_post('/api/usercoursetree/',{
+      url: `/Course/${this.state.id}/`,
+    }).then(api.parseJson).then(response => {
+        if (!response) return;
+        Object.assign(this.state.courseData.files, response);
+        this.importDir(response);
+        this.setState({files: this.state.courseData.files})
+    });
 
 
   }
@@ -519,7 +520,7 @@ class Editor extends Component {
     window.clearInterval(this.slideUpdateTimer);
   }
 
-  getDirtree = (root,path,base_url) => {
+  getDirtree = (root, path, base_url) => {
     var set = RegExp(/\w*\.\w*/);
     if(set.test(path)){
       let text = this.getTabValue(path)
@@ -539,6 +540,28 @@ class Editor extends Component {
       }
     }
   }
+  importDir = (files) => {
+    for (let path in files) {
+        const list = path.split('/');
+        let obj = this.state.directory;
+        for (const dir of list) {
+            if (dir !== '') {
+                let c = obj.children.find(v => v.name === dir);
+                if (!c) {
+                    let newFile = { name: dir };
+                    if (dir !== list[list.length - 1]) {
+                        newFile.children = [];
+                    }
+                    
+                    obj.children.push(newFile);
+                    c = obj.children[obj.children.length - 1];
+                }
+                obj = c;
+            }
+        }
+    }
+      //console.log(this.state.directory)
+  }
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
   }
@@ -547,14 +570,17 @@ class Editor extends Component {
     let cmds = cmd.split(' ')
     let base_url = "Course/" + this.state.id
     // console.log(cmds,base_url)
-
+    
+    this.executeCode(cmds, base_url);
+  }
+  executeCode = (cmds, base_url) => {
     switch(cmds[0]){
       case "javac":
       case "gcc":
       case "ruby":
       case "python":
         //Upload Dir tree, Running this cmd
-        this.getDirtree(this.state.courseData.directory,'',base_url)
+        this.getDirtree(this.state.courseData.directory, '', base_url)
         let formData = new FormData();
         formData.append('cmd',cmds[1])
         formData.append('url',base_url)
@@ -574,16 +600,24 @@ class Editor extends Component {
     // sort slides
     this.sortSlides();
 
+    //
+    let list = [];
+
+    console.log("course saving");
+
+
     // update coursetitle
     let formData = new FormData();
     formData.append('id',this.state.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
-    api.post('/api/updatecourse/',{
-      body: formData
-    }).then(response => response.json())
-    .then(response => console.log(response))
-    .catch(error => console.error('Error:', error));
+    list.push(
+      api.post('/api/updatecourse/',{
+        body: formData
+      }).then(api.parseJson)
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error))
+    )
 
     let idx = 0
     for(let c of chapters){
@@ -597,11 +631,13 @@ class Editor extends Component {
       formData.append('cid',idx)
       formData.append('title',c.name)
       formData.append('desc',c.desc)
-      api.post('/api/craetechapter/',{
-        body: formData
-      }).then(response => response.json())
-      .then(response => console.log(response))
-      .catch(error => console.error('Error:', error));
+      list.push(
+        api.post('/api/craetechapter/',{
+          body: formData
+        }).then(api.parseJson)
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error))
+      );
 
       for(let s of slides){
         //at this point, craete slides
@@ -614,17 +650,25 @@ class Editor extends Component {
         formData.append('sid',jdx)
         formData.append('title',s.name)
         formData.append('context',s.text)
-        api.post('/api/createslide/',{
-          body: formData
-        }).then(response => response.json())
-        .then(response => console.log(response))
-        .catch(error => console.error('Error:', error));
-
+        list.push(
+          api.post('/api/createslide/',{
+            body: formData
+          }).then(api.parseJson)
+          .then(response => console.log(response))
+          .catch(error => console.error('Error:', error))
+        );
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
       // console.log("runnnig")
     }
+
+
+    Promise.all(list).then(() => {
+      console.log("course saved");
+      history.push(`/course/${this.context.uid}/${this.state.id}`);
+    });
+
   }  
 
   moveBox = (from, to) => {
@@ -748,9 +792,12 @@ class Editor extends Component {
   }
   removeChapter = (ch) => {
     if (!this.state.courseData) return;
+    
     let id = typeof ch === 'number' ? ch : this.state.courseData.chapters.indexOf(ch);
+    let currentId = this.state.courseData.chapters.indexOf(this.state.currentChapter);
     this.state.courseData.chapters.splice(id, 1);
-    this.setState({courseData: this.state.courseData}, ch == this.state.currentChapter && (() => {
+
+    this.setState({courseData: this.state.courseData}, ch === currentId && (() => {
       const c = this.getChapter(0);
       if (c) this.openChapter(c);
     }) || undefined);
@@ -804,9 +851,12 @@ class Editor extends Component {
   }
   removeSlide = (slide) => {
     if (!this.state.currentChapter) return;
+    
     let id = typeof slide === 'number' ? slide : this.state.currentChapter.slides.indexOf(slide);
+    let currentId = this.state.currentChapter.slides.indexOf(this.state.currentSlide);
     this.state.currentChapter.slides.splice(id, 1);
-    this.setState({courseData: this.state.courseData}, slide == this.state.currentSlide && (() => {
+    
+    this.setState({courseData: this.state.courseData}, slide == currentId && (() => {
       const c = this.getSlide(0);
       this.openSlide(c);
 
@@ -1087,6 +1137,10 @@ class Editor extends Component {
                 runterminal={this.runTerminal}
               />
             </div>
+            <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
+              答えを記入
+              <TextArea />
+            </div>
           </div>
 
         </div>
@@ -1095,5 +1149,5 @@ class Editor extends Component {
     );
   }
 }
-
+Editor.contextType = MainContext;
 export default Editor;

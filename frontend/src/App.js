@@ -127,7 +127,7 @@ class App extends React.Component {
     formData.append('url','Course/1')
     api.post('/api/test',{
       body: formData      
-    }).then(response => response.json())
+    }).then(api.parseJson)
     .then(response => console.log('Success:', response))
 
     this.setState({
@@ -229,7 +229,7 @@ class App extends React.Component {
 
   deleteUser = () => {
     api.post('/api/deleteuser/',{
-    }).then(response => response.json())
+    }).then(api.parseJson)
     .then(response => console.log('Success:', response))
   }
 
@@ -298,8 +298,8 @@ class App extends React.Component {
                   <Route path="/search/course"  component={CourseSearch}/>
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
-                  <Route path="/course/:id/:ch"  component={CourseGet}/>
-                  <Route path="/course/:id"  component={CourseInfo}/>
+                  <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
+                  <Route path="/course/:name/:id"  component={CourseInfo}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>
