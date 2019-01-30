@@ -682,8 +682,10 @@ class Editor extends Component {
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error))
       );
-
+      
+      console.log("slide:", slides)
       for(let s of slides){
+        
         //at this point, craete slides
         //name, desc
         jdx += 1
@@ -692,7 +694,7 @@ class Editor extends Component {
         formData.append('id',this.state.id)
         formData.append('cid',idx)
         formData.append('sid',jdx)
-        formData.append('title',s.name)
+        formData.append('title',s.name || "title")
         formData.append('context',s.text)
         list.push(
           api.post('/api/createslide/',{
@@ -915,12 +917,15 @@ class Editor extends Component {
     let currentId = this.state.currentChapter.slides.indexOf(this.state.currentSlide);
     this.state.currentChapter.slides.splice(id, 1);
     
-    this.setState({courseData: this.state.courseData}, slide == currentId && (() => {
-      const c = this.getSlide(0);
-      this.openSlide(c);
+    this.setState({courseData: this.state.courseData}, () => {
+      if (slide == currentId) {
+        const c = this.getSlide(0);
+        this.openSlide(c); 
+      }
 
       this.sortSlides();
-    }));
+      this.applySlideChanges();
+    });
   }
   applySlideChanges = () => {
     if (!this.slideEditor || !this.state.currentSlide || !this.slideEditor.current.slideInitialized) return;
