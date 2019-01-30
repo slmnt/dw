@@ -715,26 +715,28 @@ class CourseUpload(viewsets.ModelViewSet):
 
 def getTree(path,json,currentpath):
 
-    for data in os.listdir(path):
-        if os.path.isdir(os.path.join(path, data)):
-            new = os.path.join(path, data)
-            getTree(new,json,currentpath+'/'+data)
-        elif data is None :
-            pass
-        else:
-            context = ''
-            with open(os.path.join(path, data),'rb') as f:
-                while True:
-                    line = f.readline()
-                    if not line:
-                        break
-                    context += line.decode('utf-8')
-            #print(os.path.join(path, data))
-            #print(currentpath+'/'+str(data))
-            p = currentpath+'/'+str(data)
-            json[p] = context
-            #print(context)
-
+    try:
+        for data in os.listdir(path):
+            if os.path.isdir(os.path.join(path, data)):
+                new = os.path.join(path, data)
+                getTree(new,json,currentpath+'/'+data)
+            elif data is None :
+                pass
+            else:
+                context = ''
+                with open(os.path.join(path, data),'rb') as f:
+                    while True:
+                        line = f.readline()
+                        if not line:
+                            break
+                        context += line.decode('utf-8')
+                #print(os.path.join(path, data))
+                #print(currentpath+'/'+str(data))
+                p = currentpath+'/'+str(data)
+                json[p] = context
+                #print(context)
+    except:
+        return []
     return json
 
 
@@ -746,11 +748,13 @@ class getUserTree(viewsets.ModelViewSet):
         data = {}
         target = request.data['url'] 
         path = STORAGE + str(request.user)
-        for p in target.split('/'):
-            path = os.path.join(path,p)
-
-        data = getTree(path,data,'')
-        json_data = json.dumps(data)
+        try:
+            for p in target.split('/'):
+                path = os.path.join(path,p)
+            data = getTree(path,data,'')
+            json_data = json.dumps(data)
+        except:
+            return []
         return Response(data=data,status=status.HTTP_200_OK)
 
 class SearchCourse(generics.ListAPIView):
