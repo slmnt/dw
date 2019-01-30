@@ -17,6 +17,10 @@ import { ReactComponent as PeopleIcon } from '../../img/people.svg';
 import { ReactComponent as GlobeIcon } from '../../img/globe.svg';
 import { ReactComponent as ChatIcon } from '../../img/chat.svg';
 
+import { ReactComponent as EditIcon } from '../../img/build.svg';
+import { ReactComponent as ShareIcon } from '../../img/share.svg';
+import { ReactComponent as PCIcon } from '../../img/computer.svg';
+
 
 class Main extends Component {
   static propTypes = {
@@ -105,10 +109,12 @@ class Main extends Component {
                 ブラウザ上で直感的に作成
               </div>
             </div>
+            <EditIcon className={styles["slide-block-body"]} style={{width: "10em"}}/>
           </div>
           <div className={styles["slide-block-right"]}>
             <div className={styles["slide-block-bg-right"]}>
             </div>
+            <ShareIcon className={styles["slide-block-body"]} style={{width: "10em"}}/>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
                 2. コースを公開
@@ -129,6 +135,7 @@ class Main extends Component {
                 全てブラウザ上
               </div>
             </div>
+            <PCIcon className={styles["slide-block-body"]} style={{width: "10em"}}/>
           </div>
 
 
