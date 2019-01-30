@@ -830,6 +830,20 @@ class UserinfoCreate(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
+
+class CreateComment(viewsets.ModelViewSet):
+
+    def post(self, request):
+        id = request.data['id']
+        comment = request.data['comment']
+        target = UserCourse.objects.get(id=id)
+        new = UserCourseComment(root=target,auth=request.user,comment=comment)
+        new.save()
+        #UserCourseComment
+        queryset = UserCourseComment.objects.all().filter(root=target).order_by('-createat')
+        serializers = UserCourseCommentSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
 #Remain apis
 # User Create api
 # User Review create

@@ -100,7 +100,9 @@ getchapterinfo = getChapterinfo.as_view({
 createuserinfo = UserinfoCreate.as_view({
     'post': 'post'
 })
-
+createcomment = CreateComment.as_view({
+    'post': 'post'
+})
 urlpatterns = [
 
     #User Authentic
@@ -156,7 +158,7 @@ urlpatterns = [
 
     #Course Search
     path('searchcourse/<text>/<type>',SearchCourse.as_view()),
-
+    path('createcomment/',createcomment),
 
     #UserSearch
     path('searchuser/<text>',SearchUser.as_view()),

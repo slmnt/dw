@@ -72,7 +72,7 @@ class Courseinfo extends Component {
 
     sendReview = () => {
 
-        api.ex_post('/api/test',{
+        api.ex_post('/api/createcomment/',{
             id: this.props.match.params.id,
             comment: this.reviewTextarea.current.value
         }).then(response => response.json())
