@@ -805,6 +805,14 @@ class SearchUserinfoget(viewsets.ModelViewSet):
         serializers = UserInfoSerializer(queryset)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
+class getChapterinfo(viewsets.ModelViewSet):
+
+    def post(self, request):
+        target1 = UserCourse.objects.get(id=request.data['id'])
+        queryset = UserCourseContent.objects.get(root=target1,cid=request.data['cid'])
+        serializers = UserCourseContentSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
 
 
 #Remain apis
@@ -819,8 +827,8 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        user = User.objects.get(id=request.data['name'])
-        queryset = UserInfo.objects.get(root=user)
-        serializers = UserInfoSerializer(queryset)
-        return Response(data=serializers.data,status=status.HTTP_200_OK)
+        data = {}
+        data['key'] = 'value'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 

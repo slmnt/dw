@@ -28,7 +28,7 @@ function fetch_timeout(method, url, option, nocookie,timeout=10000) {
   ]);
 }
 
-function fetch_post(method, url,body,timeout=10000) {
+function fetch_post(url,body,timeout=10000) {
   let cookies = cookie.parse(document.cookie);
   let formData = new FormData();
   for(let dict in body){
@@ -50,6 +50,7 @@ function fetch_post(method, url,body,timeout=10000) {
 
 export default {
   post: (url, option) => {return fetch_timeout('POST', url, option)},
+  ex_post: (url, body) => {return fetch_post(url,body)},
   get: (url, option, nocokie) => {return fetch_extend('GET', url, option, nocokie)},
   fetch: fetch_extend
 }
