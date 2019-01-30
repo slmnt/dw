@@ -589,7 +589,7 @@ class Editor extends Component {
   importDir = (files) => {
     for (let path in files) {
         const list = path.split('/');
-        let obj = this.state.directory;
+        let obj = this.state.courseData.directory;
         for (const dir of list) {
             if (dir !== '') {
                 let c = obj.children.find(v => v.name === dir);
