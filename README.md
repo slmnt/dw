@@ -27,3 +27,25 @@ fix login flow
    
 pip install   
 pip install pycryptodome   
+   
+
+# Project Members   
+ - Monta   
+ - Ikeda   
+ - Kang
+
+# Version   
+ * 0.1.0    
+ - Feature
+    - Core
+        Course Management System
+        User Managemenet System
+        User Authentication System
+        Source Code Excute System
+        Docker Excute System
+        Local File Storage System
+    - After Patch
+        Help System
+        User Communication System
+        Ad Management System
+        Fix Bugs

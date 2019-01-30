@@ -183,7 +183,7 @@ class App extends React.Component {
         this.state.data.uid = response.data;
         this.setState({ data: this.state.data });
 
-        console.log("logged in as: ", this.state.data.uid);
+        // console.log("logged in as: ", this.state.data.uid);
         if (isRoot) {
           //sessionStorage.setItem('key','test')
         }

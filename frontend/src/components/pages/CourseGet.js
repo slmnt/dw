@@ -36,7 +36,7 @@ class CourseGet extends Component {
             chapterName: "chaptername",
             chapterDesc: "chapterdesc",
 
-            showSlide: false,
+            showSlide: true,
             currentSlideId: -1,
             slides: [
                 "slide11",
@@ -65,7 +65,6 @@ class CourseGet extends Component {
             }   
         }
         this.window = React.createRef();
-
     }
 
     componentDidMount(){
@@ -77,18 +76,31 @@ class CourseGet extends Component {
 
         this.openIntro();
 
+        // console.log(this.state.courseId)
+        api.ex_post('/api/getchapterinfo/',{
+            id: this.state.courseId,
+            cid:this.state.chapterId}).then(response => response.json())
+            .then(response => {
+                this.setState({
+                    courseName: response.root,
+                    chapterName: response.title,
+                    chapterDesc: response.description
+                })
+            })
+        
+
+        //Done
         axios.post('/getusercourseindex/', {
             id: this.state.courseId,
             cid: this.state.chapterId
         }).then(response => {
-            console.log(response.data)
-            this.setState({contents: response.data})
+            let s = []
+            for(let t of response.data){
+                s.push(t.context)
+            }
+            this.setState({slides: s})
         }).catch(e => console.log(e))
 
-        let u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
-        axios.get(u).then(response => {
-            this.setState({chapters: response.data})
-        }).catch(e => console.log(e))
     }
 
     showSlide = () => {
@@ -222,7 +234,7 @@ class CourseGet extends Component {
                         </div>
                         <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId == -1 ? "" : "none"}}>
                             <div className={styles["slide-intro-name"]}>
-                                チャプター {parseInt(this.state.chapterId) + 1}: {this.state.chapterName}
+                                チャプター {parseInt(this.state.chapterId)}: {this.state.chapterName}
                             </div>
                             <div className={styles["slide-intro-desc"]}>
                                 {this.state.chapterDesc}

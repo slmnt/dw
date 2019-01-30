@@ -12,6 +12,7 @@ import hljs from 'highlight.js';
 
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 
 import api from '../../modules/api'
@@ -477,6 +478,39 @@ class Editor extends Component {
     at this point, create course and get course id/title
     this.state.name = response.title
     this.state.id = response.id
+    */
+    this.setState({
+      id: this.props.match.params.id
+    })
+    // console.log(this.props.match.params)
+    // console.log(this.props)
+
+    var u = '/getusercourseid/';
+    axios.post(u,{id:this.props.match.params.id}).then(response => {
+      // Course
+      console.log(response.data)
+    }).catch(e => console.log(e))
+
+    let chapters = []
+    u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+    axios.get(u).then(response => {
+      // Chapter
+ 
+      chapters = response.data
+      for(let c of chapters){
+        axios.post('/getusercourseindex/', {
+          id: this.props.match.params.id,
+          cid: c.cid
+        }).then(response => {
+            //Slide
+            console.log(response.data)
+        }).catch(e => console.log(e))
+    
+      }
+  
+    }).catch(e => console.log(e))
+
+    /*
     */
 
 

@@ -69,12 +69,12 @@ class UserInfo extends Component {
     componentDidMount(){
 
         axios.get('/user/').then(response => {
-            //console.log(response.data)
+            // console.log(response.data)
             this.setState({userinfo: response.data})
         }).catch((e) => {
             //this.props.history.push('login')
         })
-          
+
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
             axios.get('/mypageuserget/').then(response => {

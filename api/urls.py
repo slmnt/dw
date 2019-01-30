@@ -95,6 +95,9 @@ mypageusercourseget = MypageUSerCourseget.as_view({
 searchuserinfoget = SearchUserinfoget.as_view({
     'post': 'post'
 })
+getchapterinfo = getChapterinfo.as_view({
+    'post': 'post'
+})
 urlpatterns = [
 
     #User Authentic
@@ -124,6 +127,7 @@ urlpatterns = [
 
     #User Course Get
     path('getusercourseinfo/',getusercourse),
+    path('getchapterinfo/',getchapterinfo),
 
     path('getusercourse/',Get_User_Course),
     path('getusercoursec/',Get_User_Course_content),
@@ -147,6 +151,7 @@ urlpatterns = [
 
     #Course Search
     path('searchcourse/<text>/<type>',SearchCourse.as_view()),
+
 
     #UserSearch
     path('searchuser/<text>',SearchUser.as_view()),
