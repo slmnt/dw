@@ -66,13 +66,21 @@ class UserInfo extends Component {
         this.nameCfg = React.createRef();
         this.descCfg = React.createRef();
     }
+
+    sleep(waitMsec) {
+        var startMsec = new Date();
+
+        while (new Date() - startMsec < waitMsec);
+      }
+            
     componentDidMount(){
 
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
             api.get('/api/mypagecourseget/').then(api.parseJson)
             .then(response => this.setState({courses: response}))
-            
+            this.sleep(500)
+
             api.get('/api/mypageuserget/').then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
     
@@ -82,7 +90,7 @@ class UserInfo extends Component {
                 name: this.props.match.params.id
             }).then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
-            
+            this.sleep(500)                       
 
             api.ex_post('/api/getusercourseinfo/',{
                 name: this.props.match.params.id
