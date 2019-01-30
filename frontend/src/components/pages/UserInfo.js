@@ -74,31 +74,38 @@ class UserInfo extends Component {
         }).catch((e) => {
             //this.props.history.push('login')
         })
-          
-        if(this.props.match.params.id === "undefined"){
-    
-            /*
-            Get User Infomation
-            Get User Courses
-            axios.get('/user/').then(response => {
+
+        if(typeof(this.props.match.params.id) === 'undefined'){
+            //mypage Done
+            axios.get('/mypageuserget/').then(response => {
+                this.setState({userinfo: response.data})
+            }).catch((e) => {//this.props.history.push('login')
+            })
+
+            axios.get('/mypagecourseget/').then(response => {
                 this.setState({
                     courses: response.data
                 })
+            }).catch((e) => {//this.props.history.push('login')
+            })
+    
+        }else{
+            //user search
+            axios.post('/searchuserinfo/',{
+                name: this.props.match.params.id
+            }).then(response => {
+                this.setState({userinfo: response.data})
             }).catch((e) => {
                 //this.props.history.push('login')
             })
-            */
 
-        }else{
-            // Get Search User infomation
+
             axios.post('/getusercourseinfo/',{
                 name: this.props.match.params.id
             }).then(response => {
                 this.setState({
                     courses: response.data
                 })
-            }).catch((e) => {
-                //this.props.history.push('login')
             })
         }
 
@@ -159,10 +166,10 @@ class UserInfo extends Component {
                                 return (
                                     <div className={styles["user-info"]}>
                                         <div className={styles["name"]}>
-                                            name
+                                            {this.state.userinfo.root}
                                         </div>
                                         <div className={styles["desc"]}>
-                                            desc wda dwa dwa wa dw adw a dwa aw w aw a
+                                            {this.state.userinfo.profile}
                                         </div>
                                         <div className={styles["misc-info"]}>
                                             国: Democratic Republic of the Awaji
@@ -171,6 +178,21 @@ class UserInfo extends Component {
                                             <button className={styles["profile-controls-btn"]} onClick={this.openSettings}>
                                                 編集する
                                             </button>
+                                        </div>
+                                    </div>
+                                )
+                            }} />
+                            <Route render={() => {
+                                return (
+                                    <div className={styles["user-info"]}>
+                                        <div className={styles["name"]}>
+                                        {this.state.userinfo.root}
+                                        </div>
+                                        <div className={styles["desc"]}>
+                                        {this.state.userinfo.profile}
+                                        </div>
+                                        <div className={styles["misc-info"]}>
+                                            国: Democratic Republic of the Awaji
                                         </div>
                                     </div>
                                 )

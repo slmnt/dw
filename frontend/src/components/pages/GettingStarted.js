@@ -12,7 +12,7 @@ class GettingStarted extends Component {
         
         <div className={styles["header"]}>
           <div>
-            MiniProg で ~ を ~ !!!
+            MiniProg で ~ を ~ !!!""
           </div>
         </div>
 

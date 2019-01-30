@@ -12,6 +12,7 @@ import hljs from 'highlight.js';
 
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
 
 
 import api from '../../modules/api'
@@ -414,8 +415,8 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      id: this.props.id,
       courseData: {
-        id: 1,
         name: "testcoure",
         desc: "",
         chapters: [
@@ -478,17 +479,40 @@ class Editor extends Component {
     this.state.name = response.title
     this.state.id = response.id
     */
-    let formData = new FormData();
-    formData.append('title','testtitle')
-    formData.append('desc','desc')
+    this.setState({
+      id: this.props.match.params.id
+    })
+    // console.log(this.props.match.params)
+    // console.log(this.props)
 
-    api.post('/api/createcourse/',{
-      body: formData
-    }).then(response => response.json())
-    .then(response => this.setState({
-      name: response.title,
-      id: response.id
-    }))
+    var u = '/getusercourseid/';
+    axios.post(u,{id:this.props.match.params.id}).then(response => {
+      // Course
+      console.log(response.data)
+    }).catch(e => console.log(e))
+
+    let chapters = []
+    u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+    axios.get(u).then(response => {
+      // Chapter
+ 
+      chapters = response.data
+      for(let c of chapters){
+        axios.post('/getusercourseindex/', {
+          id: this.props.match.params.id,
+          cid: c.cid
+        }).then(response => {
+            //Slide
+            console.log(response.data)
+        }).catch(e => console.log(e))
+    
+      }
+  
+    }).catch(e => console.log(e))
+
+    /*
+    */
+
 
   }
   componentWillUnmount(){
@@ -552,12 +576,14 @@ class Editor extends Component {
 
     // update coursetitle
     let formData = new FormData();
-    formData.append('id',this.state.courseData.id)
+    formData.append('id',this.state.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
-    api.post('/api/createcourse/',{
+    api.post('/api/updatecourse/',{
       body: formData
-    })
+    }).then(response => response.json())
+    .then(response => console.log(response))
+    .catch(error => console.error('Error:', error));
 
     let idx = 0
     for(let c of chapters){
@@ -567,34 +593,39 @@ class Editor extends Component {
       //at this point, craete chapter
       //name, desc
       let formData = new FormData();
-      formData.append('id',this.state.courseData.id)
+      formData.append('id',this.state.id)
       formData.append('cid',idx)
       formData.append('title',c.name)
       formData.append('desc',c.desc)
       api.post('/api/craetechapter/',{
         body: formData
-      })
+      }).then(response => response.json())
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error));
+
       for(let s of slides){
         //at this point, craete slides
         //name, desc
         jdx += 1
 
         let formData = new FormData();
-        formData.append('id',this.state.courseData.id)
+        formData.append('id',this.state.id)
         formData.append('cid',idx)
         formData.append('sid',jdx)
         formData.append('title',s.name)
         formData.append('context',s.text)
         api.post('/api/createslide/',{
           body: formData
-        })
+        }).then(response => response.json())
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error));
+
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
-      console.log("runnnig")
+      // console.log("runnnig")
     }
-  }
-
+  }  
 
   moveBox = (from, to) => {
     if (!this.slideEditor.current.getBox(to)) return;

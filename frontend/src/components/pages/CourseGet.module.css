@@ -31,10 +31,15 @@
   padding: 0.5em 1em;
   margin: 0 0.5em;
 
-  background-color: var(--main-color);
   color: white;
 
   cursor: pointer;
+}
+.header-controls-btn {
+  background-color: var(--main-color);
+}
+.header-controls-ans {
+  background-color: var(--dark-blue);
 }
 
 
@@ -46,7 +51,7 @@
   top: 0;
   left: 0;
   z-index: 5;
-  background-color: white;
+  background-color: var(--bg-color);
   color: var(--dark-color);
   font-size: 1.5em;
 
@@ -176,7 +181,7 @@
   width: 4em;
   top: 0;
   left: 0;
-  background-color: white;
+  background-color: var(--bg-color);
   color: var(--dark-color);
   border-right: 2px solid var(--main-color);
 

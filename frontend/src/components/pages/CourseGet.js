@@ -84,6 +84,11 @@ class CourseGet extends Component {
             console.log(response.data)
             this.setState({contents: response.data})
         }).catch(e => console.log(e))
+
+        let u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+        axios.get(u).then(response => {
+            this.setState({chapters: response.data})
+        }).catch(e => console.log(e))
     }
 
     showSlide = () => {
@@ -197,9 +202,9 @@ class CourseGet extends Component {
                         <div><Link to={`/course/${this.state.courseId}/${this.state.chapterId}`}>{this.state.chapterName}</Link></div>
                     </div>
                     <div className={styles["header-controls"]}>
-                        <div>答えを見る</div>
-                        <div>前のチャプター</div>
-                        <div>次のチャプター</div>
+                        <div className={styles["header-controls-ans"]}>答えを見る</div>
+                        <div className={styles["header-controls-btn"]}>前のチャプター</div>
+                        <div className={styles["header-controls-btn"]}>次のチャプター</div>
                     </div>
                 </div>
 

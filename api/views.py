@@ -589,14 +589,16 @@ class CreateChapter(viewsets.ModelViewSet):
                 chapter = q.get()
                 chapter.title = title
                 chapter.descriptoin = desc
-                chapter.save()
+                chapter.save()                
+                serializers = UserCourseContentSerializer(chapter)
+                return Response(data=serializers.data,status=status.HTTP_200_OK)
 
             #Create New Chapter
             else:
                 Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
                 Chapter.save()
-        data = {'ok':200}
-        return Response(data=data,status=status.HTTP_200_OK)
+                serializers = UserCourseContentSerializer(Chapter)
+                return Response(data=serializers.data,status=status.HTTP_200_OK)
 
 class CreateSlide(viewsets.ModelViewSet):
 
@@ -621,6 +623,7 @@ class CreateSlide(viewsets.ModelViewSet):
                 else:                    
                     slides = UserCourseContentIndex(root=chapter,context=text,sid=sid)
                     slides.save()
+                    
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
@@ -779,13 +782,45 @@ class SearchUser(generics.ListAPIView):
         return queryset
 
 
+class MypageUserget(viewsets.ModelViewSet):
+    
+    def get(self, request):
+        queryset = UserInfo.objects.get(root=request.user)
+        serializers = UserInfoSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class MypageUSerCourseget(viewsets.ModelViewSet):
+    
+    def get(self, request):
+        root = User.objects.get(username=request.user)        
+        queryset = UserCourse.objects.all().filter(root=root)
+        serializers = UserCourseInfoSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+class SearchUserinfoget(viewsets.ModelViewSet):
+    
+    def post(self, request):
+        user = User.objects.get(id=request.data['name'])
+        queryset = UserInfo.objects.get(root=user)
+        serializers = UserInfoSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+
 
 #Remain apis
 # User Create api
-# Create Coursee Comment
-# get User Course infomation from request.user
-class APItest(generics.ListAPIView):
-    serializer_class = UserInfoSerializer
-    
-    def get_queryset(self):
-        return []
+# User Review create
+class APItest(viewsets.ModelViewSet):
+
+    def get(self, request):
+        data = {}
+        data['key'] = 'value'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        user = User.objects.get(id=request.data['name'])
+        queryset = UserInfo.objects.get(root=user)
+        serializers = UserInfoSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+

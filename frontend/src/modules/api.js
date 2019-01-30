@@ -28,9 +28,28 @@ function fetch_timeout(method, url, option, nocookie,timeout=10000) {
   ]);
 }
 
+function fetch_post(method, url,body,timeout=10000) {
+  let cookies = cookie.parse(document.cookie);
+  let formData = new FormData();
+  for(let dict in body){
+    formData.append(dict,body[dict])
+  }
+
+  return Promise.race([
+    fetch(BASE_URL + url, Object.assign({
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+      headers: {
+        "X-CSRFToken": cookies["csrftoken"]
+      }})),
+    new Promise((_,reject) => setTimeout(() => reject(new Error('timeout')),timeout))
+  ]);
+}
+
 
 export default {
-  post: (url, option) => {return fetch_extend('POST', url, option)},
+  post: (url, option) => {return fetch_timeout('POST', url, option)},
   get: (url, option, nocokie) => {return fetch_extend('GET', url, option, nocokie)},
   fetch: fetch_extend
 }

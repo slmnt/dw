@@ -91,15 +91,18 @@ class Main extends Component {
             </div>
           </div>
         
+
+
+          <h3 className={styles["nice-header"]}>３ つのステップ</h3>
           <div className={styles["slide-block-left"]}>
             <div className={styles["slide-block-bg-left"]}>
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
-                とても大事なことです
+                1. コースを作る
               </div>
               <div className={styles["slide-block-desc"]}>
-                数多くの言語に対応しております。
+                ブラウザ上で直感的に作成
               </div>
             </div>
           </div>
@@ -108,10 +111,10 @@ class Main extends Component {
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
-                とても大事なことです
+                2. コースを公開
               </div>
               <div className={styles["slide-block-desc"]}>
-                数多くの言語に対応しております。
+                プラットフォーム上で共有, 評価
               </div>
             </div>
           </div>
@@ -120,10 +123,10 @@ class Main extends Component {
             </div>
             <div className={styles["slide-block-body"]}>
               <div className={styles["slide-block-title"]}>
-                とても大事なことです
+                3. コースを受ける
               </div>
               <div className={styles["slide-block-desc"]}>
-                数多くの言語に対応しております。
+                全てブラウザ上
               </div>
             </div>
           </div>
@@ -135,7 +138,7 @@ class Main extends Component {
                 今すぐ始めよう
               </div>
               <div className={styles["continue-btn"]}>
-                会員登録
+                <Link to="/signup">会員登録</Link>
               </div>
           </div>
         
