@@ -414,7 +414,7 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      id: 1,
+      id: this.props.id,
       courseData: {
         name: "testcoure",
         desc: "",
@@ -478,17 +478,7 @@ class Editor extends Component {
     this.state.name = response.title
     this.state.id = response.id
     */
-    let formData = new FormData();
-    formData.append('title','testtitle')
-    formData.append('desc','desc')
 
-    api.post('/api/createcourse/',{
-      body: formData
-    }).then(response => response.json())
-    .then(response => this.setState({
-      name: response.title,
-      id: response.id
-    }))
 
   }
   componentWillUnmount(){

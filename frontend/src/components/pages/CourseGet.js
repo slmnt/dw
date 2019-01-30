@@ -84,6 +84,11 @@ class CourseGet extends Component {
             console.log(response.data)
             this.setState({contents: response.data})
         }).catch(e => console.log(e))
+
+        let u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+        axios.get(u).then(response => {
+            this.setState({chapters: response.data})
+        }).catch(e => console.log(e))
     }
 
     showSlide = () => {

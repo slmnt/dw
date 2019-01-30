@@ -297,7 +297,7 @@ class App extends React.Component {
 
                   <Route path="/search/course"  component={CourseSearch}/>
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
-                  <Route path="/course/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
+                  <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
                   <Route path="/course/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:id"  component={CourseInfo}/>
 

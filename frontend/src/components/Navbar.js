@@ -11,6 +11,9 @@ import {MainContext} from '../contexts/main';
 import Hamon from './helper/Hamon';
 import RedirectLink from './RedirectLink';
 
+import api from '../modules/api'
+import history from '../modules/history';
+
 class NavBar extends React.Component {
   constructor(props){
     super(props)
@@ -35,6 +38,26 @@ class NavBar extends React.Component {
   }
   onClickPopup = e => {
     if (e.target !== e.currentTarget) this.hidePopup();
+  }
+
+  createCourse = () => {
+    console.log(this.context);
+
+
+    let formData = new FormData();
+    formData.append('title','testtitle')
+    formData.append('desc','desc')
+
+    api.post('/api/createcourse/',{
+      body: formData
+    }).then(response => response.json())
+    .then(response => {
+      history.push(`/course/${this.context.uid}/${response.id}/edit`);
+      this.setState({
+        name: response.title,
+        id: response.id
+      })
+    })
   }
 
   render() {
@@ -73,8 +96,8 @@ class NavBar extends React.Component {
         <div className={styles.rightMenu}>
           <div className={styles.navmenu}>
             <div><Link to="/getting-started">はじめる</Link></div>
-            <div><Link to="/">コースを見る</Link></div>
-            <div><Link to={"/course/" + this.context.uid + "/edit"}>コースを作る</Link></div>
+            <div><Link to="/search/course">コースを見る</Link></div>
+            <div><span onClick={this.createCourse}>コースを作る</span></div>
           </div>
           <div className={styles.navmenu}>
             {
