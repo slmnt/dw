@@ -27,7 +27,6 @@ get_auth = Getuser.as_view({
 })
 
 check_mail_code = CheckMailing.as_view({
-    'get': 'get',
     'post': 'post'
 })
 
@@ -98,6 +97,10 @@ searchuserinfoget = SearchUserinfoget.as_view({
 getchapterinfo = getChapterinfo.as_view({
     'post': 'post'
 })
+createuserinfo = UserinfoCreate.as_view({
+    'post': 'post'
+})
+
 urlpatterns = [
 
     #User Authentic
@@ -106,9 +109,11 @@ urlpatterns = [
     path('logout/',Logout.as_view()),
     path('deleteuser/',disableuser),
 
+    #CreateUser
     path('createuser/',CreateUser.as_view()),
     path('createmuser/',CreateMUser.as_view()),
     path('checkmail/',check_mail_code),
+    path('createuserinfo/',createuserinfo),
 
     #Excute python project/code
     path('python/',python),

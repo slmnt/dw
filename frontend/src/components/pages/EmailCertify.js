@@ -18,7 +18,7 @@ class Email extends Component {
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-        axios.post('/api/checkmail/', {
+        axios.post('/checkmail/', {
             code: this.props.match.params['code']
         }).then(response => {
             this.props.history.push('/mypage')

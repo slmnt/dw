@@ -277,18 +277,21 @@ class Logout(APIView):
 class CookieAuthTest(viewsets.ModelViewSet):
 
     def get(self, request):
-        if request.user:
-            user = User.objects.get(username=request.user)
-            if user.is_active:
-                if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
-                    return HttpResponse(str(request.user),status=status.HTTP_200_OK)
-                else:
-                    try:
-                        uid = User.objects.get(username=str(request.user))
-                    except:
-                        return Response(status=status.HTTP_201_CREATED)
-                    logout(request)
-                    return HttpResponse('logout',status=status.HTTP_201_CREATED)
+        try:
+            if request.user:
+                user = User.objects.get(username=request.user)
+                if user.is_active:
+                    if datetime.date(request.session.get_expiry_date()) > datetime.date(datetime.now()):
+                        return HttpResponse(str(request.user),status=status.HTTP_200_OK)
+                    else:
+                        try:
+                            uid = User.objects.get(username=str(request.user))
+                        except:
+                            return Response(status=status.HTTP_201_CREATED)
+                        logout(request)
+                        return HttpResponse('logout',status=status.HTTP_201_CREATED)
+        except:
+            return HttpResponse('logout',status=status.HTTP_201_CREATED)
 
         #print(dir(request.session))
         #print(request.session._get_session())
@@ -426,7 +429,9 @@ class CheckMailing(viewsets.ModelViewSet):
         crypt = request.data['code']
         try:
             c = CertiList.objects.get(code=crypt)
-            c.name.is_active = True
+            user = User.objects.get(username=str(c.name)) 
+            user.is_active = True
+            user.save()
             c.delete()
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -814,6 +819,16 @@ class getChapterinfo(viewsets.ModelViewSet):
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
 
+class UserinfoCreate(viewsets.ModelViewSet):
+
+    def post(self, request):
+        user = User.objects.get(username=request.data['username'])
+        queryset = UserInfo(root=user,gen='M',birth=request.data['birth'])
+        queryset.save()
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 
 #Remain apis
 # User Create api
@@ -827,8 +842,11 @@ class APItest(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
+        user = User.objects.get(usernmae=request.data['username'])
+        queryset = UserInfo(root=user,gen=request.data['gen'],age=request.data['age'],birth=request.data['birth'])
+        queryset.save()
         data = {}
-        data['key'] = 'value'
+        data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
