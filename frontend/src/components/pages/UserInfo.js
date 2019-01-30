@@ -77,17 +77,18 @@ class UserInfo extends Component {
 
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
-            axios.get('/mypageuserget/').then(response => {
-                this.setState({userinfo: response.data})
-            }).catch((e) => {//this.props.history.push('login')
-            })
-
             axios.get('/mypagecourseget/').then(response => {
                 this.setState({
                     courses: response.data
                 })
             }).catch((e) => {//this.props.history.push('login')
             })
+            axios.get('/mypageuserget/').then(response => {
+                // console.log(response.data)
+                this.setState({userinfo: response.data})
+            }).catch((e) => {//this.props.history.push('login')
+            })
+
     
         }else{
             //user search
@@ -125,6 +126,10 @@ class UserInfo extends Component {
         this.props.history.push("/mypage");
     }
 
+    onSaveProfile = () => {
+        console.log(this.descCfg.current.value)
+    }
+
     changeSettings = () => {
         const name =  this.nameCfg.current.value;
         const desc =  this.descCfg.current.value;
@@ -144,18 +149,14 @@ class UserInfo extends Component {
                                 return (
                                     <div className={styles["user-info"]}>
                                         <div className={styles["profile-edit-row"]}>
-                                            <span>名前: </span>
-                                            <input type="text" className={styles["profile-controls-text"]} ref={this.nameCfg}/>
-                                        </div>
-                                        <div className={styles["profile-edit-row"]}>
-                                            <span>説明: </span>
+                                            <span>プロフィール: </span>
                                             <textarea className={styles["profile-controls-text"]} ref={this.descCfg}/>
                                         </div>
                                         <div className={styles["profile-controls"]}>
                                             <button className={styles["profile-controls-btn"]} onClick={this.closeSettings}>
                                                 キャンセル
                                             </button>
-                                            <button className={styles["profile-controls-btn"]} onClick={this.closeSettings}>
+                                            <button className={styles["profile-controls-btn"]} onClick={this.onSaveProfile}>
                                                 保存
                                             </button>
                                         </div>
