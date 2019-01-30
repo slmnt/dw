@@ -69,7 +69,7 @@ class CourseGet extends Component {
 
         this.openIntro();
         
-        // console.log(this.state.courseId)
+        // chapter
         api.ex_post('/api/getchapterinfo/',{
             id: this.state.courseId,
             cid:this.state.chapterId
@@ -85,7 +85,7 @@ class CourseGet extends Component {
         })
         
 
-        //Done
+        //slides
         axios.post('/getusercourseindex/', {
             id: this.state.courseId,
             cid: this.state.chapterId
@@ -98,7 +98,7 @@ class CourseGet extends Component {
         }).catch(e => console.log(e))
 
 
-        //
+        // dirtree
         api.ex_post('/api/usercoursetree/',{
             url: `/Course/${this.state.courseId}/`,
         }).then(api.parseJson).then(response => {

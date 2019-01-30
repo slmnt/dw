@@ -418,10 +418,10 @@ class Editor extends Component {
     this.state = {
       id: this.props.match.params.id,
       courseData: {
-        name: "testcoure",
+        name: "",
         desc: "",
         chapters: [
-          {
+          /*{
             name: "Chapter01",
             desc: "",
             slides: [
@@ -430,7 +430,7 @@ class Editor extends Component {
                 pos: -1
               }
             ]
-          }
+          }*/
         ],
         files: { // text or url
           //"/src/index.js": "const a = 0;",
@@ -479,32 +479,76 @@ class Editor extends Component {
     this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
 
 
-    //
+    // course
     var u = '/getusercourseid/';
     axios.post(u, {id:this.state.id}).then(response => {
       // Course
+      /*
+      createat: "2019-01-30T18:26:26.755470+09:00"
+      descriptoin: "desc"
+      id: 31
+      likes: 0
+      root: "adminuser"
+      title: "testcoure"
+      users: 0
+      */
       console.log(response.data)
+      this.setCourseData(response.data.title, response.data.description)
     }).catch(e => console.log(e))
 
+
+    // chapter & slides
     let chapters = []
     u = '/getCourseInfoContentsInfo/' + this.state.id
     axios.get(u).then(response => {
-      // Chapter
- 
+      // chapters
       chapters = response.data
+
+      let newChapters = [];
+
+      let slidePms = [];
       for(let c of chapters){
-        axios.post('/getusercourseindex/', {
-          id: this.state.id,
-          cid: c.cid
-        }).then(response => {
-            //Slide
-            console.log(response.data)
-        }).catch(e => console.log(e))
+        /* cid, description, title, createat */
+        let ch = {};
+        ch.name = c.title;
+        ch.desc = c.descriptoin;
+        ch.slides = [];
+        newChapters.push(ch);
     
+        //slides
+        slidePms.push(
+          axios.post('/getusercourseindex/', {
+            id: this.state.id,
+            cid: c.cid
+          }).then(response => {
+            if (!ch) {
+              console.log();
+              return;
+            }
+            for (let s of response.data) {
+              ch.slides.push({
+                text: s.context,
+                pos: -1
+              });
+            }
+            return ch;
+          }).catch(e => console.log(e))
+        );
       }
+
   
+      Promise.all(slidePms).then(response => {
+        this.loadChapters(newChapters);
+        this.state.courseData.chapters = newChapters;
+        this.setState({courseData: this.state.courseData}, () => {
+          this.openChapter(this.state.courseData.chapters[0]);
+        });
+      });
     }).catch(e => console.log(e))
 
+
+
+    // dirtree
     api.ex_post('/api/usercoursetree/',{
       url: `/Course/${this.state.id}/`,
     }).then(api.parseJson).then(response => {
@@ -689,22 +733,30 @@ class Editor extends Component {
 
   loadCourse = (data) => {
     //
-    for (let ch of data.chapters) {
-      for (let i in ch.slides) {
-        ch.slides[i].pos = parseInt(i);
-      }
-    }
+    this.loadChapters(data.chapters);
 
     //
-    this.courseNameInput.current.setValue(this.state.courseData.name);
+    this.setCourseData(data.name, data.desc);
 
     //
     this.setState({
       courseData: data
     }, () => {
-      this.openChapter(this.state.courseData.chapters[0]);
-      this.openSlide(this.state.courseData.chapters[0].slides[0]);
+      if (this.state.courseData.chapters && this.state.courseData.chapters[0]){
+        this.openChapter(this.state.courseData.chapters[0]);
+        this.openSlide(this.state.courseData.chapters[0].slides[0]);
+      }
     })
+  }
+  loadChapters = (chapters) => {
+    for (let ch of chapters) {
+      this.loadSlides(ch.slides);
+    }
+  }
+  loadSlides = (slides) => {
+    for (let i in slides) {
+      slides[i].pos = parseInt(i);
+    }
   }
   openChapter = (chapter) => {
     this.setState({currentChapter: chapter}, () => {
@@ -753,6 +805,13 @@ class Editor extends Component {
     if (!this.state.courseData) return;
     this.state.courseData.name = name;
     this.setState({courseData: this.state.courseData});
+  }
+  setCourseData = (name, desc) => {
+    this.state.courseData.name = name;
+    this.state.courseData.desc = desc;
+    this.setState({courseData: this.state.courseData});
+
+    this.courseNameInput.current.setValue(this.state.courseData.name);
   }
 
   // chapter

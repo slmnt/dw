@@ -238,7 +238,7 @@
 
   font-size: 1.5em;  
   color: inherit;
-  margin: 0 0 0.5em 1em;
+  margin: 0 0 0.5em auto;
 }
 .chapters-btn {
   box-shadow: 0 1px 3px black;
