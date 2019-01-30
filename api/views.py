@@ -737,7 +737,7 @@ def getTree(path,json,currentpath):
                 json[p] = context
                 #print(context)
     except:
-        return []
+        return ""
     return json
 
 
@@ -755,7 +755,7 @@ class getUserTree(viewsets.ModelViewSet):
             data = getTree(path,data,'')
             json_data = json.dumps(data)
         except:
-            return []
+            return ""
         return Response(data=data,status=status.HTTP_200_OK)
 
 class SearchCourse(generics.ListAPIView):
