@@ -37,6 +37,13 @@
   color: darkgray;
   margin-left: 0.5em;
 }
+.edit-button {
+  border-radius: 0.5em;
+  background-color: var(--dark-blue);
+  padding: 0.5em 2em;
+  cursor: pointer;
+  color: white;
+}
 .start-button {
   border-radius: 0.5em;
   background-color: var(--main-color);

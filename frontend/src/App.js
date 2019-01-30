@@ -289,7 +289,7 @@ class App extends React.Component {
 
                   <Route path="/certify/:code" component={Mail}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn}/>
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
                   <Route path="/user/:id"  component={UserInfo}/>

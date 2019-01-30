@@ -41,9 +41,6 @@ class NavBar extends React.Component {
   }
 
   createCourse = () => {
-    console.log(this.context);
-
-
     let formData = new FormData();
     formData.append('title','testtitle')
     formData.append('desc','desc')
@@ -53,10 +50,8 @@ class NavBar extends React.Component {
     }).then(response => response.json())
     .then(response => {
       history.push(`/course/${this.context.uid}/${response.id}/edit`);
-      this.setState({
-        name: response.title,
-        id: response.id
-      })
+      //name: response.title,
+      //id: response.id
     })
   }
 
