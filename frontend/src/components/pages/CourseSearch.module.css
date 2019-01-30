@@ -75,6 +75,7 @@
 /* container */
 .container {
     display: flex;
+    padding: 0 15%;
 }
 .ad-container{
     min-height: 100%;

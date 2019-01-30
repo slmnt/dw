@@ -1,7 +1,6 @@
 /* container: course */
 .course-container {
   flex: 1 1 auto;
-  padding: 0 15%;
 }
 .course-item {
   display: flex;
