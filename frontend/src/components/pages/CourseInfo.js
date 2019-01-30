@@ -84,9 +84,12 @@ class Courseinfo extends Component {
                             <div className={styles["course-name"]}>
                                 {this.state.contents.title}
                             </div>
-                            <div className={styles["edit-button"]}>
-                                <Link to={`/course/${this.state.courseId}/1`}>始める</Link>
-                            </div>
+                            {
+                                this.state.contents.root == this.context.uid &&
+                                <div className={styles["edit-button"]}>
+                                    <Link to={`/course/${this.context.uid}/${this.state.courseId}/1/edit`}>編集</Link>
+                                </div>
+                            }
                             <div className={styles["start-button"]}>
                                 <Link to={`/course/${this.state.courseId}/1`}>始める</Link>
                             </div>

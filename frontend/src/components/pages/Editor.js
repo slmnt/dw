@@ -719,7 +719,7 @@ class Editor extends Component {
     this.setState({courseData: this.state.courseData}, ch == this.state.currentChapter && (() => {
       const c = this.getChapter(0);
       if (c) this.openChapter(c);
-    }));
+    }) || undefined);
   }
   moveChapter = (from, to) => {
     if (!this.state.courseData.chapters[to]) return;
