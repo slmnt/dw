@@ -45,7 +45,7 @@ class Login extends Component {
         this.setState(state => ({ showPassword: !state.showPassword }));
     };    
 
-	render() {
+	  render() {
         return (
             <div className={styles.main}>
             <div className={styles.top_logo}>

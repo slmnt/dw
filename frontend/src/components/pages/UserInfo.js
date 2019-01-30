@@ -82,7 +82,6 @@ class UserInfo extends Component {
                 name: this.props.match.params.id
             }).then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
-            this.sleep(500)                       
 
             api.ex_post('/api/getusercourseinfo/',{
                 name: this.props.match.params.id
