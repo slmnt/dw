@@ -69,13 +69,28 @@ class UserInfo extends Component {
     componentDidMount(){
 
         axios.get('/user/').then(response => {
-            //console.log(response.data)
+            // console.log(response.data)
             this.setState({userinfo: response.data})
         }).catch((e) => {
             //this.props.history.push('login')
         })
           
         if(this.props.match.params.id === "undefined"){
+    
+            /*
+            Get User Infomation
+            Get User Courses
+            axios.get('/user/').then(response => {
+                this.setState({
+                    courses: response.data
+                })
+            }).catch((e) => {
+                //this.props.history.push('login')
+            })
+            */
+
+        }else{
+            // Get Search User infomation
             axios.post('/getusercourseinfo/',{
                 name: this.props.match.params.id
             }).then(response => {

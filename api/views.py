@@ -782,6 +782,8 @@ class SearchUser(generics.ListAPIView):
 
 #Remain apis
 # User Create api
+# Create Coursee Comment
+# get User Course infomation from request.user
 class APItest(generics.ListAPIView):
     serializer_class = UserInfoSerializer
     
