@@ -75,18 +75,19 @@ class CourseGet extends Component {
          */
 
         this.openIntro();
-
+        
         // console.log(this.state.courseId)
         api.ex_post('/api/getchapterinfo/',{
             id: this.state.courseId,
-            cid:this.state.chapterId}).then(response => response.json())
-            .then(response => {
-                this.setState({
-                    courseName: response.root,
-                    chapterName: response.title,
-                    chapterDesc: response.description
-                })
+            cid:this.state.chapterId
+        }).then(api.parseJson)
+        .then(response => {
+            this.setState({
+                courseName: response.root,
+                chapterName: response.title,
+                chapterDesc: response.description
             })
+        })
         
 
         //Done
@@ -101,7 +102,41 @@ class CourseGet extends Component {
             this.setState({slides: s})
         }).catch(e => console.log(e))
 
+
+        //
+        api.ex_post('/api/usercoursetree/',{
+            url: `/Course/${this.state.courseId}/`,
+        }).then(api.parseJson).then(response => {
+            if (!response) return;
+            Object.assign(this.state.files, response);
+            this.importDir(response);
+            this.setState({files: this.state.files})
+        });
     }
+
+    importDir = (files) => {
+        for (let path in files) {
+            const list = path.split('/');
+            let obj = this.state.directory;
+            for (const dir of list) {
+                if (dir !== '') {
+                    let c = obj.children.find(v => v.name === dir);
+                    if (!c) {
+                        let newFile = { name: dir };
+                        if (dir !== list[list.length - 1]) {
+                            newFile.children = [];
+                        }
+                        
+                        obj.children.push(newFile);
+                        c = obj.children[obj.children.length - 1];
+                    }
+                    obj = c;
+                }
+            }
+        }
+        //console.log(this.state.directory)
+    }
+
 
     showSlide = () => {
         this.setState({showSlide: true});

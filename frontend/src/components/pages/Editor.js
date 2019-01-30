@@ -415,7 +415,7 @@ class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      id: this.props.id,
+      id: this.props.match.params.id,
       courseData: {
         name: "testcoure",
         desc: "",
@@ -474,32 +474,24 @@ class Editor extends Component {
     this.loadCourse(this.state.courseData); // テスト test
     
     this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
-    /*
-    at this point, create course and get course id/title
-    this.state.name = response.title
-    this.state.id = response.id
-    */
-    this.setState({
-      id: this.props.match.params.id
-    })
-    // console.log(this.props.match.params)
-    // console.log(this.props)
 
+
+    //
     var u = '/getusercourseid/';
-    axios.post(u,{id:this.props.match.params.id}).then(response => {
+    axios.post(u, {id:this.state.id}).then(response => {
       // Course
       console.log(response.data)
     }).catch(e => console.log(e))
 
     let chapters = []
-    u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+    u = '/getCourseInfoContentsInfo/' + this.state.id
     axios.get(u).then(response => {
       // Chapter
  
       chapters = response.data
       for(let c of chapters){
         axios.post('/getusercourseindex/', {
-          id: this.props.match.params.id,
+          id: this.state.id,
           cid: c.cid
         }).then(response => {
             //Slide
@@ -510,8 +502,14 @@ class Editor extends Component {
   
     }).catch(e => console.log(e))
 
-    /*
-    */
+    api.ex_post('/api/usercoursetree/',{
+      url: `/Course/${this.state.id}/`,
+    }).then(api.parseJson).then(response => {
+        if (!response) return;
+        Object.assign(this.state.courseData.files, response);
+        this.importDir(response);
+        this.setState({files: this.state.courseData.files})
+    });
 
 
   }
@@ -538,6 +536,28 @@ class Editor extends Component {
           this.getDirtree(c,path + '/' + c.name,base_url)
       }
     }
+  }
+  importDir = (files) => {
+    for (let path in files) {
+        const list = path.split('/');
+        let obj = this.state.directory;
+        for (const dir of list) {
+            if (dir !== '') {
+                let c = obj.children.find(v => v.name === dir);
+                if (!c) {
+                    let newFile = { name: dir };
+                    if (dir !== list[list.length - 1]) {
+                        newFile.children = [];
+                    }
+                    
+                    obj.children.push(newFile);
+                    c = obj.children[obj.children.length - 1];
+                }
+                obj = c;
+            }
+        }
+    }
+      //console.log(this.state.directory)
   }
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
@@ -574,6 +594,9 @@ class Editor extends Component {
     // sort slides
     this.sortSlides();
 
+    //
+
+
     // update coursetitle
     let formData = new FormData();
     formData.append('id',this.state.id)
@@ -581,7 +604,7 @@ class Editor extends Component {
     formData.append('desc',this.state.courseData.desc)
     api.post('/api/updatecourse/',{
       body: formData
-    }).then(response => response.json())
+    }).then(api.parseJson)
     .then(response => console.log(response))
     .catch(error => console.error('Error:', error));
 
@@ -599,7 +622,7 @@ class Editor extends Component {
       formData.append('desc',c.desc)
       api.post('/api/craetechapter/',{
         body: formData
-      }).then(response => response.json())
+      }).then(api.parseJson)
       .then(response => console.log(response))
       .catch(error => console.error('Error:', error));
 
@@ -616,7 +639,7 @@ class Editor extends Component {
         formData.append('context',s.text)
         api.post('/api/createslide/',{
           body: formData
-        }).then(response => response.json())
+        }).then(api.parseJson)
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error));
 

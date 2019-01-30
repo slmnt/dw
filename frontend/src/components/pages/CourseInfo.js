@@ -4,6 +4,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import styles from './CourseInfo.module.css';
+import api from '../../modules/api';
+
+import {MainContext} from '../../contexts/main';
+
 import UserPanel from '../UserPanel';
 import Rating from '../Rating';
 
@@ -87,7 +91,7 @@ class Courseinfo extends Component {
                             {
                                 this.state.contents.root == this.context.uid &&
                                 <div className={styles["edit-button"]}>
-                                    <Link to={`/course/${this.context.uid}/${this.state.courseId}/1/edit`}>編集</Link>
+                                    <Link to={`/course/${this.context.uid}/${this.state.courseId}/edit`}>編集</Link>
                                 </div>
                             }
                             <div className={styles["start-button"]}>
@@ -176,5 +180,7 @@ class Courseinfo extends Component {
 }
 
 Courseinfo.propTypes = {};
+Courseinfo.contextType = MainContext;
+
 
 export default Courseinfo;
