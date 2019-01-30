@@ -68,48 +68,27 @@ class UserInfo extends Component {
     }
     componentDidMount(){
 
-        axios.get('/user/').then(response => {
-            // console.log(response.data)
-            this.setState({userinfo: response.data})
-        }).catch((e) => {
-            //this.props.history.push('login')
-        })
-
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
-            axios.get('/mypageuserget/').then(response => {
-                this.setState({userinfo: response.data})
-            }).catch((e) => {//this.props.history.push('login')
-            })
-
-            axios.get('/mypagecourseget/').then(response => {
-                this.setState({
-                    courses: response.data
-                })
-            }).catch((e) => {//this.props.history.push('login')
-            })
+            api.get('/api/mypagecourseget/').then(response => response.json())
+            .then(response => this.setState({courses: response}))
+            
+            api.get('/api/mypageuserget/').then(response => response.json())
+            .then(response => this.setState({userinfo: response}))
     
         }else{
             //user search
-            axios.post('/searchuserinfo/',{
+            api.ex_post('/api/searchuserinfo/',{
                 name: this.props.match.params.id
-            }).then(response => {
-                this.setState({userinfo: response.data})
-            }).catch((e) => {
-                //this.props.history.push('login')
-            })
+            }).then(response => response.json())
+            .then(response => this.setState({userinfo: response}))
+            
 
-
-            axios.post('/getusercourseinfo/',{
+            api.ex_post('/api/getusercourseinfo/',{
                 name: this.props.match.params.id
-            }).then(response => {
-                this.setState({
-                    courses: response.data
-                })
-            })
+            }).then(response => response.json())
+            .then(response => this.setState({courses: response}))            
         }
-
-
     }
     getUserData = () => {
 
@@ -123,6 +102,11 @@ class UserInfo extends Component {
     }
     closeSettings = () => {
         this.props.history.push("/mypage");
+    }
+
+    onSaveProfile = () => {
+        api.ex_post('/api/updateuserprofile/',{profile: this.descCfg.current.value}).then(response => response.json())
+        .then(response => this.setState({userinfo: response}))
     }
 
     changeSettings = () => {
@@ -144,18 +128,14 @@ class UserInfo extends Component {
                                 return (
                                     <div className={styles["user-info"]}>
                                         <div className={styles["profile-edit-row"]}>
-                                            <span>名前: </span>
-                                            <input type="text" className={styles["profile-controls-text"]} ref={this.nameCfg}/>
-                                        </div>
-                                        <div className={styles["profile-edit-row"]}>
-                                            <span>説明: </span>
+                                            <span>プロフィール: </span>
                                             <textarea className={styles["profile-controls-text"]} ref={this.descCfg}/>
                                         </div>
                                         <div className={styles["profile-controls"]}>
                                             <button className={styles["profile-controls-btn"]} onClick={this.closeSettings}>
                                                 キャンセル
                                             </button>
-                                            <button className={styles["profile-controls-btn"]} onClick={this.closeSettings}>
+                                            <button className={styles["profile-controls-btn"]} onClick={this.onSaveProfile}>
                                                 保存
                                             </button>
                                         </div>

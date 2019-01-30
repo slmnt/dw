@@ -103,6 +103,10 @@ createuserinfo = UserinfoCreate.as_view({
 createcomment = CreateComment.as_view({
     'post': 'post'
 })
+updateuserprofile = UpdateUserProfile.as_view({
+    'post': 'post'
+})
+
 urlpatterns = [
 
     #User Authentic
@@ -116,6 +120,8 @@ urlpatterns = [
     path('createmuser/',CreateMUser.as_view()),
     path('checkmail/',check_mail_code),
     path('createuserinfo/',createuserinfo),
+
+    path('updateuserprofile/',updateuserprofile),
 
     #Excute python project/code
     path('python/',python),
@@ -159,7 +165,6 @@ urlpatterns = [
     #Course Search
     path('searchcourse/<text>',SearchCourse.as_view()),
     path('createcomment/',createcomment),
-
 
     #UserSearch
     path('searchuser/<text>',SearchUser.as_view()),
