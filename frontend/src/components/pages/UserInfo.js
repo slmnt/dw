@@ -77,23 +77,24 @@ class UserInfo extends Component {
 
         if(typeof(this.props.match.params.id) === 'undefined'){
             //mypage Done
-            api.get('/api/mypagecourseget/').then(response => response.json())
+            api.get('/api/mypagecourseget/').then(api.parseJson)
             .then(response => this.setState({courses: response}))
-            this.sleep(500)            
-            api.get('/api/mypageuserget/').then(response => response.json())
+            this.sleep(500)
+
+            api.get('/api/mypageuserget/').then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
     
         }else{
             //user search
             api.ex_post('/api/searchuserinfo/',{
                 name: this.props.match.params.id
-            }).then(response => response.json())
+            }).then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
             this.sleep(500)                       
 
             api.ex_post('/api/getusercourseinfo/',{
                 name: this.props.match.params.id
-            }).then(response => response.json())
+            }).then(api.parseJson)
             .then(response => this.setState({courses: response}))            
         }
     }
@@ -112,7 +113,7 @@ class UserInfo extends Component {
     }
 
     onSaveProfile = () => {
-        api.ex_post('/api/updateuserprofile/',{profile: this.descCfg.current.value}).then(response => response.json())
+        api.ex_post('/api/updateuserprofile/',{profile: this.descCfg.current.value}).then(api.parseJson)
         .then(response => this.setState({userinfo: response}))
     }
 
@@ -151,37 +152,47 @@ class UserInfo extends Component {
                             }} />
                             <Route path="/mypage" render={() => {
                                 return (
-                                    <div className={styles["user-info"]}>
-                                        <div className={styles["name"]}>
-                                            {this.state.userinfo.root}
+                                    <React.Fragment>
+                                    {
+                                        this.state.userinfo &&
+                                        <div className={styles["user-info"]}>
+                                            <div className={styles["name"]}>
+                                                {this.state.userinfo.root}
+                                            </div>
+                                            <div className={styles["desc"]}>
+                                                {this.state.userinfo.profile}
+                                            </div>
+                                            <div className={styles["misc-info"]}>
+                                                国: Democratic Republic of the Awaji
+                                            </div>
+                                            <div className={styles["profile-controls"]}>
+                                                <button className={styles["profile-controls-btn"]} onClick={this.openSettings}>
+                                                    編集する
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className={styles["desc"]}>
-                                            {this.state.userinfo.profile}
-                                        </div>
-                                        <div className={styles["misc-info"]}>
-                                            国: Democratic Republic of the Awaji
-                                        </div>
-                                        <div className={styles["profile-controls"]}>
-                                            <button className={styles["profile-controls-btn"]} onClick={this.openSettings}>
-                                                編集する
-                                            </button>
-                                        </div>
-                                    </div>
+                                    }
+                                    </React.Fragment>
                                 )
                             }} />
                             <Route render={() => {
                                 return (
-                                    <div className={styles["user-info"]}>
-                                        <div className={styles["name"]}>
-                                        {this.state.userinfo.root}
+                                    <React.Fragment>
+                                    {
+                                        this.state.userinfo &&
+                                        <div className={styles["user-info"]}>
+                                            <div className={styles["name"]}>
+                                                {this.state.userinfo.root}
+                                            </div>
+                                            <div className={styles["desc"]}>
+                                                {this.state.userinfo.profile}
+                                            </div>
+                                            <div className={styles["misc-info"]}>
+                                                国: Democratic Republic of the Awaji
+                                            </div>
                                         </div>
-                                        <div className={styles["desc"]}>
-                                        {this.state.userinfo.profile}
-                                        </div>
-                                        <div className={styles["misc-info"]}>
-                                            国: Democratic Republic of the Awaji
-                                        </div>
-                                    </div>
+                                    }
+                                    </React.Fragment>
                                 )
                             }} />
                         </Switch>
@@ -191,8 +202,12 @@ class UserInfo extends Component {
                         <div className={styles["overview-title"]}></div>
                         */}
                         <div className={styles["courses"]}>
-                            <div className={styles["courses-title"]}>コース一覧</div>
-                            <CourseList courses={this.state.courses} />
+                            <div className={styles["courses-title"]}>
+                                コース一覧
+                            </div>
+                            <div className={styles["course-container"]}>
+                                <CourseList courses={this.state.courses} />
+                            </div>
                             <div className={styles["see-all"]}>
                                 <Link to="/">全て表示</Link>
                             </div>

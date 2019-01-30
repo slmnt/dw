@@ -104,6 +104,9 @@
   padding: 0.1em 1em;
   font-size: 1.2em;
 }
+.course-container {
+  padding: 0 3em;
+}
 
 .see-all {
   padding: 0.5em 1em;
