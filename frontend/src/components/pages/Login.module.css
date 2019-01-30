@@ -1,13 +1,12 @@
 
 .main {
-  margin-left: 3em;
-  margin-right: 3em;
-  padding: 2em 0;
+  padding: 3em 3em;
 
   text-align: center;
-  font-family:"arial black,Yu Gothic";
-  background-color:"#f2f7ff";
+  font-family: arial black,Yu Gothic;
+  background-color: #f2f7ff;
 
+  min-height: 100%;
 }
 
 .top_logo {
@@ -30,6 +29,10 @@
   margin: auto;
   width: 80%;
   padding: 2em 0;
+}
+.create_form input, .create_form select {
+  background: inherit;
+  border: 1px solid var(--main-color);
 }
 .form_layout{
   padding: 2em;
@@ -93,8 +96,9 @@
 }
 
 .form_cancel{
-  background-color: var(--light-color) !important;
+  background-color: transparent !important;
   color: var(--dark-color) !important;
+  border: 1px solid var(--main-color) !important;
 }
 
 .password_error{

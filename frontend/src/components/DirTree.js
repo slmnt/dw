@@ -179,7 +179,7 @@ class DirTree extends React.Component {
     api.post('/api/upload/', {
       body: formData,
     })
-    .then(response => response.json())
+    .then(api.parseJson)
     .then(response => console.log('Success:', JSON.stringify(response)))
     .catch(error => console.error('Error:', error));
   

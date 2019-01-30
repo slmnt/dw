@@ -1,9 +1,7 @@
 
 
 .main {
-    margin-left: 3em;
-    margin-right: 3em;
-    padding: 2em 0;
+    padding: 3em 3em;
 
     text-align: center;
     font-family: arial black,Yu Gothic;
@@ -99,8 +97,9 @@
 }
 
 .form_cancel{
-    background-color: var(--light-color) !important;
+    background-color: transparent !important;
     color: var(--dark-color) !important;
+    border: 1px solid var(--main-color) !important;
 }
 
 .password_error{

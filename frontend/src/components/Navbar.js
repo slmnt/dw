@@ -47,7 +47,7 @@ class NavBar extends React.Component {
 
     api.post('/api/createcourse/',{
       body: formData
-    }).then(response => response.json())
+    }).then(api.parseJson)
     .then(response => {
       history.push(`/course/${this.context.uid}/${response.id}/edit`);
       //name: response.title,

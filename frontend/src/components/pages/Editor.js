@@ -14,8 +14,9 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
 
-
+import {MainContext} from '../../contexts/main';
 import api from '../../modules/api'
+import history from '../../modules/history';
 
 import logo from '../../img/logo.svg';
 
@@ -595,6 +596,9 @@ class Editor extends Component {
     this.sortSlides();
 
     //
+    let list = [];
+
+    console.log("course saving");
 
 
     // update coursetitle
@@ -602,11 +606,13 @@ class Editor extends Component {
     formData.append('id',this.state.id)
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
-    api.post('/api/updatecourse/',{
-      body: formData
-    }).then(api.parseJson)
-    .then(response => console.log(response))
-    .catch(error => console.error('Error:', error));
+    list.push(
+      api.post('/api/updatecourse/',{
+        body: formData
+      }).then(api.parseJson)
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error))
+    )
 
     let idx = 0
     for(let c of chapters){
@@ -620,11 +626,13 @@ class Editor extends Component {
       formData.append('cid',idx)
       formData.append('title',c.name)
       formData.append('desc',c.desc)
-      api.post('/api/craetechapter/',{
-        body: formData
-      }).then(api.parseJson)
-      .then(response => console.log(response))
-      .catch(error => console.error('Error:', error));
+      list.push(
+        api.post('/api/craetechapter/',{
+          body: formData
+        }).then(api.parseJson)
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error))
+      );
 
       for(let s of slides){
         //at this point, craete slides
@@ -637,17 +645,25 @@ class Editor extends Component {
         formData.append('sid',jdx)
         formData.append('title',s.name)
         formData.append('context',s.text)
-        api.post('/api/createslide/',{
-          body: formData
-        }).then(api.parseJson)
-        .then(response => console.log(response))
-        .catch(error => console.error('Error:', error));
-
+        list.push(
+          api.post('/api/createslide/',{
+            body: formData
+          }).then(api.parseJson)
+          .then(response => console.log(response))
+          .catch(error => console.error('Error:', error))
+        );
       }
 
       this.getDirtree(this.state.courseData.directory,'',base_url)
       // console.log("runnnig")
     }
+
+
+    Promise.all(list).then(() => {
+      console.log("course saved");
+      history.push(`/course/${this.context.uid}/${this.state.id}`);
+    });
+
   }  
 
   moveBox = (from, to) => {
@@ -1118,5 +1134,5 @@ class Editor extends Component {
     );
   }
 }
-
+Editor.contextType = MainContext;
 export default Editor;

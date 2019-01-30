@@ -90,13 +90,17 @@ class Courseinfo extends Component {
                             </div>
                             {
                                 this.state.contents.root == this.context.uid &&
-                                <div className={styles["edit-button"]}>
-                                    <Link to={`/course/${this.context.uid}/${this.state.courseId}/edit`}>編集</Link>
-                                </div>
+                                <Link to={`/course/${this.context.uid}/${this.state.courseId}/edit`} style={{marginLeft: "auto"}}>
+                                    <div className={styles["edit-button"]}>
+                                        編集
+                                    </div>
+                                </Link>
                             }
-                            <div className={styles["start-button"]}>
-                                <Link to={`/course/${this.state.courseId}/1`}>始める</Link>
-                            </div>
+                            <Link to={`/course/${this.context.uid}/${this.state.courseId}/1`}>
+                                <div className={styles["start-button"]}>
+                                    始める
+                                </div>
+                            </Link>
                         </div>
                         <div className={styles["middle-container"]}>
                             <div className={styles["rating-container"]}>
@@ -134,7 +138,7 @@ class Courseinfo extends Component {
                                                     <div className={styles["chapter-name"]}>
                                                         <a>{v.title}</a>
                                                     </div>
-                                                    <Link to={"/course/" + this.state.courseId + "/" + (i + 1)} className={styles["chapter-start-button"]}>
+                                                    <Link to={`/course/${this.context.uid}/${this.state.courseId}/${i + 1}`} className={styles["chapter-start-button"]}>
                                                         開始
                                                     </Link>
                                                 </div>

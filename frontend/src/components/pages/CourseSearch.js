@@ -77,7 +77,7 @@ class CourseSearch extends Component {
     onSearch = (e) => {
 
         let path = '/api/searchcourse/' + this.state.keyword + '/' + this.langOption.current.selectedIndex
-        api.get(path).then(response => response.json())
+        api.get(path).then(api.parseJson)
         .then(response => this.setState({
             courses: response
         })).catch()

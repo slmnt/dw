@@ -10,6 +10,8 @@ import TestIFrame from '../TestIFrame';
 
 
 import api from '../../modules/api';
+import {MainContext} from '../../contexts/main';
+
 import styles from './CourseGet.module.css';
 
 import { ReactComponent as PrevIcon } from '../../img/arrow-back.svg';
@@ -320,5 +322,7 @@ class CourseGet extends Component {
 }
 
 CourseGet.propTypes = {};
+CourseGet.contextType = MainContext;
+
 
 export default CourseGet;

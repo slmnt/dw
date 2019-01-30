@@ -66,7 +66,7 @@ class UserSearch extends Component {
 
     onSearch = (e) => {
        let path = '/api/searchuser/' + this.state.keyword
-       api.get(path).then(response => response.json())
+       api.get(path).then(api.parseJson)
        .then(response => this.setState({users: response})).catch()
 
     }
