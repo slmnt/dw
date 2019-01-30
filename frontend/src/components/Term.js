@@ -181,7 +181,7 @@ class Term extends React.Component {
         }
       }
       term.runCommand = () => {
-        console.log(term.cmd);
+        // console.log(term.cmd);
 
         this.runCommand(term.cmd);
 

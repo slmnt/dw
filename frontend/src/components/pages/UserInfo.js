@@ -109,8 +109,6 @@ class UserInfo extends Component {
                 })
             })
         }
-
-
     }
     getUserData = () => {
 
@@ -127,7 +125,8 @@ class UserInfo extends Component {
     }
 
     onSaveProfile = () => {
-        console.log(this.descCfg.current.value)
+        api.ex_post('/api/updateuserprofile/',{profile: this.descCfg.current.value}).then(response => response.json())
+        .then(response => this.setState({userinfo: response}))
     }
 
     changeSettings = () => {

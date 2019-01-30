@@ -235,6 +235,28 @@ class CourseGet extends Component {
     onSaveTab = () => {
 
     }
+    
+    cmdExcute = (cmd) => {
+        let parser = cmd.split(' ')
+        // console.log(parser)
+        var set = RegExp(/\.(\w*)/);
+        if(set.test(parser[1])){
+            let arg = parser[1].replace(set,'')
+            // console.log(this.state.files)
+            // console.log(arg)
+            // console.log(this.state.files[arg])
+            let text = this.state.files[arg]
+            api.ex_post('/api/python/',{
+                contents: text 
+            }).then(api.parseJson).then(response => {
+                if (!response) return;
+                // Print Result
+                console.log(response)
+            });
+    
+        }
+    
+    }
 
     goToChaper = (v) => {
         let cid = parseInt(this.state.chapterId) + parseInt(v);
@@ -316,7 +338,7 @@ class CourseGet extends Component {
                         />
                     </div>
                     <div className={styles["textditor-container"]}>
-                        <TextEditor ref={this.window} run={this.props.runterminal}/>
+                        <TextEditor ref={this.window} run={this.cmdExcute}/>
                         {/*
                         */}
                     </div>
