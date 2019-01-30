@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import api from '../../modules/api'
 import styles from './CourseInfo.module.css';
-import api from '../../modules/api';
 
 import {MainContext} from '../../contexts/main';
 
