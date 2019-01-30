@@ -1063,8 +1063,10 @@ class Editor extends Component {
     if (!path) return;
 
     const formData = new FormData();
-  
-    formData.append('path', `/Course/${this.state.id}${path}`);
+    if(files[0].name){
+      formData.append('path', `/Course/${this.state.id}/${path}/${files[0].name}`);
+    }
+    formData.append('path', `/Course/${this.state.id}/${path}`);
     for (var i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
     }

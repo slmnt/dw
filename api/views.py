@@ -521,14 +521,15 @@ class Upload(viewsets.ModelViewSet):
             path = STORAGE
 
             for name in dir:
-                pattern = '.*\..*'
-                r = re.match(pattern,name)
-                if r:
-                    path += name
-                else:
-                    path += name + '//'
-                    if not os.path.exists(path):
-                        os.makedirs(path)
+                if name:
+                    pattern = '.*\..*'
+                    r = re.match(pattern,name)
+                    if r:
+                        path += name
+                    else:
+                        path += name + '//'
+                        if not os.path.exists(path):
+                            os.makedirs(path)
 
             with open(path,mode='wb+') as f:
                 for line in p:
