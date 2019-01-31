@@ -139,6 +139,7 @@ class TextEditor extends React.Component {
           }
       }
       console.log(path)
+      console.log(this.getContent(path))
       let tab = {
           path: path,
           name: path.substring(path.lastIndexOf('/') + 1),

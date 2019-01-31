@@ -720,45 +720,33 @@ class Editor extends Component {
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error))
       );
-      
-      console.log("slide:", slides)
-      let formData = new FormData();
-      formData.append('id',this.state.id)
-      formData.append('cid',idx)
-      formData.append('sid',0)
-      formData.append('title',"dumptitle")
-      formData.append('context','dump')
-      api.post('/api/createslide/',{
-        body: formData
-      }).then(api.parseJson)
-      .then(response => console.log(response))
-      .catch(error => console.error('Error:', error))
-
-      for(let s of slides){
-        
-        //at this point, craete slides
-        //name, desc
-        jdx += 1
-
-        let formData = new FormData();
-        formData.append('id',this.state.id)
-        formData.append('cid',idx)
-        formData.append('sid',jdx)
-        formData.append('title',s.name || "title")
-        formData.append('context',s.text)
-        list.push(
-          api.post('/api/createslide/',{
-            body: formData
-          }).then(api.parseJson)
-          .then(response => console.log(response))
-          .catch(error => console.error('Error:', error))
-        );
-      }
-
-      this.getDirtree(this.state.courseData.directory,'',base_url)
-      // console.log("runnnig")
     }
 
+    for(let ci in chapters){
+        let c = chapters[ci]
+        for(let si in c.slides){
+          let s = c.slides[si];
+          //at this point, craete slides
+          //name, desc
+
+          let formData = new FormData();
+          formData.append('id',this.state.id)
+          formData.append('cid',ci)
+          formData.append('sid',si)
+          formData.append('title',s.name || "title")
+          formData.append('context',s.text)
+          list.push(
+            api.post('/api/createslide/',{
+              body: formData
+            }).then(api.parseJson)
+            .then(response => console.log(response))
+            .catch(error => console.error('Error:', error))
+          );
+        }
+      }
+
+    this.getDirtree(this.state.courseData.directory,'',base_url)
+    
 
     Promise.all(list).then(() => {
       console.log("course saved");

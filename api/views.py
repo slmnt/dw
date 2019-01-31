@@ -330,7 +330,7 @@ class Python(viewsets.ModelViewSet):
         #excete 
         try:
             #timeout value setting is service level
-            out, err = p.communicate(timeout=0.2)
+            out, err = p.communicate(timeout=4)
         except subprocess.TimeoutExpired:
             p.kill()
             out, err = p.communicate()

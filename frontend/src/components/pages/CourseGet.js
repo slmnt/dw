@@ -95,7 +95,7 @@ class CourseGet extends Component {
                 s.push(t.context)
             }
             this.setState({slides: s})
-            console.log("oioio", s, response)
+            console.log("oioio",s)
         }).catch(e => console.log(e))
 
 
@@ -361,7 +361,7 @@ class CourseGet extends Component {
                         />
                     </div>
                     <div className={styles["textditor-container"]}>
-                        <TextEditor ref={this.window} run={this.cmdExcute}/>
+                        <TextEditor ref={this.window} run={this.cmdExcute} getContent={this.getContent}/>
                         {/*
                         */}
                     </div>
