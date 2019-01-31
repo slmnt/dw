@@ -40,10 +40,10 @@ class TextEditor extends React.Component {
       }
   }
   componentDidMount(){
-    window.addEventListener("resize", this.updateEditorSize);
+    //window.addEventListener("resize", this.updateEditorSize);
   }
   componentWillUnmount(){
-    window.removeEventListener("resize", this.updateEditorSize);
+    //window.removeEventListener("resize", this.updateEditorSize);
   }
   updateEditorSize = (e) => {
     if ( (e.timeStamp - this.lastSizeUpdate) < 500 ) return;
