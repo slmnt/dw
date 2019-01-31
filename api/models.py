@@ -93,15 +93,6 @@ class UserCourseContent(models.Model):
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
-    locked = models.BooleanField(default=False)
-
-    def lock(self):
-        self.lock = True
-        super(models.Model,self).save()
-    def unlock(self):
-        self.lock = False
-        super(models.Model,self).save()
-
 
 ######
 # Coutse Chapter Slides

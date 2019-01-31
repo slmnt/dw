@@ -706,6 +706,8 @@ class Editor extends Component {
     let idx = 0
     for(let c of chapters){
       idx += 1
+      let jdx = 0
+      let slides = c.slides
       //at this point, craete chapter
       //name, desc
       list.push(
@@ -722,7 +724,6 @@ class Editor extends Component {
 
     for(let ci in chapters){
         let c = chapters[ci]
-        let jdx = 1
         for(let si in c.slides){
           let s = c.slides[si];
           //at this point, craete slides
@@ -730,8 +731,8 @@ class Editor extends Component {
 
           let formData = new FormData();
           formData.append('id',this.state.id)
-          formData.append('cid',idx)
-          formData.append('sid',jdx)
+          formData.append('cid',ci)
+          formData.append('sid',si)
           formData.append('title',s.name || "title")
           formData.append('context',s.text)
           list.push(
@@ -821,24 +822,6 @@ class Editor extends Component {
     this.setState({showChapterMenu: true, chapterMenuConfig: -1});
   }
   closeChapterMenu = () => {
-    var chapters = this.state.courseData.chapters
-
-    let idx = 0
-    for(let c of chapters){
-      idx += 1
-      //at this point, craete chapter
-      //name, desc
-        api.ex_post('/api/craetechapter/',{
-          'id': this.state.id,
-          'cid':idx,
-          'title':c.name,
-          'desc':c.desc
-        }).then(api.parseJson)
-        .then(response => console.log())
-        .catch(error => console.error('Error:', error))
-    }
-
-
     this.setState({showChapterMenu: false});
   }
   
