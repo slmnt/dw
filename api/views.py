@@ -5,6 +5,7 @@ import shutil
 import subprocess
 
 from datetime import datetime
+from time import sleep
 
 from api import models as m
 from api import serializers as s
@@ -871,4 +872,3 @@ class APItest(viewsets.ModelViewSet):
         data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
-
