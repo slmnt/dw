@@ -291,9 +291,7 @@ class TextEditor extends React.Component {
       return this.editor.getValue();
   }
   getContent(path) {
-      console.log(path)
       if (this.props.getContent) {
-          console.log(this.props.getContent(path));
           return this.props.getContent(path);
       }
       return this.content[path];

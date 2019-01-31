@@ -24,8 +24,12 @@ class UserInfo extends Component {
 
         this.state = {
             userId: this.props.isMyPage || !this.props.match ? -1 : this.props.match.params.id,
-            userinfo: {},
+            userinfo: {
+                root: "",
+                profile: ""
+            },
             courses: [
+                /*
                 {
                     id: 1,
                     title: "course1",
@@ -59,6 +63,7 @@ class UserInfo extends Component {
                     authorAvatar: "",
                     authorId: 12
                 }
+                */
             ],
         };
         this.set = props.set
@@ -69,6 +74,7 @@ class UserInfo extends Component {
     componentDidMount(){
 
         if(typeof(this.props.match.params.id) === 'undefined'){
+            console.log("test1")
             //mypage Done
             api.get('/api/mypagecourseget/').then(api.parseJson)
             .then(response => this.setState({courses: response}))
@@ -78,15 +84,17 @@ class UserInfo extends Component {
     
         }else{
             //user search
+            api.ex_post('/api/getusercourseinfo/',{
+                name: this.props.match.params.id
+            }).then(api.parseJson)
+            .then(response => {
+                this.setState({courses: response})})            
+
             api.ex_post('/api/searchuserinfo/',{
                 name: this.props.match.params.id
             }).then(api.parseJson)
             .then(response => this.setState({userinfo: response}))
 
-            api.ex_post('/api/getusercourseinfo/',{
-                name: this.props.match.params.id
-            }).then(api.parseJson)
-            .then(response => this.setState({courses: response}))            
         }
     }
     getUserData = () => {
@@ -106,6 +114,8 @@ class UserInfo extends Component {
     onSaveProfile = () => {
         api.ex_post('/api/updateuserprofile/',{profile: this.descCfg.current.value}).then(api.parseJson)
         .then(response => this.setState({userinfo: response}))
+
+        this.closeSettings();
     }
 
     changeSettings = () => {

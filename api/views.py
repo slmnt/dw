@@ -506,7 +506,6 @@ class GetUserCourseContentIndex(viewsets.ModelViewSet):
         tar2 = UserCourseContent.objects.filter(root=tar,cid=cid)
         tar3 = tar2.get()
         obj = UserCourseContentIndex.objects.all().filter(root=tar3)
-        #print(obj)
         serial = UserCourseContentIndexSerializer(obj,many=True)
         return Response(data=serial.data,status=status.HTTP_200_OK)
 
@@ -665,8 +664,10 @@ class GEtUserCourses(viewsets.ModelViewSet):
 
     def post(self, request):
         username = request.data['name']
-        target = User.objects.get(id=username)
-        queryset = UserCourse.objects.all().filter(root=target)
+        target = UserInfo.objects.get(id=username)
+        target2 = target.root
+        queryset = UserCourse.objects.all().filter(root=target2)
+        print(queryset)
         serializers = UserCourseSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
@@ -806,8 +807,8 @@ class MypageUSerCourseget(viewsets.ModelViewSet):
 class SearchUserinfoget(viewsets.ModelViewSet):
     
     def post(self, request):
-        user = User.objects.get(id=request.data['name'])
-        queryset = UserInfo.objects.get(root=user)
+        user = UserInfo.objects.get(id=request.data['name'])
+        queryset = UserInfo.objects.get(root=user.root)
         serializers = UserInfoSerializer(queryset)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 

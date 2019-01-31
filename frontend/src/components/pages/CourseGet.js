@@ -95,6 +95,7 @@ class CourseGet extends Component {
                 s.push(t.context)
             }
             this.setState({slides: s})
+            console.log("oioio", s, response)
         }).catch(e => console.log(e))
 
 
@@ -260,6 +261,25 @@ class CourseGet extends Component {
         this.window.current.outputToTerm(text);
     }
 
+    onUpload = (files, path) => {
+        if (!path) return;
+
+        const formData = new FormData();
+        formData.append('path', `/Course/${this.state.id}/${path}/${files[0].name}`);
+        //formData.append('path', `/Course/${this.state.id}/${path}`);
+        for (var i = 0; i < files.length; i++) {
+          formData.append('files', files[i]);
+        }
+    
+        api.post('/api/upload/', {
+          body: formData,
+        })
+        .then(api.parseJson)
+        .then(response => console.log('Success:', JSON.stringify(response)))
+        .catch(error => console.error('Error:', error));
+      
+      }
+
     goToChaper = (v) => {
         let cid = parseInt(this.state.chapterId) + parseInt(v);
         if (v >= 0) {
@@ -333,6 +353,7 @@ class CourseGet extends Component {
                         */}
                         <DirTree dir={this.state.directory}
                             onOpenFile={path => {this.window.current.openTab(path);}}
+                            onUpload={this.onUpload}
                             rename={this.renameDir}
                             delete={this.deleteDir}
                             copy={this.copyDir}

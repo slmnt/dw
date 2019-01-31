@@ -403,7 +403,7 @@ class FileEditor extends React.Component {
                   width: "100%",      
               }}
           >
-              <TextEditor ref={this.window} run={this.props.runterminal}/>
+              <TextEditor ref={this.window} run={this.props.runterminal} getContent={this.props.getContent}/>
             {/*
             */}
 
@@ -540,6 +540,13 @@ class Editor extends Component {
 
   
       Promise.all(slidePms).then(response => {
+        if (newChapters.length === 0) {
+          newChapters.push({
+            name: "テストチャプター",
+            desc: "テスト",
+            slides: []
+          })
+        }
         this.loadChapters(newChapters);
         this.state.courseData.chapters = newChapters;
         this.setState({courseData: this.state.courseData}, () => {
@@ -613,11 +620,14 @@ class Editor extends Component {
   }
 
   runTerminal = (cmd) => {
+    this.cmdExcute(cmd);
+    /*
+    // docker
     let cmds = cmd.split(' ')
     let base_url = "Course/" + this.state.id
-    // console.log(cmds,base_url)
     
     this.executeCode(cmds, base_url);
+    */
   }
   executeCode = (cmds, base_url) => {
     switch(cmds[0]){
@@ -637,6 +647,32 @@ class Editor extends Component {
       default:
         break
     }
+  }
+    
+  cmdExcute = (cmd) => {
+    let parser = cmd.split(' ')
+    // console.log(parser)
+    
+    let arg = "/" + parser[1];
+    // console.log(this.state.files)
+    // console.log(arg)
+    // console.log(this.state.files[arg])
+    let text = this.fileEditor.current.window.current.getTabValue(arg) || this.state.courseData.files[arg];
+    if (!text) return;
+
+    console.log(text)
+
+    api.ex_post('/api/python/',{
+        contents: text 
+    }).then(api.parseJson).then(response => {
+        if (!response) return;
+        // Print Result
+        console.log(response)
+        this.outputToTerm(response);
+    });
+  }
+  outputToTerm = (text) => {
+    this.fileEditor.current.window.current.outputToTerm(text);
   }
 
   onSave = (e) => {
@@ -658,8 +694,10 @@ class Editor extends Component {
     formData.append('title',this.state.courseData.name)
     formData.append('desc',this.state.courseData.desc)
     list.push(
-      api.post('/api/updatecourse/',{
-        body: formData
+      api.ex_post('/api/updatecourse/',{
+        'id': this.state.id,
+        'title': this.state.courseData.name,
+        'desc': this.state.courseData.desc
       }).then(api.parseJson)
       .then(response => console.log(response))
       .catch(error => console.error('Error:', error))
@@ -672,20 +710,30 @@ class Editor extends Component {
       let slides = c.slides
       //at this point, craete chapter
       //name, desc
-      let formData = new FormData();
-      formData.append('id',this.state.id)
-      formData.append('cid',idx)
-      formData.append('title',c.name)
-      formData.append('desc',c.desc)
       list.push(
-        api.post('/api/craetechapter/',{
-          body: formData
+        api.ex_post('/api/craetechapter/',{
+          'id': this.state.id,
+          'cid':idx,
+          'title':c.name,
+          'desc':c.desc
         }).then(api.parseJson)
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error))
       );
       
       console.log("slide:", slides)
+      let formData = new FormData();
+      formData.append('id',this.state.id)
+      formData.append('cid',idx)
+      formData.append('sid',0)
+      formData.append('title',"dumptitle")
+      formData.append('context','dump')
+      api.post('/api/createslide/',{
+        body: formData
+      }).then(api.parseJson)
+      .then(response => console.log(response))
+      .catch(error => console.error('Error:', error))
+
       for(let s of slides){
         
         //at this point, craete slides
@@ -1069,11 +1117,27 @@ class Editor extends Component {
       formData.append('files', files[i]);
     }
 
+    console.log(files)
+
     api.post('/api/upload/', {
       body: formData,
     })
     .then(api.parseJson)
-    .then(response => console.log('Success:', JSON.stringify(response)))
+    .then(response => {
+      for (var i = 0; i < files.length; i++) {
+        this.createDir(path, files[i].name);
+
+        let fullPath = `${path}${files[i].name}`;
+        var reader = new FileReader();
+        reader.onload = () =>  {
+            this.state.courseData.files[fullPath] = reader.result;
+            this.setState({courseData: this.state.courseData});
+        }
+        reader.readAsText(files[i]);
+        console.log(this.state.courseData.files)
+      }
+      console.log('Success:', JSON.stringify(response))
+    })
     .catch(error => console.error('Error:', error));
   
   }
@@ -1214,6 +1278,7 @@ class Editor extends Component {
                 getContent={this.getContent}
                 onSaveTab={this.onSaveTab}
                 onUpload={this.onUpload}
+                getContent={this.getContent}
 
                 create={this.createDir}
                 copy={this.copyDir}
