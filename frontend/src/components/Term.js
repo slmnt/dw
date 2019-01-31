@@ -132,6 +132,9 @@ class Term extends React.Component {
           //console.log("first", term.x, term.y);
         };
       };
+      term.addLineBreak = () => {
+        term.write('\r\n');
+      }
 
 
       term.pushHistory = (cmd) => {
@@ -182,13 +185,15 @@ class Term extends React.Component {
       }
       term.runCommand = () => {
         // console.log(term.cmd);
+        term.addLineBreak();
 
         this.runCommand(term.cmd);
-
+        
         term.pushHistory(term.cmd);
         term.cmd = '';
         term.historyIndex = -1;
 
+        term.allowInput = false;
       }
       term.isOutOfInput = (rx, ry) => {
         const f = term.x + rx >= term.ix && term.y + ry == term.iy || term.y + ry > term.iy;
@@ -229,12 +234,21 @@ class Term extends React.Component {
         }
       });
       term._core.register(term.addDisposableListener('key', (key, ev) => {
+        //console.log(ev.keyCode, ev.ctrlKey)
+        if (ev.keyCode === 67 && ev.ctrlKey) {
+          this.term.prompt();
+          return;
+        }
+
         if (!term.allowInput) return;
         const printable = !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey;
                 
         if (ev.keyCode === 13) { // enter
+          if (term.cmd.trim() === '') {
+            this.term.prompt();
+            return;
+          }
           term.runCommand();
-          term.prompt();
           term.selectLines(1,2);
         } else if (ev.keyCode === 8) { // backspace
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
@@ -304,6 +318,7 @@ class Term extends React.Component {
     }
     getOutput(data) {
       this.term.write(data);
+      this.term.prompt();
     }
     render() {
         return (

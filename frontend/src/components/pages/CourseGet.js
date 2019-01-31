@@ -239,23 +239,25 @@ class CourseGet extends Component {
     cmdExcute = (cmd) => {
         let parser = cmd.split(' ')
         // console.log(parser)
-        var set = RegExp(/\.(\w*)/);
-        if(set.test(parser[1])){
-            let arg = parser[1].replace(set,'')
-            // console.log(this.state.files)
-            // console.log(arg)
-            // console.log(this.state.files[arg])
-            let text = this.state.files[arg]
-            api.ex_post('/api/python/',{
-                contents: text 
-            }).then(api.parseJson).then(response => {
-                if (!response) return;
-                // Print Result
-                console.log(response)
-            });
-    
-        }
-    
+        
+        let arg = "/" + parser[1];
+        // console.log(this.state.files)
+        // console.log(arg)
+        // console.log(this.state.files[arg])
+        let text = this.window.current.getTabValue(arg) || this.state.files[arg];
+        if (!text) return;
+
+        api.ex_post('/api/python/',{
+            contents: text 
+        }).then(api.parseJson).then(response => {
+            if (!response) return;
+            // Print Result
+            console.log(response)
+            this.outputToTerm(response);
+        });
+    }
+    outputToTerm = (text) => {
+        this.window.current.outputToTerm(text);
     }
 
     goToChaper = (v) => {

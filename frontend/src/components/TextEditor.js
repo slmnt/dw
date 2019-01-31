@@ -324,7 +324,9 @@ class TextEditor extends React.Component {
       this.props.onSaveTab();
   }
 
-
+  outputToTerm = (text) => {
+      this.term.current.getOutput(text);
+  }
 
 
   render() {
