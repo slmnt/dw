@@ -12,16 +12,16 @@ class Left extends React.Component {
   dragStart(e) {
     // Update our state with the item that is being dragged
     e.dataTransfer.effectAllowed = 'move'
-    console.log('start')
+    // console.log('start')
   }
 
   dragOver(e) {
-    console.log('dragging')
+    // console.log('dragging')
     e.preventDefault()
   }
 
   dragEnd() {
-    console.log('end')
+    // console.log('end')
   }
     
   render() {

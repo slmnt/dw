@@ -124,7 +124,7 @@ class DirTree extends React.Component {
     var files = dt.files;
   
     var count = files.length;
-    console.log("File Count: " + count + "\n");
+    // console.log("File Count: " + count + "\n");
     for (var i = 0; i < files.length; i++) {
       console.log(" File " + i + ":\n(" + (typeof files[i]) + ") : <" + files[i] + " > " +
               files[i].name + " " + files[i].size + "\n");
@@ -135,7 +135,7 @@ class DirTree extends React.Component {
 
   onDragEnter = e => {
     e.preventDefault();
-    console.log(e.dataTransfer)
+    // console.log(e.dataTransfer)
     this.setState({dragover: true});
   }
   onDragLeave = e => {
@@ -147,7 +147,7 @@ class DirTree extends React.Component {
     e.preventDefault();
   }
   onDrop = e => {
-    console.log("upload to:", path)
+    // console.log("upload to:", path)
     e.preventDefault();
     
     const item = e.target.closest("[data-filepath]");
@@ -234,15 +234,15 @@ class DirTree extends React.Component {
     this.props.create(path, name, isFolder);
   }
   copy = (from, to) => {
-    console.log("copy:", from, to)
+    // console.log("copy:", from, to)
     this.props.copy(from, to);
   }
   delete = (path) => {
-    console.log("delete:", path)
+    // console.log("delete:", path)
     this.props.delete(path);
   }
   rename = (path, name) => {
-    console.log("rename:", path, name)
+    // console.log("rename:", path, name)
     this.props.rename(path, name);
   }
 

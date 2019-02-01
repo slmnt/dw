@@ -98,7 +98,7 @@ class board extends Component {
 
     async syn(){
         var x = await this.wait2sec(1)
-        console.log(this.state.data)
+        // console.log(this.state.data)
     }
 
     convertdata(date){

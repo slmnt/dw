@@ -198,7 +198,7 @@ class SlideEditor extends React.Component {
     let pos = this.getBoxPos(e.currentTarget, 0, e.clientY);
 
     let box = this.getBox(pos);
-    console.log(pos)
+    // console.log(pos)
     if (box) {
       this.draggingBox = box;
     }
@@ -649,9 +649,7 @@ class Editor extends Component {
     //
     let list = [];
 
-    console.log("course saving");
-
-
+    // console.log("course saving");
     // update coursetitle
     let formData = new FormData();
     formData.append('id',this.state.id)
@@ -685,7 +683,7 @@ class Editor extends Component {
         .catch(error => console.error('Error:', error))
       );
       
-      console.log("slide:", slides)
+      // console.log("slide:", slides)
       for(let s of slides){
         
         //at this point, craete slides
@@ -713,7 +711,7 @@ class Editor extends Component {
 
 
     Promise.all(list).then(() => {
-      console.log("course saved");
+      // console.log("course saved");
       history.push(`/course/${this.context.uid}/${this.state.id}`);
     });
 
@@ -903,7 +901,7 @@ class Editor extends Component {
   addBlankSlide = () => {
     if (!this.state.currentChapter) return;
     if (this.state.currentChapter.slides.length > 30) {
-      console.log("スライドの最大枚数突破");
+      // console.log("スライドの最大枚数突破");
       return;
     }
     this.state.currentChapter.slides.push({
@@ -1019,7 +1017,7 @@ class Editor extends Component {
 
     const dup = data.file.children.find((v) => v.name == name);
     if (dup) {
-      console.log("同じ名前のファイルが存在します:", name);
+      // console.log("同じ名前のファイルが存在します:", name);
       return;
     }
 

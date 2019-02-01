@@ -12,7 +12,7 @@ class Email extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props)
+        // console.log(this.props)
         //console.log("monted")
         //console.log(this.props.match.params)
         axios.defaults.xsrfCookieName = 'csrftoken';

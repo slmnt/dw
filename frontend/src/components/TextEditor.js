@@ -78,7 +78,7 @@ class TextEditor extends React.Component {
       })
   }
   onEditorResize(width, height) {
-      console.log(width, height)
+      // console.log(width, height)
       this.editor.layout({width, height});
       //this.tabList.current.style.width = width + "px"
   }
@@ -138,7 +138,7 @@ class TextEditor extends React.Component {
               newTabs.push(v);
           }
       }
-      console.log(path)
+      // console.log(path)
       let tab = {
           path: path,
           name: path.substring(path.lastIndexOf('/') + 1),
@@ -170,7 +170,7 @@ class TextEditor extends React.Component {
       }, (() => {
           if (isCurrentTab && this.state.tabs.length > 0) {
               let i = tabId > 0 ? tabId - 1 : 0;
-              console.log(isCurrentTab, tabId, i)
+              // console.log(isCurrentTab, tabId, i)
               this.activateTab(this.state.tabs[i].path);
           } else if (this.state.tabs.length === 0) {
             this.hideEditor();
@@ -218,7 +218,7 @@ class TextEditor extends React.Component {
 
       this.setState(newState, (() => {
           let tab = this.getTab(path);
-          console.log("load", tab)
+          // console.log("load", tab)
           this.loadTabState(tab);
           tab.init = true;
 
@@ -291,9 +291,9 @@ class TextEditor extends React.Component {
       return this.editor.getValue();
   }
   getContent(path) {
-      console.log(path)
+      // console.log(path)
       if (this.props.getContent) {
-          console.log(this.props.getContent(path));
+          // console.log(this.props.getContent(path));
           return this.props.getContent(path);
       }
       return this.content[path];
@@ -311,10 +311,10 @@ class TextEditor extends React.Component {
       tab.path = newPath.join('/');
       tab.name = name;
 
-      console.log(path, this.state.currentTab)
+      // console.log(path, this.state.currentTab)
 
       this.setState({tabs: this.state.tabs}, () => {
-        console.log(path, this.state.currentTab)
+        // console.log(path, this.state.currentTab)
         if (path === this.state.currentTab) {
             this.activateTab(tab.path);
         }
