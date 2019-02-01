@@ -65,6 +65,8 @@ class FileEditor extends React.Component {
     }
   }
   importDir = (files) => {
+    let dir = [];
+    // ソート
     for (let path in files) {
         const list = path.split('/');
         let obj = this.state.directory;
@@ -72,19 +74,24 @@ class FileEditor extends React.Component {
             if (dir !== '') {
                 let c = obj.children.find(v => v.name === dir);
                 if (!c) {
-                    let newFile = { name: dir };
+                    let newFile = { name: dir, parent: obj };
                     if (dir !== list[list.length - 1]) {
                         newFile.children = [];
                     }
-                    
                     obj.children.push(newFile);
                     c = obj.children[obj.children.length - 1];
+
+                    dir.push(obj);
                 }
                 obj = c;
             }
         }
     }
-      //console.log(this.state.directory)
+    for (let d of dir) {
+      this.sortDir(dir);
+    }
+    
+    this.setState({directory: this.state.directory})
   }
   importFiles = (files) => {
     this.setState({files: files})
@@ -92,7 +99,7 @@ class FileEditor extends React.Component {
   findFile = (path) => {
     console.log("findfile", path)
     if (path == "/") { // root
-      return { parent: null, file: this.state.directory, index: 0 };
+      return this.state.directory;
     }
 
     const tree = path.split('/')
@@ -111,20 +118,30 @@ class FileEditor extends React.Component {
       if (tree.length == 0) break;
       parent = file;
     }
-    return { parent, file, index };
+    return file;
+  }
+  findPath = (data) => {
+    console.log("findpath", data)
+    
+    let file = data;
+    let path = '';
+
+    while (file) {
+      if (file.parent) path = '/' + file.name + path;
+      file = file.parent;
+    }
+    return path;
   }
 
-
   createNew = (path, isFolder) => {
-    const data = this.findFile(path);
-    if (!data.file) return;
+    const file = this.findFile(path);
+    if (!file) return;
 
     let baseName = "新しい" + (isFolder ? "フォルダ" : "ファイル");
-    let name
+    let name = baseName;
     for(let i = 0; i < 100; i++) {
-      name = baseName + ` (${i + 1})`;
       let flag = false;
-      for (let c of data.file.children) {
+      for (let c of file.children) {
         if (c.name == name) {
           flag = true;
           break;
@@ -133,43 +150,70 @@ class FileEditor extends React.Component {
       if (!flag) {
         break;
       }
+      name = baseName + ` (${i + 1})`;
     }
     this.createDir(path, name, isFolder);
   }
   createDir = (path, name, isFolder) => {
-    const data = this.findFile(path);
-    if (!data || !data.file || !data.file.children) return; // folder のみ
+    const file = this.findFile(path);
+    if (!file || !file.children) return; // folder のみ
 
-    const dup = data.file.children.find((v) => v.name == name);
+    const dup = file.children.find((v) => v.name == name);
     if (dup) {
       console.log("同じ名前のファイルが存在します:", name);
       return;
     }
 
-    data.file.children.push({
+    file.children.push({
       name: name,
-      children: isFolder && []
+      children: isFolder && [],
+      parent: file
     });
+    this.sortDir(file);
     this.setState({directory: this.state.directory});
   }
   renameDir = (path, name) => {
-    const data = this.findFile(path);
-    if (!data) return;
+    const file = this.findFile(path);
+    if (!file) return;
 
-    this.updateTabName(path, name); // TextEditor も更新
-    this.saveDir(this.splitPath(path).path + "/" + name, this.state.files[path]); // 自動保存
+    name = this.sanitizeFileName(name);
+    let dir = this.splitPath(path).dir;
+    let newPath = this.joinPath(dir, name);
+
+    this.saveDir(newPath, this.window.current.getTabValue(path)); // 自動保存
+    delete this.state.files[path];
     
-    data.file.name = name;
+    file.name = name;
+    this.setState({files: this.state.files, directory: this.state.directory}, () => {
+      this.updateTabName(path, name); // TextEditor も更新
+    });
+  }
+  moveDir = (from, to) => {
+    const file = this.findFile(from);
+    const path = this.getDirPath(to);
+    const dest = this.findFile(path);
+    if (!file || !dest || path == this.getDirPath(from)) return;
+
+    // remove
+    file.parent.children.splice(file.parent.children.indexOf(file), 1);
+    const value = this.state.files[from];
+    delete this.state.files[from];
+
+    // place
+    dest.children.push(file);
+    file.parent = dest;
+    this.sortDir(dest);
+    this.state.files[this.joinPath(path, file.name)] = value;
+
+    //
     this.setState({directory: this.state.directory});
-
-
   }
   deleteDir = (path) => {
-    const data = this.findFile(path);
-    console.log("close", path, data)
-    if (!data || !data.parent) return;
+    const file = this.findFile(path);
+    console.log("close", path, file)
+    if (!file || !file.parent || !file.parent.children) return;
     
-    data.parent.children.splice(data.index, 1);
+    file.parent.children.splice(file.parent.children.indexOf(file), 1);
     this.setState({directory: this.state.directory});
 
     // close tab
@@ -177,24 +221,46 @@ class FileEditor extends React.Component {
 
   }
   copyDir = (from, to) => {
-    console.log("copyDir", from, to)
-    const data = this.findFile(from);
+    const fromFile = this.findFile(from);
     const name = this.splitPath(from).name;
-    const path = this.splitPath(to).path;
-    this.createDir(path, name, !data.children);
-    this.saveDir(to, this.state.files[from]);
+    const path = this.getDirPath(to);
+    console.log("copyDir", to, path)
+    this.createDir(path, name, fromFile.children && true);
+    this.saveDir(this.joinPath(to, name), this.state.files[from]);
   }
   saveDir = (path, value) => {
-    if (!this.state.files[path]) return;
+    console.log(path, value)
     this.state.files[path] = value;
     this.setState({files: this.state.files});
   }
   splitPath = (path) => {
     let i = path.lastIndexOf('/');
     return {
-      name: path.substring(0, i),
-      dir: path.substring(i + 1),
+      dir: path.substring(0, i) || '/',
+      name: path.substring(i + 1),
     }
+  }
+  joinPath = (p1, p2) => {
+    return p1.replace(/(\/*)$/, '') + '/' + p2.replace(/^(\/*)/, '');
+  }
+  getDirPath = (path) => {
+    const data = this.getFile(path);
+    return !data.children ? path : this.splitPath(path).dir;
+  }
+  getFile = (v) => {
+    if (typeof(v) == 'string') {
+      return {
+        data: this.findFile(v),
+        path: v
+      }
+    }
+    return {
+      data: v,
+      path: this.findPath(v)
+    };
+  }
+  sanitizeFileName = name => {
+    return name.replace(/\//g, '');
   }
 
   onUpload = (files, path) => {
@@ -232,6 +298,16 @@ class FileEditor extends React.Component {
   
   }
 
+
+  sortDir = (file) => {
+    // フォルダを上位に & ファイル名で降順
+    file.children.sort((a, b) => {
+      if (!a.children || !b.children) {
+        return (!a.children ? 1 : 0)  - (!b.children ? 1 : 0);
+      }
+      return a.name.localeCompare(b.name);
+    })
+  }
   
   // tab
   renameTab = (path, name) => {
@@ -319,6 +395,7 @@ class FileEditor extends React.Component {
             rename={this.renameDir}
             delete={this.deleteDir}
             copy={this.copyDir}
+            move={this.moveDir}
             create={this.createDir}
             createNew={this.createNew}
 
@@ -327,7 +404,12 @@ class FileEditor extends React.Component {
 
         </div>
         <div className={styles["textditor-container"]}>
-          <TextEditor ref={this.window} run={this.runTerminal} getContent={this.getContent}/>
+          <TextEditor
+            ref={this.window}
+            run={this.runTerminal}
+            getContent={this.getContent}
+            save={this.saveDir}
+          />
           {/*
           */}
 

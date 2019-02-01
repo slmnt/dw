@@ -90,6 +90,8 @@ class DirTree extends React.Component {
               if (this.props.onOpenFile) this.props.onOpenFile(path);
             }
           }).bind(this)}
+          onDragStart={this.onDragStart}
+          onDragEnd={this.onDragEnd}
         >
           <div className={styles["dir-label"]} draggable>
             <span
@@ -133,10 +135,18 @@ class DirTree extends React.Component {
   }
 
 
-  onDragEnter = e => {
-    e.preventDefault();
-    console.log(e.dataTransfer)
+  onDragStart = e => {
+    e.dataTransfer.effectAllowed = 'copy'
+    e.dataTransfer.setData("dragfile", e.currentTarget.dataset["filepath"]);
+    console.log(e.dataTransfer.getData('dragfile'));
     this.setState({dragover: true});
+  }
+  onDragEnd = e => {
+    this.setState({dragover: false});
+  }
+
+  onDragEnter = e => {
+    e.preventDefault();    
   }
   onDragLeave = e => {
     if (e.target != e.currentTarget) return;
@@ -148,9 +158,16 @@ class DirTree extends React.Component {
   }
   onDrop = e => {
     e.preventDefault();
-    
+
     const item = e.target.closest("[data-filepath]");
     const path = item && item.dataset["filepath"] || "/";
+
+    const dest = e.dataTransfer.getData('dragfile');
+    if (dest) {
+      this.props.move(dest, path);
+      return;
+    }
+
     
     const dt = e.dataTransfer;
     const files = dt.files;
@@ -238,7 +255,6 @@ class DirTree extends React.Component {
     this.props.create(path, name, isFolder);
   }
   copy = (from, to) => {
-    console.log("copy:", from, to)
     this.props.copy(from, to);
   }
   delete = (path) => {
@@ -252,7 +268,9 @@ class DirTree extends React.Component {
 
   render() {
     return (
-      <div className={styles["dir-main"]}>
+      <div className={styles["dir-main"]}
+        onContextMenu={e => e.preventDefault()}
+      >
           <input type="text"
             className={styles.rename}
             onKeyDown={this.onRenameKeyDown}

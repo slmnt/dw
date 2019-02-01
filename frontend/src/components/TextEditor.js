@@ -161,24 +161,29 @@ class TextEditor extends React.Component {
   closeTab(path) {
     console.log("close", path)
 
-      let tabId = this.getTabIndex(path);
-      let newTabs = Array.from(this.state.tabs);
-      newTabs.splice(tabId, 1);
+    // 自動保存
+    this.props.save(path, this.getTabValue(path));
 
-      let isCurrentTab = path === this.state.currentTab;
+    //
+    let tabId = this.getTabIndex(path);
+    let newTabs = Array.from(this.state.tabs);
+    newTabs.splice(tabId, 1);
 
-      this.setState({
-          tabs: newTabs,
-          currentTab: isCurrentTab ? null : this.state.currentTab
-      }, (() => {
-          if (isCurrentTab && this.state.tabs.length > 0) {
-              let i = tabId > 0 ? tabId - 1 : 0;
-              console.log(isCurrentTab, tabId, i)
-              this.activateTab(this.state.tabs[i].path);
-          } else if (this.state.tabs.length === 0) {
-            this.hideEditor();
-          }
-      }).bind(this));
+    let isCurrentTab = path === this.state.currentTab;
+
+
+    this.setState({
+        tabs: newTabs,
+        currentTab: isCurrentTab ? null : this.state.currentTab
+    }, (() => {
+        if (isCurrentTab && this.state.tabs.length > 0) {
+            let i = tabId > 0 ? tabId - 1 : 0;
+            console.log(isCurrentTab, tabId, i)
+            this.activateTab(this.state.tabs[i].path);
+        } else if (this.state.tabs.length === 0) {
+        this.hideEditor();
+        }
+    }).bind(this));
 
   }
   renameTab = (path, name) => {
@@ -191,13 +196,14 @@ class TextEditor extends React.Component {
 
     tab.path = newPath.join('/');
     tab.name = name;
+    tab.value = this.getContent(path);
 
     console.log(path, this.state.currentTab)
 
     this.setState({tabs: this.state.tabs}, () => {
       console.log(path, this.state.currentTab)
       if (path === this.state.currentTab) {
-          this.activateTab(tab.path);
+          this.setState({currentTab: tab.path});
       }
     });
   }
@@ -318,9 +324,9 @@ class TextEditor extends React.Component {
   }
   getContent(path) {
       if (this.props.getContent) {
-          return this.props.getContent(path);
+          return this.props.getContent(path) || '';
       }
-      return this.content[path];
+      return this.content[path] || '';
   }
 
 
