@@ -213,16 +213,5 @@
   height: 100%;
   width: 100%;
 }
-.dirtree-container {
-  flex: 0 0 auto;
-  width: 200px;
-  overflow: hidden auto;
-  border-right: 1px solid #666666;
-}
-.textditor-container {
-  
-  flex: 1 1 auto;
-  height: 100%;
-  width: 100%;   
-}
+
 

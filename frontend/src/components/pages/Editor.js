@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import styles from './Editor.module.css';
 
-import TextEditor from '../TextEditor';
-import DirTree from '../DirTree';
+import FileEditor from '../FileEditor';
 import TestIFrame from '../TestIFrame';
 
 import 'highlight.js/styles/vs.css'
@@ -347,123 +346,35 @@ class SlideEditor extends React.Component {
 
 }
 
-class FileEditor extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-    }
-    this.window = React.createRef();
-  }
-  renameTab = (path, name) => {
-    this.window.current.renameTab(path, name);
-  }
-
-  getTabValue = (path) => {
-    return this.window.current.getTabValue(path);
-  }
-
-  render() {
-    return (
-      <div
-          style={{
-          display: "flex",
-          lineHeight: "120%",
-          fontSize: "0.6em",
-          color: "#cccccc",
-          height: "100%",
-          width: "100%",
-          }}
-      >
-          <div
-              style={{
-                  flex: "0 0 auto",
-                  width: "200px",
-                  overflow: "hidden auto",
-                  borderRight: "1px solid #666666",
-              }}
-          >
-          {/*
-          */}
-          <DirTree dir={this.props.directory}
-            onOpenFile={path => {this.window.current.openTab(path);}}
-            rename={this.props.rename}
-            delete={this.props.delete}
-            copy={this.props.copy}
-            create={this.props.create}
-
-            onUpload={this.props.onUpload}
-          />
-
-          </div>
-          <div
-              style={{
-                  flex: "1 1 auto",
-                  height: "100%",
-                  width: "100%",      
-              }}
-          >
-              <TextEditor ref={this.window} run={this.props.runterminal} getContent={this.props.getContent}/>
-            {/*
-            */}
-
-          </div>
-      </div>
-    )
-  }
-}
-
 //
 class Editor extends Component {
   constructor (props) {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      courseData: {
+      course: {
         name: "",
         desc: "",
-        chapters: [
-          /*{
-            name: "Chapter01",
-            desc: "",
-            slides: [
-              {
-                text: "Pleas Input something this area",
-                pos: -1
-              }
-            ]
-          }*/
-        ],
-        files: { // text or url
-          //"/src/index.js": "const a = 0;",
-          //"/app.js": "const あこどぉう = 'ういえおｋ';"
-        },
-        directory: { // directory structure
-          name: "", // root (名前なし)
-          children: [
-            /*
-            {
-              name: "src",
-              children: [
-                {
-                  name: "index.js"
-                }
-              ]
-            },
-            { name: "app.js" },
-            { name: "app1.js" },
-            { name: "app2.js" },
-            { name: "app3.js" },
-            */
-          ]
-        },
       },
+      chapters: [
+        /*{
+          name: "Chapter01",
+          desc: "",
+          slides: [
+            {
+              text: "Pleas Input something this area",
+              pos: -1
+            }
+          ]
+        }*/
+      ],
       currentChapter: null,
       currentSlide: null,
       currentTab: 0,
 
       showChapterMenu: false,
       chapterMenuConfig: -1
+      
     }
 
     this.courseNameInput = React.createRef();
@@ -474,9 +385,11 @@ class Editor extends Component {
 
     this.slideEditor = React.createRef();
     this.fileEditor = React.createRef();
+
   }
+
   componentDidMount() {
-    this.loadCourse(this.state.courseData); // テスト test
+    this.loadCourse(this.state.course); // テスト test
     
     this.slideUpdateTimer = window.setInterval(this.applySlideChanges, 1000); // 1秒に一回更新
 
@@ -548,9 +461,9 @@ class Editor extends Component {
           })
         }
         this.loadChapters(newChapters);
-        this.state.courseData.chapters = newChapters;
-        this.setState({courseData: this.state.courseData}, () => {
-          this.openChapter(this.state.courseData.chapters[0]);
+        this.state.chapters = newChapters;
+        this.setState({chapters: this.state.chapters}, () => {
+          this.openChapter(this.state.chapters[0]);
         });
       });
     }).catch(e => console.log(e))
@@ -562,9 +475,8 @@ class Editor extends Component {
       url: `/Course/${this.state.id}/`,
     }).then(api.parseJson).then(response => {
         if (!response) return;
-        Object.assign(this.state.courseData.files, response);
-        this.importDir(response);
-        this.setState({files: this.state.courseData.files})
+        this.fileEditor.current.importFiles(response);
+        this.fileEditor.current.importDir(response);
     });
 
 
@@ -573,111 +485,15 @@ class Editor extends Component {
     window.clearInterval(this.slideUpdateTimer);
   }
 
-  getDirtree = (root, path, base_url) => {
-    var set = RegExp(/\w*\.\w*/);
-    if(set.test(path)){
-      let text = this.getTabValue(path)
-      if(text){
-        let formData = new FormData();
-        formData.append('base_url',base_url)
-        formData.append(path,text)
-        api.post('/api/courseupload/',{
-          body:formData
-        })
-      }
-    }
 
-    if(root.children){
-      for(let c of root.children){
-          this.getDirtree(c,path + '/' + c.name,base_url)
-      }
-    }
-  }
-  importDir = (files) => {
-    for (let path in files) {
-        const list = path.split('/');
-        let obj = this.state.courseData.directory;
-        for (const dir of list) {
-            if (dir !== '') {
-                let c = obj.children.find(v => v.name === dir);
-                if (!c) {
-                    let newFile = { name: dir };
-                    if (dir !== list[list.length - 1]) {
-                        newFile.children = [];
-                    }
-                    
-                    obj.children.push(newFile);
-                    c = obj.children[obj.children.length - 1];
-                }
-                obj = c;
-            }
-        }
-    }
-      //console.log(this.state.directory)
-  }
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
   }
 
-  runTerminal = (cmd) => {
-    this.cmdExcute(cmd);
-    /*
-    // docker
-    let cmds = cmd.split(' ')
-    let base_url = "Course/" + this.state.id
-    
-    this.executeCode(cmds, base_url);
-    */
-  }
-  executeCode = (cmds, base_url) => {
-    switch(cmds[0]){
-      case "javac":
-      case "gcc":
-      case "ruby":
-      case "python":
-        //Upload Dir tree, Running this cmd
-        this.getDirtree(this.state.courseData.directory, '', base_url)
-        let formData = new FormData();
-        formData.append('cmd',cmds[1])
-        formData.append('url',base_url)
-        api.post('/api/dockpy',{
-          body: formData
-        })  
-        break
-      default:
-        break
-    }
-  }
-    
-  cmdExcute = (cmd) => {
-    let parser = cmd.split(' ')
-    // console.log(parser)
-    
-    let arg = "/" + parser[1];
-    // console.log(this.state.files)
-    // console.log(arg)
-    // console.log(this.state.files[arg])
-    let text = this.fileEditor.current.window.current.getTabValue(arg) || this.state.courseData.files[arg];
-    if (!text) return;
-
-    console.log(text)
-
-    api.ex_post('/api/python/',{
-        contents: text 
-    }).then(api.parseJson).then(response => {
-        if (!response) return;
-        // Print Result
-        console.log(response)
-        this.outputToTerm(response);
-    });
-  }
-  outputToTerm = (text) => {
-    this.fileEditor.current.window.current.outputToTerm(text);
-  }
 
   onSave = (e) => {
     let base_url = "Course/" + this.state.id
-    var chapters = this.state.courseData.chapters
+    var chapters = this.state.chapters
     
     // sort slides
     this.sortSlides();
@@ -691,13 +507,13 @@ class Editor extends Component {
     // update coursetitle
     let formData = new FormData();
     formData.append('id',this.state.id)
-    formData.append('title',this.state.courseData.name)
-    formData.append('desc',this.state.courseData.desc)
+    formData.append('title',this.state.course.name)
+    formData.append('desc',this.state.course.desc)
     list.push(
       api.ex_post('/api/updatecourse/',{
         'id': this.state.id,
-        'title': this.state.courseData.name,
-        'desc': this.state.courseData.desc
+        'title': this.state.course.name,
+        'desc': this.state.course.desc
       }).then(api.parseJson)
       .then(response => console.log(response))
       .catch(error => console.error('Error:', error))
@@ -724,15 +540,17 @@ class Editor extends Component {
 
     for(let ci in chapters){
         let c = chapters[ci]
+
+        let jdx = 0
         for(let si in c.slides){
           let s = c.slides[si];
           //at this point, craete slides
           //name, desc
-
+          jdx += 1
           let formData = new FormData();
           formData.append('id',this.state.id)
-          formData.append('cid',ci)
-          formData.append('sid',si)
+          formData.append('cid',idx)
+          formData.append('sid',si + 1)
           formData.append('title',s.name || "title")
           formData.append('context',s.text)
           list.push(
@@ -745,7 +563,7 @@ class Editor extends Component {
         }
       }
 
-    this.getDirtree(this.state.courseData.directory,'',base_url)
+    this.getDirtree(null,'',base_url)
     
 
     Promise.all(list).then(() => {
@@ -768,30 +586,26 @@ class Editor extends Component {
     this.lastPos = to;
     this.lastBox = target;
 
-    this.setState({courseData: this.state.courseData})
+    this.setState({chapters: this.state.chapters})
   }
 
   loadCourse = (data) => {
     //
-    this.loadChapters(data.chapters);
-
-    //
     this.setCourseData(data.name, data.desc);
-
-    //
-    this.setState({
-      courseData: data
-    }, () => {
-      if (this.state.courseData.chapters && this.state.courseData.chapters[0]){
-        this.openChapter(this.state.courseData.chapters[0]);
-        this.openSlide(this.state.courseData.chapters[0].slides[0]);
-      }
-    })
   }
   loadChapters = (chapters) => {
     for (let ch of chapters) {
       this.loadSlides(ch.slides);
     }
+
+    this.setState({
+      chapters: chapters,
+    }, () => {
+      if (this.state.chapters[0]){
+        this.openChapter(this.state.chapters[0]);
+        this.openSlide(this.state.chapters[0].slides[0]);
+      }
+    })
   }
   loadSlides = (slides) => {
     for (let i in slides) {
@@ -838,36 +652,36 @@ class Editor extends Component {
 
   // 
   updateCourseState = () => {
-    this.setState({courseData: this.state.courseData});
+    this.setState({course: this.state.course});
   }
 
   // course
   setCourseName = name => {
-    if (!this.state.courseData) return;
-    this.state.courseData.name = name;
-    this.setState({courseData: this.state.courseData});
+    if (!this.state.course) return;
+    this.state.course.name = name;
+    this.setState({course: this.state.course});
   }
   setCourseData = (name, desc) => {
-    this.state.courseData.name = name;
-    this.state.courseData.desc = desc;
-    this.setState({courseData: this.state.courseData});
+    this.state.course.name = name;
+    this.state.course.desc = desc;
+    this.setState({course: this.state.course});
 
-    this.courseNameInput.current.setValue(this.state.courseData.name);
+    this.courseNameInput.current.setValue(this.state.course.name);
   }
 
   // chapter
   getChapter = id => {
-    return this.state.courseData.chapters[id];
+    return this.state.chapters[id];
   }
   setChapterName = name => {
     if (!this.state.currentChapter) return;
     this.state.currentChapter.name = name;
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
   setChapterDesc = desc => {
     if (!this.state.currentChapter) return;
     this.state.currentChapter.desc = desc;
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
   setChapterNameText = name => {
     this.chapterNameInput.current.setValue(name);
@@ -878,38 +692,35 @@ class Editor extends Component {
     ch.name = this.chapterMenuNameInput.current.getValue();
     ch.desc = this.chapterMenuDescInput.current.getValue();
     if (ch == this.state.currentChapter) this.setChapterNameText(ch.name);
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
 
   addBlankChapter = () => {
-    if (!this.state.courseData) return;
-    this.state.courseData.chapters.push({
+    this.state.chapters.push({
       name: "チャプター",
       desc: "",
       slides: []
     });
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
-  removeChapter = (ch) => {
-    if (!this.state.courseData) return;
-    
-    let id = typeof ch === 'number' ? ch : this.state.courseData.chapters.indexOf(ch);
-    let currentId = this.state.courseData.chapters.indexOf(this.state.currentChapter);
-    this.state.courseData.chapters.splice(id, 1);
+  removeChapter = (ch) => {    
+    let id = typeof ch === 'number' ? ch : this.state.chapters.indexOf(ch);
+    let currentId = this.state.chapters.indexOf(this.state.currentChapter);
+    this.state.chapters.splice(id, 1);
 
-    this.setState({courseData: this.state.courseData}, ch === currentId && (() => {
+    this.setState({chapters: this.state.chapters}, ch === currentId && (() => {
       const c = this.getChapter(0);
       if (c) this.openChapter(c);
     }) || undefined);
   }
   moveChapter = (from, to) => {
-    if (!this.state.courseData.chapters[to]) return;
-    if (!this.state.courseData.chapters[from]) return;
+    if (!this.state.chapters[to]) return;
+    if (!this.state.chapters[from]) return;
 
     from = parseInt(from);
     to = parseInt(to);
 
-    let clone = this.state.courseData.chapters.map((v, i) => i);
+    let clone = this.state.chapters.map((v, i) => i);
 
     let forward = from < to;
     let p = forward ? -1 : 1;
@@ -919,12 +730,12 @@ class Editor extends Component {
     clone[from] = to;
 
     
-    const w = Array.from(this.state.courseData.chapters);
+    const w = Array.from(this.state.chapters);
     for (let i in clone) {
-      this.state.courseData.chapters[clone[i]] = w[i];
+      this.state.chapters[clone[i]] = w[i];
     }
 
-    this.setState({courseData: this.state.courseData})
+    this.setState({chapters: this.state.chapters})
   }
 
   // slide
@@ -934,7 +745,7 @@ class Editor extends Component {
   setSlideText = text => {
     if (!this.state.currentSlide) return;
     this.state.currentSlide.text = text;
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
   addBlankSlide = () => {
     if (!this.state.currentChapter) return;
@@ -947,7 +758,7 @@ class Editor extends Component {
       text: "",
       pos: this.state.currentChapter.slides.length
     });
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapters: this.state.chapters});
   }
   removeSlide = (slide) => {
     if (!this.state.currentChapter) return;
@@ -956,7 +767,7 @@ class Editor extends Component {
     let currentId = this.state.currentChapter.slides.indexOf(this.state.currentSlide);
     this.state.currentChapter.slides.splice(id, 1);
     
-    this.setState({courseData: this.state.courseData}, () => {
+    this.setState({chapters: this.state.chapters}, () => {
       if (slide == currentId) {
         const c = this.getSlide(0);
         this.openSlide(c); 
@@ -983,7 +794,7 @@ class Editor extends Component {
     for (let i in slides) {
       slides[i].pos = parseInt(i);
     }
-    this.setState({courseData: this.state.courseData});
+    this.setState({chapter: this.state.chapter});
   }
 
 
@@ -1022,113 +833,6 @@ class Editor extends Component {
   }
 
 
-
-  /* file */
-  findFile = (path) => {
-    if (path == "/") { // root
-      return { parent: null, file: this.state.courseData.directory, index: 0 };
-    }
-
-    const tree = path.split('/')
-    tree.shift();
-    
-    let index = 0;
-    let file = null;
-    let parent = this.state.courseData.directory;
-
-    while (parent.children && parent.children.length > 0) {
-      index = parent.children.findIndex((v) => v.name == tree[0]);
-      file = parent.children[index];
-      if (!file) return null;
-
-      tree.shift();
-      if (tree.length == 0) break;
-      parent = file;
-    }
-    return { parent, file, index };
-  }
-
-
-  createDir = (path, name, isFolder) => {
-    const data = this.findFile(path);
-    if (!data || !data.file || !data.file.children) return; // folder のみ
-
-    const dup = data.file.children.find((v) => v.name == name);
-    if (dup) {
-      console.log("同じ名前のファイルが存在します:", name);
-      return;
-    }
-
-    data.file.children.push({
-      name: name,
-      children: isFolder && []
-    });
-    this.setState({courseData: this.state.courseData});
-  }
-  renameDir = (path, name) => {
-    const data = this.findFile(path);
-    if (!data) return;
-
-    this.updateTabName(path, name); // TextEditor も更新
-
-    data.file.name = name;
-    this.setState({courseData: this.state.courseData});
-  }
-  deleteDir = (path) => {
-    const data = this.findFile(path);
-    if (!data || !data.parent) return;
-    
-    data.parent.children.splice(data.index, 1);
-    this.setState({courseData: this.state.courseData});
-  }
-  copyDir = (from, to) => {
-
-  }
-
-
-  updateTabName = (path, name) => {
-    this.fileEditor.current.renameTab(path, name);
-  }
-  getContent = (path) => {
-    return this.state.courseData.files[path];
-  }
-  onSaveTab = () => {
-
-  }
-  onUpload = (files, path) => {
-    if (!path) return;
-
-    const formData = new FormData();
-    formData.append('path', `/Course/${this.state.id}/${path}/${files[0].name}`);
-    //formData.append('path', `/Course/${this.state.id}/${path}`);
-    for (var i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
-    }
-
-    console.log(files)
-
-    api.post('/api/upload/', {
-      body: formData,
-    })
-    .then(api.parseJson)
-    .then(response => {
-      for (var i = 0; i < files.length; i++) {
-        this.createDir(path, files[i].name);
-
-        let fullPath = `${path}${files[i].name}`;
-        var reader = new FileReader();
-        reader.onload = () =>  {
-            this.state.courseData.files[fullPath] = reader.result;
-            this.setState({courseData: this.state.courseData});
-        }
-        reader.readAsText(files[i]);
-        console.log(this.state.courseData.files)
-      }
-      console.log('Success:', JSON.stringify(response))
-    })
-    .catch(error => console.error('Error:', error));
-  
-  }
 
   render() {
     return (
@@ -1222,7 +926,7 @@ class Editor extends Component {
                     </div>
                   </div>
                   {
-                    this.state.courseData && this.state.courseData.chapters.map((v, i) => {
+                    this.state.chapters.map((v, i) => {
                       return (
                         <div key={i} className={styles["chapter-menu-item"]} draggable data-chapter={i}
                           onDragOver={this.onDragOver}
@@ -1250,7 +954,6 @@ class Editor extends Component {
             </div>
             <div style={{zIndex: this.state.currentTab === 0 ? "1" : "-1"}} >
               <SlideEditor ref={this.slideEditor}
-                courseData={this.state.courseData}
                 currentChapter={this.state.currentChapter}
                 currentSlide={this.state.currentSlide}
                 moveBox={this.moveBox}
@@ -1261,20 +964,18 @@ class Editor extends Component {
               />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
-              <FileEditor ref={this.fileEditor}
-                directory={this.state.courseData.directory}
-                getContent={this.getContent}
-                onSaveTab={this.onSaveTab}
-                onUpload={this.onUpload}
-                getContent={this.getContent}
-
-                create={this.createDir}
-                copy={this.copyDir}
-                rename={this.renameDir}
-                delete={this.deleteDir}
-
-                runterminal={this.runTerminal}
-              />
+              <div
+                  style={{
+                  display: "flex",
+                  lineHeight: "120%",
+                  fontSize: "0.6em",
+                  color: "#cccccc",
+                  height: "100%",
+                  width: "100%",
+                  }}
+              >
+               <FileEditor ref={this.fileEditor} />
+              </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
               答えを記入

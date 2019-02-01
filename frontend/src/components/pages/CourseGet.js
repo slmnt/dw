@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import classNames from 'classnames';
 
-import TextEditor from '../TextEditor';
-import DirTree from '../DirTree';
+import FileEditor from '../FileEditor';
 import TestIFrame from '../TestIFrame';
 
 
@@ -57,7 +56,7 @@ class CourseGet extends Component {
                 ]
             }   
         }
-        this.window = React.createRef();
+        this.fileEditor = React.createRef();
     }
 
     componentDidMount(){
@@ -111,28 +110,6 @@ class CourseGet extends Component {
         });
     }
 
-    importDir = (files) => {
-        for (let path in files) {
-            const list = path.split('/');
-            let obj = this.state.directory;
-            for (const dir of list) {
-                if (dir !== '') {
-                    let c = obj.children.find(v => v.name === dir);
-                    if (!c) {
-                        let newFile = { name: dir };
-                        if (dir !== list[list.length - 1]) {
-                            newFile.children = [];
-                        }
-                        
-                        obj.children.push(newFile);
-                        c = obj.children[obj.children.length - 1];
-                    }
-                    obj = c;
-                }
-            }
-        }
-        //console.log(this.state.directory)
-    }
 
 
     showSlide = () => {
@@ -162,124 +139,7 @@ class CourseGet extends Component {
     toNextSlide = () => {
         this.changeSlide(this.state.currentSlideId + 1);
     }
-
-
-    /* file */
-    findFile = (path) => {
-        if (path == "/") { // root
-            return { parent: null, file: this.state.directory, index: 0 };
-        }
-
-        const tree = path.split('/')
-        tree.shift();
-        
-        let index = 0;
-        let file = null;
-        let parent = this.state.directory;
-
-        while (parent.children && parent.children.length > 0) {
-            index = parent.children.findIndex((v) => v.name == tree[0]);
-            file = parent.children[index];
-            if (!file) return null;
-
-            tree.shift();
-            if (tree.length == 0) break;
-            parent = file;
-        }
-        return { parent, file, index };
-    }
-
-
-    createDir = (path, name, isFolder) => {
-        const data = this.findFile(path);
-        if (!data || !data.file || !data.file.children) return; // folder のみ
-
-        const dup = data.file.children.find((v) => v.name == name);
-        if (dup) {
-            console.log("同じ名前のファイルが存在します:", name);
-            return;
-        }
-
-        data.file.children.push({
-            name: name,
-            children: isFolder && []
-        });
-        this.setState({directory: this.state.directory});
-    }
-    renameDir = (path, name) => {
-        const data = this.findFile(path);
-        if (!data) return;
-
-        this.updateTabName(path, name); // TextEditor も更新
-
-        data.file.name = name;
-        this.setState({directory: this.state.directory});
-    }
-    deleteDir = (path) => {
-        const data = this.findFile(path);
-        if (!data || !data.parent) return;
-        
-        data.parent.children.splice(data.index, 1);
-        this.setState({directory: this.state.directory});
-    }
-    copyDir = (from, to) => {
-
-    }
-
-    updateTabName = (path, name) => {
-        this.window.current.renameTab(path, name);
-    }
-    getContent = (path) => {
-        console.log(this.state.files[path])
-        return this.state.files[path];
-    }
-    onSaveTab = () => {
-
-    }
     
-    cmdExcute = (cmd) => {
-        let parser = cmd.split(' ')
-        // console.log(parser)
-        
-        let arg = "/" + parser[1];
-        // console.log(this.state.files)
-        // console.log(arg)
-        // console.log(this.state.files[arg])
-        let text = this.window.current.getTabValue(arg) || this.state.files[arg];
-        if (!text) return;
-
-        api.ex_post('/api/python/',{
-            contents: text 
-        }).then(api.parseJson).then(response => {
-            if (!response) return;
-            // Print Result
-            console.log(response)
-            this.outputToTerm(response);
-        });
-    }
-    outputToTerm = (text) => {
-        this.window.current.outputToTerm(text);
-    }
-
-    onUpload = (files, path) => {
-        if (!path) return;
-
-        const formData = new FormData();
-        formData.append('path', `/Course/${this.state.id}/${path}/${files[0].name}`);
-        //formData.append('path', `/Course/${this.state.id}/${path}`);
-        for (var i = 0; i < files.length; i++) {
-          formData.append('files', files[i]);
-        }
-    
-        api.post('/api/upload/', {
-          body: formData,
-        })
-        .then(api.parseJson)
-        .then(response => console.log('Success:', JSON.stringify(response)))
-        .catch(error => console.error('Error:', error));
-      
-      }
-
     goToChaper = (v) => {
         let cid = parseInt(this.state.chapterId) + parseInt(v);
         if (v >= 0) {
@@ -348,23 +208,7 @@ class CourseGet extends Component {
                         </div>
                     </div>
                     
-                    <div className={styles["dirtree-container"]}>
-                        {/*
-                        */}
-                        <DirTree dir={this.state.directory}
-                            onOpenFile={path => {this.window.current.openTab(path);}}
-                            onUpload={this.onUpload}
-                            rename={this.renameDir}
-                            delete={this.deleteDir}
-                            copy={this.copyDir}
-                            create={this.createDir}                
-                        />
-                    </div>
-                    <div className={styles["textditor-container"]}>
-                        <TextEditor ref={this.window} run={this.cmdExcute} getContent={this.getContent}/>
-                        {/*
-                        */}
-                    </div>
+                   <FileEditor ref={this.fileEditor} />
                 </div>  
             </div>
         );
