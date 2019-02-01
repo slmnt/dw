@@ -134,6 +134,8 @@ class App extends React.Component {
       bid: localStorage.getItem("bid")
     })
     */
+   api.get('/api/test/?p=1').then(api.parseJson)
+  .then(response => console.log('Success:', response))
 
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき

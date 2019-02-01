@@ -112,3 +112,11 @@ class UserCourseComment(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
     comment = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
+
+class UserBoard(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
+
