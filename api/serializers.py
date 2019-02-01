@@ -82,7 +82,6 @@ class AdsSerializer(serializers.ModelSerializer):
         model = Ads
         fields = ('__all__')
 
-
 class UserCourseCommentSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()
     
@@ -95,3 +94,11 @@ class UserCourseContentIndexSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCourseContentIndex
         fields = ('context','id')
+
+class UserBoardSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserBoard
+        fields = ('__all__')
+

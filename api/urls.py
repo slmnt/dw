@@ -54,10 +54,12 @@ Get_User_Course_index = GetUserCourseContentIndex.as_view({
 Upload = Upload.as_view({
     'post': 'post'
 })
+
 apitest = APItest.as_view({
     'post': 'post',
     'get': 'get'
 })
+
 createcourse = CreateCourse.as_view({
     'post': 'post'
 })
@@ -139,9 +141,11 @@ urlpatterns = [
     path('getuser/',Get_User),
 
     #User Course Get
+    #FIX
     path('getusercourseinfo/',getusercourse),
     path('getchapterinfo/',getchapterinfo),
 
+    #FIX
     path('getusercourse/',Get_User_Course),
     path('getusercoursec/',Get_User_Course_content),
     path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
@@ -153,6 +157,7 @@ urlpatterns = [
     path('upload/',Upload),
 
     #User Course Create
+    #FIX
     path('createcourse/',createcourse),
     path('craetechapter/',createchapter),
     path('createslide/',craeteslide),
@@ -160,6 +165,7 @@ urlpatterns = [
     path('usercoursetree/',getusertree),
 
     #User Course Update
+    #FIX
     path('updatecourse/',updatecourse),
 
     #Course Search
@@ -167,15 +173,15 @@ urlpatterns = [
     path('createcomment/',createcomment),
 
     #UserSearch
+    #FIX
     path('searchuser/<text>',SearchUser.as_view()),
     path('searchuserinfo/',searchuserinfoget),
-
-    #path('test',apitest),
-    path('test',apitest),
 
     #mypage
     path('mypageuserget/',mypageuserget),
     path('mypagecourseget/',mypageusercourseget),
 
+    #path('test',apitest),
+    path('test/',apitest),
 
 ]

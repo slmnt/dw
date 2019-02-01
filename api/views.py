@@ -31,6 +31,7 @@ from django.shortcuts import render,redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Q
 
 from Crypto.Hash import SHA256
@@ -855,18 +856,40 @@ class UpdateUserProfile(viewsets.ModelViewSet):
         serializers = UserInfoSerializer(queryset)        
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
+class UserBoard(viewsets.ModelViewSet):
+
+    #URL: /board/<page>
+    def get(self, request,page):
+        pagesize = 20
+        objs = UserBoard.objects.all()
+        p = Paginator(objs,pagesize)
+        queryset = p.page(page).object_list
+        serializer = UserBoardSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        print(request)
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
+
 #Remain apis
 # User Create api
 # User Review create
 class APItest(viewsets.ModelViewSet):
 
     def get(self, request):
+        print(request.GET['p'])
         data = {}
-        data['key'] = 'value'
+        data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
+        print(request)
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)
