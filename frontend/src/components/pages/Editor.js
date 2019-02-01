@@ -431,11 +431,11 @@ class Editor extends Component {
         newChapters.push(ch);
     
         //slides
+        //id: this.state.id,
+        //cid: c.cid
+        //
         slidePms.push(
-          axios.post('/getusercourseindex/', {
-            id: this.state.id,
-            cid: c.cid
-          }).then(response => {
+          axios.get('/slide/').then(response => {
             if (!ch) {
               console.log();
               return;
@@ -527,7 +527,7 @@ class Editor extends Component {
       //at this point, craete chapter
       //name, desc
       list.push(
-        api.ex_post('/api/craetechapter/',{
+        api.ex_post('/api/chapter/',{
           'id': this.state.id,
           'cid':idx,
           'title':c.name,
@@ -539,7 +539,7 @@ class Editor extends Component {
       for(let s of slides){
         //name, text,idx,jdx,id
         jdx += 1
-        api.ex_post('/api/createslide/',{
+        api.ex_post('/api/slide/',{
             id: this.state.id,
             cid: idx,
             sid: jdx,

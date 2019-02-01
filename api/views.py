@@ -41,6 +41,8 @@ DOCKDIR = BASE_DIR + '//docker//python//'
 DOCKFILES = BASE_DIR + '//docker//'
 STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
+PAGESIZE = 20
+
 """
 send_mail(
     'Subject here',
@@ -132,6 +134,12 @@ class CreateUser(APIView):
             fail_silently=False,
         )
         return Response(data=uname,status=status.HTTP_200_OK)
+        
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 
 class CreateMUser(APIView):
 
@@ -449,16 +457,6 @@ class GetUserInfo(viewsets.ModelViewSet):
     def post(self, request):
         return Response(status=status.HTTP_200_OK)
 
-class GetUserCourse(viewsets.ModelViewSet):
-
-    def get(self,request):
-        uid = UserCourse.objects.all().order_by('-createat')
-        s = UserCourseSerializer(uid,many=True)
-        return Response(data=s.data,status=status.HTTP_200_OK)
-
-    def post(self, request):
-        return Response(status=status.HTTP_200_OK)
-
 class GetUserCourseContent(viewsets.ModelViewSet):
 
     def get(self,request):
@@ -553,6 +551,28 @@ class CreateCourse(viewsets.ModelViewSet):
         serializer = UserCourseInfoSerializer(queryset)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        try:
+            page = request.GET['p']
+        except:
+            page = 1
+        finally:
+            objs = UserCourse.objects.all().order_by('-createat')
+        try:
+            id = request.GET['id']
+            id = int(id)
+            queryset = UserCourse.objects.get(id=id)
+            serializer = UserCourseInfoSerializer(queryset)
+            return Response(data=serializer.data,status=status.HTTP_200_OK)
+        except:
+            pass
+        p = Paginator(objs,PAGESIZE)
+        queryset = p.page(page).object_list
+        serializer = UserCourseInfoSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        
+
+
 class UpdateCourse(viewsets.ModelViewSet):
 
     #create Course
@@ -572,6 +592,12 @@ class UpdateCourse(viewsets.ModelViewSet):
         queryset = mycourse
         serializer = UserCourseInfoSerializer(queryset)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 
 
 class CreateChapter(viewsets.ModelViewSet):
@@ -607,11 +633,32 @@ class CreateChapter(viewsets.ModelViewSet):
                 serializers = UserCourseContentSerializer(Chapter)
                 return Response(data=serializers.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        try:
+            course = request.GET['u']
+            course = int(course)
+        except:
+            course = 0
+        finally:
+            target = UserCourse.objects.get(id=course)
+            objs = UserCourseContent.objects.all().filter(root=target)
+        try:
+            c = request.GET['c']
+            c = int(c)
+            objs = UserCourseContent.objects.all().filter(root=target,cid=c)
+        except:
+            pass
+        queryset = objs
+        serializer = UserCourseContentSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+
 class CreateSlide(viewsets.ModelViewSet):
 
     #required
     #user, courseid, chapterid, context
     def post(self, request):
+        print("craete slide")
         root = User.objects.get(username=request.user)
         id = request.data['id']
         cid = request.data['cid']
@@ -633,6 +680,21 @@ class CreateSlide(viewsets.ModelViewSet):
                     
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            cid = request.GET['cid']
+            id = int(id)
+            cid = int(cid)
+            course = UserCourse.objects.get(id=id)
+            target = UserCourseContent.objects.get(root=course,cid=cid)
+            queryset = UserCourseContentIndex.objects.all().filter(root=target)
+        except:
+            pass
+        serializers = UserCourseContentIndexSerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
 
 class ChapterSourceCodeCreate(viewsets.ModelViewSet):
 
@@ -760,6 +822,13 @@ class getUserTree(viewsets.ModelViewSet):
             return ""
         return Response(data=data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
 class SearchCourse(generics.ListAPIView):
     serializer_class = UserCourseSerializer
     
@@ -813,15 +882,6 @@ class SearchUserinfoget(viewsets.ModelViewSet):
         serializers = UserInfoSerializer(queryset)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
-class getChapterinfo(viewsets.ModelViewSet):
-
-    def post(self, request):
-        target1 = UserCourse.objects.get(id=request.data['id'])
-        queryset = UserCourseContent.objects.get(root=target1,cid=request.data['cid'])
-        serializers = UserCourseContentSerializer(queryset)
-        return Response(data=serializers.data,status=status.HTTP_200_OK)
-
-
 class UserinfoCreate(viewsets.ModelViewSet):
 
     def post(self, request):
@@ -856,13 +916,24 @@ class UpdateUserProfile(viewsets.ModelViewSet):
         serializers = UserInfoSerializer(queryset)        
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
+
 class UserBoard(viewsets.ModelViewSet):
 
-    #URL: /board/<page>
-    def get(self, request,page):
-        pagesize = 20
+    #URL: /board/?p=2>
+    def get(self, request):
+        try:
+            page = request.GET['p']
+        except:
+            page = 1
         objs = UserBoard.objects.all()
-        p = Paginator(objs,pagesize)
+        p = Paginator(objs,PAGESIZE)
         queryset = p.page(page).object_list
         serializer = UserBoardSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
@@ -882,14 +953,14 @@ class UserBoard(viewsets.ModelViewSet):
 class APItest(viewsets.ModelViewSet):
 
     def get(self, request):
-        print(request.GET['p'])
+        #print(request.GET['p'])
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request)
+        #print(request.GET)
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)

@@ -45,7 +45,7 @@ class NavBar extends React.Component {
     formData.append('title','testtitle')
     formData.append('desc','desc')
 
-    api.post('/api/createcourse/',{
+    api.post('/api/course/',{
       body: formData
     }).then(api.parseJson)
     .then(response => {

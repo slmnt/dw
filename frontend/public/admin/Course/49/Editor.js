@@ -518,11 +518,11 @@ class Editor extends Component {
         newChapters.push(ch);
     
         //slides
+        // id: this.state.id,
+        // cid: c.cid
+        //
         slidePms.push(
-          axios.post('/getusercourseindex/', {
-            id: this.state.id,
-            cid: c.cid
-          }).then(response => {
+          axios.post('/slide/').then(response => {
             if (!ch) {
               console.log();
               return;
