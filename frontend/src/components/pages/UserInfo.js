@@ -121,7 +121,7 @@ class UserInfo extends Component {
     changeSettings = () => {
         const name =  this.nameCfg.current.value;
         const desc =  this.descCfg.current.value;
-        console.log("change setttings: ", name, desc);
+        // console.log("change setttings: ", name, desc);
     }
     
     render() {

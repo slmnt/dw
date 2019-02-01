@@ -63,7 +63,7 @@ class CourseSearch extends Component {
     }
 
     componentDidMount(){
-        var u = '/getusercourse/'
+        var u = '/course/'
         axios.get(u).then(response => {
             this.setState({
                 courses: response.data

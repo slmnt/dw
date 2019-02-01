@@ -60,7 +60,7 @@ class SignIn extends Component {
 
   submit(e){    
     e.preventDefault()
-    console.log(this.state)
+    // console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
     let gen = document.getElementById('gender')

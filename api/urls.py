@@ -15,18 +15,22 @@ codesec = CodeSerial.as_view({
 })
 
 user = userinfo.as_view({
-    'get': 'get'
+    'get': 'get',
+    'post': 'post'
 })
 
 addcomment = Commentadd.as_view({
+    'get': 'get',
     'post': 'post'
 })
 
 get_auth = Getuser.as_view({
-    'get': 'get'
+    'get': 'get',
+    'post': 'post'
 })
 
 check_mail_code = CheckMailing.as_view({
+    'get': 'get',
     'post': 'post'
 })
 
@@ -35,11 +39,8 @@ Get_User = GetUserInfo.as_view({
     'post': 'post'
 })
 
-Get_User_Course = GetUserCourse.as_view({
-    'get': 'get',
-    'post': 'post'
-})
 Get_User_Course_info = GetUserCourseContentid.as_view({
+    'get': 'get',
     'post': 'post'
 })
 
@@ -48,64 +49,77 @@ Get_User_Course_content = GetUserCourseContent.as_view({
     'post': 'post'
 })
 Get_User_Course_index = GetUserCourseContentIndex.as_view({
-    'post': 'post'    
+    'get': 'get',
+    'post': 'post'
 })
 
 Upload = Upload.as_view({
+    'get': 'get',
     'post': 'post'
 })
 
 apitest = APItest.as_view({
-    'post': 'post',
-    'get': 'get'
+    'get': 'get',
+    'post': 'post'
 })
-
 createcourse = CreateCourse.as_view({
+    'get': 'get',
     'post': 'post'
 })
 createchapter = CreateChapter.as_view({
+    'get': 'get',
     'post': 'post'
 })
 craeteslide = CreateSlide.as_view({
+    'get': 'get',
     'post': 'post'
 })
 updatecourse = UpdateCourse.as_view({
+    'get': 'get',
     'post': 'post'
 })
 disableuser = DisableUser.as_view({
+    'get': 'get',
     'post': 'post'
 })
 courseupload = CourseUpload.as_view({
+    'get': 'get',
     'post': 'post'
 })
 pythonbydocker = PythonByDocker.as_view({
+    'get': 'get',
     'post': 'post'
 })
 getusertree = getUserTree.as_view({
+    'get': 'get',
     'post': 'post'
 })
 getusercourse = GEtUserCourses.as_view({
+    'get': 'get',
     'post': 'post'
 })
 mypageuserget = MypageUserget.as_view({
-    'get': 'get'
-})
-mypageusercourseget = MypageUSerCourseget.as_view({
-    'get': 'get'
-})
-searchuserinfoget = SearchUserinfoget.as_view({
+    'get': 'get',
     'post': 'post'
 })
-getchapterinfo = getChapterinfo.as_view({
+mypageusercourseget = MypageUSerCourseget.as_view({
+    'get': 'get',
+    'post': 'post'
+})
+searchuserinfoget = SearchUserinfoget.as_view({
+    'get': 'get',
     'post': 'post'
 })
 createuserinfo = UserinfoCreate.as_view({
+    'get': 'get',
     'post': 'post'
 })
 createcomment = CreateComment.as_view({
+    'get': 'get',
     'post': 'post'
 })
 updateuserprofile = UpdateUserProfile.as_view({
+    'get': 'get',
     'post': 'post'
 })
 
@@ -143,34 +157,32 @@ urlpatterns = [
     #User Course Get
     #FIX
     path('getusercourseinfo/',getusercourse),
-    path('getchapterinfo/',getchapterinfo),
 
     #FIX
-    path('getusercourse/',Get_User_Course),
     path('getusercoursec/',Get_User_Course_content),
+
     path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
     path('getusercourseid/',Get_User_Course_info),
     path('getusercourseindex/',Get_User_Course_index),
-    path('getusercoursecomment/<id>',GetUserCourseComments.as_view()),
 
     #File Upload
     path('upload/',Upload),
 
     #User Course Create
-    #FIX
-    path('createcourse/',createcourse),
-    path('craetechapter/',createchapter),
-    path('createslide/',craeteslide),
+    path('course/',createcourse),
+    path('chapter/',createchapter),
+    path('slide/',craeteslide),
     path('courseupload/',courseupload),
     path('usercoursetree/',getusertree),
 
     #User Course Update
-    #FIX
     path('updatecourse/',updatecourse),
 
     #Course Search
     path('searchcourse/<text>',SearchCourse.as_view()),
+    #FIX
     path('createcomment/',createcomment),
+    path('getusercoursecomment/<id>',GetUserCourseComments.as_view()),
 
     #UserSearch
     #FIX

@@ -60,12 +60,12 @@ class Courseinfo extends Component {
 
     componentDidMount(){
 
-        var u = '/getusercourseid/';
-        axios.post(u,{id:this.props.match.params.id}).then(response => {
+        var u = `/course/?id=${this.props.match.params.id}`;
+        axios.get(u).then(response => {
             this.setState({contents: response.data})
         }).catch(e => console.log(e))
 
-        u = '/getCourseInfoContentsInfo/' + this.props.match.params.id
+        u = `/chapter/?u=${this.props.match.params.id}`
         axios.get(u).then(response => {
             this.setState({chapters: response.data})
         }).catch(e => console.log(e))

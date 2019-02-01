@@ -78,7 +78,7 @@ class TextEditor extends React.Component {
       })
   }
   onEditorResize(width, height) {
-      console.log(width, height)
+      // console.log(width, height)
       this.editor.layout({width, height});
       //this.tabList.current.style.width = width + "px"
   }
@@ -165,25 +165,24 @@ class TextEditor extends React.Component {
     this.props.save(path, this.getTabValue(path));
 
     //
-    let tabId = this.getTabIndex(path);
-    let newTabs = Array.from(this.state.tabs);
-    newTabs.splice(tabId, 1);
+      let tabId = this.getTabIndex(path);
+      let newTabs = Array.from(this.state.tabs);
+      newTabs.splice(tabId, 1);
 
-    let isCurrentTab = path === this.state.currentTab;
+      let isCurrentTab = path === this.state.currentTab;
 
-
-    this.setState({
-        tabs: newTabs,
-        currentTab: isCurrentTab ? null : this.state.currentTab
-    }, (() => {
-        if (isCurrentTab && this.state.tabs.length > 0) {
-            let i = tabId > 0 ? tabId - 1 : 0;
-            console.log(isCurrentTab, tabId, i)
-            this.activateTab(this.state.tabs[i].path);
-        } else if (this.state.tabs.length === 0) {
-        this.hideEditor();
-        }
-    }).bind(this));
+      this.setState({
+          tabs: newTabs,
+          currentTab: isCurrentTab ? null : this.state.currentTab
+      }, (() => {
+          if (isCurrentTab && this.state.tabs.length > 0) {
+              let i = tabId > 0 ? tabId - 1 : 0;
+              // console.log(isCurrentTab, tabId, i)
+              this.activateTab(this.state.tabs[i].path);
+          } else if (this.state.tabs.length === 0) {
+            this.hideEditor();
+          }
+      }).bind(this));
 
   }
   renameTab = (path, name) => {
@@ -250,7 +249,7 @@ class TextEditor extends React.Component {
 
       this.setState(newState, (() => {
           let tab = this.getTab(path);
-          console.log("load", tab)
+          // console.log("load", tab)
           this.loadTabState(tab);
           tab.init = true;
 
@@ -328,8 +327,6 @@ class TextEditor extends React.Component {
       }
       return this.content[path] || '';
   }
-
-
 
   outputToTerm = (text) => {
       this.term.current.getOutput(text);

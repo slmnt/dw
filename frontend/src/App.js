@@ -133,9 +133,9 @@ class App extends React.Component {
     this.setState({
       bid: localStorage.getItem("bid")
     })
+    api.post('/api/test/?p=1').then(api.parseJson)
+   .then(response => console.log('Success:', response))
     */
-   api.get('/api/test/?p=1').then(api.parseJson)
-  .then(response => console.log('Success:', response))
 
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき

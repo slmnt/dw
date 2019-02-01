@@ -67,14 +67,11 @@ class CourseGet extends Component {
          */
 
         this.openIntro();
-        
         // chapter
-        api.ex_post('/api/getchapterinfo/',{
-            id: this.state.courseId,
-            cid:this.state.chapterId
-        }).then(api.parseJson)
+        api.get(`/api/chapter/?u=${this.state.courseId}&c=${this.state.chapterId}`).then(api.parseJson)
         .then(response => {
             if (response) {
+                response = response[0]
                 this.setState({
                     courseName: response.root,
                     chapterName: response.title,
@@ -85,16 +82,18 @@ class CourseGet extends Component {
         
 
         //slides
-        axios.post('/getusercourseindex/', {
-            id: this.state.courseId,
-            cid: this.state.chapterId
-        }).then(response => {
+        //
+        //id: this.state.courseId,
+        //cid: this.state.chapterId
+        //
+        axios.get(`/slide/?id=${this.state.courseId}&cid=${this.state.chapterId}`).then(response => {
+            // console.log(response.data)
             let s = []
             for(let t of response.data){
                 s.push(t.context)
             }
             this.setState({slides: s})
-            console.log("oioio",s)
+            // console.log("oioio",s)
         }).catch(e => console.log(e))
 
 
