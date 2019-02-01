@@ -38,11 +38,11 @@ class DirTree extends React.Component {
     }
     this.menu = [
       ["新しいファイル", () => {
-        this.createNew(this.state.contextTarget, "新しいファイル");
+        this.createNew(this.state.contextTarget);
         this.closeContextMenu();
       }],
       ["新しいフォルダ", () => {
-        this.createNew(this.state.contextTarget, "新しいフォルダ", true);
+        this.createNew(this.state.contextTarget, true);
         this.closeContextMenu();
       }],
       ["コピー", () => {
@@ -147,15 +147,15 @@ class DirTree extends React.Component {
     e.preventDefault();
   }
   onDrop = e => {
-    // console.log("upload to:", path)
     e.preventDefault();
     
     const item = e.target.closest("[data-filepath]");
     const path = item && item.dataset["filepath"] || "/";
-
+    
     const dt = e.dataTransfer;
     const files = dt.files;
-
+    
+    console.log("upload to:", path)
     if (this.props.onUpload) this.props.onUpload(files, path);
 
     this.setState({dragover: false});
@@ -227,7 +227,11 @@ class DirTree extends React.Component {
   }
 
   /* 操作 (外部) */
-  createNew = (path, name, isFolder) => {
+  createNew = (path, isFolder) => {
+    console.log("create new:", path, isFolder)
+    this.props.createNew(path, isFolder);
+  }
+  create = (path, name, isFolder) => {
     if (isFolder) console.log("create folder:", path, name)
     else console.log("create file:", path, name)
     
@@ -293,10 +297,10 @@ class DirTree extends React.Component {
           </div>
           <div className={styles["dir-header"]}>
             <span>ディレクトリ</span>
-            <div className={styles["dir-header-icon"]} style={{marginLeft: "auto"}} onClick={() => this.createNew("/", "新しいファイル")}>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "auto"}} onClick={() => this.createNew("/")}>
               <AddIcon />
             </div>
-            <div className={styles["dir-header-icon"]} style={{marginLeft: "0.5em"}} onClick={() => this.createNew("/", "新しいフォルダ", true)}>
+            <div className={styles["dir-header-icon"]} style={{marginLeft: "0.5em"}} onClick={() => this.createNew("/", true)}>
               <CreateFolderIcon />
             </div>
           </div>

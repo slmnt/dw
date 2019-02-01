@@ -138,7 +138,8 @@ class TextEditor extends React.Component {
               newTabs.push(v);
           }
       }
-      // console.log(path)
+      console.log(path)
+      console.log(this.getContent(path))
       let tab = {
           path: path,
           name: path.substring(path.lastIndexOf('/') + 1),
@@ -158,6 +159,8 @@ class TextEditor extends React.Component {
 
   }
   closeTab(path) {
+    console.log("close", path)
+
       let tabId = this.getTabIndex(path);
       let newTabs = Array.from(this.state.tabs);
       newTabs.splice(tabId, 1);
@@ -177,6 +180,29 @@ class TextEditor extends React.Component {
           }
       }).bind(this));
 
+  }
+  renameTab = (path, name) => {
+    const tab = this.getTab(path);
+    if (!tab) return;
+
+    let newPath = tab.path.split('/');
+    newPath.pop();
+    newPath.push(name);
+
+    tab.path = newPath.join('/');
+    tab.name = name;
+
+    console.log(path, this.state.currentTab)
+
+    this.setState({tabs: this.state.tabs}, () => {
+      console.log(path, this.state.currentTab)
+      if (path === this.state.currentTab) {
+          this.activateTab(tab.path);
+      }
+    });
+  }
+  saveTab = (path) => {
+    this.props.save(path, this.getTabValue(path));
   }
   saveTabState(tab) {
       if (!tab) return;
@@ -291,40 +317,15 @@ class TextEditor extends React.Component {
       return this.editor.getValue();
   }
   getContent(path) {
-      // console.log(path)
       if (this.props.getContent) {
-          // console.log(this.props.getContent(path));
           return this.props.getContent(path);
       }
       return this.content[path];
   }
 
-
-  renameTab = (path, name) => {
-      const tab = this.getTab(path);
-      if (!tab) return;
-
-      let newPath = tab.path.split('/');
-      newPath.pop();
-      newPath.push(name);
-
-      tab.path = newPath.join('/');
-      tab.name = name;
-
-      // console.log(path, this.state.currentTab)
-
-      this.setState({tabs: this.state.tabs}, () => {
-        // console.log(path, this.state.currentTab)
-        if (path === this.state.currentTab) {
-            this.activateTab(tab.path);
-        }
-      });
+  outputToTerm = (text) => {
+      this.term.current.getOutput(text);
   }
-  onSave = () => {
-      this.props.onSaveTab();
-  }
-
-
 
 
   render() {
