@@ -62,9 +62,10 @@ class TextEditor extends React.Component {
       }
       this.editorContainer = element;
       let rect = element.getBoundingClientRect();
+      console.log(rect.width, rect.height)
       //element.style.width = rect.width + "px";
       //element.style.height = rect.height + "px";
-      this.onEditorResize(rect.width, rect.height);
+      //this.onEditorResize(rect.width, rect.height);
   }
   contentRef = element => {
       if (!element) {
@@ -332,6 +333,12 @@ class TextEditor extends React.Component {
       this.term.current.getOutput(text);
   }
 
+  onTermInit = (height) => {
+    let rect = this.editorContainer.getBoundingClientRect();
+    console.log(rect.width, rect.height)
+    this.onEditorResize(rect.width, rect.height);
+  }
+
 
   render() {
       const options = {
@@ -406,26 +413,27 @@ class TextEditor extends React.Component {
                     flex: "1 1 auto",
                     width: "100%",
                     overflow: "hidden",
+                    paddingTop: "2em",
                     opacity: this.state.showEditor && "1" || "0",
+                    backgroundColor: "var(--dark-darkest)",
                 }}
                 onClick={this.onClickBackground}
-                ref={this.containerRef}
             >
-            <div style={{
-                    display: "relative",
-                    width: "100%",
-                    paddingTop: "2em",
-                    backgroundColor: "#1e1e1e",
-                }}>
-                <div
-                    className={styles["window-content"]}
-                    style={{
-                        height: "100%",
+                <div style={{
+                        display: "relative",
                         width: "100%",
+                        height: "100%",
                     }}
-                    ref={this.contentRef}
+                    ref={this.containerRef}
                 >
-                </div>
+                    <div
+                        className={styles["window-content"]}
+                        style={{
+                            width: "100%",
+                        }}
+                        ref={this.contentRef}
+                    >
+                    </div>
                 </div>
             </div>
         </div> 
@@ -440,7 +448,7 @@ class TextEditor extends React.Component {
                     display: this.state.showTerm && "block" || "none"
                 }}
             >
-                <Term height={200} ref={this.term} run={this.props.run}/>
+                <Term height={200} ref={this.term} run={this.props.run} onInit={this.onTermInit}/>
             </div>
         </div>
       </div>

@@ -98,6 +98,8 @@ class Term extends React.Component {
 
       //
       element.style.height = term._core.viewport._viewportElement.getBoundingClientRect().height + "px";
+
+      this.props.onInit(element.style.height);
     }
   
     runTerminal(term) {
