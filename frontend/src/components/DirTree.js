@@ -27,6 +27,7 @@ class DirTree extends React.Component {
       fileData: {
       },
       dragging: false,
+      draggingItem: false,
       
       showContextMenu: false,
       contextTarget: null,
@@ -134,30 +135,44 @@ class DirTree extends React.Component {
   
   }
 
+  showDropArea = () => {
+    this.setState({dragover: true});
+  }
+  hideDropArea = () => {
+    this.setState({dragover: false});
+  }
 
   onDragStart = e => {
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData("dragfile", e.currentTarget.dataset["filepath"]);
     console.log(e.dataTransfer.getData('dragfile'));
-    this.setState({dragover: true});
+    this.setState({draggingItem: true});
   }
   onDragEnd = e => {
-    this.setState({dragover: false});
+    this.hideDropArea();
+    console.log("end");
+    this.setState({draggingItem: false});
   }
 
   onDragEnter = e => {
-    e.preventDefault();    
+    e.preventDefault();
+    console.log(this.state.draggingItem)
+    if (!this.state.draggingItem) {
+      this.showDropArea();
+    }
   }
   onDragLeave = e => {
     if (e.target != e.currentTarget) return;
     e.preventDefault();
-    this.setState({dragover: false});
+    this.hideDropArea();
   }
   onDragOver = e => {
     e.preventDefault();
   }
   onDrop = e => {
     e.preventDefault();
+    this.hideDropArea();
+    this.setState({draggingItem: false});
 
     const item = e.target.closest("[data-filepath]");
     const path = item && item.dataset["filepath"] || "/";
@@ -175,7 +190,6 @@ class DirTree extends React.Component {
     console.log("upload to:", path)
     if (this.props.onUpload) this.props.onUpload(files, path);
 
-    this.setState({dragover: false});
   }
 
   onDropItem = () => {

@@ -192,7 +192,8 @@ class FileEditor extends React.Component {
     const file = this.findFile(from);
     const path = this.getDirPath(to);
     const dest = this.findFile(path);
-    if (!file || !dest || path == this.getDirPath(from)) return;
+    console.log(from, to, path, dest)
+    if (!file || !dest || path == this.getDirPath(from) || !dest.children) return;
 
     // remove
     file.parent.children.splice(file.parent.children.indexOf(file), 1);
@@ -244,8 +245,8 @@ class FileEditor extends React.Component {
     return p1.replace(/(\/*)$/, '') + '/' + p2.replace(/^(\/*)/, '');
   }
   getDirPath = (path) => {
-    const data = this.getFile(path);
-    return !data.children ? path : this.splitPath(path).dir;
+    const data = this.getFile(path).data;
+    return data.children ? path : this.splitPath(path).dir;
   }
   getFile = (v) => {
     if (typeof(v) == 'string') {

@@ -41,6 +41,10 @@ class NavBar extends React.Component {
   }
 
   createCourse = () => {
+    if (!this.context.uid) {
+      history.push('/login');
+    }
+
     let formData = new FormData();
     formData.append('title','testtitle')
     formData.append('desc','desc')
@@ -49,6 +53,7 @@ class NavBar extends React.Component {
       body: formData
     }).then(api.parseJson)
     .then(response => {
+      if (!response) return;
       history.push(`/course/${this.context.uid}/${response.id}/edit`);
       //name: response.title,
       //id: response.id
@@ -98,8 +103,8 @@ class NavBar extends React.Component {
             {
               !this.context.isLoggedIn ?
                 <React.Fragment>
-                  <div><RedirectLink to="/login">ログイン</RedirectLink></div>
-                  <div><RedirectLink to="/signup">会員登録</RedirectLink></div>
+                  <div className={styles["account-btn"]}><RedirectLink to="/login">ログイン</RedirectLink></div>
+                  <div className={styles["account-btn"]}><RedirectLink to="/signup">会員登録</RedirectLink></div>
                 </React.Fragment>
               :
                 <React.Fragment>

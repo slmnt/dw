@@ -34,7 +34,7 @@ class CourseList extends Component {
                             </div>
                             <div className={styles["course-item-main"]}>
                                 <div className={styles["course-item-top"]}>
-                                    <Link to={`/course/${this.context.uid}/${v.id}`} className={styles["course-item-title"]}>
+                                    <Link to={`/course/${v.root}/${v.id}`} className={styles["course-item-title"]}>
                                         {v.title}
                                     </Link>
                                     <Link to={"/user/" + v.id} className={styles["course-item-user"]}>

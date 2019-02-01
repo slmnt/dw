@@ -302,7 +302,6 @@ class Term extends React.Component {
 
 
     updateTerminalSize() {
-      return;
       if (!this.term) return;
       const cols = this.term.cols;
       const rows = this.term.rows;

@@ -102,12 +102,16 @@
   align-content: center;
 }
 .navmenu > div + div {
-  margin-left: 1em;
+  margin-left: 0.5em;
 }
 .navmenu > div:hover {
   font-weight: bold;
 }
-
+.account-btn {
+  border-radius: 2em;
+  padding: 0.2em 1em;
+  border: 1px solid var(--main-color);
+}
 
 .avatar {
   height: 2em;

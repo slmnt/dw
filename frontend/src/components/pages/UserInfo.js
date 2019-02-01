@@ -77,10 +77,14 @@ class UserInfo extends Component {
             console.log("test1")
             //mypage Done
             api.get('/api/mypagecourseget/').then(api.parseJson)
-            .then(response => this.setState({courses: response}))
+            .then(response => {
+                if (response) this.setState({courses: response})
+            })
 
             api.get('/api/mypageuserget/').then(api.parseJson)
-            .then(response => this.setState({userinfo: response}))
+            .then(response => {
+                if (response) this.setState({userinfo: response})
+            })
     
         }else{
             //user search
@@ -88,12 +92,15 @@ class UserInfo extends Component {
                 name: this.props.match.params.id
             }).then(api.parseJson)
             .then(response => {
-                this.setState({courses: response})})            
+                if (response) this.setState({courses: response})
+            })            
 
             api.ex_post('/api/searchuserinfo/',{
                 name: this.props.match.params.id
             }).then(api.parseJson)
-            .then(response => this.setState({userinfo: response}))
+            .then(response => {
+                if (response) this.setState({userinfo: response})
+            })
 
         }
     }
