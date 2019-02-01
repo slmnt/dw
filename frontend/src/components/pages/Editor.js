@@ -720,15 +720,29 @@ class Editor extends Component {
         .then(response => console.log(response))
         .catch(error => console.error('Error:', error))
       );
+      for(let s of slides){
+        //name, text,idx,jdx,id
+        jdx += 1
+        api.ex_post('/api/createslide/',{
+            id: this.state.id,
+            cid: idx,
+            sid: jdx,
+            title: s.name,
+            context: s.text          
+        }).then(api.parseJson)
+        .then(response => console.log(response))
+        .catch(error => console.error('Error:', error))
+
+      }
     }
 
+    /*
     for(let ci in chapters){
         let c = chapters[ci]
         for(let si in c.slides){
           let s = c.slides[si];
           //at this point, craete slides
           //name, desc
-
           let formData = new FormData();
           formData.append('id',this.state.id)
           formData.append('cid',ci)
@@ -744,6 +758,7 @@ class Editor extends Component {
           );
         }
       }
+      */
 
     this.getDirtree(this.state.courseData.directory,'',base_url)
     
