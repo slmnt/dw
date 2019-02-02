@@ -12,6 +12,7 @@ import hljs from 'highlight.js';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import cookie from 'cookie';
 
 import {MainContext} from '../../contexts/main';
 import api from '../../modules/api'
@@ -488,9 +489,9 @@ class Editor extends Component {
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
   }
+  
 
-
-  onSave = (e) => {
+  onSave = async (e) => {
     let base_url = "Course/" + this.state.id
     var chapters = this.state.chapters
     
@@ -499,9 +500,6 @@ class Editor extends Component {
 
     //
     let list = [];
-
-    console.log("course saving");
-
 
     // update coursetitle
     let formData = new FormData();
@@ -525,65 +523,32 @@ class Editor extends Component {
       let slides = c.slides
       //at this point, craete chapter
       //name, desc
-        api.ex_post('/api/chapter/',{
-          'id': this.state.id,
-          'cid':idx,
-          'title':c.name,
-          'desc':c.desc
-        }).then(api.parseJson)
-        .then(response => console.log())
-        .catch(error => console.error('Error:', error))
-
+      let c2 = await api.ex_post('/api/chapter/',{
+        'id': this.state.id,
+        'cid':idx,
+        'title':c.name,
+        'desc':c.desc
+      })
+      
       for(let s of slides){
         //name, text,idx,jdx,id
         jdx += 1
-
-          api.ex_post('/api/slide/',{
-              id: this.state.id,
-              cid: idx,
-              sid: jdx,
-              title: s.name,
-              context: s.text          
-          }).then(api.parseJson)
-          .then(response => console.log())
-          .catch(error => console.error('Error:', error))
-      }
+         let s2 = await api.ex_post('/api/slide/',{
+            id: this.state.id,
+            cid: idx,
+            sid: jdx,
+            title: s.name,
+            context: s.text          
+        })
     }
-
-    /*
-    for(let ci in chapters){
-        let c = chapters[ci]
-
-        let jdx = 0
-        for(let si in c.slides){
-          let s = c.slides[si];
-          //at this point, craete slides
-          //name, desc
-          let formData = new FormData();
-          formData.append('id',this.state.id)
-          formData.append('cid',idx)
-          formData.append('sid',si + 1)
-          formData.append('title',s.name || "title")
-          formData.append('context',s.text)
-          list.push(
-            api.post('/api/createslide/',{
-              body: formData
-            }).then(api.parseJson)
-            .then(response => console.log(response))
-            .catch(error => console.error('Error:', error))
-          );
-        }
-      }
-      */
+    }
 
     this.fileEditor.current.getDirtree(null, '', base_url)
     
-    /*
     Promise.all(list).then(() => {
       // console.log("course saved");
       history.push(`/course/${this.context.uid}/${this.state.id}`);
     });
-    */
   }  
 
   moveBox = (from, to) => {

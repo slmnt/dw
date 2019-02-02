@@ -62,7 +62,6 @@ function parseJson(response) {
   return r;
 }
 
-
 export default {
   post: (url, option) => {return fetch_timeout('POST', url, option)},
   ex_post: (url, body) => {return fetch_post(url,body)},
