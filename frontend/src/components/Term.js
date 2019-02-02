@@ -130,7 +130,6 @@ class Term extends React.Component {
     
       //
       term.prompt = () => {
-        // とりあえず次フレームにまわしてバグ回避 (特定の _dsr_clbk に対応させるのが難しい)
         term.write2('\r\n' + term.promptStr, () => {
           term.ix = term.x;
           term.iy = term.y;
@@ -278,6 +277,7 @@ class Term extends React.Component {
               // cmd を調整
               let n = term.cmdCharN(term.x, term.y);
               term.cmd = term.cmd.substring(0, n - 2) + term.cmd.substring(n - 1);
+              console.log("backspace", term.cmd)
               //console.log(term.cmd);
               // 書き込み
               term.write2(term.cmd);
