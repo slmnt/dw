@@ -395,8 +395,8 @@ class Editor extends Component {
 
 
     // course
-    var u = '/getusercourseid/';
-    axios.post(u, {id:this.state.id}).then(response => {
+    var u = `/course/?id=${this.state.id}`;
+    axios.get(u).then(response => {
       // Course
       /*
       createat: "2019-01-30T18:26:26.755470+09:00"
@@ -407,14 +407,13 @@ class Editor extends Component {
       title: "testcoure"
       users: 0
       */
-      console.log(response.data)
       this.setCourseData(response.data.title, response.data.description)
     }).catch(e => console.log(e))
 
 
     // chapter & slides
     let chapters = []
-    u = '/getCourseInfoContentsInfo/' + this.state.id
+    u = `/chapter/?u=${this.state.id}`
     axios.get(u).then(response => {
       // chapters
       chapters = response.data
@@ -435,7 +434,7 @@ class Editor extends Component {
         //cid: c.cid
         //
         slidePms.push(
-          axios.get('/slide/').then(response => {
+          axios.get(`/slide/?id=${this.state.id}&cid=${c.cid}`).then(response => {
             if (!ch) {
               console.log();
               return;

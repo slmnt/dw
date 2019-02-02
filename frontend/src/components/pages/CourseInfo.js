@@ -70,7 +70,7 @@ class Courseinfo extends Component {
             this.setState({chapters: response.data})
         }).catch(e => console.log(e))
 
-        u = '/getusercoursecomment/' + this.props.match.params.id
+        u = `/comment/?id=${this.props.match.params.id}`
         axios.get(u).then(response => {
             this.setState({reviews: response.data})
         }).catch(e => console.log(e))
@@ -79,13 +79,15 @@ class Courseinfo extends Component {
 
     sendReview = () => {
 
-        api.ex_post('/api/createcomment/',{
+        api.ex_post('/api/comment/',{
             id: this.props.match.params.id,
             comment: this.reviewTextarea.current.value
         }).then(response => response.json())
         .then(response => {
             this.setState({reviews: response})
         })
+
+        this.reviewTextarea.current.value = ''
 
     }
 
