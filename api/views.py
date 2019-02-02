@@ -3,6 +3,7 @@ import re
 import json
 import shutil
 import subprocess
+import pathlib
 
 from datetime import datetime
 
@@ -790,32 +791,27 @@ class CourseUpload(viewsets.ModelViewSet):
     #base_url,[files]
     def post(self, request):
         name = str(request.user)
-        path = STORAGE + name + '//' + request.data['base_url']
         #1 Check URL,
         #2 Make Files to base url
+        storage_path = pathlib.PurePath(STORAGE)
 
         for url in request.data:
-            p = path
-            urls = url.split('/')
+            if url == "base_url":
+                continue
             
-            if url == 'base_url':
-                pass
-            else:
-                for u in urls:
-                    pattern = '.*\..*'
-                    r = re.match(pattern,u)
-                    if r:#if file                        
-                        p += '//' + u
-                    else:#if dir
-                        p += '//' + u
-                        if not os.path.exists(p):
-                            os.makedirs(p)
-                with open(p,'wb') as f:
+            path = pathlib.PurePath(STORAGE, name, request.data['base_url'], url)
+            print("path", path.as_posix())
+            try:
+                relative_path = path.relative_to(storage_path) # ここでエラー出たら storage の範囲外
+            
+                os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
+                with open(path, 'wb') as f:
                     f.write(request.data[url].encode('utf-8'))
+            except ValueError:
+                print("CourseUpload error", path.as_posix())
 
         data = {}
         data['key'] = 'value'
-        json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
 def getTree(path,json,currentpath):

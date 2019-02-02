@@ -99,9 +99,9 @@ class CourseGet extends Component {
             url: `/Course/${this.state.courseId}/`,
         }).then(api.parseJson).then(response => {
             if (!response) return;
-            Object.assign(this.state.files, response);
-            console.log(this.state.files)
-            this.importDir(response);
+            console.log(response)
+            this.fileEditor.current.importFiles(response);
+            this.fileEditor.current.importDir(response);
             this.setState({files: this.state.files})
         });
     }

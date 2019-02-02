@@ -818,7 +818,7 @@ class Editor extends Component {
               <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
             </div>
             <div className={styles["header-controls"]}>
-              <div className={styles["discard-btn"]}><span>キャンセル</span></div>
+              <div className={styles["discard-btn"]}><Link to={`/course/${this.context.uid}/${this.state.id}`}>キャンセル</Link></div>
               {/*
               <div className={styles["preview-btn"]}><span>プレビュー</span></div>
               */}
