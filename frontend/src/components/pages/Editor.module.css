@@ -565,5 +565,16 @@
 
 
 /* answer */
+.answer-container {
+  padding: 1em 2em;
+}
+.answer-title {
+  font-size: 1.2em;
+}
+.answer-textarea-container {
+
+}
+
+
 
 
