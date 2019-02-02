@@ -8,18 +8,15 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import Divider from '@material-ui/core/Divider';
 import { Grid } from '@material-ui/core';
 
-class board extends Component {
-    state = {
-        data: false,
-        comment: '',
-        comments: []
-    }
-
+class Board extends Component {
     constructor(props){
         super(props)
 
-        this.onChange = this.onChange.bind(this)
-        this.addcomment = this.addcomment.bind(this)
+        this.state = {
+            data: false,
+            comment: '',
+            comments: []
+        }
     }
 
     componentDidMount(){
@@ -69,11 +66,11 @@ class board extends Component {
         })  
     }
 
-    onChange(newValue) {
+    onChange = (newValue) => {
         this.setState({comment: newValue.target.value})
     }    
 
-    addcomment(){
+    addComment = () => {
         axios.defaults.xsrfCookieName = 'csrftoken';
         axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
@@ -180,6 +177,6 @@ class board extends Component {
   	}
 }
 
-board.propTypes = {};
+Board.propTypes = {};
 
-export default board;
+export default Board;

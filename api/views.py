@@ -43,6 +43,9 @@ STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
 PAGESIZE = 20
 
+
+HOSTNAME = 'http://localhost:3000'
+
 """
 send_mail(
     'Subject here',
@@ -63,19 +66,18 @@ class UserAuthentic(APIView):
             auth_user = User.objects.get(username=request.data['uid'])
         except:
             return Response(data="1")
-        #is_vaild check
+
         try:
+            #is_vaild check
             if auth_user.is_active == False:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-        except:
-            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-        #sended pwd check
-        try:
+            #sent pwd check
             pwd = request.data['pwd']
             if check_password(pwd, auth_user.password):
                 pass
         except:
             return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+
         v_user = authenticate(username=auth_user.username,password=pwd)
         if v_user is not None:
             login(request,v_user)
@@ -87,33 +89,32 @@ class UserAuthentic(APIView):
             #now
             return Response(data="1",status=status.HTTP_404_NOT_FOUND)
 
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 #required data
 # 'uid' 'pwd' 'email' 'fname' 'lname
 class CreateUser(APIView):
 
     def post(self, request):
         #check username
-        try:
+        #try:
             uname = request.data['uid']
             pwd = request.data['pwd']
             email = request.data['email']
             new_user = User(username=uname, email=email)
-            new_user.is_active = False
+            # new_user.is_active = False
             new_user.set_password(pwd)
-        except:
-            return Response(data="1")
-        #check first name
-        try:
+
+            #check first name
             new_user.first_name = request.data['fname']
-        except:
-            pass
-        #check last name
-        try:
+            #check last name
             new_user.last_name = request.data['lname']
-        except:
-            pass
-        new_user.save()
-        try:
+            
+            new_user.save()
             u = User.objects.get(username=uname)
             h = SHA256.new()
             h.update(uname.encode('utf-8'))
@@ -122,18 +123,32 @@ class CreateUser(APIView):
             c = CertiList(name=u,code=str(code))
             c.save()
             #print(u)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        body = "http://localhost:3000/checkmail/" + code + "/"
-        send_mail(
-            'mail check',
-            str(body),
-            'miniprog2018@gmail.com',
-            [str(email)],
-            fail_silently=False,
-        )
-        return Response(data=uname,status=status.HTTP_200_OK)
+
+            # create user info
+            print("hey------------", new_user, request.data['gen'], request.data['birth'])
+            queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
+            queryset.save()
+
+            login(request, new_user)
+            request.session.set_expiry(432000)
+
+            data = {}
+            data['uid'] = uname
+
+            # send email
+            body = HOSTNAME + "/checkmail/" + code + "/"
+            """
+            send_mail(
+                'mail check',
+                str(body),
+                'miniprog2018@gmail.com',
+                [str(email)],
+                fail_silently=False,
+            )"""
+            return Response(data=data, status=status.HTTP_200_OK)
+        #except:
+        #    return Response(status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request):
         data = {}
@@ -168,7 +183,7 @@ class CreateMUser(APIView):
             new_user.save()
             return Response(data=uname,status=status.HTTP_200_OK)
         else:
-            return redirect("http://localhost:3000")
+            return redirect(HOSTNAME)
         #print(request.session.get_expiry_date())
         #sesion = Session.objects.get(session_key=request.session.session_key)
         #print(auth_user.last_login)        
@@ -178,6 +193,7 @@ class CreateMUser(APIView):
         #        response = HttpResponse('working')       
         #        response.set_cookie('cookie','deliceous cookie')
         #        return response
+
 
 #required data
 # 'contents'
@@ -366,7 +382,7 @@ class PythonByDocker(viewsets.ModelViewSet):
     #   docker run pybox
     #4 Send Client printed result
     def post(self, request):
-        print(request.data['cmd'])
+        # print(request.data['cmd'])
         name = str(request.user)
         USER_STORAGE = STORAGE + name + '//' + request.data['url']
         #USER_STORAGE = STORAGE + str(request.user)
@@ -419,7 +435,7 @@ class PythonByDocker(viewsets.ModelViewSet):
                     if not temp:
                         break
                     dump += temp
-        print(dump)
+        # print(dump)
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
@@ -475,6 +491,13 @@ class GetUserCourseContentid(viewsets.ModelViewSet):
         serial = UserCourseInfoSerializer(obj)
         return Response(data=serial.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        #print(request.GET['p'])
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 
 #CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
 class CourseInfoConetntsInfoGet(generics.ListAPIView):
@@ -517,15 +540,13 @@ class Upload(viewsets.ModelViewSet):
             dir = request.data['path'].split('/')
             dir = [name] + dir
             path = STORAGE
-
+            
             for name in dir:
                 if name:
-                    pattern = '.*\..*'
-                    r = re.match(pattern,name)
-                    if r:
-                        path += name
+                    path = os.path.join(path,name)
+                    if name == dir[-1]:
+                        pass
                     else:
-                        path += name + '//'
                         if not os.path.exists(path):
                             os.makedirs(path)
 
@@ -535,6 +556,13 @@ class Upload(viewsets.ModelViewSet):
             
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 
 class CreateCourse(viewsets.ModelViewSet):
 
@@ -553,11 +581,24 @@ class CreateCourse(viewsets.ModelViewSet):
 
     def get(self, request):
         try:
+            user = request.GET['user']
+            if user == 'undefined':
+                user = request.user
+            else:
+                user = int(user)
+                user = User.objects.get(id=user)
+        except:
+            pass
+        try:
             page = request.GET['p']
         except:
             page = 1
         finally:
-            objs = UserCourse.objects.all().order_by('-createat')
+            try:
+                if user:
+                    objs = UserCourse.objects.all().filter(root=user).order_by('-createat')
+            except:
+                objs = UserCourse.objects.all().order_by('-createat')
         try:
             id = request.GET['id']
             id = int(id)
@@ -641,11 +682,11 @@ class CreateChapter(viewsets.ModelViewSet):
             course = 0
         finally:
             target = UserCourse.objects.get(id=course)
-            objs = UserCourseContent.objects.all().filter(root=target)
+            objs = UserCourseContent.objects.all().filter(root=target).order_by('cid')
         try:
             c = request.GET['c']
             c = int(c)
-            objs = UserCourseContent.objects.all().filter(root=target,cid=c)
+            objs = UserCourseContent.objects.all().filter(root=target,cid=c).order_by('cid')
         except:
             pass
         queryset = objs
@@ -658,7 +699,7 @@ class CreateSlide(viewsets.ModelViewSet):
     #required
     #user, courseid, chapterid, context
     def post(self, request):
-        print("craete slide")
+        # print("craete slide")
         root = User.objects.get(username=request.user)
         id = request.data['id']
         cid = request.data['cid']
@@ -689,7 +730,7 @@ class CreateSlide(viewsets.ModelViewSet):
             cid = int(cid)
             course = UserCourse.objects.get(id=id)
             target = UserCourseContent.objects.get(root=course,cid=cid)
-            queryset = UserCourseContentIndex.objects.all().filter(root=target)
+            queryset = UserCourseContentIndex.objects.all().filter(root=target).order_by('sid')
         except:
             pass
         serializers = UserCourseContentIndexSerializer(queryset,many=True)
@@ -730,7 +771,7 @@ class GEtUserCourses(viewsets.ModelViewSet):
         target = UserInfo.objects.get(id=username)
         target2 = target.root
         queryset = UserCourse.objects.all().filter(root=target2)
-        print(queryset)
+        # print(queryset)
         serializers = UserCourseSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
@@ -885,14 +926,7 @@ class SearchUserinfoget(viewsets.ModelViewSet):
 class UserinfoCreate(viewsets.ModelViewSet):
 
     def post(self, request):
-        user = User.objects.get(username=request.data['username'])
-        queryset = UserInfo(root=user,gen='M',birth=request.data['birth'])
-        queryset.save()
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class CreateComment(viewsets.ModelViewSet):
 
@@ -906,6 +940,19 @@ class CreateComment(viewsets.ModelViewSet):
         queryset = UserCourseComment.objects.all().filter(root=target).order_by('-createat')
         serializers = UserCourseCommentSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            id = int(id)
+            target = UserCourse.objects.get(id=id)
+            queryset = UserCourseComment.objects.all().filter(root=target)
+            serializers = UserCourseCommentSerializer(queryset,many=True)
+        except:
+            pass
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+
 
 class UpdateUserProfile(viewsets.ModelViewSet):
 
@@ -945,6 +992,24 @@ class UserBoard(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
+class Userinfomation(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['user']
+            target = User.objects.get(id=int(id))
+        except:
+            target = request.user
+        queryset = UserInfo.objects.get(root=target)
+        serializers = UserInfoSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        print(request)
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 
 
 #Remain apis
@@ -961,6 +1026,7 @@ class APItest(viewsets.ModelViewSet):
 
     def post(self, request):
         #print(request.GET)
+        print(request.data)
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)

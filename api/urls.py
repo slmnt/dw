@@ -83,7 +83,7 @@ disableuser = DisableUser.as_view({
     'post': 'post'
 })
 courseupload = CourseUpload.as_view({
-    'get': 'get',
+#    'get': 'get',
     'post': 'post'
 })
 pythonbydocker = PythonByDocker.as_view({
@@ -110,10 +110,6 @@ searchuserinfoget = SearchUserinfoget.as_view({
     'get': 'get',
     'post': 'post'
 })
-createuserinfo = UserinfoCreate.as_view({
-    'get': 'get',
-    'post': 'post'
-})
 createcomment = CreateComment.as_view({
     'get': 'get',
     'post': 'post'
@@ -122,8 +118,13 @@ updateuserprofile = UpdateUserProfile.as_view({
     'get': 'get',
     'post': 'post'
 })
+userinfomation = Userinfomation.as_view({
+    'get': 'get',
+    'post': 'post'
+})
 
 urlpatterns = [
+#userinfo get,create
 
     #User Authentic
     path('authentic/',UserAuthentic.as_view()),
@@ -135,7 +136,6 @@ urlpatterns = [
     path('createuser/',CreateUser.as_view()),
     path('createmuser/',CreateMUser.as_view()),
     path('checkmail/',check_mail_code),
-    path('createuserinfo/',createuserinfo),
 
     path('updateuserprofile/',updateuserprofile),
 
@@ -154,17 +154,6 @@ urlpatterns = [
 
     path('getuser/',Get_User),
 
-    #User Course Get
-    #FIX
-    path('getusercourseinfo/',getusercourse),
-
-    #FIX
-    path('getusercoursec/',Get_User_Course_content),
-
-    path('getCourseInfoContentsInfo/<id>',CourseInfoConetntsInfoGet.as_view()),
-    path('getusercourseid/',Get_User_Course_info),
-    path('getusercourseindex/',Get_User_Course_index),
-
     #File Upload
     path('upload/',Upload),
 
@@ -180,8 +169,9 @@ urlpatterns = [
 
     #Course Search
     path('searchcourse/<text>',SearchCourse.as_view()),
+    path('comment/',createcomment),
+
     #FIX
-    path('createcomment/',createcomment),
     path('getusercoursecomment/<id>',GetUserCourseComments.as_view()),
 
     #UserSearch
@@ -190,8 +180,8 @@ urlpatterns = [
     path('searchuserinfo/',searchuserinfoget),
 
     #mypage
-    path('mypageuserget/',mypageuserget),
-    path('mypagecourseget/',mypageusercourseget),
+    path('userinfo/',userinfomation),
+
 
     #path('test',apitest),
     path('test/',apitest),

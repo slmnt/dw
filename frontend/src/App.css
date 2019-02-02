@@ -15,7 +15,8 @@ a {
     --light-color: #b0f9eb;
     --nice-border-color: #666666;
     --nice-text-color: #cccccc;
-    --bg-color: white;/*#f2f7ff;*/
+    --bg-color: white;
+    --nice-bg-color: #f2f7ff;
     --gray-color: #868e96;
 
     --dark-lighter: #3c3c3c;

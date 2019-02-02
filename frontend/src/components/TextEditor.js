@@ -140,8 +140,8 @@ class TextEditor extends React.Component {
               newTabs.push(v);
           }
       }
-      console.log(path)
-      console.log(this.getContent(path))
+      //console.log(path)
+      //console.log(this.getContent(path))
       let tab = {
           path: path,
           name: path.substring(path.lastIndexOf('/') + 1),

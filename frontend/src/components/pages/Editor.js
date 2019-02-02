@@ -12,6 +12,7 @@ import hljs from 'highlight.js';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
+import cookie from 'cookie';
 
 import {MainContext} from '../../contexts/main';
 import api from '../../modules/api'
@@ -318,10 +319,10 @@ class SlideEditor extends React.Component {
                       // this.props.setSlideText(data);
                     } }
                     onBlur={ editor => {
-                        console.log( 'Blur.', editor );
+                        //console.log( 'Blur.', editor );
                     } }
                     onFocus={ editor => {
-                        console.log( 'Focus.', editor );
+                        //console.log( 'Focus.', editor );
                     } }
                 />
               </div>
@@ -395,8 +396,8 @@ class Editor extends Component {
 
 
     // course
-    var u = '/getusercourseid/';
-    axios.post(u, {id:this.state.id}).then(response => {
+    var u = `/course/?id=${this.state.id}`;
+    axios.get(u).then(response => {
       // Course
       /*
       createat: "2019-01-30T18:26:26.755470+09:00"
@@ -407,14 +408,13 @@ class Editor extends Component {
       title: "testcoure"
       users: 0
       */
-      console.log(response.data)
       this.setCourseData(response.data.title, response.data.description)
     }).catch(e => console.log(e))
 
 
     // chapter & slides
     let chapters = []
-    u = '/getCourseInfoContentsInfo/' + this.state.id
+    u = `/chapter/?u=${this.state.id}`
     axios.get(u).then(response => {
       // chapters
       chapters = response.data
@@ -435,7 +435,7 @@ class Editor extends Component {
         //cid: c.cid
         //
         slidePms.push(
-          axios.get('/slide/').then(response => {
+          axios.get(`/slide/?id=${this.state.id}&cid=${c.cid}`).then(response => {
             if (!ch) {
               console.log();
               return;
@@ -475,6 +475,7 @@ class Editor extends Component {
       url: `/Course/${this.state.id}/`,
     }).then(api.parseJson).then(response => {
         if (!response) return;
+        console.log(response)
         this.fileEditor.current.importFiles(response);
         this.fileEditor.current.importDir(response);
     });
@@ -489,9 +490,9 @@ class Editor extends Component {
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
   }
+  
 
-
-  onSave = (e) => {
+  onSave = async (e) => {
     let base_url = "Course/" + this.state.id
     var chapters = this.state.chapters
     
@@ -499,26 +500,21 @@ class Editor extends Component {
     this.sortSlides();
 
     //
-    let list = [];
 
-    console.log("course saving");
-
-
-    // update coursetitle
+    // course
     let formData = new FormData();
     formData.append('id',this.state.id)
     formData.append('title',this.state.course.name)
     formData.append('desc',this.state.course.desc)
-    list.push(
-      api.ex_post('/api/updatecourse/',{
-        'id': this.state.id,
-        'title': this.state.course.name,
-        'desc': this.state.course.desc
-      }).then(api.parseJson)
-      .then(response => console.log(response))
-      .catch(error => console.error('Error:', error))
-    )
+    await api.ex_post('/api/updatecourse/',{
+      'id': this.state.id,
+      'title': this.state.course.name,
+      'desc': this.state.course.desc
+    }).then(api.parseJson)
+    .then(response => console.log())
+    .catch(error => console.error('Error:', error))
 
+    // chapter & slide
     let idx = 0
     for(let c of chapters){
       idx += 1
@@ -526,66 +522,29 @@ class Editor extends Component {
       let slides = c.slides
       //at this point, craete chapter
       //name, desc
-      list.push(
-        api.ex_post('/api/chapter/',{
-          'id': this.state.id,
-          'cid':idx,
-          'title':c.name,
-          'desc':c.desc
-        }).then(api.parseJson)
-        .then(response => console.log(response))
-        .catch(error => console.error('Error:', error))
-      );
+      let c2 = await api.ex_post('/api/chapter/',{
+        'id': this.state.id,
+        'cid':idx,
+        'title':c.name,
+        'desc':c.desc
+      })
+      
       for(let s of slides){
         //name, text,idx,jdx,id
         jdx += 1
-        api.ex_post('/api/slide/',{
+         let s2 = await api.ex_post('/api/slide/',{
             id: this.state.id,
             cid: idx,
             sid: jdx,
             title: s.name,
             context: s.text          
-        }).then(api.parseJson)
-        .then(response => console.log(response))
-        .catch(error => console.error('Error:', error))
-
+        })
       }
     }
 
-    /*
-    for(let ci in chapters){
-        let c = chapters[ci]
-
-        let jdx = 0
-        for(let si in c.slides){
-          let s = c.slides[si];
-          //at this point, craete slides
-          //name, desc
-          let formData = new FormData();
-          formData.append('id',this.state.id)
-          formData.append('cid',idx)
-          formData.append('sid',si + 1)
-          formData.append('title',s.name || "title")
-          formData.append('context',s.text)
-          list.push(
-            api.post('/api/createslide/',{
-              body: formData
-            }).then(api.parseJson)
-            .then(response => console.log(response))
-            .catch(error => console.error('Error:', error))
-          );
-        }
-      }
-      */
-
-    this.getDirtree(null,'',base_url)
+    await this.fileEditor.current.uploadFiles(base_url)
     
-
-    Promise.all(list).then(() => {
-      console.log("course saved");
-      history.push(`/course/${this.context.uid}/${this.state.id}`);
-    });
-
+    history.push(`/course/${this.context.uid}/${this.state.id}`);
   }  
 
   moveBox = (from, to) => {
@@ -979,22 +938,19 @@ class Editor extends Component {
               />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
-              <div
-                  style={{
-                  display: "flex",
-                  lineHeight: "120%",
-                  fontSize: "0.6em",
-                  color: "#cccccc",
-                  height: "100%",
-                  width: "100%",
-                  }}
-              >
-               <FileEditor ref={this.fileEditor} />
+              <div className={styles["file-editor-container"]}>
+                <FileEditor ref={this.fileEditor} courseId={this.state.id} />
               </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
-              答えを記入
-              <TextArea />
+              <div className={styles["answer-container"]}>
+                <div className={styles["answer-title"]}>
+                  答えを記入
+                </div>
+                <div className={styles["answer-textarea-container"]}>
+                  <TextArea />
+                </div>
+              </div>
             </div>
           </div>
 

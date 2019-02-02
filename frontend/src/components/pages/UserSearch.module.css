@@ -5,7 +5,7 @@
 
 /* header */
 .header {
-    padding: 2em 5% 1em 5%;
+    padding: 2em 5% 3em 5%;
 }
 .title-container {
     font-size: 1.5em;
@@ -15,6 +15,8 @@
     display: flex;
     justify-content: flex-end;
     align-content: center;
+
+    min-height: 1.5em;
 }
 .search-container {
     display: flex;
@@ -100,10 +102,11 @@
 
     font-size: 1.2em;
 }
+/*
 .course-item + .course-item + .course-item {
     border-top: 1px solid var(--light-color);
 }
-
+*/
 
 .course-item-score {
     text-align: center;
@@ -175,3 +178,12 @@
         padding: 0 15%;
     }
 }
+
+
+
+/* pagination */
+.pagination-container {
+    padding: 3em 0;
+}
+
+

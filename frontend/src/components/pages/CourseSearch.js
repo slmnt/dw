@@ -4,11 +4,13 @@ import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
+import styles from './CourseSearch.module.css';
 import api from '../../modules/api';
+
 import Loading from '../Loading'
 import CourseList from '../CourseList';
 import Ad from '../AdPanel'
-import styles from './CourseSearch.module.css';
+import Pagination from '../Pagination';
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
@@ -19,6 +21,7 @@ class CourseSearch extends Component {
 
         this.state = {
             keyword: '',
+            page: 1,
             context: [],
             courses: [
                 /*
@@ -88,6 +91,18 @@ class CourseSearch extends Component {
         api.get();
         */
     }
+
+
+    clampPage = (v) => {
+        return Math.max(1, v);
+    }
+    goToPage = (v) => {
+        this.setState({page: this.clampPage(v)});
+    }
+    addToPage = (v) => {
+        this.setState({page: this.clampPage(this.state.page + v)});
+    }
+    
     
     render() {
         return (
@@ -120,6 +135,15 @@ class CourseSearch extends Component {
                     </div>
                     */}
                     <CourseList courses={this.state.courses} />
+                </div>
+                <div className={styles["pagination-container"]}>
+                    <Pagination first={1} last={10} maxButtons={5} currentPage={this.state.page}
+                        onClickPrev={() => this.addToPage(-1)}
+                        onClickNext={() => this.addToPage(1)}
+                        onClickFirst={() => this.goToPage(1)}
+                        onClickLast={() => this.goToPage(10)}
+                        onClickPage={(i) => this.goToPage(i)}
+                    />
                 </div>
             </div>
         );

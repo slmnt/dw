@@ -41,9 +41,6 @@ class CourseGet extends Component {
             showSlide: true,
             currentSlideId: -1,
             slides: [
-                "",
-                "",
-                "",
             ],
 
             showAnswer: false,
@@ -71,7 +68,7 @@ class CourseGet extends Component {
         api.get(`/api/chapter/?u=${this.state.courseId}&c=${this.state.chapterId}`).then(api.parseJson)
         .then(response => {
             if (response && response[0]) {
-                console.log(response)
+                response = response[0]
                 this.setState({
                     courseName: response.root,
                     chapterName: response.title,
@@ -118,6 +115,13 @@ class CourseGet extends Component {
         this.setState({showSlide: false});
     }
 
+    onClickSlideHeader = e => {
+        if (this.state.showAnswer) {
+            this.hideAnswer();
+        } else {
+            this.openIntro();
+        }
+    }
     openIntro = () => {
         this.setState({currentSlideId: -1});
     }
@@ -146,7 +150,10 @@ class CourseGet extends Component {
         }
     }
     showAnswer = (v) => {
-        this.setState({showAnswer: v});
+        this.setState({showAnswer: true});
+    }
+    hideAnswer = (v) => {
+        this.setState({showAnswer: false});
     }
 
     render() {
@@ -155,11 +162,11 @@ class CourseGet extends Component {
                 <div className={styles["header"]}>
                     <div className={styles["header-title"]}>
                         <div><Link to={`/course/${this.context.uid}/${this.state.courseId}`}>{this.state.courseName}</Link></div>
-                        <div>/</div>
+                        <div style={{margin: "0 1em"}}>/</div>
                         <div>{this.state.chapterName}</div>
                     </div>
                     <div className={styles["header-controls"]}>
-                        <div className={styles["header-controls-ans"]} onClick={() => this.showAnswer(true)}>答えを見る</div>
+                        <div className={styles["header-controls-ans"]} onClick={() => {this.showSlide(); this.showAnswer();}}>答えを見る</div>
                         <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(-1)}>前のチャプター</div>
                         <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(1)}>次のチャプター</div>
                     </div>
@@ -173,11 +180,19 @@ class CourseGet extends Component {
                     </div>
                     <div className={styles["slide-container"]} style={{display: this.state.showSlide ? "" : "none"}}>
                         <div className={styles["slide-header"]}>
-                            <span className={styles["slide-header-title"]} onClick={this.openIntro}>スライド</span>
+                            <span className={styles["slide-header-title"]} onClick={this.onClickSlideHeader}>{this.state.showAnswer ? "答え" : "スライド"}</span>
                             <span><SlideIcon /></span>
                             <span className={styles["slide-header-collapse-btn"]} onClick={this.hideSlide}><PrevIcon/></span>
                         </div>
-                        <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId == -1 ? "" : "none"}}>
+
+                        <div className={styles["slide-answer"]} style={{display: this.state.showAnswer ? "" : "none"}}>
+                            <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || ""} />
+                            <div className={styles["slide-answer-close"]} onClick={this.hideAnswer}>
+                                閉じる
+                            </div>
+                        </div>
+                        
+                        <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId === -1 && !this.state.showAnswer ? "" : "none"}}>
                             <div className={styles["slide-intro-name"]}>
                                 チャプター {parseInt(this.state.chapterId)}: {this.state.chapterName}
                             </div>
@@ -188,15 +203,17 @@ class CourseGet extends Component {
                                 開始
                             </div>
                         </div>
-                        <div className={styles["slide-content"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
-                            <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || "test"} />
+                        
+
+                        <div className={styles["slide-content"]} style={{display: this.state.currentSlideId === -1 || this.state.showAnswer ? "none" : ""}}>
+                            <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || ""} />
                         </div>
-                        <div className={styles["slide-controls"]} style={{display: this.state.currentSlideId == -1 ? "none" : ""}}>
+                        <div className={styles["slide-controls"]} style={{display: this.state.currentSlideId === -1 || this.state.showAnswer ? "none" : ""}}>
                             <div className={styles["slide-controls-icon"]} onClick={this.toFirstSlide}><FirstIcon /></div>
                             <div className={styles["slide-controls-icon"]} onClick={this.toPrevSlide}><PrevIcon style={{width: "2.5em", height: "2.5em"}}/></div>
                             <div className={styles["slide-controls-num"]}>
                                 <span style={{fontSize: "2em"}}>
-                                    {this.state.currentSlideId + 1}
+                                    {this.state.slides.length === 0 || this.state.currentSlideId === -1 ? 0 : this.state.currentSlideId + 1}
                                 </span>
                                 <sub style={{fontSize: "1.4em"}}>
                                     /{this.state.slides.length}
@@ -205,9 +222,11 @@ class CourseGet extends Component {
                             <div className={styles["slide-controls-icon"]} onClick={this.toNextSlide}><NextIcon style={{width: "2.5em", height: "2.5em"}} /></div>
                             <div className={styles["slide-controls-icon"]} onClick={this.toLastSlide}><LastIcon /></div>
                         </div>
+                    
+                    
                     </div>
                     
-                   <FileEditor ref={this.fileEditor} />
+                   <FileEditor ref={this.fileEditor} courseId={this.state.courseId} />
                 </div>  
             </div>
         );

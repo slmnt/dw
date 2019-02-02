@@ -2,11 +2,13 @@ import axios from 'axios';
 import cookie from 'cookie';
 
 /* API 要求 モジュール */
-const BASE_URL = "http://localhost:8000"
+const PROTOCOL = 'http';
+const HOST = process.env.NODE_ENV === 'production' ? '133.167.69.153' : 'localhost:8000';
+const BASE_URL = PROTOCOL + '://' + HOST;
 
 function fetch_extend(method, url, option, nocookie) {
   let cookies = cookie.parse(document.cookie);
-  return fetch(BASE_URL + url, Object.assign({
+  return (BASE_URL + url, Object.assign({
     method: method,
     credentials: !nocookie && 'include',
     headers: {
@@ -53,15 +55,12 @@ function parseJson(response) {
     return;
   }
 
-  let r;
   try {
-    r = response.json();
+    return response.json();
   } catch (e) {
     console.log(e)
   }
-  return r;
 }
-
 
 export default {
   post: (url, option) => {return fetch_timeout('POST', url, option)},

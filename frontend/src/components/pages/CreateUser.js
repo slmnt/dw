@@ -25,14 +25,13 @@ class SignIn extends Component {
       load: false
     }
 
-    this.submit = this.submit.bind(this)
-    this.checkpasswd = this.checkpasswd.bind(this)
-    this.handleChange = this.handleChange.bind(this)
 
-    document.addEventListener('submit',(e) => this.submit(e))
+    this.genInput = React.createRef();
+    this.birthInput = React.createRef();
+
   }
 
-  checkpasswd(){
+  checkpasswd = () => {
     var tar1 = this.state.passwd
     var tar2 = this.state.passwd2
     if(tar1 !== tar2)
@@ -58,31 +57,21 @@ class SignIn extends Component {
     return parseInt(now - ages)
   }
 
-  submit(e){    
+  submit = (e) => {    
     e.preventDefault()
     // console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
-    let gen = document.getElementById('gender')
-    let age = document.getElementById('age')
-
-    api.ex_post('/api/createuser/',{
+    const data = {
       uid: this.state.username,
       pwd: this.state.passwd,
       email: this.state.email,
       fname: this.state.firstname,
-      lname: this.state.lastname
-    }).then(response => response.json())
-    .then(response => {
-      api.ex_post('/api/createuserinfo/',{
-        username: this.state.username,
-        gen: gen.value,
-        birth: age.value
-      }).then(response => response.json())
-      .then(response => console.log(response))  
-    })
-
-
+      lname: this.state.lastname,
+      gen: this.genInput.current.value,
+      birth: this.birthInput.current.value,
+    }
+    this.context.createUser(data);
 
   }
 
@@ -102,10 +91,6 @@ class SignIn extends Component {
       this.setState({load: true})
   };
 
-  componentWillUnmount(){
-    document.removeEventListener('submit', (e) => this.submit(e))
-  }
-
   render() {
 
     if(this.state.load)
@@ -120,7 +105,7 @@ class SignIn extends Component {
           </div>
         </div>
 
-        <form className={styles.create_form} name="Create">
+        <form className={styles.create_form} name="Create" onSubmit={this.submit}>
           <div className={styles.form_layout}>
             <div className={styles.form_title}>
               会員登録
@@ -178,11 +163,11 @@ class SignIn extends Component {
                 <label>性別</label>
               </div>
               <div>
-                <select id="gender" >
-                  <option>---</option>
-                  <option>男性</option>
-                  <option>女性</option>
-                  <option>わからない</option>
+                <select ref={this.genInput} >
+                  <option value="">---</option>
+                  <option value="M">男性</option>
+                  <option value="F">女性</option>
+                  <option value="X">わからない</option>
                 </select>
               </div>
             </div>
@@ -191,12 +176,12 @@ class SignIn extends Component {
                 <label>年齢</label>
               </div>
               <div>
-                <input id="age" type="date"></input>
+                <input type="date" ref={this.birthInput}></input>
               </div>
             </div>
           <div className={styles.form_btn}>
             <a className={styles.form_cancel} href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
-            <a href="javascript:void(0)" onClick={(e) => this.submit(e)} >登録</a>
+            <a href="javascript:void(0)" onClick={this.submit} >登録</a>
           </div>
           </div>
         </form>

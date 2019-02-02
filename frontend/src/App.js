@@ -6,6 +6,11 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import queryString from 'query-string';
 import axios from 'axios';
+
+
+
+
+import api from './modules/api';
 import history from './modules/history';
 
 import './App.css';
@@ -37,13 +42,14 @@ import CourseSearch from './components/pages/CourseSearch'
 import CourseGet from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
 
+import Forum from './components/pages/Forum';
+
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
 import Terms from './components/pages/Terms';
 import Privacy from './components/pages/Privacy';
 import NotFound from './components/pages/NotFound';
 
-import api from './modules/api'
 
 
 axios.defaults.baseURL = '/api';
@@ -89,7 +95,8 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      logout: this.logout
+      logout: this.logout,
+      createUser: this.createUser,
     }
   };
 
@@ -103,7 +110,8 @@ class App extends React.Component {
       uid: '',
       username: '',
       login: this.login,
-      logout: this.logout
+      logout: this.logout,
+      createUser: this.createUser,
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -198,7 +206,6 @@ class App extends React.Component {
     })
   }
   logout = () => {
-
   }
   updateLoginState = () => {
     //this.loginWithCookie();
@@ -223,10 +230,30 @@ class App extends React.Component {
     });
   }
 
-  createUser = (data) => {
-    axios.post('createuser/', data).then(response => {
+  createUser = (data, callback) => {
+    api.ex_post('/api/createuser/', data)
+    .then(response => {
       console.log(response)
+      if(response.status === 200){
+        return api.parseJson(response);
+      } else {
+        throw new Error(response);
+      }
     })
+    .then(response => {
+
+        this.state.data.isLoggedIn = true;
+        this.state.data.uid = response.uid;
+
+        this.setState({
+          data: this.state.data
+        }, () => {
+          if (callback) callback();
+          console.log("created & logged in as: ", this.state.data.uid);
+        });
+    }).catch(e => {
+      console.log("error: createuser", e)
+    });
   }
 
   deleteUser = () => {
@@ -291,17 +318,20 @@ class App extends React.Component {
 
                   <Route path="/certify/:code" component={Mail}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage"/>
+                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
-                  <Route path="/user/:id"  component={UserInfo}/>
+                  
                   <Route path="/search/user"  component={UserSearch}/>
+                  <Route path="/user/:id"  component={UserInfo}/>
 
                   <Route path="/search/course"  component={CourseSearch}/>
                   <Route exact strict path="/courseSearch"  component={CourseSearch}/>
                   <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
                   <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:name/:id"  component={CourseInfo}/>
+
+                  <Route path="/forum"  component={Forum}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>

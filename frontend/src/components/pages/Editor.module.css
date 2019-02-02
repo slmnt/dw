@@ -554,3 +554,34 @@
 
 
 /* file editor */
+.file-editor-container {
+  display: flex;
+  line-height: 120%;
+  font-size: 0.6em;
+  color: #cccccc;
+  height: 100%;
+  width: 100%;
+}
+
+
+/* answer */
+.answer-container {
+  padding: 1em 2em 2em 2em;
+  height: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-flow: column;
+}
+.answer-title {
+  flex: 0 0 auto;
+  font-size: 1.2em;
+}
+.answer-textarea-container {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  font-size: 1.5em;
+}
+
+
+

@@ -73,36 +73,16 @@ class UserInfo extends Component {
     }    
     componentDidMount(){
 
-        if(typeof(this.props.match.params.id) === 'undefined'){
-            console.log("test1")
-            //mypage Done
-            api.get('/api/mypagecourseget/').then(api.parseJson)
-            .then(response => {
-                if (response) this.setState({courses: response})
-            })
+        api.get(`/api/userinfo/?user=${this.props.match.params.id}`).then(api.parseJson)
+        .then(response => {
+            if (response) this.setState({userinfo: response})
+        })
 
-            api.get('/api/mypageuserget/').then(api.parseJson)
-            .then(response => {
-                if (response) this.setState({userinfo: response})
-            })
-    
-        }else{
-            //user search
-            api.ex_post('/api/getusercourseinfo/',{
-                name: this.props.match.params.id
-            }).then(api.parseJson)
-            .then(response => {
-                if (response) this.setState({courses: response})
-            })            
+        api.get(`/api/course/?user=${this.props.match.params.id}`).then(api.parseJson)
+        .then(response => {
+            if (response) this.setState({courses: response})
+        })
 
-            api.ex_post('/api/searchuserinfo/',{
-                name: this.props.match.params.id
-            }).then(api.parseJson)
-            .then(response => {
-                if (response) this.setState({userinfo: response})
-            })
-
-        }
     }
     getUserData = () => {
 

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';   
 import PropTypes from 'prop-types';
-import Loading from '../Loading';
-import Ad from '../AdPanel';
 import axios from 'axios';
-
 import { Link } from 'react-router-dom';
 
-import styles from './UserSearch.module.css';
 
 import api from '../../modules/api';
+import styles from './UserSearch.module.css';
+
+import Loading from '../Loading';
+import Ad from '../AdPanel';
+import Pagination from '../Pagination';
 
 import { ReactComponent as FavIcon } from '../../img/fav.svg';
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
@@ -21,6 +22,7 @@ class UserSearch extends Component {
 
         this.state = {
             keyword: '',
+            page: 1,
             context: [],
             users: [
                 /*
@@ -72,6 +74,17 @@ class UserSearch extends Component {
        .then(response => this.setState({users: response})).catch()
 
     }
+
+    clampPage = (v) => {
+        return Math.max(1, v);
+    }
+    goToPage = (v) => {
+        this.setState({page: this.clampPage(v)});
+    }
+    addToPage = (v) => {
+        this.setState({page: this.clampPage(this.state.page + v)});
+    }
+    
     
     render() {
         return (
@@ -132,6 +145,16 @@ class UserSearch extends Component {
                             })
                         }
                     </div>
+                </div>
+
+                <div className={styles["pagination-container"]}>
+                    <Pagination first={1} last={10} maxButtons={5} currentPage={this.state.page}
+                        onClickPrev={() => this.addToPage(-1)}
+                        onClickNext={() => this.addToPage(1)}
+                        onClickFirst={() => this.goToPage(1)}
+                        onClickLast={() => this.goToPage(10)}
+                        onClickPage={(i) => this.goToPage(i)}
+                    />
                 </div>
             </div>
         );
