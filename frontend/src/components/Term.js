@@ -68,12 +68,8 @@ class Term extends React.Component {
       term.open(element);
       term.winptyCompatInit();
       term.webLinksInit();
-      term.fit();
-      term.focus();
 
-      this.runTerminal(this.term)
-      term.write('Hello from \x1B[1;3;31mPresident Kang\x1B[0m');
-      term.prompt();
+
 
 
       const stringOptions = {
@@ -97,8 +93,14 @@ class Term extends React.Component {
       }
 
       //
+      
+      this.runTerminal(this.term)
+      term.fit();
+      term.focus();
+      term.write2('Hello from \x1B[1;3;31mPresident Kang\x1B[0m');
+      term.prompt();
+      
       element.style.height = term._core.viewport._viewportElement.getBoundingClientRect().height + "px";
-
       this.props.onInit(element.style.height);
     }
   
@@ -126,7 +128,7 @@ class Term extends React.Component {
     
       //
       term.prompt = () => {
-        term.write('\r\n' + term.promptStr);
+        term.write2('\r\n' + term.promptStr);
         term.allowInput = true;
         term._dsr_clbk = () => {
           term.ix = term.x;
@@ -135,7 +137,9 @@ class Term extends React.Component {
         };
       };
       term.addLineBreak = () => {
-        term.write('\r\n');
+        term.write(ansiEscapes.cursorTo(term.mx - 1, term.my - 1));
+        console.log(term.mx, term.my)
+        //term.write('\r\n');
       }
 
 
@@ -163,11 +167,12 @@ class Term extends React.Component {
       term.insertToCommand = (key, n) => {
         term.write(key);
         if (key.length == 1) {
-          window.setTimeout(() => {
+          term._dsr_clbk = () => {
+            //console.log("insert", key, n, term.x, term.y)
             term.write(term.cmd.substring(n - 1));
             term.write(ansiEscapes.cursorTo(term.x - 1, term.y - 1));
             term.cmd = term.cmd.substring(0, n - 1) + (key.length == 1 ? key : "") + term.cmd.substring(n - 1);
-          }, 0);
+          };
         }
       }
       term.clearCommand = () => {
@@ -219,12 +224,13 @@ class Term extends React.Component {
         return n;
       }
     
-
-      term.on('data', d => {
+      term.onWrite = (d) => {
+        //console.log(d)
         const m = d.match(DSR);
         if (m) {
           term.x = parseInt(m[2]);
           term.y = parseInt(m[1]);
+          //console.log(term.x, term.y)
           if (term.x > term.mx) term.mx = term.x;
           if (term.y > term.my) term.my = term.y;
           if (term._dsr_clbk) {
@@ -234,6 +240,15 @@ class Term extends React.Component {
         } else {
           term.write(ansiEscapes.cursorGetPosition);
         }
+      }
+      term.write2 = (d) => {
+        term.write(d);
+        term.onWrite(d);
+      }
+
+      term.on('data', d => {
+        // term.write だけでは呼ばれない
+        term.onWrite(d);
       });
       term._core.register(term.addDisposableListener('key', (key, ev) => {
         //console.log(ev.keyCode, ev.ctrlKey)
