@@ -70,14 +70,12 @@ class CourseGet extends Component {
         // chapter
         api.get(`/api/chapter/?u=${this.state.courseId}&c=${this.state.chapterId}`).then(api.parseJson)
         .then(response => {
-            if (response && response[0]) {
-                console.log(response)
-                this.setState({
-                    courseName: response.root,
-                    chapterName: response.title,
-                    chapterDesc: response.description
-                })
-            }
+            response = response[0]
+            this.setState({
+                courseName: response.root,
+                chapterName: response.title,
+                chapterDesc: response.description
+            })
         })
         
 

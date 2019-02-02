@@ -87,6 +87,12 @@ class UserAuthentic(APIView):
             #now
             return Response(data="1",status=status.HTTP_404_NOT_FOUND)
 
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 #required data
 # 'uid' 'pwd' 'email' 'fname' 'lname
 class CreateUser(APIView):
@@ -178,6 +184,7 @@ class CreateMUser(APIView):
         #        response = HttpResponse('working')       
         #        response.set_cookie('cookie','deliceous cookie')
         #        return response
+
 
 #required data
 # 'contents'
@@ -475,6 +482,13 @@ class GetUserCourseContentid(viewsets.ModelViewSet):
         serial = UserCourseInfoSerializer(obj)
         return Response(data=serial.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        #print(request.GET['p'])
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 
 #CourseSearch, CourseInfoGet, CourseInfoContentsInfoGet
 class CourseInfoConetntsInfoGet(generics.ListAPIView):
@@ -553,11 +567,24 @@ class CreateCourse(viewsets.ModelViewSet):
 
     def get(self, request):
         try:
+            user = request.GET['user']
+            if user == 'undefined':
+                user = request.user
+            else:
+                user = int(user)
+                user = User.objects.get(id=user)
+        except:
+            pass
+        try:
             page = request.GET['p']
         except:
             page = 1
         finally:
-            objs = UserCourse.objects.all().order_by('-createat')
+            try:
+                if user:
+                    objs = UserCourse.objects.all().filter(root=user).order_by('-createat')
+            except:
+                objs = UserCourse.objects.all().order_by('-createat')
         try:
             id = request.GET['id']
             id = int(id)
@@ -907,6 +934,19 @@ class CreateComment(viewsets.ModelViewSet):
         serializers = UserCourseCommentSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            id = int(id)
+            target = UserCourse.objects.get(id=id)
+            queryset = UserCourseComment.objects.all().filter(root=target)
+            serializers = UserCourseCommentSerializer(queryset,many=True)
+        except:
+            pass
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+
+
 class UpdateUserProfile(viewsets.ModelViewSet):
 
     def post(self, request):
@@ -945,6 +985,24 @@ class UserBoard(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
+class Userinfomation(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['user']
+            target = User.objects.get(id=int(id))
+        except:
+            target = request.user
+        queryset = UserInfo.objects.get(root=target)
+        serializers = UserInfoSerializer(queryset)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        print(request)
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
 
 
 #Remain apis
