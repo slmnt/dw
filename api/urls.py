@@ -83,7 +83,7 @@ disableuser = DisableUser.as_view({
     'post': 'post'
 })
 courseupload = CourseUpload.as_view({
-    'get': 'get',
+#    'get': 'get',
     'post': 'post'
 })
 pythonbydocker = PythonByDocker.as_view({

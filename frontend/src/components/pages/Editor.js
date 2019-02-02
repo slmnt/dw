@@ -499,23 +499,21 @@ class Editor extends Component {
     this.sortSlides();
 
     //
-    let list = [];
 
-    // update coursetitle
+    // course
     let formData = new FormData();
     formData.append('id',this.state.id)
     formData.append('title',this.state.course.name)
     formData.append('desc',this.state.course.desc)
-    list.push(
-      api.ex_post('/api/updatecourse/',{
-        'id': this.state.id,
-        'title': this.state.course.name,
-        'desc': this.state.course.desc
-      }).then(api.parseJson)
-      .then(response => console.log())
-      .catch(error => console.error('Error:', error))
-    )
+    await api.ex_post('/api/updatecourse/',{
+      'id': this.state.id,
+      'title': this.state.course.name,
+      'desc': this.state.course.desc
+    }).then(api.parseJson)
+    .then(response => console.log())
+    .catch(error => console.error('Error:', error))
 
+    // chapter & slide
     let idx = 0
     for(let c of chapters){
       idx += 1
@@ -540,15 +538,12 @@ class Editor extends Component {
             title: s.name,
             context: s.text          
         })
-    }
+      }
     }
 
-    this.fileEditor.current.getDirtree(null, '', base_url)
+    await this.fileEditor.current.uploadFiles(base_url)
     
-    Promise.all(list).then(() => {
-      // console.log("course saved");
-      history.push(`/course/${this.context.uid}/${this.state.id}`);
-    });
+    history.push(`/course/${this.context.uid}/${this.state.id}`);
   }  
 
   moveBox = (from, to) => {

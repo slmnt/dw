@@ -15,7 +15,7 @@
     display: flex;
     justify-content: flex-end;
     align-content: center;
-    
+
     min-height: 1.5em;
 }
 .search-container {
@@ -102,10 +102,11 @@
 
     font-size: 1.2em;
 }
+/*
 .course-item + .course-item + .course-item {
     border-top: 1px solid var(--light-color);
 }
-
+*/
 
 .course-item-score {
     text-align: center;
@@ -182,7 +183,7 @@
 
 /* pagination */
 .pagination-container {
-    padding: 3em 25%;
+    padding: 3em 0;
 }
 
 

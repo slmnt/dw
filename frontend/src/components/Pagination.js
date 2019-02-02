@@ -58,7 +58,6 @@ class Pagination extends Component {
       );
       idx++;
     }
-    console.log(elems, min, max, current);
     return elems;
   }
   onClickFirst = e => {

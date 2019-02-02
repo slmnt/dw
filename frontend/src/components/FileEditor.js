@@ -42,6 +42,22 @@ class FileEditor extends React.Component {
   }
 
   // file
+  uploadFiles = async (base_url) => {
+    for (let path in this.state.files) {
+      //var set = RegExp(/\w*\.\w*/);
+      //if(set.test(path)){
+      //}
+      console.log("uploading", path)
+      const fixedPath = path.replace(/^\/*/, '');
+
+      let formData = new FormData();
+      formData.append('base_url', base_url)
+      formData.append(fixedPath, this.state.files[path])
+      await api.post('/api/courseupload/',{
+        body: formData
+      })
+    }
+  }
   getDirtree = (root, path, base_url) => {
     if (!root) root = this.state.directory;
 
@@ -50,8 +66,8 @@ class FileEditor extends React.Component {
       let text = this.getTabValue(path)
       if(text){
         let formData = new FormData();
-        formData.append('base_url',base_url)
-        formData.append(path,text)
+        formData.append('base_url', base_url)
+        formData.append(path, text)
         api.post('/api/courseupload/',{
           body: formData
         })
@@ -97,7 +113,7 @@ class FileEditor extends React.Component {
     this.setState({files: files})
   }
   findFile = (path) => {
-    console.log("findfile", path)
+    //console.log("findfile", path)
     if (path == "/") { // root
       return this.state.directory;
     }
@@ -121,7 +137,7 @@ class FileEditor extends React.Component {
     return file;
   }
   findPath = (data) => {
-    console.log("findpath", data)
+    //console.log("findpath", data)
     
     let file = data;
     let path = '';
@@ -164,13 +180,16 @@ class FileEditor extends React.Component {
       return;
     }
 
-    file.children.push({
+    const newFile = {
       name: name,
       children: isFolder && [],
       parent: file
-    });
+    };
+    file.children.push(newFile);
     this.sortDir(file);
     this.setState({directory: this.state.directory});
+
+    if (!isFolder) this.saveDir(this.findPath(newFile), '');
   }
   renameDir = (path, name) => {
     const file = this.findFile(path);
@@ -230,7 +249,7 @@ class FileEditor extends React.Component {
     this.saveDir(this.joinPath(to, name), this.state.files[from]);
   }
   saveDir = (path, value) => {
-    console.log(path, value)
+    console.log("saving:", path, value)
     this.state.files[path] = value;
     this.setState({files: this.state.files});
   }
@@ -284,7 +303,7 @@ class FileEditor extends React.Component {
       for (var i = 0; i < files.length; i++) {
         this.createDir(path, files[i].name);
 
-        let fullPath = `${path}${files[i].name}`;
+        let fullPath = this.joinPath(path, files[i].name);
         var reader = new FileReader();
         reader.onload = () =>  {
             this.state.files[fullPath] = reader.result;
@@ -344,7 +363,7 @@ class FileEditor extends React.Component {
       case "ruby":
       case "python":
         //Upload Dir tree, Running this cmd
-        this.getDirtree(this.state.directory, '', base_url)
+        this.uploadFiles(base_url)
         let formData = new FormData();
         formData.append('cmd',cmds[1])
         formData.append('url',base_url)
