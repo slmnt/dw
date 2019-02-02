@@ -104,7 +104,7 @@ class CreateUser(APIView):
             pwd = request.data['pwd']
             email = request.data['email']
             new_user = User(username=uname, email=email)
-            new_user.is_active = False
+            # new_user.is_active = False
             new_user.set_password(pwd)
         except:
             return Response(data="1")
@@ -531,15 +531,13 @@ class Upload(viewsets.ModelViewSet):
             dir = request.data['path'].split('/')
             dir = [name] + dir
             path = STORAGE
-
+            
             for name in dir:
                 if name:
-                    pattern = '.*\..*'
-                    r = re.match(pattern,name)
-                    if r:
-                        path += name
+                    path = os.path.join(path,name)
+                    if name == dir[-1]:
+                        pass
                     else:
-                        path += name + '//'
                         if not os.path.exists(path):
                             os.makedirs(path)
 
