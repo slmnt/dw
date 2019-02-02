@@ -230,36 +230,29 @@ class App extends React.Component {
     });
   }
 
-  createUser = (data, misc, callback) => {
-    api.ex_post('/api/createuser/', data).then(api.parseJson)
+  createUser = (data, callback) => {
+    api.ex_post('/api/createuser/', data)
     .then(response => {
-      if(response.status !== 200){
-        //throw new Error('error: create user');
+      console.log(response)
+      if(response.status === 200){
+        return api.parseJson(response);
+      } else {
+        throw new Error(response);
       }
+    })
+    .then(response => {
 
-      api.ex_post('/api/createuserinfo/',{
-        username: data.uid,
-        gen: misc.gen.value,
-        birth: misc.age.value
-      }).then(response => {
-        console.log(response);
-        // console.log(response)
-        if(response.status === 200){
-          const res = api.parseJson(response);
+        this.state.data.isLoggedIn = true;
+        this.state.data.uid = response.uid;
 
-          this.state.data.isLoggedIn = true;
-          this.state.data.uid = data.uid;//res.uid;
-          
-          this.setState({
-            data: this.state.data
-          }, () => {
-            if (callback) callback();
-            console.log("created & logged in as: ", this.state.data.uid);
-          });
-        }
-      }).catch(e => {
-        console.log("error: authentic/", e)
-      });
+        this.setState({
+          data: this.state.data
+        }, () => {
+          if (callback) callback();
+          console.log("created & logged in as: ", this.state.data.uid);
+        });
+    }).catch(e => {
+      console.log("error: createuser", e)
     });
   }
 

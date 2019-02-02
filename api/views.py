@@ -43,6 +43,9 @@ STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
 PAGESIZE = 20
 
+
+HOSTNAME = 'http://localhost:3000'
+
 """
 send_mail(
     'Subject here',
@@ -98,27 +101,20 @@ class CreateUser(APIView):
 
     def post(self, request):
         #check username
-        try:
+        #try:
             uname = request.data['uid']
             pwd = request.data['pwd']
             email = request.data['email']
             new_user = User(username=uname, email=email)
             # new_user.is_active = False
             new_user.set_password(pwd)
-        except:
-            return Response(data="1")
-        #check first name
-        try:
+
+            #check first name
             new_user.first_name = request.data['fname']
-        except:
-            pass
-        #check last name
-        try:
+            #check last name
             new_user.last_name = request.data['lname']
-        except:
-            pass
-        new_user.save()
-        try:
+            
+            new_user.save()
             u = User.objects.get(username=uname)
             h = SHA256.new()
             h.update(uname.encode('utf-8'))
@@ -127,19 +123,32 @@ class CreateUser(APIView):
             c = CertiList(name=u,code=str(code))
             c.save()
             #print(u)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        body = "http://localhost:3000/checkmail/" + code + "/"
-        """
-        send_mail(
-            'mail check',
-            str(body),
-            'miniprog2018@gmail.com',
-            [str(email)],
-            fail_silently=False,
-        )"""
-        return Response(data=uname,status=status.HTTP_200_OK)
+
+            # create user info
+            print("hey------------", new_user, request.data['gen'], request.data['birth'])
+            queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
+            queryset.save()
+
+            login(request, new_user)
+            request.session.set_expiry(432000)
+
+            data = {}
+            data['uid'] = uname
+
+            # send email
+            body = HOSTNAME + "/checkmail/" + code + "/"
+            """
+            send_mail(
+                'mail check',
+                str(body),
+                'miniprog2018@gmail.com',
+                [str(email)],
+                fail_silently=False,
+            )"""
+            return Response(data=data, status=status.HTTP_200_OK)
+        #except:
+        #    return Response(status=status.HTTP_400_BAD_REQUEST)
         
     def get(self, request):
         data = {}
@@ -174,7 +183,7 @@ class CreateMUser(APIView):
             new_user.save()
             return Response(data=uname,status=status.HTTP_200_OK)
         else:
-            return redirect("http://localhost:3000")
+            return redirect(HOSTNAME)
         #print(request.session.get_expiry_date())
         #sesion = Session.objects.get(session_key=request.session.session_key)
         #print(auth_user.last_login)        
@@ -917,18 +926,7 @@ class SearchUserinfoget(viewsets.ModelViewSet):
 class UserinfoCreate(viewsets.ModelViewSet):
 
     def post(self, request):
-        user = User.objects.get(username=request.data['username'])
-        queryset = UserInfo(root=user,gen='M',birth=request.data['birth'])
-        queryset.save()
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-
-        login(request, user)
-        request.session.set_expiry(432000)
-
-        return Response(data=data,status=status.HTTP_200_OK)
-
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class CreateComment(viewsets.ModelViewSet):
 

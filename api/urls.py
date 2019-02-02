@@ -110,10 +110,6 @@ searchuserinfoget = SearchUserinfoget.as_view({
     'get': 'get',
     'post': 'post'
 })
-createuserinfo = UserinfoCreate.as_view({
-    #'get': 'get',
-    'post': 'post'
-})
 createcomment = CreateComment.as_view({
     'get': 'get',
     'post': 'post'
@@ -140,7 +136,6 @@ urlpatterns = [
     path('createuser/',CreateUser.as_view()),
     path('createmuser/',CreateMUser.as_view()),
     path('checkmail/',check_mail_code),
-    path('createuserinfo/',createuserinfo),
 
     path('updateuserprofile/',updateuserprofile),
 
