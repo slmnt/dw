@@ -111,7 +111,7 @@ searchuserinfoget = SearchUserinfoget.as_view({
     'post': 'post'
 })
 createuserinfo = UserinfoCreate.as_view({
-    'get': 'get',
+    #'get': 'get',
     'post': 'post'
 })
 createcomment = CreateComment.as_view({

@@ -2,7 +2,9 @@ import axios from 'axios';
 import cookie from 'cookie';
 
 /* API 要求 モジュール */
-const BASE_URL = "http://localhost:8000"
+const PROTOCOL = 'http';
+const HOST = process.env.NODE_ENV === 'production' ? '133.167.69.153' : 'localhost:8000';
+const BASE_URL = PROTOCOL + '://' + HOST;
 
 function fetch_extend(method, url, option, nocookie) {
   let cookies = cookie.parse(document.cookie);

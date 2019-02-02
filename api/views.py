@@ -63,19 +63,18 @@ class UserAuthentic(APIView):
             auth_user = User.objects.get(username=request.data['uid'])
         except:
             return Response(data="1")
-        #is_vaild check
+
         try:
+            #is_vaild check
             if auth_user.is_active == False:
                 return Response(status=status.HTTP_404_NOT_FOUND)
-        except:
-            return Response(data="1",status=status.HTTP_404_NOT_FOUND)
-        #sended pwd check
-        try:
+            #sent pwd check
             pwd = request.data['pwd']
             if check_password(pwd, auth_user.password):
                 pass
         except:
             return Response(data="1",status=status.HTTP_404_NOT_FOUND)
+
         v_user = authenticate(username=auth_user.username,password=pwd)
         if v_user is not None:
             login(request,v_user)
@@ -132,13 +131,14 @@ class CreateUser(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         body = "http://localhost:3000/checkmail/" + code + "/"
+        """
         send_mail(
             'mail check',
             str(body),
             'miniprog2018@gmail.com',
             [str(email)],
             fail_silently=False,
-        )
+        )"""
         return Response(data=uname,status=status.HTTP_200_OK)
         
     def get(self, request):
@@ -923,6 +923,10 @@ class UserinfoCreate(viewsets.ModelViewSet):
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)
+
+        login(request, user)
+        request.session.set_expiry(432000)
+
         return Response(data=data,status=status.HTTP_200_OK)
 
 
