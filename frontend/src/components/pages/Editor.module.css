@@ -566,15 +566,22 @@
 
 /* answer */
 .answer-container {
-  padding: 1em 2em;
+  padding: 1em 2em 2em 2em;
+  height: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-flow: column;
 }
 .answer-title {
+  flex: 0 0 auto;
   font-size: 1.2em;
 }
 .answer-textarea-container {
-
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  font-size: 1.5em;
 }
-
 
 
 

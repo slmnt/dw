@@ -350,16 +350,20 @@ class FileEditor extends React.Component {
 
   // terminal
   runTerminal = (cmd) => {
-    this.cmdExcute(cmd);
+    /*
+    // local
+    this.localExec(cmd);
+    */
+
     /*
     // docker
-    let cmds = cmd.split(' ')
-    let base_url = "Course/" + this.state.id
-    
-    this.executeCode(cmds, base_url);
     */
+    let cmds = cmd.split(' ')
+    let base_url = `Course/${this.props.courseId}`
+    
+    this.remoteExec(cmds, base_url);
   }
-  executeCode = (cmds, base_url) => {
+  remoteExec = (cmds, base_url) => {
     switch(cmds[0]){
       case "javac":
       case "gcc":
@@ -378,7 +382,7 @@ class FileEditor extends React.Component {
         break
     }
   }
-  cmdExcute = (cmd) => {
+  localExec = (cmd) => {
     let parser = cmd.split(' ')
     // console.log(parser)
     

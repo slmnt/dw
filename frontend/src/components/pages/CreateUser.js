@@ -63,26 +63,18 @@ class SignIn extends Component {
     // console.log(this.state)
     //api/createuser/
     // 'uid' 'pwd' 'email' 'fname' 'lname
-    let gen = document.getElementById('gender')
-    let age = document.getElementById('age')
-
-    api.ex_post('/api/createuser/',{
+    const data = {
       uid: this.state.username,
       pwd: this.state.passwd,
       email: this.state.email,
       fname: this.state.firstname,
-      lname: this.state.lastname
-    }).then(response => response.json())
-    .then(response => {
-      api.ex_post('/api/createuserinfo/',{
-        username: this.state.username,
-        gen: gen.value,
-        birth: age.value
-      }).then(response => response.json())
-      .then(response => console.log(response))  
-    })
-
-
+      lname: this.state.lastname,
+    };
+    const misc = {
+      gen: document.getElementById('gender'),
+      age: document.getElementById('age'),
+    }
+    this.context.createUser(data, misc);
 
   }
 
