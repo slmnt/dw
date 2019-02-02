@@ -35,6 +35,8 @@ class Pagination extends Component {
 
   }
   getButtons = (first, last, btns, current) => {
+    current = Math.max(first, Math.min(last, current));
+    
     let half = parseInt(btns / 2);
     let min = current - half;
     let max = current + half;

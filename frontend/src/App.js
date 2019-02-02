@@ -42,6 +42,8 @@ import CourseSearch from './components/pages/CourseSearch'
 import CourseGet from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
 
+import Forum from './components/pages/Forum';
+
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
 import Terms from './components/pages/Terms';
@@ -246,7 +248,7 @@ class App extends React.Component {
           const res = api.parseJson(response);
 
           this.state.data.isLoggedIn = true;
-          this.state.data.uid = res.uid;
+          this.state.data.uid = data.uid;//res.uid;
           
           this.setState({
             data: this.state.data
@@ -336,7 +338,7 @@ class App extends React.Component {
                   <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:name/:id"  component={CourseInfo}/>
 
-                  <Route path="/forum"  component={About}/>
+                  <Route path="/forum"  component={Forum}/>
 
                   <Route path="/about" component={About}/>
                   <Route path="/getting-started" component={GettingStarted}/>

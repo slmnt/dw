@@ -99,7 +99,7 @@ class NavBar extends React.Component {
             <div><Link to="/search/course">コースを見る</Link></div>
             <div><span onClick={this.createCourse}>コースを作る</span></div>
           </div>
-          <div className={styles.navmenu}>
+          <div className={styles.accountmenu}>
             {
               !this.context.isLoggedIn ?
                 <React.Fragment>
@@ -108,9 +108,9 @@ class NavBar extends React.Component {
                 </React.Fragment>
               :
                 <React.Fragment>
-                  <div>
+                  <Link to="/mypage">
                     {this.context.uid}
-                  </div>
+                  </Link>
                   <div className={styles.avatar} onClick={this.showPopup}>
                   </div>
                   <Arrow onClick={this.showPopup} />

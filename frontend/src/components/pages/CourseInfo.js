@@ -167,7 +167,7 @@ class Courseinfo extends Component {
                         :
                             <div className={styles["review-container"]}>
                                 <div className={styles["review-post"]}>
-                                    <div>書く</div>
+                                    <div>レビューを書く</div>
                                     <textarea className={styles["review-textarea"]} ref={this.reviewTextarea}></textarea>
                                     <div style={{marginLeft: "auto"}}>
                                         <button className={styles["review-send"]} onClick={this.sendReview}>送信</button>

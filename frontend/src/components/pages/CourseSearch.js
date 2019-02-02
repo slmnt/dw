@@ -93,12 +93,16 @@ class CourseSearch extends Component {
     }
 
 
+    clampPage = (v) => {
+        return Math.max(1, v);
+    }
     goToPage = (v) => {
-        this.setState({page: v});
+        this.setState({page: this.clampPage(v)});
     }
     addToPage = (v) => {
-        this.setState({page: this.state.page + v});
+        this.setState({page: this.clampPage(this.state.page + v)});
     }
+    
     
     render() {
         return (

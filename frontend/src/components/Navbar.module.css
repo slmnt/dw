@@ -95,18 +95,22 @@
 }
 
 
-.navmenu {
+.navmenu, .accountmenu {
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-content: center;
 }
-.navmenu > div + div {
-  margin-left: 0.5em;
-}
 .navmenu > div:hover {
   font-weight: bold;
 }
+.navmenu > div + div {
+  margin-left: 1em;
+}
+.accountmenu > * + * {
+  margin-left: 0.5em;
+}
+
 .account-btn {
   border-radius: 2em;
   padding: 0.2em 1em;
