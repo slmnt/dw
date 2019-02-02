@@ -550,6 +550,13 @@ class Upload(viewsets.ModelViewSet):
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
+    def get(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+
 class CreateCourse(viewsets.ModelViewSet):
 
     #create Course
