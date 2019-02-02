@@ -475,6 +475,7 @@ class Editor extends Component {
       url: `/Course/${this.state.id}/`,
     }).then(api.parseJson).then(response => {
         if (!response) return;
+        console.log(response)
         this.fileEditor.current.importFiles(response);
         this.fileEditor.current.importDir(response);
     });
@@ -938,12 +939,18 @@ class Editor extends Component {
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
               <div className={styles["file-editor-container"]}>
-               <FileEditor ref={this.fileEditor} courseId={this.state.id} />
+                <FileEditor ref={this.fileEditor} courseId={this.state.id} />
               </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
-              答えを記入
-              <TextArea />
+              <div className={styles["answer-container"]}>
+                <div className={styles["answer-title"]}>
+                  答えを記入
+                </div>
+                <div className={styles["answer-textarea-container"]}>
+                  <TextArea />
+                </div>
+              </div>
             </div>
           </div>
 

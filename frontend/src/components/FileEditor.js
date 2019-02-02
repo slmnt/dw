@@ -81,7 +81,7 @@ class FileEditor extends React.Component {
     }
   }
   importDir = (files) => {
-    let dir = [];
+    let dirList = [];
     // ソート
     for (let path in files) {
         const list = path.split('/');
@@ -97,14 +97,14 @@ class FileEditor extends React.Component {
                     obj.children.push(newFile);
                     c = obj.children[obj.children.length - 1];
 
-                    dir.push(obj);
+                    dirList.push(obj);
                 }
                 obj = c;
             }
         }
     }
-    for (let d of dir) {
-      this.sortDir(dir);
+    for (let d of dirList) {
+      this.sortDir(d);
     }
     
     this.setState({directory: this.state.directory})
@@ -287,7 +287,7 @@ class FileEditor extends React.Component {
     if (!path) return;
 
     console.log(this.props.courseId)
-    
+
     const formData = new FormData();
     formData.append('path', `/Course/${this.props.courseId}/${path}/${files[0].name}`);
     //formData.append('path', `/Course/${this.state.id}/${path}`);
