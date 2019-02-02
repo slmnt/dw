@@ -577,7 +577,7 @@ class Editor extends Component {
       }
       */
 
-    this.fileEditor.getDirtree(null, '', base_url)
+    this.fileEditor.current.getDirtree(null, '', base_url)
     
 
     Promise.all(list).then(() => {

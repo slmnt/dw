@@ -245,10 +245,10 @@ class FileEditor extends React.Component {
     return p1.replace(/(\/*)$/, '') + '/' + p2.replace(/^(\/*)/, '');
   }
   getDirPath = (path) => {
-    const data = this.getFile(path).data;
+    const data = this.getFileData(path).data;
     return data.children ? path : this.splitPath(path).dir;
   }
-  getFile = (v) => {
+  getFileData = (v) => {
     if (typeof(v) == 'string') {
       return {
         data: this.findFile(v),

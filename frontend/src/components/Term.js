@@ -134,7 +134,7 @@ class Term extends React.Component {
         term.write2('\r\n' + term.promptStr, () => {
           term.ix = term.x;
           term.iy = term.y;
-          console.log("prompt", term.x, term.y);
+          //console.log("prompt", term.x, term.y);
         });
         term.allowInput = true;
       };
