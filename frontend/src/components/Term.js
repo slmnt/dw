@@ -125,21 +125,23 @@ class Term extends React.Component {
       term.insertMode = true;
       term.history = [];
       term.historyIndex = -1;
+
+      term._dsr_clbk = [];
     
       //
       term.prompt = () => {
-        term.write2('\r\n' + term.promptStr);
-        term.allowInput = true;
-        term._dsr_clbk = () => {
+        // とりあえず次フレームにまわしてバグ回避 (特定の _dsr_clbk に対応させるのが難しい)
+        term.write2('\r\n' + term.promptStr, () => {
           term.ix = term.x;
           term.iy = term.y;
-          //console.log("first", term.x, term.y);
-        };
+          console.log("prompt", term.x, term.y);
+        });
+        term.allowInput = true;
       };
       term.addLineBreak = () => {
-        term.write(ansiEscapes.cursorTo(term.mx - 1, term.my - 1));
-        console.log(term.mx, term.my)
-        //term.write('\r\n');
+        term.write2(ansiEscapes.cursorTo(term.mx - 1, term.my - 1));
+        //console.log(term.mx, term.my)
+        term.write2('\r\n');
       }
 
 
@@ -158,40 +160,41 @@ class Term extends React.Component {
         const txt = term.history[term.historyIndex];
         if (txt) {
           term.clearCommand();
-          term.write(txt);
+          term.write2(txt);
           term.cmd = txt;
         }
       }
 
 
       term.insertToCommand = (key, n) => {
-        term.write(key);
+        let clbk;
         if (key.length == 1) {
-          term._dsr_clbk = () => {
+          clbk = () => {
             //console.log("insert", key, n, term.x, term.y)
-            term.write(term.cmd.substring(n - 1));
-            term.write(ansiEscapes.cursorTo(term.x - 1, term.y - 1));
+            term.write2(term.cmd.substring(n - 1));
+            term.write2(ansiEscapes.cursorTo(term.x - 1, term.y - 1));
             term.cmd = term.cmd.substring(0, n - 1) + (key.length == 1 ? key : "") + term.cmd.substring(n - 1);
           };
         }
+        term.write2(key, clbk);
       }
       term.clearCommand = () => {
         if (!term.mx || !term.ix) return;
-        term.write(ansiEscapes.eraseEndLine);
-        term.write(ansiEscapes.cursorNextLine);
-        term.write(ansiEscapes.eraseLines(term.my - term.y));
-        term.write(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
+        term.write2(ansiEscapes.eraseEndLine);
+        term.write2(ansiEscapes.cursorNextLine);
+        term.write2(ansiEscapes.eraseLines(term.my - term.y));
+        term.write2(ansiEscapes.cursorTo(term.ix - 1, term.iy - 1));
       }
       term.setCommand = (text, ox, oy) => {
         term.cmd = text;
-        term.write(ansiEscapes.cursorTo(term.ix, term.iy));
-        term.write(term.cmd);
+        term.write2(ansiEscapes.cursorTo(term.ix, term.iy));
+        term.write2(term.cmd);
         if (ox && oy) {
-          term.write(ansiEscapes.cursorTo(ox, term.oy));
+          term.write2(ansiEscapes.cursorTo(ox, term.oy));
         }
       }
       term.runCommand = () => {
-        // console.log(term.cmd);
+        console.log("run cmd: ", term.cmd);
         term.addLineBreak();
 
         this.runCommand(term.cmd);
@@ -224,36 +227,35 @@ class Term extends React.Component {
         return n;
       }
     
-      term.onWrite = (d) => {
-        //console.log(d)
-        const m = d.match(DSR);
-        if (m) {
-          term.x = parseInt(m[2]);
-          term.y = parseInt(m[1]);
-          //console.log(term.x, term.y)
-          if (term.x > term.mx) term.mx = term.x;
-          if (term.y > term.my) term.my = term.y;
-          if (term._dsr_clbk) {
-            term._dsr_clbk();
-            term._dsr_clbk = null;
-          }
-        } else {
-          term.write(ansiEscapes.cursorGetPosition);
-        }
+      term.onWrite = (d, clbk) => {
+        //console.log("onWrite:", d, clbk)
+        term.write(ansiEscapes.cursorGetPosition);
+        term._dsr_clbk.push(clbk || true);
       }
-      term.write2 = (d) => {
+      term.write2 = (d, clbk) => {
         term.write(d);
-        term.onWrite(d);
+        term.onWrite(d, clbk);
       }
 
       term.on('data', d => {
         // term.write だけでは呼ばれない
-        term.onWrite(d);
+        const m = d.match(DSR);
+        if (m) {
+          term.x = parseInt(m[2]);
+          term.y = parseInt(m[1]);
+          //console.log("onwrite dsr: ", term.x, term.y)
+          if (term.x > term.mx) term.mx = term.x;
+          if (term.y > term.my) term.my = term.y;
+          if (term._dsr_clbk) {
+            let clbk = term._dsr_clbk.shift();
+            if (clbk && typeof(clbk) == 'function') clbk();
+          }
+        }
       });
       term._core.register(term.addDisposableListener('key', (key, ev) => {
         //console.log(ev.keyCode, ev.ctrlKey)
         if (ev.keyCode === 67 && ev.ctrlKey) {
-          this.term.prompt();
+          term.prompt();
           return;
         }
 
@@ -262,12 +264,13 @@ class Term extends React.Component {
                 
         if (ev.keyCode === 13) { // enter
           if (term.cmd.trim() === '') {
-            this.term.prompt();
+            term.prompt();
             return;
           }
           term.runCommand();
           term.selectLines(1,2);
         } else if (ev.keyCode === 8) { // backspace
+          console.log("ix, iy: ", term.ix, term.iy)
           if (term.x > term.ix && term.y == term.iy || term.y > term.iy) {
             if (term.insertMode) {
               // 一旦クリア
@@ -277,14 +280,14 @@ class Term extends React.Component {
               term.cmd = term.cmd.substring(0, n - 2) + term.cmd.substring(n - 1);
               //console.log(term.cmd);
               // 書き込み
-              term.write(term.cmd);
-              term.write(ansiEscapes.cursorTo(term.x - 2, term.y - 1));
+              term.write2(term.cmd);
+              term.write2(ansiEscapes.cursorTo(term.x - 2, term.y - 1));
             } else {
               if (term.x == 1) {
-                term.write(ansiEscapes.cursorTo(term.cols + 2, term.y - 2));
-                term.write(' ');
+                term.write2(ansiEscapes.cursorTo(term.cols + 2, term.y - 2));
+                term.write2(' ');
               }
-              term.write('\b \b');
+              term.write2('\b \b');
             }
           }
         } else if (printable) {
@@ -305,13 +308,13 @@ class Term extends React.Component {
             term.insertToCommand(key, n);
           } else {
             term.cmd += key
-            term.write(key);
+            term.write2(key);
           }
         }
       }));
     
       term._core.register(term.addDisposableListener('paste', (data, ev) => {
-        term.write(data);
+        term.write2(data);
       }));
     }
 
@@ -333,7 +336,7 @@ class Term extends React.Component {
       if (this.props.run) this.props.run(text)
     }
     getOutput(data) {
-      this.term.write(data);
+      this.term.write2(data);
       this.term.prompt();
     }
     render() {
