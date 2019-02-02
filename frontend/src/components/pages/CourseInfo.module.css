@@ -8,6 +8,12 @@
   margin-top: 2em;
 }
 
+.date {
+  font-size: 0.8em;
+  color: var(--main-color);
+  text-align: right;
+}
+
 /* info */
 .info-panel {
   border-width: 1px 1px 0 1px;

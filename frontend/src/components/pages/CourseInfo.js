@@ -135,6 +135,9 @@ class Courseinfo extends Component {
                                 {this.state.contents.descriptoin}
                             </div>
                         </div>
+                        <div className={styles.date}>
+                            {this.convertdata(this.state.contents.createat)}
+                        </div>
                     </div>
                     <div className={styles["tab-list"]}>
                         <div onClick={() => this.setTab(0)} className={this.state.currentTab === 0 ? styles["tab-onclicked"] : ""}><span>チャプター</span></div>

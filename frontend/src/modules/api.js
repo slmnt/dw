@@ -8,7 +8,7 @@ const BASE_URL = PROTOCOL + '://' + HOST;
 
 function fetch_extend(method, url, option, nocookie) {
   let cookies = cookie.parse(document.cookie);
-  return (BASE_URL + url, Object.assign({
+  return fetch(BASE_URL + url, Object.assign({
     method: method,
     credentials: !nocookie && 'include',
     headers: {

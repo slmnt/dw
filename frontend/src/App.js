@@ -35,7 +35,7 @@ import UserSearch from './components/pages/UserSearch'
 
 import Right from './components/pages/MyLayout';
 import Tech from './components/pages/Techinfo'
-import Mail from './components/pages/EmailCertify'
+import EmailVerify from './components/pages/EmailVerify'
 
 import CourseEditor from './components/pages/Editor'
 import CourseSearch from './components/pages/CourseSearch'
@@ -316,7 +316,7 @@ class App extends React.Component {
                 <Switch>
                   <Route exact path="/"  render={() => <Main />}/>
 
-                  <Route path="/certify/:code" component={Mail}/>
+                  <Route path="/verify/:code" component={EmailVerify}/>
 
                   <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
                   <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>

@@ -126,7 +126,6 @@ class CreateUser(APIView):
 
 
             # create user info
-            print("hey------------", new_user, request.data['gen'], request.data['birth'])
             queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
             queryset.save()
 
