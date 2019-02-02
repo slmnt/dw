@@ -318,10 +318,10 @@ class SlideEditor extends React.Component {
                       // this.props.setSlideText(data);
                     } }
                     onBlur={ editor => {
-                        console.log( 'Blur.', editor );
+                        //console.log( 'Blur.', editor );
                     } }
                     onFocus={ editor => {
-                        console.log( 'Focus.', editor );
+                        //console.log( 'Focus.', editor );
                     } }
                 />
               </div>
@@ -514,7 +514,7 @@ class Editor extends Component {
         'title': this.state.course.name,
         'desc': this.state.course.desc
       }).then(api.parseJson)
-      .then(response => console.log(response))
+      .then(response => console.log())
       .catch(error => console.error('Error:', error))
     )
 
@@ -525,29 +525,28 @@ class Editor extends Component {
       let slides = c.slides
       //at this point, craete chapter
       //name, desc
-      list.push(
         api.ex_post('/api/chapter/',{
           'id': this.state.id,
           'cid':idx,
           'title':c.name,
           'desc':c.desc
         }).then(api.parseJson)
-        .then(response => console.log(response))
+        .then(response => console.log())
         .catch(error => console.error('Error:', error))
-      );
+
       for(let s of slides){
         //name, text,idx,jdx,id
         jdx += 1
-        api.ex_post('/api/slide/',{
-            id: this.state.id,
-            cid: idx,
-            sid: jdx,
-            title: s.name,
-            context: s.text          
-        }).then(api.parseJson)
-        .then(response => console.log(response))
-        .catch(error => console.error('Error:', error))
 
+          api.ex_post('/api/slide/',{
+              id: this.state.id,
+              cid: idx,
+              sid: jdx,
+              title: s.name,
+              context: s.text          
+          }).then(api.parseJson)
+          .then(response => console.log())
+          .catch(error => console.error('Error:', error))
       }
     }
 
@@ -579,12 +578,12 @@ class Editor extends Component {
 
     this.fileEditor.current.getDirtree(null, '', base_url)
     
-
+    /*
     Promise.all(list).then(() => {
-      console.log("course saved");
+      // console.log("course saved");
       history.push(`/course/${this.context.uid}/${this.state.id}`);
     });
-
+    */
   }  
 
   moveBox = (from, to) => {

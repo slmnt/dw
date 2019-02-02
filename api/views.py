@@ -373,7 +373,7 @@ class PythonByDocker(viewsets.ModelViewSet):
     #   docker run pybox
     #4 Send Client printed result
     def post(self, request):
-        print(request.data['cmd'])
+        # print(request.data['cmd'])
         name = str(request.user)
         USER_STORAGE = STORAGE + name + '//' + request.data['url']
         #USER_STORAGE = STORAGE + str(request.user)
@@ -426,7 +426,7 @@ class PythonByDocker(viewsets.ModelViewSet):
                     if not temp:
                         break
                     dump += temp
-        print(dump)
+        # print(dump)
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
 
@@ -668,11 +668,11 @@ class CreateChapter(viewsets.ModelViewSet):
             course = 0
         finally:
             target = UserCourse.objects.get(id=course)
-            objs = UserCourseContent.objects.all().filter(root=target)
+            objs = UserCourseContent.objects.all().filter(root=target).order_by('cid')
         try:
             c = request.GET['c']
             c = int(c)
-            objs = UserCourseContent.objects.all().filter(root=target,cid=c)
+            objs = UserCourseContent.objects.all().filter(root=target,cid=c).order_by('cid')
         except:
             pass
         queryset = objs
@@ -685,7 +685,7 @@ class CreateSlide(viewsets.ModelViewSet):
     #required
     #user, courseid, chapterid, context
     def post(self, request):
-        print("craete slide")
+        # print("craete slide")
         root = User.objects.get(username=request.user)
         id = request.data['id']
         cid = request.data['cid']
@@ -716,7 +716,7 @@ class CreateSlide(viewsets.ModelViewSet):
             cid = int(cid)
             course = UserCourse.objects.get(id=id)
             target = UserCourseContent.objects.get(root=course,cid=cid)
-            queryset = UserCourseContentIndex.objects.all().filter(root=target)
+            queryset = UserCourseContentIndex.objects.all().filter(root=target).order_by('sid')
         except:
             pass
         serializers = UserCourseContentIndexSerializer(queryset,many=True)
@@ -757,7 +757,7 @@ class GEtUserCourses(viewsets.ModelViewSet):
         target = UserInfo.objects.get(id=username)
         target2 = target.root
         queryset = UserCourse.objects.all().filter(root=target2)
-        print(queryset)
+        # print(queryset)
         serializers = UserCourseSerializer(queryset,many=True)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
@@ -1019,6 +1019,7 @@ class APItest(viewsets.ModelViewSet):
 
     def post(self, request):
         #print(request.GET)
+        print(request.data)
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)
