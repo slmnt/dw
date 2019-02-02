@@ -937,17 +937,8 @@ class Editor extends Component {
               />
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
-              <div
-                  style={{
-                  display: "flex",
-                  lineHeight: "120%",
-                  fontSize: "0.6em",
-                  color: "#cccccc",
-                  height: "100%",
-                  width: "100%",
-                  }}
-              >
-               <FileEditor ref={this.fileEditor} />
+              <div className={styles["file-editor-container"]}>
+               <FileEditor ref={this.fileEditor} courseId={this.state.id} />
               </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >

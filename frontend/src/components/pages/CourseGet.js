@@ -207,7 +207,7 @@ class CourseGet extends Component {
                         </div>
                     </div>
                     
-                   <FileEditor ref={this.fileEditor} />
+                   <FileEditor ref={this.fileEditor} courseId={this.state.courseId} />
                 </div>  
             </div>
         );

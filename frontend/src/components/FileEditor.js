@@ -286,8 +286,10 @@ class FileEditor extends React.Component {
   onUpload = (files, path) => {
     if (!path) return;
 
+    console.log(this.props.courseId)
+    
     const formData = new FormData();
-    formData.append('path', `/Course/${this.state.id}/${path}/${files[0].name}`);
+    formData.append('path', `/Course/${this.props.courseId}/${path}/${files[0].name}`);
     //formData.append('path', `/Course/${this.state.id}/${path}`);
     for (var i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
@@ -303,6 +305,7 @@ class FileEditor extends React.Component {
       for (var i = 0; i < files.length; i++) {
         this.createDir(path, files[i].name);
 
+        // ブラウザで読み込み
         let fullPath = this.joinPath(path, files[i].name);
         var reader = new FileReader();
         reader.onload = () =>  {
