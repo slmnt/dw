@@ -4,4 +4,4 @@ COPY . .
 
 WORKDIR .
 
-CMD [ "python","t.py"]
+CMD [ "python","out.py"]

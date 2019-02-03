@@ -391,7 +391,8 @@ class PythonByDocker(viewsets.ModelViewSet):
     def post(self, request):
         # print(request.data['cmd'])
         name = str(request.user)
-        USER_STORAGE = STORAGE + name + '//' + request.data['url']
+        dump = os.path.join(STORAGE,name)
+        USER_STORAGE = os.path.join(dump,request.data['url'])
         #USER_STORAGE = STORAGE + str(request.user)
         #Clear DOcker Folder
         try:
@@ -445,6 +446,9 @@ class PythonByDocker(viewsets.ModelViewSet):
         # print(dump)
         #return response
         return Response(data=dump,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)
 
 class Getuser(viewsets.ModelViewSet):
 
@@ -1046,15 +1050,29 @@ class Userboard(viewsets.ModelViewSet):
         except:
             pass 
         try:
-            page = request.GET['page'] 
+            page = int(request.GET['page'])
+            page_size = int(request.GET['s'])
+            page_size = min(MAX_PAGESIZE, max(1, page_size))
         except:
             page = 1
+            page_size = MAX_PAGESIZE
             pass
-        objs = UserBoard.objects.all()
-        p = Paginator(objs,PAGESIZE)
-        queryset = p.page(page).object_list
-        serializer = UserBoardSerializer(queryset,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+        objs = UserBoard.objects.all().order_by('-createby')
+        pages = math.ceil(len(objs) / page_size)
+        try:
+            p = Paginator(objs, page_size)
+            queryset = p.page(page).object_list
+            serializer = UserBoardSerializer(queryset,many=True)
+            data = {
+                "pages": pages,
+                "courses": serializer.data
+            }
+        except EmptyPage:
+            data = {
+                "pages": pages,
+                "courses": []
+            }
+        return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
         context = request.data['text']

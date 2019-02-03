@@ -346,10 +346,8 @@ class FileEditor extends React.Component {
     return this.state.files[path];
   }
 
-
-
   // terminal
-  runTerminal = (cmd) => {
+  runTerminal = async (cmd) => {
     /*
     // local
     this.localExec(cmd);
@@ -360,10 +358,10 @@ class FileEditor extends React.Component {
     */
     let cmds = cmd.split(' ')
     let base_url = `Course/${this.props.courseId}`
-    
-    //this.remoteExec(cmds, base_url);
+    let result = await this.remoteExec(cmds, base_url);
+    console.log(result)
   }
-  remoteExec = (cmds, base_url) => {
+  remoteExec = async (cmds, base_url) => {
     switch(cmds[0]){
       case "javac":
       case "gcc":
@@ -374,10 +372,10 @@ class FileEditor extends React.Component {
         let formData = new FormData();
         formData.append('cmd',cmds[1])
         formData.append('url',base_url)
-        api.post('/api/dockpy',{
+        let res = await api.post('/api/dockpy',{
           body: formData
-        })  
-        break
+        }).then(api.parseJson)
+        return res
       default:
         break
     }

@@ -193,7 +193,7 @@ class Term extends React.Component {
         }
       }
       term.runCommand = () => {
-        console.log("run cmd: ", term.cmd);
+        // console.log("run cmd: ", term.cmd);
         term.addLineBreak();
 
         this.runCommand(term.cmd);
@@ -202,7 +202,7 @@ class Term extends React.Component {
         term.cmd = '';
         term.historyIndex = -1;
 
-        term.allowInput = false;
+        // term.allowInput = false;
       }
       term.isOutOfInput = (rx, ry) => {
         const f = term.x + rx >= term.ix && term.y + ry == term.iy || term.y + ry > term.iy;
