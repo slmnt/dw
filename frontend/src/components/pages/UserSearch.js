@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../modules/api';
 import styles from './UserSearch.module.css';
+import {MainContext} from '../../contexts/main';
 
 import Loading from '../Loading';
 import Ad from '../AdPanel';
@@ -53,9 +54,9 @@ class UserSearch extends Component {
 
         this.langOption = React.createRef();
     }
+    //this.context.getpage('course_len')
 
     componentDidMount(){
-
         var u = '/getuser'
         axios.get(u).then(response => {
             this.setState({
@@ -76,6 +77,11 @@ class UserSearch extends Component {
     }
 
     clampPage = (v) => {
+        let p = Math.max(1, v)
+        if(p <= this.context.getpage('user_len'))
+            api.get(`/api/getuser/?p=${p}`).then(api.parseJson)
+            .then(response => this.setState({users: response})).catch()
+
         return Math.max(1, v);
     }
     goToPage = (v) => {
@@ -148,11 +154,11 @@ class UserSearch extends Component {
                 </div>
 
                 <div className={styles["pagination-container"]}>
-                    <Pagination first={1} last={10} maxButtons={5} currentPage={this.state.page}
+                    <Pagination first={1} last={this.context.getpage('user_len')} maxButtons={5} currentPage={this.state.page}
                         onClickPrev={() => this.addToPage(-1)}
                         onClickNext={() => this.addToPage(1)}
                         onClickFirst={() => this.goToPage(1)}
-                        onClickLast={() => this.goToPage(10)}
+                        onClickLast={() => this.goToPage(this.context.getpage('user_len'))}
                         onClickPage={(i) => this.goToPage(i)}
                     />
                 </div>
@@ -161,6 +167,6 @@ class UserSearch extends Component {
   	}
 }
 
-UserSearch.propTypes = {};
+UserSearch.contextType = MainContext;
 
 export default UserSearch;

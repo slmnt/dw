@@ -56,7 +56,6 @@ axios.defaults.baseURL = '/api';
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
-const drawerWidth = 200;
 
 class ProtectedRoute extends React.Component {
   setParam(url, params) {
@@ -97,7 +96,9 @@ class App extends React.Component {
       login: this.login,
       logout: this.logout,
       createUser: this.createUser,
-    }
+    },
+    pages:[]
+    
   };
 
   constructor(props){
@@ -112,6 +113,7 @@ class App extends React.Component {
       login: this.login,
       logout: this.logout,
       createUser: this.createUser,
+      getpage: this.getpage
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -130,20 +132,13 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-    /*    
-    const formData = new FormData();
-    formData.append('url','Course/1')
-    api.post('/api/test',{
-      body: formData      
-    }).then(api.parseJson)
-    .then(response => console.log('Success:', response))
 
-    this.setState({
-      bid: localStorage.getItem("bid")
+    api.get('/api/init/').then(api.parseJson)
+    .then(response => {
+      this.setState({
+        pages: response
+      })
     })
-    api.post('/api/test/?p=1').then(api.parseJson)
-   .then(response => console.log('Success:', response))
-    */
 
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
@@ -156,6 +151,10 @@ class App extends React.Component {
   }
   componentDidCatch(error, info){
     console.log('error')
+  }
+
+  getpage = (page) => {
+    return this.state.pages[page]
   }
 
   login = (name, password, callback) => {
@@ -230,8 +229,8 @@ class App extends React.Component {
     });
   }
 
-  createUser = (data, callback) => {
-    api.ex_post('/api/createuser/', data)
+  createUser = async (data, callback) => {
+    await api.ex_post('/api/createuser/', data)
     .then(response => {
       console.log(response)
       if(response.status === 200){
@@ -241,7 +240,6 @@ class App extends React.Component {
       }
     })
     .then(response => {
-
         this.state.data.isLoggedIn = true;
         this.state.data.uid = response.uid;
 
@@ -249,11 +247,16 @@ class App extends React.Component {
           data: this.state.data
         }, () => {
           if (callback) callback();
-          console.log("created & logged in as: ", this.state.data.uid);
+          console.log();
         });
     }).catch(e => {
       console.log("error: createuser", e)
     });
+
+    await api.ex_post('/api/userinfo/',data)
+
+    this.login(data.uid,data.pwd)
+
   }
 
   deleteUser = () => {
@@ -293,7 +296,7 @@ class App extends React.Component {
             <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
             </Navbar>
             
-            <Drawer ref={this.drawer} />
+            <Drawer ref={this.drawer}/>
 
             <main className="content">
               <Scrollbars className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
@@ -325,8 +328,8 @@ class App extends React.Component {
                   <Route path="/search/user"  component={UserSearch}/>
                   <Route path="/user/:id"  component={UserInfo}/>
 
-                  <Route path="/search/course"  component={CourseSearch}/>
-                  <Route exact strict path="/courseSearch"  component={CourseSearch}/>
+                  <Route path="/search/course"  render={()=> <CourseSearch/>}/>
+                  <Route exact strict path="/courseSearch" component={CourseSearch}/>
                   <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
                   <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
                   <Route path="/course/:name/:id"  component={CourseInfo}/>

@@ -466,9 +466,15 @@ class CheckMailing(viewsets.ModelViewSet):
 class GetUserInfo(viewsets.ModelViewSet):
 
     def get(self,request):
-        uid = UserInfo.objects.all()
-        s = UserInfoSerializer(uid,many=True)
-        return Response(data=s.data,status=status.HTTP_200_OK)
+        try:
+            page = request.GET['p']
+        except:
+            page = 1
+        objs = UserInfo.objects.all().order_by('-id')
+        p = Paginator(objs,PAGESIZE)
+        queryset = p.page(page).object_list
+        serializer = UserInfoSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
 
     def post(self, request):
         return Response(status=status.HTTP_200_OK)
@@ -800,15 +806,14 @@ class CourseUpload(viewsets.ModelViewSet):
                 continue
             
             path = pathlib.PurePath(STORAGE, name, request.data['base_url'], url)
-            print("path", path.as_posix())
             try:
-                relative_path = path.relative_to(storage_path) # ここでエラー出たら storage の範囲外
+                relative_path = path.relative_to(storage_path)
             
                 os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
                 with open(path, 'wb') as f:
                     f.write(request.data[url].encode('utf-8'))
             except ValueError:
-                print("CourseUpload error", path.as_posix())
+                pass
 
         data = {}
         data['key'] = 'value'
@@ -1000,11 +1005,41 @@ class Userinfomation(viewsets.ModelViewSet):
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        print(request)
+        gen = request.data['gen']
+        birth = request.data['birth']
+        user = User.objects.get(username=request.data['uid'])        
+        queryset = UserInfo(root=user,birth=birth,gen=gen)
+        queryset.save()
         data = {}
         data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
+
+class PageInit(viewsets.ModelViewSet):
+
+    def get(self, request):
+        forum_len = 0
+        course_len = 0
+        user_len = 0
+        try:
+            course_len = len(UserCourse.objects.all())
+            forum_len = len(UserBoard.objects.all())
+            user_len = len(UserInfo.objects.all())
+        except:
+            pass
+        data = {}
+        data['course_len'] = course_len / PAGESIZE
+        data['forum_len'] = forum_len / PAGESIZE
+        data['user_len'] = user_len / PAGESIZE
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        data = {}
+        data['key'] = 'ok'
+        json_data = json.dumps(data)
+        return Response(data=data,status=status.HTTP_200_OK)
+
 
 
 #Remain apis

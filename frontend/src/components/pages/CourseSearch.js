@@ -11,6 +11,8 @@ import Loading from '../Loading'
 import CourseList from '../CourseList';
 import Ad from '../AdPanel'
 import Pagination from '../Pagination';
+import {MainContext} from '../../contexts/main';
+
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
@@ -86,14 +88,16 @@ class CourseSearch extends Component {
         .then(response => this.setState({
             courses: response
         })).catch()
-    
-        /*
-        api.get();
-        */
     }
 
-
     clampPage = (v) => {
+        let p = Math.max(1, v)
+        if(p <= this.context.getpage('course_len'))
+            api.get(`/api/course/?p=${p}`).then(api.parseJson)
+            .then(response => this.setState({
+                courses: response
+            })).catch()
+
         return Math.max(1, v);
     }
     goToPage = (v) => {
@@ -137,11 +141,11 @@ class CourseSearch extends Component {
                     <CourseList courses={this.state.courses} />
                 </div>
                 <div className={styles["pagination-container"]}>
-                    <Pagination first={1} last={10} maxButtons={5} currentPage={this.state.page}
+                    <Pagination first={1} last={this.context.getpage('course_len')} maxButtons={5} currentPage={this.state.page}
                         onClickPrev={() => this.addToPage(-1)}
                         onClickNext={() => this.addToPage(1)}
                         onClickFirst={() => this.goToPage(1)}
-                        onClickLast={() => this.goToPage(10)}
+                        onClickLast={() => this.goToPage(this.context.getpage('course_len'))}
                         onClickPage={(i) => this.goToPage(i)}
                     />
                 </div>
@@ -150,6 +154,5 @@ class CourseSearch extends Component {
   	}
 }
 
-CourseSearch.propTypes = {};
-
+CourseSearch.contextType = MainContext;
 export default CourseSearch;
