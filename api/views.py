@@ -125,7 +125,6 @@ class CreateUser(APIView):
             c.save()
             #print(u)
 
-
             # create user info
             queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
             queryset.save()
@@ -145,7 +144,8 @@ class CreateUser(APIView):
                 'miniprog2018@gmail.com',
                 [str(email)],
                 fail_silently=False,
-            )"""
+            )
+            """
             return Response(data=data, status=status.HTTP_200_OK)
         #except:
         #    return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -969,29 +969,6 @@ class UpdateUserProfile(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
-
-
-class UserBoard(viewsets.ModelViewSet):
-
-    #URL: /board/?p=2>
-    def get(self, request):
-        try:
-            page = request.GET['p']
-        except:
-            page = 1
-        objs = UserBoard.objects.all()
-        p = Paginator(objs,PAGESIZE)
-        queryset = p.page(page).object_list
-        serializer = UserBoardSerializer(queryset,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
-
-    def post(self, request):
-        print(request)
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
 class Userinfomation(viewsets.ModelViewSet):
 
     def get(self, request):
@@ -1041,6 +1018,55 @@ class PageInit(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
 
+class Userboard(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            queryset = UserBoard.objects.get(id=int(id))
+            serializer = UserBoardSerializer(queryset)
+            return Response(data=serializer.data,status=status.HTTP_200_OK)
+        except:
+            pass 
+        try:
+            page = request.GET['page'] 
+        except:
+            page = 1
+            pass
+        objs = UserBoard.objects.all()
+        p = Paginator(objs,PAGESIZE)
+        queryset = p.page(page).object_list
+        serializer = UserBoardSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        context = request.data['text']
+        queryset = UserBoard(auth=request.user,context=context)
+        queryset.save()
+        serializer = UserBoardSerializer(queryset)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+class UserboardComment(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+        except:
+            pass
+        target = UserBoard.objects.get(id=int(id))
+        queryset = UserBoardAnswer.objects.all().filter(root=target)
+        serializer = UserBoardAnswerSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        id = request.data['id']
+        context = request.data['text']
+        target = UserBoard.objects.get(id=int(id))
+        queryset = UserBoardAnswer(root=target,auth=request.user,context=context)
+        queryset.save()
+        queryset = UserBoardAnswer.objects.all()
+        serializer = UserBoardAnswerSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
 
 #Remain apis
 # User Create api

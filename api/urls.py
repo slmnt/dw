@@ -126,6 +126,14 @@ pageinit = PageInit.as_view({
     'get': 'get',
     'post': 'post'    
 })
+userboard = Userboard.as_view({
+    'get': 'get',
+    'post': 'post'    
+})
+userboardcomment = UserboardComment.as_view({
+    'get': 'get',
+    'post': 'post'    
+})
 
 urlpatterns = [
 #userinfo get,create
@@ -187,8 +195,20 @@ urlpatterns = [
     path('userinfo/',userinfomation),
     path('init/',pageinit),
 
+    #userboard
+    path('userboard/',userboard),
+    path('userboardcomment/',userboardcomment),
+
+    #userproposal
+    #usercommit
+    #userissue
+    #userhelp
+
+
     #path('test',apitest),
     path('test/',apitest),
+
+
     
 
 ]
