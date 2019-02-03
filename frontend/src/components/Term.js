@@ -335,7 +335,7 @@ class Term extends React.Component {
       if (this.props.run) this.props.run(text)
     }
     getOutput(data) {
-      this.term.write2(data);
+      this.term.write2(data.replace(/\n/g, '\r\n'));
       this.term.prompt();
     }
     render() {
