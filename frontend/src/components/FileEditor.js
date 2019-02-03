@@ -355,11 +355,13 @@ class FileEditor extends React.Component {
     /*
     // docker
     */
+    //let cmds = cmd.split(' ')
+    //let base_url = `Course/${this.props.courseId}`
+    //this.remoteExec(cmds, base_url, callback);
+  
+  remoteExec = (cmd, base_url, callback) => {
     let cmds = cmd.split(' ')
-    let base_url = `Course/${this.props.courseId}`
-    this.remoteExec(cmds, base_url, callback);
-  }
-  remoteExec = (cmds, base_url, callback) => {
+
     switch(cmds[0]){
       case "javac":
       case "gcc":
@@ -434,7 +436,7 @@ class FileEditor extends React.Component {
         <div className={styles["textditor-container"]}>
           <TextEditor
             ref={this.window}
-            run={this.runTerminal}
+            run={this.remoteExec}
             getContent={this.getContent}
             save={this.saveDir}
           />

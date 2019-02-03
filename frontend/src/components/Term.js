@@ -193,7 +193,7 @@ class Term extends React.Component {
         }
       }
       term.runCommand = () => {
-        console.log("run cmd: ", term.cmd);
+        // console.log("run cmd: ", term.cmd);
         term.addLineBreak();
 
         this.runCommand(term.cmd);
