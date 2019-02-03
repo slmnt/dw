@@ -97,7 +97,6 @@ class App extends React.Component {
       logout: this.logout,
       createUser: this.createUser,
     },
-    pages:[]
     
   };
 
@@ -113,7 +112,6 @@ class App extends React.Component {
       login: this.login,
       logout: this.logout,
       createUser: this.createUser,
-      getpage: this.getpage
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -133,13 +131,6 @@ class App extends React.Component {
   
   componentWillMount(){
 
-    api.get('/api/init/').then(api.parseJson)
-    .then(response => {
-      this.setState({
-        pages: response
-      })
-    })
-
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
@@ -153,9 +144,6 @@ class App extends React.Component {
     console.log('error')
   }
 
-  getpage = (page) => {
-    return this.state.pages[page]
-  }
 
   login = (name, password, callback) => {
     //console.log(name, password)

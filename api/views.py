@@ -1052,32 +1052,6 @@ class Userinfomation(viewsets.ModelViewSet):
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
 
-class PageInit(viewsets.ModelViewSet):
-
-    def get(self, request):
-        forum_len = 0
-        course_len = 0
-        user_len = 0
-        try:
-            course_len = len(UserCourse.objects.all())
-            forum_len = len(UserBoard.objects.all())
-            user_len = len(UserInfo.objects.all())
-        except:
-            pass
-        data = {}
-        data['course_len'] = course_len / PAGESIZE
-        data['forum_len'] = forum_len / PAGESIZE
-        data['user_len'] = user_len / PAGESIZE
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
-    def post(self, request):
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
-
 
 #Remain apis
 # User Create api
