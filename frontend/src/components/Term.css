@@ -8,3 +8,7 @@
 .xterm-viewport::-webkit-scrollbar-thumb {
   background: #666; 
 }
+
+.term-wrapper{
+  height: 200px
+}

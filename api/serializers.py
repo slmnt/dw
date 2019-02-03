@@ -102,3 +102,9 @@ class UserBoardSerializer(serializers.ModelSerializer):
         model = UserBoard
         fields = ('__all__')
 
+class UserBoardAnswerSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserBoard
+        fields = ('auth','comment','createat')

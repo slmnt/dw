@@ -113,6 +113,7 @@ class UserCourseComment(models.Model):
     comment = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)
 
+#Question
 class UserBoard(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
     context = models.TextField()
@@ -120,3 +121,65 @@ class UserBoard(models.Model):
     updateat = models.DateTimeField(default=timezone.now)
     likes = models.IntegerField(default=0)
 
+class UserBoardAnswer(models.Model):
+    root = models.ForeignKey('UserBoard',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+
+#Proposal
+class UserProposal(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
+
+class UserProposalComment(models.Model):
+    root = models.ForeignKey('UserProposal',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+
+#Help
+class UserHelp(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
+
+class UserHelpAnswer(models.Model):
+    root = models.ForeignKey('UserHelp',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+
+
+#Commit
+class UserCommit(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
+
+class UserCommitComment(models.Model):
+    root = models.ForeignKey('UserCommit',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+
+#Issue
+class UserIssue(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    likes = models.IntegerField(default=0)
+
+class UserIssueComment(models.Model):
+    root = models.ForeignKey('UserIssue',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)

@@ -104,6 +104,7 @@ class App extends React.Component {
     super(props);
 
     this.drawer = React.createRef();
+    this.scrollbar = React.createRef();
 
     this.state.data = {
       isLoggedIn: false,
@@ -130,15 +131,22 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-
+    document.addEventListener('mousewheel',this.onScroll)
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
   componentDidMount(){
+
   }
+
+  onScroll = (e) => {
+    console.log(this.scrollbar.current.getValues())
+  }
+
   componentDidUpdate(){
   }
   componentWillUnmount(){
+    document.removeEventListener('mousewheel',this.onScroll)
   }
   componentDidCatch(error, info){
     console.log('error')
@@ -282,7 +290,7 @@ class App extends React.Component {
             <Drawer ref={this.drawer}/>
 
             <main className="content">
-              <Scrollbars className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+              <Scrollbars ref={this.scrollbar} className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
                 setting react router route
                 <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>

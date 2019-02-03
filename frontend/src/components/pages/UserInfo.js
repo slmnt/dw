@@ -80,7 +80,7 @@ class UserInfo extends Component {
 
         api.get(`/api/course/?user=${this.props.match.params.id}`).then(api.parseJson)
         .then(response => {
-            if (response) this.setState({courses: response})
+            if (response) this.setState({courses: response.courses})
         })
 
     }
