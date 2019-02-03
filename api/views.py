@@ -3,6 +3,7 @@ import re
 import json
 import shutil
 import subprocess
+import math
 import pathlib
 
 from datetime import datetime
@@ -28,11 +29,11 @@ from django.contrib.auth.hashers import PBKDF2PasswordHasher
 from django.contrib.auth.hashers import check_password
 from django.contrib.sessions.models import Session
 
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.http import HttpResponse
 from django.core.mail import send_mail
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Q
 
 from Crypto.Hash import SHA256
@@ -43,6 +44,7 @@ DOCKFILES = BASE_DIR + '//docker//'
 STATIC = BASE_DIR + '//static//'
 STORAGE = BASE_DIR + '//frontend//public//'
 PAGESIZE = 20
+MAX_PAGESIZE = 20
 
 
 HOSTNAME = 'http://localhost:3000'
@@ -472,18 +474,29 @@ class GetUserInfo(viewsets.ModelViewSet):
 
     def get(self,request):
         try:
-            page = request.GET['p']
+            page = int(request.GET['p'])
+            page_size = int(request.GET['s'])
+            page_size = min(MAX_PAGESIZE, max(1, page_size))
         except:
             page = 1
+            page_size = MAX_PAGESIZE
+            
         objs = UserInfo.objects.all().order_by('-id')
-        p = Paginator(objs, PAGESIZE)
-        queryset = p.page(page).object_list
-        serializer = UserInfoSerializer(queryset,many=True)
+        pages = math.ceil(len(objs) / page_size)
 
-        data = {
-            "pages": len(objs),
-            "users": serializer.data,
-        }
+        try:
+            p = Paginator(objs, page_size)
+            queryset = p.page(page).object_list
+            serializer = UserInfoSerializer(queryset, many=True)
+            data = {
+                "pages": pages,
+                "users": serializer.data
+            }
+        except EmptyPage:
+            data = {
+                "pages": pages,
+                "users": []
+            }
         return Response(data=data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -606,16 +619,21 @@ class CreateCourse(viewsets.ModelViewSet):
                 user = t.root
         except:
             pass
+
         try:
-            page = request.GET['p']
+            page = int(request.GET['p'])
+            page_size = int(request.GET['s'])
+            page_size = min(MAX_PAGESIZE, max(1, page_size))
         except:
             page = 1
+            page_size = MAX_PAGESIZE
         finally:
             try:
                 if user:
                     objs = UserCourse.objects.all().filter(root=user).order_by('-createat')
             except:
                 objs = UserCourse.objects.all().order_by('-createat')
+
         try:
             id = request.GET['id']
             id = int(id)
@@ -624,14 +642,23 @@ class CreateCourse(viewsets.ModelViewSet):
             return Response(data=serializer.data,status=status.HTTP_200_OK)
         except:
             pass
-        p = Paginator(objs,PAGESIZE)
-        queryset = p.page(page).object_list
-        serializer = UserCourseInfoSerializer(queryset,many=True)
 
-        data = {
-            "pages": len(objs),
-            "courses": serializer.data
-        }
+        pages = math.ceil(len(objs) / page_size)
+
+        try:
+            p = Paginator(objs, page_size)
+            queryset = p.page(page).object_list
+            serializer = UserCourseInfoSerializer(queryset,many=True)
+            data = {
+                "pages": pages,
+                "courses": serializer.data
+            }
+        except EmptyPage:
+            data = {
+                "pages": pages,
+                "courses": []
+            }
+
         return Response(data=data, status=status.HTTP_200_OK)
         
 
@@ -1007,32 +1034,6 @@ class Userinfomation(viewsets.ModelViewSet):
         data['key'] = 'ok'
         json_data = json.dumps(data)
         return Response(data=data,status=status.HTTP_200_OK)
-
-class PageInit(viewsets.ModelViewSet):
-
-    def get(self, request):
-        forum_len = 0
-        course_len = 0
-        user_len = 0
-        try:
-            course_len = len(UserCourse.objects.all())
-            forum_len = len(UserBoard.objects.all())
-            user_len = len(UserInfo.objects.all())
-        except:
-            pass
-        data = {}
-        data['course_len'] = course_len / PAGESIZE
-        data['forum_len'] = forum_len / PAGESIZE
-        data['user_len'] = user_len / PAGESIZE
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
-    def post(self, request):
-        data = {}
-        data['key'] = 'ok'
-        json_data = json.dumps(data)
-        return Response(data=data,status=status.HTTP_200_OK)
-
 
 class Userboard(viewsets.ModelViewSet):
 

@@ -122,10 +122,6 @@ userinfomation = Userinfomation.as_view({
     'get': 'get',
     'post': 'post'
 })
-pageinit = PageInit.as_view({
-    'get': 'get',
-    'post': 'post'    
-})
 userboard = Userboard.as_view({
     'get': 'get',
     'post': 'post'    
@@ -193,7 +189,6 @@ urlpatterns = [
 
     #mypage
     path('userinfo/',userinfomation),
-    path('init/',pageinit),
 
     #userboard
     path('userboard/',userboard),

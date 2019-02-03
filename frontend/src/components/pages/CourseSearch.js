@@ -24,7 +24,8 @@ class CourseSearch extends Component {
         this.state = {
             keyword: '',
             page: 1,
-            pages: 1,
+            totalPages: 1,
+            pageSize: 5,
             context: [],
             courses: [
                 /*
@@ -92,15 +93,21 @@ class CourseSearch extends Component {
     goToPage = (v) => {
         const page = this.clampPage(v);
 
-        api.get(`/api/course/?p=${page}`).then(api.parseJson)
+        api.get(`/api/course/?p=${page}&s=${this.state.pageSize}`).then(api.parseJson)
         .then(response => {
             if (!response) return;
+            if (response.courses.length === 0) {
+                this.setState({
+                    totalPages: response.pages
+                });
+                return;
+            }
             this.setState({
-                pages: response.pages,
+                totalPages: response.pages,
                 courses: response.courses,
+                page: page,
             })    
         })
-        this.setState({page});
     }
     addToPage = (v) => {
         this.goToPage(this.state.page + v)
@@ -140,11 +147,11 @@ class CourseSearch extends Component {
                     <CourseList courses={this.state.courses} />
                 </div>
                 <div className={styles["pagination-container"]}>
-                    <Pagination first={1} last={this.context.getpage('course_len')} maxButtons={5} currentPage={this.state.page}
+                    <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
                         onClickPrev={() => this.addToPage(-1)}
                         onClickNext={() => this.addToPage(1)}
                         onClickFirst={() => this.goToPage(1)}
-                        onClickLast={() => this.goToPage(this.context.getpage('course_len'))}
+                        onClickLast={() => this.goToPage(this.state.totalPages)}
                         onClickPage={(i) => this.goToPage(i)}
                     />
                 </div>

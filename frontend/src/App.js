@@ -97,7 +97,6 @@ class App extends React.Component {
       logout: this.logout,
       createUser: this.createUser,
     },
-    pages:[]
     
   };
 
@@ -105,6 +104,7 @@ class App extends React.Component {
     super(props);
 
     this.drawer = React.createRef();
+    this.scrollbar = React.createRef();
 
     this.state.data = {
       isLoggedIn: false,
@@ -113,7 +113,6 @@ class App extends React.Component {
       login: this.login,
       logout: this.logout,
       createUser: this.createUser,
-      getpage: this.getpage
     };
 
     // window.addEventListener('beforeunload',e => this.closewindows(e))
@@ -132,33 +131,27 @@ class App extends React.Component {
   }
   
   componentWillMount(){
-
-    api.get('/api/init/').then(api.parseJson)
-    .then(response => {
-      this.setState({
-        pages: response
-      })
-    })
-
+    document.addEventListener('mousewheel',this.onScroll)
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
   componentDidMount(){
-    document.addEventListener('mousewheel',(e) => {
-      console.log(e)
-    })
+
   }
+
+  onScroll = (e) => {
+    console.log(this.scrollbar.current.getValues())
+  }
+
   componentDidUpdate(){
   }
   componentWillUnmount(){
+    document.removeEventListener('mousewheel',this.onScroll)
   }
   componentDidCatch(error, info){
     console.log('error')
   }
 
-  getpage = (page) => {
-    return this.state.pages[page]
-  }
 
   login = (name, password, callback) => {
     //console.log(name, password)
@@ -297,7 +290,7 @@ class App extends React.Component {
             <Drawer ref={this.drawer}/>
 
             <main className="content">
-              <Scrollbars className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+              <Scrollbars ref={this.scrollbar} className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
                 {/*
                 setting react router route
                 <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
