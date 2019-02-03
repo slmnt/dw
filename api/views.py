@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import math
 import pathlib
+import asyncio
 
 from datetime import datetime
 
@@ -416,10 +417,9 @@ class PythonByDocker(viewsets.ModelViewSet):
         #open stdin stderr file
         with open(STATIC + 'output.txt', 'w') as output, open(STATIC + 'output.txt', 'r') as read_result, open(os.devnull,'a') as pipe:
             #build subprocess 
-            cmd1 = "docker build --tag pybox " + DOCKDIR
+            cmd1 = "docker build --rm --tag pybox " + DOCKDIR
             cmd2 = "docker run pybox"
             p1 = subprocess.Popen(cmd1.split(),stdout=pipe,stderr=pipe)
-            p2 = subprocess.Popen(cmd2.split(), stdout=output, stderr=output)
             dump = ''
             flag = True
             #excete 
@@ -429,6 +429,7 @@ class PythonByDocker(viewsets.ModelViewSet):
             except subprocess.TimeoutExpired:
                 p1.kill()
                 out, err = p1.communicate()
+            p2 = subprocess.Popen(cmd2.split(),stdout=output,stderr=output)
             try:
                 #timeout value setting is service level
                 out, err = p2.communicate()
@@ -1057,7 +1058,7 @@ class Userboard(viewsets.ModelViewSet):
             page = 1
             page_size = MAX_PAGESIZE
             pass
-        objs = UserBoard.objects.all().order_by('-createby')
+        objs = UserBoard.objects.all().order_by('-createat')
         pages = math.ceil(len(objs) / page_size)
         try:
             p = Paginator(objs, page_size)
@@ -1075,8 +1076,9 @@ class Userboard(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def post(self, request):
+        title = request.data['title']
         context = request.data['text']
-        queryset = UserBoard(auth=request.user,context=context)
+        queryset = UserBoard(auth=request.user,title=title,context=context)
         queryset.save()
         serializer = UserBoardSerializer(queryset)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
