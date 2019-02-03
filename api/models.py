@@ -116,6 +116,7 @@ class UserCourseComment(models.Model):
 #Question
 class UserBoard(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
@@ -130,6 +131,7 @@ class UserBoardAnswer(models.Model):
 #Proposal
 class UserProposal(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
@@ -144,6 +146,7 @@ class UserProposalComment(models.Model):
 #Help
 class UserHelp(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
@@ -159,6 +162,7 @@ class UserHelpAnswer(models.Model):
 #Commit
 class UserCommit(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)
@@ -173,6 +177,7 @@ class UserCommitComment(models.Model):
 #Issue
 class UserIssue(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
     context = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
     updateat = models.DateTimeField(default=timezone.now)

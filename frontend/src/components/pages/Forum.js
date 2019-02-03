@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './Forum.module.css';
 
 import Footer from '../Footer';
+import api from '../../modules/api'
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
@@ -102,6 +103,14 @@ class CreateThread extends Component {
   onPost = e => {
     const title = this.titleInput.current.value;
     const desc = this.descInput.current.value;
+    api.ex_post('/api/userboard/',{
+      title: title,
+      text: desc
+    })
+
+    // test get
+    api.get(`/api/userboard/?page=${1}&s=${20}`).then(api.parseJson)
+    .then(response => console.log(response)).catch()
   }
   onCancel = e => {
 
