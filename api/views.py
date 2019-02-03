@@ -807,13 +807,13 @@ class CourseUpload(viewsets.ModelViewSet):
             
             path = pathlib.PurePath(STORAGE, name, request.data['base_url'], url)
             try:
-                relative_path = path.relative_to(storage_path)
+                relative_path = path.relative_to(storage_path) # ここでエラー出たら storage の範囲外
             
                 os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
                 with open(path, 'wb') as f:
                     f.write(request.data[url].encode('utf-8'))
             except ValueError:
-                pass
+                print("CourseUpload error: invalid destination:", path.as_posix())
 
         data = {}
         data['key'] = 'value'
