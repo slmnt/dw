@@ -347,6 +347,7 @@ class FileEditor extends React.Component {
   }
 
   // terminal
+  runTerminal = (cmd, callback) => {
     /*
     // local
     this.localExec(cmd);

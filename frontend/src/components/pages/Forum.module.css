@@ -176,4 +176,83 @@
 
 
 
+/* create thread */
+.newthread-header {
+  margin-right: auto;
+}
+.newthread-container {
 
+}
+.newthread-container > * {
+  margin: 0.3em 0;
+}
+.newthread-title-box, .newthread-text-box {
+  padding: 0.5em 0.8em;
+
+  outline: none;
+  border: 2px solid var(--main-color);
+  box-shadow: 0 0 2px #00000060;
+
+  box-sizing: border-box;
+  font-size: inherit;
+  color: var(--nice-border-color);
+
+  width: 100%;
+}
+.newthread-title-box {
+
+}
+.newthread-text-box {
+  height: 10em;
+  font-size: 1.2em;
+  resize: vertical;
+}
+
+
+.newthread-controls {
+  text-align: right;
+  display: flex;
+  justify-content: flex-start;
+}
+.newthread-cancel-btn, .newthread-post-btn {
+  outline: none;
+  border: 1px solid var(--main-color);
+  border-radius: 0.5em;
+
+  font-size: 0.8em;
+  width: 8em;
+  height: 2em;
+
+  cursor: pointer;
+}
+.newthread-cancel-btn {
+  background-color: inherit;
+}
+.newthread-post-btn {
+  background-color: var(--main-color);
+  color: var(--nice-bg-color);
+
+  margin-left: 1em;
+}
+
+
+/* topic list */
+.topiclist-container {
+
+}
+.topiclist-item {
+  padding: 1em 2em;
+  margin: 1em 0;
+
+  border-radius: 0.5em;
+  border: 1px solid var(--main-color);
+  background-color: white;
+}
+.topiclist-name {
+  font-size: 1.2em;
+  color: var(--main-color);
+}
+.topiclist-desc {
+  font-size: 1em;
+  color: var(--nice-border-color);
+}

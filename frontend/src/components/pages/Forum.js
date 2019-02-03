@@ -5,8 +5,121 @@ import Footer from '../Footer';
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
 
+class TopicList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      topics: [
+        {
+          name: "質問",
+          desc: "this is a test",
+        },
+        {
+          name: "C 言語",
+          desc: "this is a test",
+        },
+        {
+          name: "Java",
+          desc: "this is a test",
+        },
+        {
+          name: "コース作成について",
+          desc: "this is a test",
+        },
+        {
+          name: "がんくんへの質問",
+          desc: "this is a test",
+        },
+        {
+          name: "雑談",
+          desc: "this is a test",
+        },
 
 
+      ]
+    }
+  }
+  render(){
+    return (
+      <div className={styles["topiclist-container"]}>
+        {
+          this.state.topics.map((v, i) => {
+            return <div key={i} className={styles["topiclist-item"]}>
+              <div className={styles["topiclist-name"]}>
+                <a>
+                  {v.name}
+                </a>
+              </div>
+              <div className={styles["topiclist-desc"]}>
+                {v.desc}
+              </div>
+            </div>
+          })
+        }
+      </div>
+    )
+  }
+}
+
+
+
+class CreatePost extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    }
+    this.textInput = React.createRef();
+  }
+  onPost = e => {
+    const text = this.textInput.current.value;
+  }
+  onCancel = e => {
+
+  }
+  render(){
+    return (
+      <div className={styles["newthread-container"]}>
+        <div className={styles["newthread-header"]}>コメントの投稿</div>
+        <textarea placeholder="投稿内容を書いてください" className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
+        <div className={styles["newthread-controls"]}>
+          <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
+          <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+class CreateThread extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    }
+    this.titleInput = React.createRef();
+    this.descInput = React.createRef();
+  }
+  onPost = e => {
+    const title = this.titleInput.current.value;
+    const desc = this.descInput.current.value;
+  }
+  onCancel = e => {
+
+  }
+  render(){
+    return (
+      <div className={styles["newthread-container"]}>
+        <div className={styles["newthread-controls"]}>
+          <span className={styles["newthread-header"]}>スレッドの投稿</span>
+          <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
+          <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
+        </div>
+        <input type="text" placeholder="タイトルを書いてください" className={styles["newthread-title-box"]} ref={this.titleInput}></input>
+        <textarea placeholder="投稿内容を書いてください" className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
+      </div>
+    )
+  }
+}
 
 class ForumPost extends Component {
   constructor(props) {
@@ -149,7 +262,14 @@ class Forum extends Component {
               )
             })
           }
+          <div style={{height: "5em"}}></div>
           <ForumThread />
+          <div style={{height: "5em"}}></div>
+          <CreateThread />
+          <div style={{height: "5em"}}></div>
+          <CreatePost />
+          <div style={{height: "5em"}}></div>
+          <TopicList />
         </div>
         <Footer />
       </div>
