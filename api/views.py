@@ -774,10 +774,10 @@ class CreateSlide(viewsets.ModelViewSet):
             course = UserCourse.objects.get(id=id)
             target = UserCourseContent.objects.get(root=course,cid=cid)
             queryset = UserCourseContentIndex.objects.all().filter(root=target).order_by('sid')
+            serializers = UserCourseContentIndexSerializer(queryset,many=True)
+            return Response(data=serializers.data,status=status.HTTP_200_OK)
         except:
-            pass
-        serializers = UserCourseContentIndexSerializer(queryset,many=True)
-        return Response(data=serializers.data,status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChapterSourceCodeCreate(viewsets.ModelViewSet):

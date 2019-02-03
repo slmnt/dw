@@ -446,7 +446,8 @@ class TextEditor extends React.Component {
             </div>
             <div className={styles["term-wrapper"]}
                 style={{
-                    display: this.state.showTerm && "block" || "none"
+                    display: this.state.showTerm && "block" || "none",
+                    height: "200px",
                 }}
             >
                 <Term height={200} ref={this.term} run={this.props.run} onInit={this.onTermInit}/>

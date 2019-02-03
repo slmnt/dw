@@ -231,6 +231,12 @@
   margin-right: 0.5em;
 }
 
+.chapter-header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
 .chapter-name {
   display: flex;
   align-items: center;
@@ -238,7 +244,7 @@
 
   font-size: 1.5em;  
   color: inherit;
-  margin: 0 0 0.5em auto;
+  margin-left: 1em;
 }
 .chapters-btn {
   box-shadow: 0 1px 3px black;
@@ -246,7 +252,8 @@
   
   flex: 0 0 auto;
   padding: 0.3em 1em;
-  margin: 0 1em 0.5em 1em;
+  margin-left: 1em;
+  margin-bottom: 0.2em;
 
   cursor: pointer;
 }
@@ -433,7 +440,22 @@
   background-color: var(--bg-color);
 }
 
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+.course-btn {
+  box-shadow: 0 1px 3px black;
+  border-radius: 1em;
+  
+  flex: 0 0 auto;
+  padding: 0.3em 1em;
+  margin-left: 1em;
 
+  cursor: pointer;
+}
 .course-name {
   display: flex;
   align-items: center;

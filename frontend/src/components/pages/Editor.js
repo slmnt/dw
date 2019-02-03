@@ -813,9 +813,11 @@ class Editor extends Component {
       <div style={{height: "100%"}}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <div className={styles["course-name"]}>
-              <div className={styles["course-name-tag"]}><span>コース編集: </span></div>
-              <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
+            <div className={styles["course-header"]}>
+              <div className={styles["course-btn"]} onClick={() => this.openChapterMenu()}>コース編集</div>
+              <div className={styles["course-name"]}>
+                <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
+              </div>
             </div>
             <div className={styles["header-controls"]}>
               <div className={styles["discard-btn"]}><Link to={`/course/${this.context.uid}/${this.state.id}`}>キャンセル</Link></div>
@@ -840,12 +842,13 @@ class Editor extends Component {
                 <AnsIcon />
               </div>
             </div>
-            <div className={styles["chapter-name"]}>
-              <div style={{fontSize: "0.6em"}}>チャプター: </div>
-              <TextBox ref={this.chapterNameInput} onUpdate={v => this.setChapterName(v)} />
-            </div>
-            <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
-              チャプター編集
+            <div className={styles["chapter-header"]}>
+              <div className={styles["chapters-btn"]} onClick={() => this.openChapterMenu()}>
+                チャプター編集
+              </div>
+              <div className={styles["chapter-name"]}>
+                <TextBox ref={this.chapterNameInput} onUpdate={v => this.setChapterName(v)} />
+              </div>
             </div>
             <div className={styles["chapter-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
               <div className={styles["chapter-menu"]}>
