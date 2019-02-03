@@ -24,6 +24,8 @@ class UserSearch extends Component {
         this.state = {
             keyword: '',
             page: 1,
+            totalPages: 1,
+            pageSize: 10,
             context: [],
             users: [
                 /*
@@ -76,15 +78,21 @@ class UserSearch extends Component {
     goToPage = (v) => {
         const page = this.clampPage(v);
 
-        api.get(`/api/getuser/?p=${page}`).then(api.parseJson)
+        api.get(`/api/getuser/?p=${page}&s=${this.state.pageSize}`).then(api.parseJson)
         .then(response => {
             if (!response) return;
+            if (response.users.length === 0) {
+                this.setState({
+                    totalPages: response.pages
+                });
+                return;
+            }
             this.setState({
-                pages: response.pages,
+                totalPages: response.pages,
                 users: response.users,
+                page: page,
             })    
         })
-        this.setState({page});
     }
     addToPage = (v) => {
         this.goToPage(this.state.page + v)
@@ -153,11 +161,11 @@ class UserSearch extends Component {
                 </div>
 
                 <div className={styles["pagination-container"]}>
-                    <Pagination first={1} last={this.context.getpage('user_len')} maxButtons={5} currentPage={this.state.page}
+                    <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
                         onClickPrev={() => this.addToPage(-1)}
                         onClickNext={() => this.addToPage(1)}
                         onClickFirst={() => this.goToPage(1)}
-                        onClickLast={() => this.goToPage(this.context.getpage('user_len'))}
+                        onClickLast={() => this.goToPage(this.state.totalPages)}
                         onClickPage={(i) => this.goToPage(i)}
                     />
                 </div>
