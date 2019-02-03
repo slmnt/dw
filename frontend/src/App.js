@@ -140,7 +140,7 @@ class App extends React.Component {
   }
 
   onScroll = (e) => {
-    //console.log(this.scrollbar.current.getValues())
+    // console.log(this.scrollbar.current.getValues())
   }
 
   componentDidUpdate(){

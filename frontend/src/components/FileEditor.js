@@ -346,10 +346,7 @@ class FileEditor extends React.Component {
     return this.state.files[path];
   }
 
-
-
   // terminal
-  runTerminal = (cmd) => {
     /*
     // local
     this.localExec(cmd);
@@ -360,10 +357,9 @@ class FileEditor extends React.Component {
     */
     let cmds = cmd.split(' ')
     let base_url = `Course/${this.props.courseId}`
-    
-    //this.remoteExec(cmds, base_url);
+    this.remoteExec(cmds, base_url, callback);
   }
-  remoteExec = (cmds, base_url) => {
+  remoteExec = (cmds, base_url, callback) => {
     switch(cmds[0]){
       case "javac":
       case "gcc":
@@ -376,13 +372,17 @@ class FileEditor extends React.Component {
         formData.append('url',base_url)
         api.post('/api/dockpy',{
           body: formData
-        })  
-        break
+        }).then(api.parseJson).then(response => {
+          if (!response) return;
+
+          this.outputToTerm(response);
+          if (callback) callback(response)
+        })
       default:
         break
     }
   }
-  localExec = (cmd) => {
+  localExec = (cmd, callback) => {
     let parser = cmd.split(' ')
     // console.log(parser)
     
@@ -399,9 +399,10 @@ class FileEditor extends React.Component {
         contents: text 
     }).then(api.parseJson).then(response => {
         if (!response) return;
-        // Print Result
         console.log(response)
+
         this.outputToTerm(response);
+        if (callback) callback(response);
     });
   }
   outputToTerm = (text) => {
