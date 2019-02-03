@@ -144,6 +144,9 @@ class App extends React.Component {
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
   }
   componentDidMount(){
+    document.addEventListener('mousewheel',(e) => {
+      console.log(e)
+    })
   }
   componentDidUpdate(){
   }

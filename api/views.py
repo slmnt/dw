@@ -129,8 +129,13 @@ class CreateUser(APIView):
             queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
             queryset.save()
 
-            login(request, new_user)
-            request.session.set_expiry(432000)
+            v_user = authenticate(username=uname,password=pwd)
+            if v_user is not None:
+                login(request,v_user)
+                #check live user moedls
+                #cookie login expiry set
+                #86400sec / 1day
+                request.session.set_expiry(86400 * 5)
 
             data = {}
             data['uid'] = uname
@@ -597,7 +602,8 @@ class CreateCourse(viewsets.ModelViewSet):
                 user = request.user
             else:
                 user = int(user)
-                user = User.objects.get(id=user)
+                t = UserInfo.objects.get(id=user)
+                user = t.root
         except:
             pass
         try:
@@ -984,10 +990,10 @@ class Userinfomation(viewsets.ModelViewSet):
     def get(self, request):
         try:
             id = request.GET['user']
-            target = User.objects.get(id=int(id))
+            queryset = UserInfo.objects.get(id=int(id))
         except:
             target = request.user
-        queryset = UserInfo.objects.get(root=target)
+            queryset = UserInfo.objects.get(root=target)            
         serializers = UserInfoSerializer(queryset)
         return Response(data=serializers.data,status=status.HTTP_200_OK)
 

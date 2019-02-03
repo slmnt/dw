@@ -499,13 +499,7 @@ class Editor extends Component {
     // sort slides
     this.sortSlides();
 
-    //
-
     // course
-    let formData = new FormData();
-    formData.append('id',this.state.id)
-    formData.append('title',this.state.course.name)
-    formData.append('desc',this.state.course.desc)
     await api.ex_post('/api/updatecourse/',{
       'id': this.state.id,
       'title': this.state.course.name,
@@ -724,6 +718,7 @@ class Editor extends Component {
   addBlankSlide = () => {
     if (!this.state.currentChapter) return;
     if (this.state.currentChapter.slides.length > 30) {
+      alert("スライドの最大枚数突破\nスライドは30枚までです。")
       console.log("スライドの最大枚数突破");
       return;
     }
