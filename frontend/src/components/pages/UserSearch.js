@@ -57,12 +57,7 @@ class UserSearch extends Component {
     //this.context.getpage('course_len')
 
     componentDidMount(){
-        var u = '/getuser'
-        axios.get(u).then(response => {
-            this.setState({
-                users: response.data
-            })
-        }).catch(e => console.log(e))        
+        this.goToPage(1);      
     }
     
     handleChange = (event) => {
@@ -73,24 +68,28 @@ class UserSearch extends Component {
        let path = '/api/searchuser/' + this.state.keyword
        api.get(path).then(api.parseJson)
        .then(response => this.setState({users: response})).catch()
-
     }
 
     clampPage = (v) => {
-        let p = Math.max(1, v)
-        if(p <= this.context.getpage('user_len'))
-            api.get(`/api/getuser/?p=${p}`).then(api.parseJson)
-            .then(response => this.setState({users: response})).catch()
-
         return Math.max(1, v);
     }
     goToPage = (v) => {
-        this.setState({page: this.clampPage(v)});
+        const page = this.clampPage(v);
+
+        api.get(`/api/getuser/?p=${page}`).then(api.parseJson)
+        .then(response => {
+            if (!response) return;
+            this.setState({
+                pages: response.pages,
+                users: response.users,
+            })    
+        })
+        this.setState({page});
     }
     addToPage = (v) => {
-        this.setState({page: this.clampPage(this.state.page + v)});
+        this.goToPage(this.state.page + v)
     }
-    
+
     
     render() {
         return (

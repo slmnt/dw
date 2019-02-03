@@ -471,10 +471,15 @@ class GetUserInfo(viewsets.ModelViewSet):
         except:
             page = 1
         objs = UserInfo.objects.all().order_by('-id')
-        p = Paginator(objs,PAGESIZE)
+        p = Paginator(objs, PAGESIZE)
         queryset = p.page(page).object_list
         serializer = UserInfoSerializer(queryset,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+        data = {
+            "pages": len(objs),
+            "users": serializer.data,
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
 
     def post(self, request):
         return Response(status=status.HTTP_200_OK)
@@ -616,7 +621,12 @@ class CreateCourse(viewsets.ModelViewSet):
         p = Paginator(objs,PAGESIZE)
         queryset = p.page(page).object_list
         serializer = UserCourseInfoSerializer(queryset,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+        data = {
+            "pages": len(objs),
+            "courses": serializer.data
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
         
 
 
@@ -807,13 +817,13 @@ class CourseUpload(viewsets.ModelViewSet):
             
             path = pathlib.PurePath(STORAGE, name, request.data['base_url'], url)
             try:
-                relative_path = path.relative_to(storage_path)
+                relative_path = path.relative_to(storage_path) # ここでエラー出たら storage の範囲外
             
                 os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
                 with open(path, 'wb') as f:
                     f.write(request.data[url].encode('utf-8'))
             except ValueError:
-                pass
+                print("CourseUpload error: invalid destination:", path.as_posix())
 
         data = {}
         data['key'] = 'value'

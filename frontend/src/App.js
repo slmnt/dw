@@ -232,7 +232,6 @@ class App extends React.Component {
   createUser = async (data, callback) => {
     await api.ex_post('/api/createuser/', data)
     .then(response => {
-      console.log(response)
       if(response.status === 200){
         return api.parseJson(response);
       } else {
@@ -247,15 +246,11 @@ class App extends React.Component {
           data: this.state.data
         }, () => {
           if (callback) callback();
-          console.log();
+          console.log("created & logged in as: ", this.state.data.uid);
         });
     }).catch(e => {
       console.log("error: createuser", e)
     });
-
-    await api.ex_post('/api/userinfo/',data)
-
-    this.login(data.uid,data.pwd)
 
   }
 

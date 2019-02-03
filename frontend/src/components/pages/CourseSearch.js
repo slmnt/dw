@@ -24,6 +24,7 @@ class CourseSearch extends Component {
         this.state = {
             keyword: '',
             page: 1,
+            pages: 1,
             context: [],
             courses: [
                 /*
@@ -68,12 +69,7 @@ class CourseSearch extends Component {
     }
 
     componentDidMount(){
-        var u = '/course/'
-        axios.get(u).then(response => {
-            this.setState({
-                courses: response.data
-            })
-        }).catch(e => console.log(e))
+        this.goToPage(1);
     }
     
     handleChange = (event) => {
@@ -91,20 +87,23 @@ class CourseSearch extends Component {
     }
 
     clampPage = (v) => {
-        let p = Math.max(1, v)
-        if(p <= this.context.getpage('course_len'))
-            api.get(`/api/course/?p=${p}`).then(api.parseJson)
-            .then(response => this.setState({
-                courses: response
-            })).catch()
-
         return Math.max(1, v);
     }
     goToPage = (v) => {
-        this.setState({page: this.clampPage(v)});
+        const page = this.clampPage(v);
+
+        api.get(`/api/course/?p=${page}`).then(api.parseJson)
+        .then(response => {
+            if (!response) return;
+            this.setState({
+                pages: response.pages,
+                courses: response.courses,
+            })    
+        })
+        this.setState({page});
     }
     addToPage = (v) => {
-        this.setState({page: this.clampPage(this.state.page + v)});
+        this.goToPage(this.state.page + v)
     }
     
     
