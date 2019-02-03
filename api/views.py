@@ -676,7 +676,7 @@ class UpdateCourse(viewsets.ModelViewSet):
         mycourse = UserCourse.objects.get(id=id)
         if mycourse.root == root:
             mycourse.title = title
-            mycourse.desc = desc
+            mycourse.descriptoin = desc
             mycourse.save()
 
         queryset = mycourse

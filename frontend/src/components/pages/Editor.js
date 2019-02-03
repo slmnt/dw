@@ -374,6 +374,7 @@ class Editor extends Component {
       currentTab: 0,
 
       showChapterMenu: false,
+      showCourseMenu: false,
       chapterMenuConfig: -1
       
     }
@@ -381,6 +382,10 @@ class Editor extends Component {
     this.courseNameInput = React.createRef();
     this.chapterNameInput = React.createRef();
     //this.chapterDescInput = React.createRef();
+ 
+    this.courseMenuNameInput = React.createRef();
+    this.courseMenuDescInput = React.createRef();
+ 
     this.chapterMenuNameInput = React.createRef();
     this.chapterMenuDescInput = React.createRef();
 
@@ -408,7 +413,7 @@ class Editor extends Component {
       title: "testcoure"
       users: 0
       */
-      this.setCourseData(response.data.title, response.data.description)
+      this.setCourseData(response.data.title, response.data.descriptoin)
     }).catch(e => console.log(e))
 
 
@@ -598,6 +603,23 @@ class Editor extends Component {
   }
   openTab = (id) => {
     this.setState({currentTab: id});
+  }
+
+
+  openCourseMenu = () => {
+    this.courseMenuNameInput.current.setValue(this.state.course.name);
+    this.courseMenuDescInput.current.setValue(this.state.course.desc);
+
+    this.setState({showCourseMenu: true});
+  }
+  closeCourseMenu = () => {
+    this.setState({showCourseMenu: false});
+  }
+
+  saveCourseMenu = () => {
+    const name = this.courseMenuNameInput.current.getValue();
+    const desc = this.courseMenuDescInput.current.getValue();
+    this.setCourseData(name, desc);
   }
 
   openChapterMenu = () => {
@@ -809,7 +831,7 @@ class Editor extends Component {
         <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles["course-header"]}>
-              <div className={styles["course-btn"]} onClick={() => this.openChapterMenu()}>コース編集</div>
+              <div className={styles["course-btn"]} onClick={() => this.openCourseMenu()}>コース編集</div>
               <div className={styles["course-name"]}>
                 <TextBox ref={this.courseNameInput} onUpdate={v => this.setCourseName(v)}/>
               </div>
@@ -822,21 +844,32 @@ class Editor extends Component {
               <div className={styles["save-btn"]} onClick={this.onSave} ><span>保存</span></div>
             </div>
 
-            <div className={styles["course-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
+            <div className={styles["course-menu-container"]} style={{display: this.state.showCourseMenu ? "block" : "none"}}>
               <div className={styles["course-menu"]}>
                 <div className={styles["course-menu-header"]}>
-                  <div className={styles["course-menu-header-main"]}>
-                    <div>チャプター 一覧</div>
-                    <AddIcon className={styles["course-menu-header-add"]} onClick={this.addBlankChapter} style={{display: this.state.chapterMenuConfig !== -1 ? "none" : "block"}}/>
+                  <div>コース情報</div>
+                </div>
+
+                <div className={styles["course-menu-cfg"]}>
+                  <div>名前</div>
+                  <div className={styles["course-menu-cfg-name"]}>
+                    <TextBox ref={this.courseMenuNameInput} />
                   </div>
-                  <div className={styles["course-menu-header-controls"]}>                
-                    <div className={styles["course-menu-header-item"]} onClick={() => this.closeChapterMenu()}>
-                      閉じる
-                    </div>
+                  <div style={{marginTop: "1em"}}>説明</div>
+                  <div className={styles["course-menu-cfg-desc"]}>
+                    <TextArea ref={this.courseMenuDescInput}/>
+                  </div>
+                </div>
+                <div className={styles["course-menu-controls"]}>                
+                  <div onClick={() => this.closeCourseMenu()}>
+                    閉じる
+                  </div>
+                  <div className={styles["course-menu-control-save"]} onClick={() => {this.saveCourseMenu(); this.closeCourseMenu();}}>
+                    保存
                   </div>
                 </div>
               </div>
-              <div className={styles["course-menu-bg"]} onClick={() => this.closeChapterMenu()}>
+              <div className={styles["chapter-menu-bg"]} onClick={() => this.closeCourseMenu()}>
               </div>
             </div>
           </div>
