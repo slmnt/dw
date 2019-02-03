@@ -26,6 +26,7 @@ class UserSearch extends Component {
             page: 1,
             totalPages: 1,
             pageSize: 10,
+            
             context: [],
             users: [
                 /*
