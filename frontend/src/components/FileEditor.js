@@ -359,7 +359,7 @@ class FileEditor extends React.Component {
     //let cmds = cmd.split(' ')
     //let base_url = `Course/${this.props.courseId}`
     //this.remoteExec(cmds, base_url, callback);
-  
+  }
   remoteExec = (cmd, base_url, callback) => {
     let cmds = cmd.split(' ')
 
