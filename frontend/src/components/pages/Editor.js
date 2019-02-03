@@ -821,6 +821,24 @@ class Editor extends Component {
               */}
               <div className={styles["save-btn"]} onClick={this.onSave} ><span>保存</span></div>
             </div>
+
+            <div className={styles["course-menu-container"]} style={{display: this.state.showChapterMenu ? "block" : "none"}}>
+              <div className={styles["course-menu"]}>
+                <div className={styles["course-menu-header"]}>
+                  <div className={styles["course-menu-header-main"]}>
+                    <div>チャプター 一覧</div>
+                    <AddIcon className={styles["course-menu-header-add"]} onClick={this.addBlankChapter} style={{display: this.state.chapterMenuConfig !== -1 ? "none" : "block"}}/>
+                  </div>
+                  <div className={styles["course-menu-header-controls"]}>                
+                    <div className={styles["course-menu-header-item"]} onClick={() => this.closeChapterMenu()}>
+                      閉じる
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles["course-menu-bg"]} onClick={() => this.closeChapterMenu()}>
+              </div>
+            </div>
           </div>
           <div className={styles["middle-header"]}>
             <div className={styles.tablist}>

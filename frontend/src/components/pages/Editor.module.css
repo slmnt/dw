@@ -257,6 +257,10 @@
 
   cursor: pointer;
 }
+
+
+
+
 .discard-btn {
   background-color: var(--nice-border-color) !important;
 }
