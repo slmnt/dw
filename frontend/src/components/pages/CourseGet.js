@@ -32,6 +32,7 @@ class CourseGet extends Component {
         this.state = {
             courseId: this.props.match.params.id,
             chapterId: this.props.match.params.ch,
+            author: this.props.match.params.name,
 
             courseName: "",
             
@@ -161,7 +162,7 @@ class CourseGet extends Component {
             <div className={styles["main"]}>
                 <div className={styles["header"]}>
                     <div className={styles["header-title"]}>
-                        <div><Link to={`/course/${this.context.uid}/${this.state.courseId}`}>{this.state.courseName}</Link></div>
+                        <div><Link to={`/course/${this.state.author}/${this.state.courseId}`}>{this.state.courseName}</Link></div>
                         <div style={{margin: "0 1em"}}>/</div>
                         <div>{this.state.chapterName}</div>
                     </div>

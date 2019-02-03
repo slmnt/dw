@@ -193,7 +193,6 @@ class Term extends React.Component {
         }
       }
       term.runCommand = () => {
-        // console.log("run cmd: ", term.cmd);
         term.addLineBreak();
 
         this.runCommand(term.cmd);
@@ -332,7 +331,7 @@ class Term extends React.Component {
     }
     
     runCommand(text) {
-      //console.log("run cmd:", text);
+      console.log("run cmd:", text);
       if (this.props.run) this.props.run(text)
     }
     getOutput(data) {

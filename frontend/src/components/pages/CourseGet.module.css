@@ -14,7 +14,7 @@
 
   white-space: nowrap;
 
-  padding: 0 1em 0 4em;
+  padding: 0 1em 0 2em;
   height: 4em;
   border-bottom: 2px solid var(--main-color);
 }

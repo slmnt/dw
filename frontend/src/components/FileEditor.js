@@ -39,6 +39,9 @@ class FileEditor extends React.Component {
       },
     }
     this.window = React.createRef();
+
+
+    window.print = this.outputToTerm; // test
   }
 
   // file

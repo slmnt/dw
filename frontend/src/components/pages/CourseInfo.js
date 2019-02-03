@@ -103,7 +103,7 @@ class Courseinfo extends Component {
                                 {this.state.contents.title}
                             </div>
                             {
-                                this.state.contents.root == this.context.uid &&
+                                this.context.uid && this.state.contents.root == this.context.uid &&
                                 <Link to={`/course/${this.state.contents.root}/${this.state.courseId}/edit`} style={{margin: "0 1em 0 auto"}}>
                                     <div className={styles["edit-button"]}>
                                         編集
