@@ -63,10 +63,7 @@ class TopicList extends Component {
     )
   }
 }
-
-
-
-
+//////////////////////////////////////////////////////////////
 
 class CreateThread extends Component {
   constructor(props) {
@@ -109,7 +106,7 @@ class CreateThread extends Component {
   }
 }
 
-
+/////////////////////////////////////////////////////////////////////////////////
 /* Category List
   all
   Question
@@ -183,7 +180,6 @@ class Forum extends Component {
 
   }
   selectCat = (catId) => {
-    console.log(catId)
     this.search(catId);
     this.setState({selectedCat: catId});
   }
