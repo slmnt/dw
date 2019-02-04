@@ -77,25 +77,17 @@ class CreateThread extends Component {
     this.descInput = React.createRef();
   }
 
-  componentDidMount(){
-    // test get
-    // run
-    //api.get(`/api/thread/?page=${1}&s=${20}&search=${"admin"}`).then(api.parseJson)
-    //.then(response => console.log(response)).catch()    
-  }
-
-  onPost = e => {
-
+  onPost = e => {    
     //run
+    const cat = this.props.category;
     const title = this.titleInput.current.value;
     const desc = this.descInput.current.value;
     api.ex_post('/api/thread/',{
       title: title,
       text: desc,
-      category: "Python"
-
+      category: cat
     })
-    if (this.props.onPost) this.props.onPost();
+    if (this.props.onCancel) this.props.onCancel();
   }
   onCancel = e => {
     if (this.props.onCancel) this.props.onCancel();
@@ -118,7 +110,13 @@ class CreateThread extends Component {
 }
 
 
-
+/* Category List
+  all
+  Question
+  Proposal
+  QNA
+  Challenge
+*/
 class Forum extends Component {
   constructor(props) {
     super(props);
@@ -128,47 +126,65 @@ class Forum extends Component {
       isCreating: false,
       categories: [
         {name: "すべて", id: "all"},
-        {name: "質問", id: "qa"},
+        {name: "質問", id: "Question"},
         {name: "がんくんへの質問", id: "gqa"},
-        {name: "提案", id: "pp"},
-        {name: "コース作成について", id: "cr"},
-        {name: "問題", id: "pr"},
+        {name: "提案", id: "Proposal"},
+        {name: "コース作成について", id: "QNA"},
+        {name: "問題", id: "Challenge"},
         {name: "質問", id: "q"},
       ],
       posts: [
         {
           title: "コースの作成について",
-          text: "テスト"
+          context: "テスト"
         },
         {
           title: "編集方法",
-          text: "テスト"
+          context: "テスト"
         },
         {
           title: "hi",
-          text: "what"
+          context: "what"
         },
         {
           title: "hi",
-          text: "what"
+          context: "what"
         },
         {
           title: "hi",
-          text: "what"
+          context: "what"
         },
       ]
     }
   }
   componentDidMount() {
     this.selectCat('all');
+    this.search()
   }
   
   search = (e) => {
-    console.log("search: ")
+    // console.log("search: ")
+    if(e){
+      api.get(`/api/thread/?page=${1}&s=${20}&cat=${e}`).then(api.parseJson)
+      .then(response => {
+        this.setState({
+          posts: response.threads
+        })
+      }).catch()      
+    }else{
+      api.get(`/api/thread/?page=${1}&s=${20}&cat=${this.state.selectedCat}`).then(api.parseJson)
+      .then(response => {
+        this.setState({
+          posts: response.threads
+        })
+      }).catch() 
+    }
     this.setState({isSearching: true});
+
   }
   selectCat = (catId) => {
-    this.search();
+    console.log(catId)
+    this.search(catId);
     this.setState({selectedCat: catId});
   }
 
@@ -177,6 +193,7 @@ class Forum extends Component {
   }
   hideCreatingForm = () => {
     this.setState({isCreating: false});
+    this.search()
   }
   render() {
     return (
@@ -230,7 +247,7 @@ class Forum extends Component {
             <div styles={{width: "100%"}}>
               {
                 this.state.isCreating ?
-                  <CreateThread onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
+                  <CreateThread category={this.state.selectedCat} oanPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
                 :
                   <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
               }
@@ -243,9 +260,9 @@ class Forum extends Component {
                   <div>
                     {v.title}
                     <span>avatar</span>
-                    <span>username</span>
+                    <span>{v.auth}</span>
                   </div>
-                  <div>{v.text}</div>
+                  <div>{v.context}</div>
                 </div>
               )
             })
