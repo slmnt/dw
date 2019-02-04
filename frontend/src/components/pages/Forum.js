@@ -100,17 +100,25 @@ class CreateThread extends Component {
     this.titleInput = React.createRef();
     this.descInput = React.createRef();
   }
+
+  componentDidMount(){
+    // test get
+    // run
+    //api.get(`/api/thread/?page=${1}&s=${20}&search=${"admin"}`).then(api.parseJson)
+    //.then(response => console.log(response)).catch()    
+  }
+
   onPost = e => {
+
+    //run
     const title = this.titleInput.current.value;
     const desc = this.descInput.current.value;
-    api.ex_post('/api/userboard/',{
+    api.ex_post('/api/thread/',{
       title: title,
-      text: desc
-    })
+      text: desc,
+      category: "Python"
 
-    // test get
-    api.get(`/api/userboard/?page=${1}&s=${20}`).then(api.parseJson)
-    .then(response => console.log(response)).catch()
+    })
   }
   onCancel = e => {
 

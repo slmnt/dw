@@ -12,4 +12,6 @@ admin.site.register(Ads)
 admin.site.register(Adque)
 admin.site.register(UserCourseComment)
 admin.site.register(UserCourseContentIndex)
-
+admin.site.register(Category)
+admin.site.register(UserThread)
+admin.site.register(UserThreadComment)

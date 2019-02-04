@@ -1105,6 +1105,92 @@ class UserboardComment(viewsets.ModelViewSet):
         serializer = UserBoardAnswerSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
+
+class Userthread(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            queryset = UserThread.objects.get(id=int(id))
+            serializer = UserThreadSerializer(queryset)
+            return Response(data=serializer.data,status=status.HTTP_200_OK)
+        except:
+            pass 
+        try:
+            search = request.GET['search']
+            #category
+            try:
+                user = User.objects.get(username=search)
+                objs = UserThread.objects.filter( 
+                    Q(auth=user) | Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
+            except:
+                try:
+                    cate = Category.objects.get(name=search)
+                    objs = UserThread.objects.filter( 
+                        Q(category=cate) | Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
+                except:
+                    objs = UserThread.objects.filter( 
+                        Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
+        except:
+            objs = UserThread.objects.all().order_by('-updateat')
+
+        #make page json
+        try:
+            page = int(request.GET['page'])
+            page_size = int(request.GET['s'])
+            page_size = min(MAX_PAGESIZE, max(1, page_size))
+        except:
+            page = 1
+            page_size = MAX_PAGESIZE
+
+        pages = math.ceil(len(objs) / page_size)
+        try:
+            p = Paginator(objs, page_size)
+            queryset = p.page(page).object_list
+            serializer = UserThreadSerializer(queryset,many=True)
+            data = {
+                "pages": pages,
+                "threads": serializer.data
+            }
+        except EmptyPage:
+            data = {
+                "pages": pages,
+                "threads": []
+            }
+        return Response(data=data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        title = request.data['title']
+        context = request.data['text']
+        category = request.data['category']
+        category = Category.objects.get(name=category)
+        queryset = UserThread(category=category,auth=request.user,title=title,context=context)
+        queryset.save()
+        serializer = UserThreadSerializer(queryset)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+class UserThreadcomment(viewsets.ModelViewSet):
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+        except:
+            pass
+        target = UserThread.objects.get(id=int(id))
+        queryset = UserThreadComment.objects.all().filter(root=target)
+        serializer = UserThreadCommentSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+    def post(self, request):
+        id = request.data['id']
+        context = request.data['text']
+        target = UserThread.objects.get(id=int(id))
+        queryset = UserThreadComment(root=target,auth=request.user,context=context)
+        queryset.save()
+        queryset = UserBoardAnswer.objects.all()
+        serializer = UserThreadCommentSerializer(queryset,many=True)
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
+
 #Remain apis
 # User Create api
 # User Review create
