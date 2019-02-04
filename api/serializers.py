@@ -108,3 +108,18 @@ class UserBoardAnswerAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBoardAnswer
         fields = ('auth','comment','createat')
+
+class UserThreadSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(read_only=True,slug_field='name')
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserThread
+        fields = ('__all__')
+
+class UserThreadCommentSerializer(serializers.ModelSerializer):
+    auth = serializers.StringRelatedField()
+    
+    class Meta:
+        model = UserBoardAnswer
+        fields = ('auth','comment','createat')

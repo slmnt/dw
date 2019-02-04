@@ -130,6 +130,14 @@ userboardcomment = UserboardComment.as_view({
     'get': 'get',
     'post': 'post'    
 })
+userthread = Userthread.as_view({
+    'get': 'get',
+    'post': 'post'    
+})
+userthreadcomment = UserThreadcomment.as_view({
+    'get': 'get',
+    'post': 'post'    
+})
 
 urlpatterns = [
 #userinfo get,create
@@ -194,10 +202,9 @@ urlpatterns = [
     path('userboard/',userboard),
     path('userboardcomment/',userboardcomment),
 
-    #userproposal
-    #usercommit
-    #userissue
-    #userhelp
+    #UserThread
+    path('thread/',userthread),
+    path('threadcomment/',userthreadcomment),
 
 
     #path('test',apitest),

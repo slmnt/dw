@@ -188,3 +188,21 @@ class UserIssueComment(models.Model):
     auth = models.ForeignKey(User,on_delete=models.CASCADE)
     comment = models.TextField()
     createat = models.DateTimeField(default=timezone.now)
+
+class Category(models.Model):
+    name = models.CharField(max_length=50,unique=True)
+
+class UserThread(models.Model):
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    context = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
+    updateat = models.DateTimeField(default=timezone.now)
+    category = models.ForeignKey('Category',on_delete=models.CASCADE)
+    likes = models.IntegerField(default=0)
+
+class UserThreadComment(models.Model):
+    root = models.ForeignKey('UserThread',on_delete=models.CASCADE)
+    auth = models.ForeignKey(User,on_delete=models.CASCADE)
+    comment = models.TextField()
+    createat = models.DateTimeField(default=timezone.now)
