@@ -43,6 +43,8 @@ import CourseGet from './components/pages/CourseGet'
 import CourseInfo from './components/pages/CourseInfo'
 
 import Forum from './components/pages/Forum';
+import ForumThread from './components/pages/ForumThread';
+
 
 import About from './components/pages/About';
 import GettingStarted from './components/pages/GettingStarted';
@@ -324,6 +326,8 @@ class App extends React.Component {
                 <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
                 <Route path="/course/:name/:id"  component={CourseInfo}/>
 
+                <Route path="/forum/thread/:id"  component={ForumThread}/>
+                <Route path="/forum/topics"  component={Forum}/>
                 <Route path="/forum"  component={Forum}/>
 
                 <Route path="/about" component={About}/>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
  
 import styles from './Footer.module.css';
+import {MainContext} from '../contexts/main';
 
 import { ReactComponent as Logo } from '../img/logo.svg';
 
@@ -15,18 +16,30 @@ class Footer extends Component {
             <div className={styles["nav-block"]}>
               <span><Link to="/">トップページ</Link></span>
               <span><Link to="/getting-started">はじめる</Link></span>
-              <span>会員登録</span>
-              <span>マイページ</span>
             </div>
             <div className={styles["nav-block"]}>
+              {
+                this.context.isLoggedIn ?
+                  <React.Fragment>
+                    <span><Link to="/mypage">マイページ</Link></span>
+                    <span><Link to="/mypage/settings">設定</Link></span>
+                  </React.Fragment>
+                :
+                  <React.Fragment>
+                    <span><Link to="/login">ログイン</Link></span>
+                    <span><Link to="/signin">会員登録</Link></span>
+                  </React.Fragment>
+              }
+            </div>
+            <div className={styles["nav-block"]}>
+              <span><Link to="/forum">フォーラム</Link></span>
               <span><Link to="/search/course">コース検索</Link></span>
               <span><Link to="/search/user">ユーザ検索</Link></span>
-              <span><Link to="/">コースを作る</Link></span>
             </div>
             <div className={styles["nav-block"]}>
-              <span><Link to="/about">about</Link></span>
-              <span>Policy</span>
-              <span>Help</span>
+              <span><Link to="/about">このサイトについて</Link></span>
+              <span><Link to="/term">プライバシーポリシー</Link></span>
+              <span><Link to="/help">ヘルプ</Link></span>
             </div>
           </div>
           <div className={styles["logo-block"]}>
@@ -62,5 +75,6 @@ class Footer extends Component {
     )
   }
 }
+Footer.contextType = MainContext;
 
 export default Footer;

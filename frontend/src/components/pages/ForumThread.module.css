@@ -1,0 +1,149 @@
+.main {
+  height: 100%;
+}
+
+
+/* thread */
+.thread-container {
+  padding: 0 2em;
+  margin: 5em auto;
+  max-width: 50em;
+}
+
+.thread-post-comment-container {
+  margin: 2em 0;
+}
+
+
+.thread-title {
+  font-size: 1.8em;
+  margin-left: 0.5em;
+  margin-bottom: 0.5em;
+}
+.thread-comments-title {
+  padding: 0.2em 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.thread-op, .thread-comment {
+  font-size: 1em;
+
+  border-radius: 0.2em;
+  background-color: white;
+  border: 1px solid var(--main-color);
+  box-shadow: 0 0 1px;
+
+  padding: 1em 1em;
+  margin: 0.5em 0em;
+}
+.thread-op {
+}
+.thread-comments-container {
+}
+.thread-comment {
+}
+
+
+
+
+
+
+/* post */
+.post-container {
+  display: flex;
+}
+.post-user {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 1em;
+}
+.post-username {
+}
+.post-avatar-container {
+  padding: 0 1.5em 0 0.5em;
+}
+.post-avatar {
+  height: 2em;
+  width: 2em;
+  border-radius: 100%;
+  background-color: blueviolet;
+}
+.post-main {
+  flex: 1 1 auto;
+}
+.post-text {
+
+}
+.post-date {
+  font-size: 0.8em;
+  color: var(--main-color);
+
+  text-align: right;
+}
+
+
+
+
+/* create post */
+.newcomment-header {
+  margin-right: auto;
+}
+.newcomment-container {
+
+}
+.newcomment-container > * {
+  margin: 0.3em 0;
+}
+.newcomment-title-box, .newcomment-text-box {
+  padding: 0.5em 0.8em;
+
+  outline: none;
+  border: 2px solid var(--main-color);
+  box-shadow: 0 0 2px #00000060;
+
+  box-sizing: border-box;
+  font-size: inherit;
+  color: var(--nice-border-color);
+
+  width: 100%;
+}
+.newcomment-title-box {
+
+}
+.newcomment-text-box {
+  height: 6em;
+  font-size: 1.2em;
+  resize: vertical;
+}
+
+
+.newcomment-controls {
+  text-align: right;
+  display: flex;
+  justify-content: flex-start;
+}
+.newcomment-cancel-btn, .newcomment-post-btn {
+  outline: none;
+  border: 1px solid var(--main-color);
+  border-radius: 0.5em;
+
+  font-size: 0.8em;
+  width: 8em;
+  height: 2em;
+
+  cursor: pointer;
+}
+.newcomment-cancel-btn {
+  background-color: inherit;
+  transition: background-color 0.2s;
+}
+.newcomment-cancel-btn:hover {
+  background-color: #1abc9c40;
+}
+.newcomment-post-btn {
+  background-color: var(--main-color);
+  color: var(--nice-bg-color);
+
+  margin-left: 1em;
+}

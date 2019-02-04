@@ -66,32 +66,6 @@ class TopicList extends Component {
 
 
 
-class CreatePost extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    }
-    this.textInput = React.createRef();
-  }
-  onPost = e => {
-    const text = this.textInput.current.value;
-  }
-  onCancel = e => {
-
-  }
-  render(){
-    return (
-      <div className={styles["newthread-container"]}>
-        <div className={styles["newthread-header"]}>コメントの投稿</div>
-        <textarea placeholder="投稿内容を書いてください" className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
-        <div className={styles["newthread-controls"]}>
-          <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
-          <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
-        </div>
-      </div>
-    )
-  }
-}
 
 
 class CreateThread extends Component {
@@ -121,9 +95,10 @@ class CreateThread extends Component {
       category: "Python"
 
     })
+    if (this.props.onPost) this.props.onPost();
   }
   onCancel = e => {
-
+    if (this.props.onCancel) this.props.onCancel();
   }
   render(){
     return (
@@ -140,90 +115,23 @@ class CreateThread extends Component {
   }
 }
 
-class ForumPost extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    }
-  }
-  render(){
-    return (
-      <div className={styles["post-container"]}>
-        <div className={styles["post-avatar-container"]}>
-          <img className={styles["post-avatar"]} src=""></img>
-        </div>
-        <div className={styles["post-main"]}>
-          <div className={styles["post-user"]}>
-            <div className={styles["post-username"]}>
-              <Link to={`/user/${this.props.user}`}>{this.props.user}</Link>
-            </div>
-          </div>
-          <div className={styles["post-text"]}>
-            {this.props.text}
-          </div>
-          <div className={styles["post-date"]}>
-            2019年 15月 58日
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-class ForumThread extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: "test thread",
-      op: {
-        user: "Kang the conquerer",
-        text: "I came, I saw, I conquererd",
-      },
-      comments: [
-        {
-          user: "Kang the destroyer",
-          text: "I praise the lord, then break the law",
-        },
-        {
-          user: "Kang the savage",
-          text: "I take what's mine, then take some more",
-        }
-      ]
-    }
-  }
-  render(){
-    return (
-      <div>
-        <div className={styles["thread-op"]}>
-          <div className={styles["thread-title"]}>
-            {this.state.title}
-          </div>
-          <ForumPost user={this.state.op.user} text={this.state.op.text}/>
-        </div>
-        <div className={styles["thread-comments-container"]}>
-          <div className={styles["thread-comments-title"]}>
-            {`${this.state.comments.length + 1} コメント`}
-          </div>
-          {
-            this.state.comments.map((v, i) => {
-              return ( 
-                <div key={i} className={styles["thread-comment"]}>
-                  <ForumPost key={i} user={v.user} text={v.text} />
-                </div>
-              )
-            })
-          }
-        </div>
-      </div>
-    )
-  }
-}
 
 
 class Forum extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isSearching: false,
+      selectedCat: false,
+      isCreating: false,
+      categories: [
+        {name: "質問", id: "qa"},
+        {name: "がんくんへの質問", id: "gqa"},
+        {name: "提案", id: "pp"},
+        {name: "コース作成について", id: "cr"},
+        {name: "問題", id: "pr"},
+        {name: "質問", id: "q"},
+      ],
       posts: [
         {
           title: "コースの作成について",
@@ -248,36 +156,77 @@ class Forum extends Component {
       ]
     }
   }
+  
   search = (e) => {
+    console.log("search: ")
+    this.setState({isSearching: true});
+  }
+  selectCat = (catId) => {
+    this.search();
+    this.setState({selectedCat: catId});
+  }
 
+  showCreatingForm = () => {
+    this.setState({isCreating: true});
+  }
+  hideCreatingForm = () => {
+    this.setState({isCreating: false});
   }
   render() {
     return (
       <div className={styles.main}>
-        <div className={styles.header}>
-          <div className={styles["toolbar-right"]}>
-          {/*
-            <div>おい</div>
-            <div>やるぞ</div>
-          */}
+        <div className={styles.header}
+          style={{
+            position: this.state.isSearching ? "sticky" : "",
+          }}
+        >
+
+          <div className={styles["search-header"]}
+            style={{
+              height: this.state.isSearching ? "5em" : ""
+            }}
+            >
+            <div className={styles["toolbar-right"]}
+              style={{
+                display: this.state.isSearching ? "none" : ""
+              }}
+              >
+            {/*
+              <div>おい</div>
+              <div>やるぞ</div>
+            */}
+            </div>
+            <span className={styles["title"]}
+              style={{
+                display: this.state.isSearching ? "none" : ""
+              }}
+              >気になることを探してみよう</span>
+            <span className={styles["search-box-container"]}>
+              <input type="text" className={styles["search-box"]} maxLength={30} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
+              <SearchIcon />
+            </span>
           </div>
-          <span className={styles["title"]}>気になることを探してみよう</span>
-          <span className={styles["search-box-container"]}>
-            <input type="text" className={styles["search-box"]} maxLength={30} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
-            <SearchIcon />
-          </span>
+          <div className={styles["toolbar"]}>
+            <div className={styles["toolbar-left"]}>
+              {
+                this.state.categories.map((v, i) => {
+                  return <div key={i} className={this.state.selectedCat === v.id && styles["toolbar-item-selected"]} onClick={() => this.selectCat(v.id)}>
+                    {v.name}
+                  </div>
+                })
+              }
+            </div>
+          </div>
         </div>
-        <div className={styles["toolbar"]}>
-          <div className={styles["toolbar-left"]}>
-            <div>質問</div>
-            <div>提案</div>
-            <div>ヘルプ</div>
-            <div>会議</div>
-            <div>がんくん</div>
-            <div>話題</div>
-          </div>
-        </div>        
         <div className={styles.content}>
+          <div styles={{width: "100%"}}>
+            {
+              this.state.isCreating ?
+                <CreateThread onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
+              :
+                <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
+            }
+          </div>
           {
             this.state.posts.map((v, i) => {
               return (
@@ -288,12 +237,6 @@ class Forum extends Component {
               )
             })
           }
-          <div style={{height: "5em"}}></div>
-          <ForumThread />
-          <div style={{height: "5em"}}></div>
-          <CreateThread />
-          <div style={{height: "5em"}}></div>
-          <CreatePost />
           <div style={{height: "5em"}}></div>
           <TopicList />
         </div>
