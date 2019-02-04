@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
 import {MainContext} from '../contexts/main';
 
+import history from '../modules/history';
+
+
 import { ReactComponent as Logo } from '../img/logo.svg';
 
 
@@ -23,6 +26,7 @@ class Footer extends Component {
                   <React.Fragment>
                     <span><Link to="/mypage">マイページ</Link></span>
                     <span><Link to="/mypage/settings">設定</Link></span>
+                    <span><a onClick={() => this.context.logout(() => {history.push("/")})}>ログアウト</a></span>
                   </React.Fragment>
                 :
                   <React.Fragment>

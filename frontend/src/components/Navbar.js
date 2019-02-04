@@ -75,7 +75,7 @@ class NavBar extends React.Component {
                 <div><Link to="/mypage/courses">コース管理</Link></div>
                 <div><Link to="/mypage/settings">設定</Link></div>
                 <div><Link to="/help">ヘルプ</Link></div>
-                <div><Link to="/" onClick={() => this.context.logout()} >ログアウト</Link></div>
+                <div><a onClick={() => this.context.logout(() => {history.push("/")})} >ログアウト</a></div>
               </div>
             </React.Fragment>
         }

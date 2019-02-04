@@ -105,8 +105,10 @@ class CreateThread extends Component {
       <div className={styles["newthread-container"]}>
         <div className={styles["newthread-controls"]}>
           <span className={styles["newthread-header"]}>スレッドの投稿</span>
-          <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
-          <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
+          <span style={{marginLeft: "auto"}}>
+            <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
+            <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
+          </span>
         </div>
         <input type="text" placeholder="タイトルを書いてください" maxLength={30} className={styles["newthread-title-box"]} ref={this.titleInput}></input>
         <textarea placeholder="投稿内容を書いてください" maxLength={1000} className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
@@ -125,6 +127,7 @@ class Forum extends Component {
       selectedCat: false,
       isCreating: false,
       categories: [
+        {name: "すべて", id: "all"},
         {name: "質問", id: "qa"},
         {name: "がんくんへの質問", id: "gqa"},
         {name: "提案", id: "pp"},
@@ -155,6 +158,9 @@ class Forum extends Component {
         },
       ]
     }
+  }
+  componentDidMount() {
+    this.selectCat('all');
   }
   
   search = (e) => {
@@ -200,7 +206,7 @@ class Forum extends Component {
               style={{
                 display: this.state.isSearching ? "none" : ""
               }}
-              >気になることを探してみよう</span>
+            >気になることを探してみよう</span>
             <span className={styles["search-box-container"]}>
               <input type="text" className={styles["search-box"]} maxLength={30} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
               <SearchIcon />
@@ -219,19 +225,26 @@ class Forum extends Component {
           </div>
         </div>
         <div className={styles.content}>
-          <div styles={{width: "100%"}}>
-            {
-              this.state.isCreating ?
-                <CreateThread onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
-              :
-                <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
-            }
-          </div>
+          {
+            this.state.selectedCat !== 'all' &&
+            <div styles={{width: "100%"}}>
+              {
+                this.state.isCreating ?
+                  <CreateThread onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
+                :
+                  <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
+              }
+            </div>
+          }
           {
             this.state.posts.map((v, i) => {
               return (
                 <div key={i} className={styles["post"]}>
-                  <div>{v.title}</div>
+                  <div>
+                    {v.title}
+                    <span>avatar</span>
+                    <span>username</span>
+                  </div>
                   <div>{v.text}</div>
                 </div>
               )

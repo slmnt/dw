@@ -86,7 +86,7 @@ class Drawer extends Component {
         return !this.context.isLoggedIn;
     }
     logout = () => {
-        this.context.logout();
+        this.context.logout(() => {history.push("/")});
     }
     render() {
 

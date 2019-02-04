@@ -15,7 +15,7 @@
     color: #f2f7ff;
     background-color: var(--main-color);
     text-align: center;
-    padding: 50px;
+    padding: 2em 0;
     min-height: 25em;
 
     display: flex;
@@ -26,10 +26,10 @@
     font-size: 70px;
 }
 .m {
-    font-size: 100px;
+    font-size: 1.4em;
 }
 .p {
-    font-size: 100px;
+    font-size: 1.4em;
 }
 .header-sub-title {
     font-size: 30px;
@@ -245,6 +245,9 @@
 
 
 @media (max-width: 800px) {
+    .header-title {
+        font-size: 2.5em;
+    }
     .tile-container {
         padding: 0;
     }

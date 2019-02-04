@@ -202,8 +202,6 @@ class App extends React.Component {
 
     })
   }
-  logout = () => {
-  }
   updateLoginState = () => {
     //this.loginWithCookie();
   }
@@ -218,10 +216,11 @@ class App extends React.Component {
     this.state.data.uid = '';
     this.setState({ data: this.state.data });
   }
-  logout = () => {
+  logout = (callback) => {
     axios.post('logout/').then(response => {
         // console.log(response)
         this.clearLoginState();
+        if (callback) callback();
     }).catch(e => {
         console.log("error: logout", e)
     });

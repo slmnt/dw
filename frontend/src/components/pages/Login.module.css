@@ -1,12 +1,14 @@
 
 .main {
-  padding: 3em 3em;
-
   text-align: center;
   font-family: arial black,Yu Gothic;
   background-color: #f2f7ff;
 
   min-height: 100%;
+
+  padding: 3em 1em;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .top_logo {
@@ -26,8 +28,8 @@
 }
 
 .create_form{
-  margin: auto;
-  width: 80%;
+  margin: 0 auto;
+  max-width: 30em;
   padding: 2em 0;
 }
 .create_form input, .create_form select {
@@ -74,10 +76,20 @@
 
 .form_btn{
   margin-top: 1em;
-  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  white-space: nowrap;
+
 }
 
 .form_btn > a{
+  flex: 0 1 5em !important;
+
+
+
   color: white;
   flex: 0 0 auto;
 
@@ -86,7 +98,7 @@
   padding: 0.5em 2em;
   cursor: pointer;
 
-  margin-left: 1em;
+  margin: 0 0.5em;
 }
 
 .form_btn > a:active{

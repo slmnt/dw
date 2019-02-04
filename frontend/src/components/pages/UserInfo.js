@@ -10,7 +10,7 @@ import { ReactComponent as Logo } from '../../img/logo.svg';
 import axios from 'axios';
 import api from '../../modules/api';
 
-
+import Footer from '../Footer';
 import CourseList from '../CourseList';
 
 
@@ -124,7 +124,7 @@ class UserInfo extends Component {
                                 return (
                                     <div className={styles["user-info"]}>
                                         <div className={styles["profile-edit-row"]}>
-                                            <span>プロフィール: </span>
+                                            <div>プロフィール: </div>
                                             <textarea className={styles["profile-controls-text"]} ref={this.descCfg}/>
                                         </div>
                                         <div className={styles["profile-controls"]}>
@@ -196,12 +196,16 @@ class UserInfo extends Component {
                             <div className={styles["course-container"]}>
                                 <CourseList courses={this.state.courses} />
                             </div>
+                            {/*
                             <div className={styles["see-all"]}>
                                 <Link to="/">全て表示</Link>
                             </div>
+                            */}
                         </div>
                     </div>
                 </div>
+                
+                <Footer />
             </div>
         );
   	}

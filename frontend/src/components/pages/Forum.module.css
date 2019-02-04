@@ -39,9 +39,8 @@
 }
 .toolbar-left > div, .toolbar-right > div {
   flex: 0 0 auto;
-  margin: 0 1em;
   cursor: pointer;
-  padding: 0.2em 0.4em;
+  padding: 0.2em 1em;
 }
 .toolbar-left > div:first-child {
   margin-left: auto;
@@ -203,6 +202,7 @@
 .newthread-controls {
   text-align: right;
   display: flex;
+  flex-flow: row wrap;
   justify-content: flex-start;
 }
 .newthread-cancel-btn, .newthread-post-btn {
@@ -256,6 +256,9 @@
 @media (max-width: 800px) {
   .toolbar {
     padding: 0;
+  }
+  .search-header {
+    font-size: 0.7em;
   }
 }
 
