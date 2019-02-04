@@ -163,7 +163,7 @@
 
 
 @media (max-width: 800px) {
-  .navigation {
+  .navmenu {
     display: none !important;
   }
 }

@@ -67,7 +67,7 @@ class Main extends Component {
           {/*
           <h3 className={styles["main-contents-title"]}>サービスの特徴</h3>
           */}
-          <div className={styles["tile-container"]} style={{padding: "0 25px"}}>
+          <div className={styles["tile-container"]}>
             <h3 className={styles["tile-header"]}>サービスの特徴</h3>
             <div className={styles["f-grid"]}>
               <div className={classNames(styles["f-grid-item"], styles["tile"], styles["main-contents-1"])}>

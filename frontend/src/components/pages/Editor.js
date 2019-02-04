@@ -337,9 +337,11 @@ class SlideEditor extends React.Component {
                 */}
               </div>
             </div>
+          {/*
           <div className={styles["slides-footer"]}>
             FOOTEER
           </div>
+          */}
         </div>
       </div>
     )
@@ -382,12 +384,14 @@ class Editor extends Component {
     this.courseNameInput = React.createRef();
     this.chapterNameInput = React.createRef();
     //this.chapterDescInput = React.createRef();
- 
+    
     this.courseMenuNameInput = React.createRef();
     this.courseMenuDescInput = React.createRef();
- 
+    
     this.chapterMenuNameInput = React.createRef();
     this.chapterMenuDescInput = React.createRef();
+    
+    this.answerTextArea = React.createRef();
 
     this.slideEditor = React.createRef();
     this.fileEditor = React.createRef();
@@ -503,6 +507,9 @@ class Editor extends Component {
     
     // sort slides
     this.sortSlides();
+
+    // 答え
+    const ans = this.answerTextArea.current.getValue();
 
     // course
     await api.ex_post('/api/updatecourse/',{
@@ -997,7 +1004,7 @@ class Editor extends Component {
                   答えを記入
                 </div>
                 <div className={styles["answer-textarea-container"]}>
-                  <TextArea />
+                  <TextArea ref={this.answerTextArea} />
                 </div>
               </div>
             </div>

@@ -16,7 +16,7 @@
     background-color: var(--main-color);
     text-align: center;
     padding: 50px;
-    height: 25em;
+    min-height: 25em;
 
     display: flex;
     flex-flow: column;
@@ -46,7 +46,7 @@
     background-repeat: no-repeat !important;
     background-size: cover !important;
     font-size: 30px;
-    padding: 100px;
+    padding: 3em 0.1em 4em 0.1em;
     border-bottom: solid 1px #eeeeee;
 }
 .main-contents-title {
@@ -60,7 +60,7 @@
 /* タイル */
 .tile-container {
     color: var(--dark-darker);
-    padding: 3em 0;
+    padding: 0 1em;
     margin: 10em 0;
 }
 .tile-header {
@@ -233,7 +233,7 @@
 .continue-btn {
     font-size: 2em;
     border: 1px solid var(--main-color);
-    width: 10em;
+    max-width: 10em;
     margin: auto;
     margin-top: 1em;
 
@@ -241,4 +241,24 @@
 }
 .continue-btn:hover {
     background-color: var(--light-color);
+}
+
+
+@media (max-width: 800px) {
+    .tile-container {
+        padding: 0;
+    }
+    .slide-block-body {
+        width: 100%;
+    }
+    .slide-block-bg-left {
+        right: 0;
+    }
+    .slide-block-bg-right {
+        right: 0;
+    }
+    .slide-block-bg-right svg {
+        width: 0;
+        display: none !important;
+    }
 }

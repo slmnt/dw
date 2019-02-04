@@ -23,13 +23,14 @@ class Drawer extends Component {
                 ['-'],
                 ['コース検索', '/search/course'],
                 ['ユーザ検索', '/search/user'],
-                ['コースを作る', '/', this.createCourse],
+                ['コースを作る', this.createCourse],
                 ['-'],
                 ['フォーラム', '/forum'],
                 ['-'],
-                ['マイページ','/mypage'],
-                ['ログアウト', '/'],
-                ['-'],
+                ['ログイン','/login', this.isLoggedOut],
+                ['新規登録', '/signin', this.isLoggedOut],
+                ['マイページ','/mypage', this.isLoggedIn],
+                ['ログアウト', this.logout, this.isLoggedIn],
                 //['text editor (right)', '/right'],
                 //['courseSearch','/search/course'],
                 //['test course get', '/course/123/'],
@@ -78,7 +79,15 @@ class Drawer extends Component {
 
         this.close();
     }
-      
+    isLoggedIn = () => {
+        return this.context.isLoggedIn;
+    }
+    isLoggedOut = () => {
+        return !this.context.isLoggedIn;
+    }
+    logout = () => {
+        this.context.logout();
+    }
     render() {
 
         return (
@@ -92,7 +101,7 @@ class Drawer extends Component {
                 </div>
                 <div className={styles.panel}
                     style={{
-                        left: this.state.isDrawerOpen ? 0 : -1000 + "px"
+                        left: this.state.isDrawerOpen ? 0 : "-16em"
                     }}
                 >
                     <div className={styles["close-container"]}>
@@ -112,9 +121,9 @@ class Drawer extends Component {
                                     }}></div>
                                 )
                             }
-                            return (
-                                v[2] ?
-                                <a key={i} className={styles.item} onClick={this.createCourse}>
+                            return (v[2] === undefined || v[2]()) && (
+                                typeof v[1] === 'function' ?
+                                <a key={i} className={styles.item} onClick={v[1]}>
                                     {v[0]}
                                 </a>
                                 :

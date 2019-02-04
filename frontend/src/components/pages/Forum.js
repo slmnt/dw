@@ -1,4 +1,6 @@
-import React, { Component } from 'react';   
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 import styles from './Forum.module.css';
 
 import Footer from '../Footer';
@@ -123,8 +125,8 @@ class CreateThread extends Component {
           <button className={styles["newthread-cancel-btn"]} onClick={this.onCancel}>キャンセル</button>
           <button className={styles["newthread-post-btn"]} onClick={this.onPost}>投稿</button>
         </div>
-        <input type="text" placeholder="タイトルを書いてください" className={styles["newthread-title-box"]} ref={this.titleInput}></input>
-        <textarea placeholder="投稿内容を書いてください" className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
+        <input type="text" placeholder="タイトルを書いてください" maxLength={30} className={styles["newthread-title-box"]} ref={this.titleInput}></input>
+        <textarea placeholder="投稿内容を書いてください" maxLength={1000} className={styles["newthread-text-box"]} ref={this.descInput}></textarea>
       </div>
     )
   }
@@ -145,7 +147,7 @@ class ForumPost extends Component {
         <div className={styles["post-main"]}>
           <div className={styles["post-user"]}>
             <div className={styles["post-username"]}>
-              {this.props.user}
+              <Link to={`/user/${this.props.user}`}>{this.props.user}</Link>
             </div>
           </div>
           <div className={styles["post-text"]}>
@@ -197,7 +199,7 @@ class ForumThread extends Component {
           {
             this.state.comments.map((v, i) => {
               return ( 
-                <div className={styles["thread-comment"]}>
+                <div key={i} className={styles["thread-comment"]}>
                   <ForumPost key={i} user={v.user} text={v.text} />
                 </div>
               )
@@ -216,12 +218,12 @@ class Forum extends Component {
     this.state = {
       posts: [
         {
-          title: "hi",
-          text: "what"
+          title: "コースの作成について",
+          text: "テスト"
         },
         {
-          title: "hi",
-          text: "what"
+          title: "編集方法",
+          text: "テスト"
         },
         {
           title: "hi",
@@ -238,28 +240,35 @@ class Forum extends Component {
       ]
     }
   }
+  search = (e) => {
+
+  }
   render() {
     return (
       <div className={styles.main}>
         <div className={styles.header}>
           <div className={styles["toolbar-right"]}>
+          {/*
             <div>おい</div>
             <div>やるぞ</div>
+          */}
           </div>
-          <span className={styles["title"]}>～を検索試用</span>
+          <span className={styles["title"]}>気になることを探してみよう</span>
           <span className={styles["search-box-container"]}>
-            <input type="text" className={styles["search-box"]} />
+            <input type="text" className={styles["search-box"]} maxLength={30} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
             <SearchIcon />
           </span>
         </div>
-        <div className={styles["toolbar-left"]}>
-          <div>質問</div>
-          <div>提案</div>
-          <div>ヘルプ</div>
-          <div>会議</div>
-          <div>がんくん</div>
-          <div>話題</div>
-        </div>
+        <div className={styles["toolbar"]}>
+          <div className={styles["toolbar-left"]}>
+            <div>質問</div>
+            <div>提案</div>
+            <div>ヘルプ</div>
+            <div>会議</div>
+            <div>がんくん</div>
+            <div>話題</div>
+          </div>
+        </div>        
         <div className={styles.content}>
           {
             this.state.posts.map((v, i) => {

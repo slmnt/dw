@@ -6,8 +6,10 @@
 /* main (navigation) */
 .main-footer {
   display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
 
-  height: 10em;
+  min-height: 10em;
   padding: 5em 3em;
   text-align: center;
 
@@ -23,11 +25,10 @@
   flex: 1 1 auto;
 
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: row wrap;
   align-items: center;
   align-content: flex-start;
 
-  padding: 0 5em 0 0;
 }
 .nav-block {
   display: flex;
@@ -39,7 +40,7 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
-  margin: 0 6em;
+  margin: 1em 6em;
 
   font-size: 1.5em;
 }
@@ -48,16 +49,29 @@
 /* bottom */
 .bottom {
   display: flex;
+  flex-flow: row wrap;
   justify-content: space-between;
   align-content: center;
 
-  height: 1em;
+  min-height: 1em;
   padding: 2em;
 
   color: var(--gray-color);
 
   font-size: 0.7em;
 }
-.bottom > div > span + span {
-  margin-left: 2em;
+.bottom > div > span {
+  margin-left: 1em;
+}
+.bottom > div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+
+@media (max-width: 800px) {
+  .nav-block {
+    padding: 1em 1em;
+  }
 }

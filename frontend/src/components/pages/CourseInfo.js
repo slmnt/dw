@@ -84,7 +84,7 @@ class Courseinfo extends Component {
             comment: this.reviewTextarea.current.value
         }).then(api.parseJson)
         .then(response => {
-            this.setState({reviews: response})
+            if (response) this.setState({reviews: response})
         })
 
         this.reviewTextarea.current.value = ''

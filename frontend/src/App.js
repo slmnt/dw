@@ -280,67 +280,65 @@ class App extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      <div className="pageContainer">
-        <div className="page">
-          <MainContext.Provider value={this.state.data}>
+      <div className="page">
+        <MainContext.Provider value={this.state.data}>
 
-            <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
-            </Navbar>
-            
-            <Drawer ref={this.drawer}/>
+          <Navbar className="topBar" onClickMenu={() => this.drawer.current.open()}>
+          </Navbar>
+          
+          <Drawer ref={this.drawer}/>
 
-            <main className="content">
-              <Scrollbars ref={this.scrollbar} className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
-                {/*
-                setting react router route
-                <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
-                */}
-                {/*
-                <div className={classNames({
-                  'hide': this.state.bgm,
-                  'player': true
-                })}>
-                  <Back id={this.state.bid}/>
-                </div>
-                  <Route path="/main" render={() => <Main />}/>
-                  <Route path="/right" component={Right} />
-                  <Route path="/tech"  component={Tech}/>
-                  <Route path="/test"  component={CourseInfo} />
-                */}
-                <Switch>
-                  <Route exact path="/"  render={() => <Main />}/>
+          <main className="content">
+            <Scrollbars ref={this.scrollbar} className="react-scrollbar" disablehorizontalscrolling="true" style={{ width: "100%", height: "100%" }}>
+              {/*
+              setting react router route
+              <Route exact path="/"  render={() => <Login test={this.statecallback} />}/>
+              */}
+              {/*
+              <div className={classNames({
+                'hide': this.state.bgm,
+                'player': true
+              })}>
+                <Back id={this.state.bid}/>
+              </div>
+                <Route path="/main" render={() => <Main />}/>
+                <Route path="/right" component={Right} />
+                <Route path="/tech"  component={Tech}/>
+                <Route path="/test"  component={CourseInfo} />
+              */}
+              <Switch>
+                <Route exact path="/"  render={() => <Main />}/>
 
-                  <Route path="/verify/:code" component={EmailVerify}/>
+                <Route path="/verify/:code" component={EmailVerify}/>
 
-                  <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
-                  <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
-                  <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
-                  
-                  <Route path="/search/user"  component={UserSearch}/>
-                  <Route path="/user/:id"  component={UserInfo}/>
+                <ProtectedRoute path="/signup"  component={CreateUser} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
+                <ProtectedRoute path="/login" render={() => <Login />} ok={!this.state.data.isLoggedIn} redirectTo="/mypage" processRedirect/>
+                <ProtectedRoute path="/mypage" render={() => <UserInfo isMyPage={true} />} ok={this.state.data.isLoggedIn} redirectTo="/login" redirectBack/>
+                
+                <Route path="/search/user"  component={UserSearch}/>
+                <Route path="/user/:id"  component={UserInfo}/>
 
-                  <Route path="/search/course"  render={()=> <CourseSearch/>}/>
-                  <Route exact strict path="/courseSearch" component={CourseSearch}/>
-                  <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
-                  <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
-                  <Route path="/course/:name/:id"  component={CourseInfo}/>
+                <Route path="/search/course"  render={()=> <CourseSearch/>}/>
+                <Route exact strict path="/courseSearch" component={CourseSearch}/>
+                <Route path="/course/:name/:id/edit"  component={CourseEditor} redirectTo="/login" />                  
+                <Route path="/course/:name/:id/:ch"  component={CourseGet}/>
+                <Route path="/course/:name/:id"  component={CourseInfo}/>
 
-                  <Route path="/forum"  component={Forum}/>
+                <Route path="/forum"  component={Forum}/>
 
-                  <Route path="/about" component={About}/>
-                  <Route path="/getting-started" component={GettingStarted}/>
-                  <Route path="/terms" component={Terms}/>
-                  <Route path="/privacy" component={Privacy}/>
+                <Route path="/about" component={About}/>
+                <Route path="/getting-started" component={GettingStarted}/>
+                <Route path="/terms" component={Terms}/>
+                <Route path="/privacy" component={Privacy}/>
 
-                  <Route path="/help"  component={NotFound}/>
-                  <Route path="/settings"  component={NotFound}/>
+                <Route path="/help"  component={NotFound}/>
+                <Route path="/settings"  component={NotFound}/>
 
-                  <Route component={NotFound}/>
-                </Switch>
-              </Scrollbars>
-            </main>
-          </MainContext.Provider>
-        </div>
+                <Route component={NotFound}/>
+              </Switch>
+            </Scrollbars>
+          </main>
+        </MainContext.Provider>
       </div>
     );
   }

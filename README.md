@@ -13,13 +13,20 @@ https://reactjs.org/docs/events.html
 https://www.google.com/doodles/celebrating-50-years-of-kids-coding   
       
    
-createuser -U postgres -P -I -E django *user-django-password:xsi123456*   
-createdb -E UTF-8 -O django -U postgres djangodb   
-psql -U django -W -h localhost djangodb      
-dropdb -U django djangodb      
-   
-      
-         
+`createuser -U postgres -P -I -E django`  
+*user-django-password:xsi123456*
+
+`createdb -E UTF-8 -O django -U postgres djangodb`   
+
+`psql -U django -W -h localhost djangodb`
+
+`dropdb -U django djangodb`
+
+`nginx -s quit`
+
+`gunicorn --daemon --workers 3 --bind unix:/home/kang/2018DW/back.sock back.wsgi`
+
+       
 # FIX List   
 Backend use Docker   
 Api request error fix solution-> js timer api request 5times   
