@@ -37,10 +37,11 @@
   border: 1px solid var(--main-color);
 }
 .form_layout{
-  padding: 2em;
+  padding: 1em;
   margin: auto;
   display: block;
-  width: 70%;
+  width: 100%;
+  box-sizing: border-box;
   text-align: left;
   border: 1px solid #1abc9c60;
 
@@ -64,45 +65,72 @@
   padding-top: 0.5em;
   padding-bottom: 1em;
 }
-.form_layout > div > div{
-  width: 45%;
-  display: inline-block;
-  text-align: right;
-}
+
 
 .form_layout > div  > div + div{
   text-align: center;
 }
 
-.form_btn{
-  margin-top: 1em;
-
+.form_input_container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-flow: column;
   align-content: center;
-  white-space: nowrap;
+  align-items: center;
+  justify-content: space-between;
 
+  font-size: 1.3em;
+}
+.form_input {
+  border-radius: 0.2em;
+  outline: none;
+  border: 1.5px solid var(--main-color);
+  
+  height: 1.8em;
+  max-width: 13em;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 0 0.6em;
+
+  font-size: 1em;
+}
+.form_input + .form_input {
+  margin-top: 1em;
 }
 
-.form_btn > a{
-  flex: 0 1 5em !important;
 
 
-
+.form_btn {
   color: white;
   flex: 0 0 auto;
 
-  border-radius: 0.5em;
+  border-radius: 0.2em;
   background-color: var(--main-color);
-  padding: 0.5em 2em;
   cursor: pointer;
 
-  margin: 0 0.5em;
+  height: 1.8em;
+  max-width: 13em;
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 2em;
+
+  text-align: center;
 }
 
-.form_btn > a:active{
+.form_btn:active{
   background-color: #28ddb9;
+}
+
+
+.form_bottom_controls {
+  margin-top: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  padding: 0 1em;
+  box-sizing: border-box;
 }
 
 .form_submit{

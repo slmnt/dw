@@ -230,6 +230,9 @@
 .continue-title {
     font-size: 2em;
 }
+.continue-btn-container {
+    padding: 0 1em;
+}
 .continue-btn {
     font-size: 2em;
     border: 1px solid var(--main-color);

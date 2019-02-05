@@ -162,8 +162,33 @@
   
 }
 
+.post-header {
+  display: flex;
+  flex-flow: row wrap;
+}
+.post-title {
+  flex: 1 1 auto;
+  font-weight: bold;
+}
 
+.post-avatar {
+  border-radius: 100%;
+  background-color: violet;
+  height: 1em;
+  width: 1em;
+}
+.post-user {
+  margin-left: 1em;
+}
 
+.post-date {
+  font-size: 0.8em;
+  color: var(--main-color);
+  text-align: right;
+}
+.post-date > span + span {
+  margin-left: 1em;
+}
 
 
 /* create thread */

@@ -85,13 +85,13 @@ class Pagination extends Component {
         <span className={styles["icon-btn"]} onClick={this.onClickFirst}>
           <FirstIcon />
         </span>
-        <span className={styles["icon-btn"]} onClick={this.onClickPrev} style={{marginRight: "1em"}}>
+        <span className={styles["icon-btn"]} onClick={this.onClickPrev} style={{marginRight: "-1em"}}>
           <PrevIcon />
         </span>
         {
           this.getButtons(this.props.first, this.props.last, this.props.maxButtons, this.props.currentPage)
         }
-        <span className={styles["icon-btn"]} onClick={this.onClickNext} style={{marginLeft: "1em"}}>
+        <span className={styles["icon-btn"]} onClick={this.onClickNext} style={{marginLeft: "-1em"}}>
           <NextIcon />
         </span>
         <span className={styles["icon-btn"]} onClick={this.onClickLast}>

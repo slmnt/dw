@@ -84,6 +84,10 @@
 .course-container {
     flex: 1 1 auto;
     padding: 0 5%;
+    margin: auto;
+    max-width: 40em;
+
+    box-sizing: border-box;
 
     display: flex;
     flex-flow: row wrap;
@@ -99,6 +103,7 @@
     padding: 0.5em 1.5em;
     margin-bottom: 1.2em;
     border: 1px solid var(--main-color);
+    background-color: white;
 
     font-size: 1.2em;
 }

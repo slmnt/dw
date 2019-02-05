@@ -144,8 +144,10 @@ class Main extends Component {
               <div className={styles["continue-title"]}>
                 今すぐ始めよう
               </div>
-              <div className={styles["continue-btn"]}>
-                <Link to="/signup">会員登録</Link>
+              <div className={styles["continue-btn-container"]}>
+                <div className={styles["continue-btn"]}>
+                  <Link to="/signup">会員登録</Link>
+                </div>
               </div>
           </div>
         

@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 
 import styles from './Forum.module.css';
 
-import Footer from '../Footer';
 import api from '../../modules/api'
-
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
+
+import Footer from '../Footer';
+import Pagination from '../Pagination';
 
 class TopicList extends Component {
   constructor(props) {
@@ -126,6 +127,11 @@ class Forum extends Component {
       isSearching: false,
       selectedCat: false,
       isCreating: false,
+
+      page: 1,
+      totalPages: 1,
+      pageSize: 10,
+
       categories: [
         {name: "すべて", id: "all"},
         {name: "質問", id: "qa"},
@@ -138,29 +144,50 @@ class Forum extends Component {
       posts: [
         {
           title: "コースの作成について",
-          text: "テスト"
+          text: "テスト",
+          avatar: "a",
+          user: "Kang, an intellectual",
+          cat: "test",
+          date: "2119/98/92",
         },
         {
           title: "編集方法",
-          text: "テスト"
+          text: "テスト",
+          avatar: "a",
+          user: "Kang, an intellectual",
+          cat: "test",
+          date: "2119/98/92",
         },
         {
           title: "hi",
-          text: "what"
+          text: "what",
+          avatar: "a",
+          user: "Kang, an intellectual",
+          cat: "test",
+          date: "2119/98/92",
         },
         {
           title: "hi",
-          text: "what"
+          text: "what",
+          avatar: "a",
+          user: "Kang, an intellectual",
+          cat: "test",
+          date: "2119/98/92",
         },
         {
           title: "hi",
-          text: "what"
+          text: "what",
+          avatar: "a",
+          user: "Kang, an intellectual",
+          cat: "test",
+          date: "2119/98/92",
         },
       ]
     }
   }
   componentDidMount() {
     this.selectCat('all');
+    this.setState({isSearching: false});
   }
   
   search = (e) => {
@@ -178,6 +205,22 @@ class Forum extends Component {
   hideCreatingForm = () => {
     this.setState({isCreating: false});
   }
+
+
+  clampPage = (v) => {
+    return Math.max(1, v);
+  }
+  goToPage = (v) => {
+    const page = this.clampPage(v);
+    this.state.setState({page: page}, () => {
+      this.search();
+    });
+  }
+  addToPage = (v) => {
+    this.goToPage(this.state.page + v)
+  }
+
+
   render() {
     return (
       <div className={styles.main}>
@@ -240,17 +283,36 @@ class Forum extends Component {
             this.state.posts.map((v, i) => {
               return (
                 <div key={i} className={styles["post"]}>
-                  <div>
-                    {v.title}
-                    <span>avatar</span>
-                    <span>username</span>
+                  <div className={styles["post-header"]}>
+                    <span className={styles["post-title"]}>{v.title}</span>
+                    <span>
+                      <span className={styles["post-avatar"]}>{v.avatar}</span>
+                      <span className={styles["post-user"]}>{v.user}</span>
+                    </span>
                   </div>
                   <div>{v.text}</div>
+                  <div className={styles["post-date"]}>
+                    <span>
+                      {v.cat}
+                    </span>
+                    <span>
+                      {v.date}
+                    </span>
+                  </div>
                 </div>
               )
             })
           }
           <div style={{height: "5em"}}></div>
+          <div className={styles["pagination-container"]}>
+            <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
+              onClickPrev={() => this.addToPage(-1)}
+              onClickNext={() => this.addToPage(1)}
+              onClickFirst={() => this.goToPage(1)}
+              onClickLast={() => this.goToPage(this.state.totalPages)}
+              onClickPage={(i) => this.goToPage(i)}
+            />
+          </div>
           <TopicList />
         </div>
         <Footer />

@@ -1,7 +1,7 @@
 
 
 .main {
-    padding: 3em 3em;
+    padding: 3em 1em;
 
     text-align: center;
     font-family: arial black,Yu Gothic;
@@ -27,7 +27,8 @@
 
 .create_form{
     margin: auto;
-    width: 80%;
+    width: 100%;
+    max-width: 30em;
     padding: 2em 0;
 }
 .create_form input, .create_form select {
@@ -36,13 +37,14 @@
 }
 
 .form_layout{
-    padding: 2em;
+    padding: 1em;
     margin: auto;
     display: block;
-    width: 70%;
+    width: 100%;
+    box-sizing: border-box;
     text-align: left;
     border: 1px solid #1abc9c60;
-
+  
     background-color: white;
 }
 

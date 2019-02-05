@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+
 
 //
 import styles from './Login.module.css';
-import {MainContext} from '../../contexts/main';
+import { processRedirect } from '../../modules/misc';
+import { MainContext } from '../../contexts/main';
 
 //
 import { ReactComponent as Logo } from '../../img/logo.svg';
@@ -33,9 +36,6 @@ class Login extends Component {
     onClickLogin = () => {
         this.context.login(this.state.name, this.state.password);
     }
-    onClickDrop = () => {
-        this.context.logout();
-    }
 
     handleChange = prop => event => {
         this.setState({ [prop]: event.target.value });
@@ -60,26 +60,15 @@ class Login extends Component {
                 <div className={styles.form_title}>
                   ログイン
                 </div>
-                <div>
-                  <div>
-                    <label>ID</label>
-                  </div>
-                  <div>
-                    <input onChange={this.handleChange('name')}></input>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <label>パスワード</label>
-                  </div>
-                  <div>
-                    <input type="password" onChange={this.handleChange('password')}></input>
+                <div className={styles.form_input_container}>
+                  <input className={styles.form_input} placeholder="ID" onChange={this.handleChange('name')}></input>
+                  <input className={styles.form_input} placeholder="パスワード" type="password" onChange={this.handleChange('password')}></input>
+                  <a className={styles.form_btn} onClick={this.onClickLogin}>ログイン</a>
+                  <div className={styles.form_bottom_controls}>
+                    <a onClick={() => processRedirect('/')}>キャンセル</a>
+                    <Link to="/signup">新規登録</Link>
                   </div>
                 </div>
-              <div className={styles.form_btn}>
-                <a className={styles.form_cancel} href="javascript:void(0)" onClick={this.onClickDrop} >キャンセル</a>
-                <a href="javascript:void(0)" onClick={this.onClickLogin}>ログイン</a>
-              </div>
               </div>
             </div>
             <br/>
