@@ -1118,21 +1118,28 @@ class Userthread(viewsets.ModelViewSet):
             pass 
         try:
             search = request.GET['search']
-            #category
             try:
-                user = User.objects.get(username=search)
-                objs = UserThread.objects.filter( 
-                    Q(auth=user) | Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
+                category = request.GET['cat']
+                if category == "all":
+                    objs = UserThread.objects.all().order_by('-updateat')
+                else:
+                    cate = Category.objects.get(name=category)
+                    objs = UserThread.objects.filter( 
+                        Q(category=cate) | Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
+
             except:
-                try:
-                    cate = Category.objects.get(name=search)
-                    objs = UserThread.objects.filter( 
-                        Q(category=cate) | Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
-                except:
-                    objs = UserThread.objects.filter( 
-                        Q(title__contains=text) | Q(context__contains=text)).order_by('-updateat')
+                objs = UserThread.objects.filter( 
+                    Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
         except:
-            objs = UserThread.objects.all().order_by('-updateat')
+            try:
+                category = request.GET['cat']
+                if category == "all":
+                    objs = UserThread.objects.all().order_by('-updateat')
+                else:
+                    cate = Category.objects.get(name=category)
+                    objs = UserThread.objects.filter(category=cate).order_by('-updateat')
+            except:
+                objs = []
 
         #make page json
         try:

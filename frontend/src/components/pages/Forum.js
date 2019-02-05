@@ -64,10 +64,7 @@ class TopicList extends Component {
     )
   }
 }
-
-
-
-
+//////////////////////////////////////////////////////////////
 
 class CreateThread extends Component {
   constructor(props) {
@@ -78,25 +75,17 @@ class CreateThread extends Component {
     this.descInput = React.createRef();
   }
 
-  componentDidMount(){
-    // test get
-    // run
-    //api.get(`/api/thread/?page=${1}&s=${20}&search=${"admin"}`).then(api.parseJson)
-    //.then(response => console.log(response)).catch()    
-  }
-
-  onPost = e => {
-
+  onPost = e => {    
     //run
+    const cat = this.props.category;
     const title = this.titleInput.current.value;
     const desc = this.descInput.current.value;
     api.ex_post('/api/thread/',{
       title: title,
       text: desc,
-      category: "Python"
-
+      category: cat
     })
-    if (this.props.onPost) this.props.onPost();
+    if (this.props.onCancel) this.props.onCancel();
   }
   onCancel = e => {
     if (this.props.onCancel) this.props.onCancel();
@@ -118,8 +107,14 @@ class CreateThread extends Component {
   }
 }
 
-
-
+/////////////////////////////////////////////////////////////////////////////////
+/* Category List
+  all
+  Question
+  Proposal
+  QNA
+  Challenge
+*/
 class Forum extends Component {
   constructor(props) {
     super(props);
@@ -134,11 +129,11 @@ class Forum extends Component {
 
       categories: [
         {name: "すべて", id: "all"},
-        {name: "質問", id: "qa"},
+        {name: "質問", id: "Question"},
         {name: "がんくんへの質問", id: "gqa"},
-        {name: "提案", id: "pp"},
-        {name: "コース作成について", id: "cr"},
-        {name: "問題", id: "pr"},
+        {name: "提案", id: "Proposal"},
+        {name: "コース作成について", id: "QNA"},
+        {name: "問題", id: "Challenge"},
         {name: "質問", id: "q"},
       ],
       posts: [
@@ -190,13 +185,23 @@ class Forum extends Component {
     this.setState({isSearching: false});
   }
   
+  load = () => {
+    // console.log("search: ")
+    api.get(`/api/thread/?page=${1}&s=${20}&cat=${this.state.selectedCat}`).then(api.parseJson)
+    .then(response => {
+      this.setState({
+        posts: response.threads
+      })
+    }).catch() 
+  }
   search = (e) => {
-    console.log("search: ")
-    this.setState({isSearching: true});
+    this.load();
+    this.setSearch(true);
   }
   selectCat = (catId) => {
-    this.search();
-    this.setState({selectedCat: catId});
+    this.setState({selectedCat: catId}, () => {
+      this.load();
+    });
   }
 
   showCreatingForm = () => {
@@ -204,6 +209,7 @@ class Forum extends Component {
   }
   hideCreatingForm = () => {
     this.setState({isCreating: false});
+    this.search()
   }
 
 
@@ -259,7 +265,7 @@ class Forum extends Component {
             <div className={styles["toolbar-left"]}>
               {
                 this.state.categories.map((v, i) => {
-                  return <div key={i} className={this.state.selectedCat === v.id && styles["toolbar-item-selected"]} onClick={() => this.selectCat(v.id)}>
+                  return <div key={i} className={this.state.selectedCat === v.id && styles["toolbar-item-selected"]} onClick={() => {this.selectCat(v.id); this.setState({isSearching: true}); } }>
                     {v.name}
                   </div>
                 })
@@ -273,7 +279,7 @@ class Forum extends Component {
             <div styles={{width: "100%"}}>
               {
                 this.state.isCreating ?
-                  <CreateThread onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
+                  <CreateThread category={this.state.selectedCat} oanPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
                 :
                   <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
               }
@@ -292,6 +298,7 @@ class Forum extends Component {
                   </div>
                   <div>{v.text}</div>
                   <div className={styles["post-date"]}>
+                    <span>{v.context}</span>
                     <span>
                       {v.cat}
                     </span>
