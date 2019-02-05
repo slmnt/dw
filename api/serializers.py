@@ -89,11 +89,18 @@ class UserCourseCommentSerializer(serializers.ModelSerializer):
         model = UserCourseComment
         fields = ('auth','comment','createat')
 
+class UserChapterAnswerSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = UserChapterAnswer
+        fields = ('context','id')
+
+
 class UserCourseContentIndexSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserCourseContentIndex
-        fields = ('context','id')
+        fields = ('context','aid')
 
 class UserBoardSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()

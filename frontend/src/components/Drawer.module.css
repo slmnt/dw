@@ -9,7 +9,7 @@
     background-color: white;
     z-index: 1;
     
-    transition-timing-function: cubic-bezier(.1, 1, .2, 0.8);
+    transition-timing-function: cubic-bezier(.1, 1, .2, 0.1);
     transition: left 0.5s;
     scrollbar-width: thin;
     scrollbar-color: var(--light-color) rgba(0, 0, 0, 0);
