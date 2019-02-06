@@ -1208,7 +1208,6 @@ class ChapterAnswer(viewsets.ModelViewSet):
         root = User.objects.get(username=request.user)
         id = request.data['id']
         cid = request.data['cid']
-        sid = request.data['aid']
         text = request.data['context']
         course = UserCourse.objects.get(id=id)
         if root == course.root:

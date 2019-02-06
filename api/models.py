@@ -97,7 +97,6 @@ class UserCourseContent(models.Model):
 class UserChapterAnswer(models.Model):
     root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
     context = models.TextField()
-    aid = models.IntegerField(default=-1,validators=[MinValueValidator(-1), MaxValueValidator(30)])
     
 ######
 # Coutse Chapter Slides

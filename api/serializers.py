@@ -93,7 +93,7 @@ class UserChapterAnswerSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserChapterAnswer
-        fields = ('context','aid')
+        fields = ('context')
 
 
 class UserCourseContentIndexSerializer(serializers.ModelSerializer):
