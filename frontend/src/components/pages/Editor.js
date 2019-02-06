@@ -394,8 +394,6 @@ class Editor extends Component {
     this.chapterMenuNameInput = React.createRef();
     this.chapterMenuDescInput = React.createRef();
     
-    this.answerTextArea = React.createRef();
-
     this.slideEditor = React.createRef();
     this.fileEditor = React.createRef();
 
@@ -514,7 +512,7 @@ class Editor extends Component {
     this.sortSlides();
 
     // 答え
-    const ans = this.answerTextArea.current.getValue();
+    const ans = this.getAnswer();
 
     // course
     await api.ex_post('/api/updatecourse/',{
@@ -601,7 +599,7 @@ class Editor extends Component {
     if (!chapter) return;
     this.setState({currentChapter: chapter}, () => {
       this.setChapterNameText(chapter.name);
-      this.answerTextArea.current.value = chapter.answer;
+      this.setAnswer(chapter.answer);
 
       const c = this.getSlide(0);
       this.openSlide(c); // slide がない場合もそのまま
@@ -738,6 +736,18 @@ class Editor extends Component {
     }
 
     this.setState({chapters: this.state.chapters})
+  }
+
+  setAnswer = v => {
+    //this.answerTextArea.current.value = chapter.answer;
+    if (this.state.currentChapter) {
+      this.state.currentChapter.answer = v;
+      this.setState({chapters: this.state.chapters});
+    }
+  }
+  getAnswer = () => {
+    //return this.answerTextArea.current.getValue();
+    return this.answerText || "";
   }
 
   // slide
@@ -1009,7 +1019,38 @@ class Editor extends Component {
                   答えを記入
                 </div>
                 <div className={styles["answer-textarea-container"]}>
-                  <TextArea ref={this.answerTextArea} />
+                  <CKEditor
+                    editor={ ClassicEditor }
+                    data={this.state.currentChapter && this.state.currentChapter.answer}
+                    config={{
+                      height: "550px",
+                      width: "100%",
+                      fullPage: false,
+                      autoGrow_maxHeight: "100%",
+                      resize_enabled: true,
+                      resize_minWidth: 200,
+                      resize_minHeight: 400,
+                      resize_dir: 'vertical',
+                      //removePlugins: 'size,autogrow',
+                    }}
+                    onInit={ editor => {
+                        // You can store the "editor" and use when it is needed.
+                        //console.log( 'Editor is ready to use!', editor );
+                        //console.log(editor)
+                        //console.log(this)
+                        //editor.resize('200', '400', true)
+                      } }
+                    onChange={ ( event, editor ) => {
+                      this.answerText = editor.getData();
+                      // this.props.setSlideText(data);
+                    } }
+                    onBlur={ editor => {
+                        //console.log( 'Blur.', editor );
+                    } }
+                    onFocus={ editor => {
+                        //console.log( 'Focus.', editor );
+                    } }
+                  />
                 </div>
               </div>
             </div>

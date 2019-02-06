@@ -1,4 +1,5 @@
 import React from 'react';   
+import classNames from 'classnames';
 
 import * as monaco from 'monaco-editor';
 //Editor component path set localhost:3000/course/<:id>/edit 
@@ -37,6 +38,13 @@ class TextEditor extends React.Component {
       this.content = {
         "/src/index.js": "const a = 0;",
         "/app.js": "const あこどぉう = 'ういえおｋ';"
+      }
+
+      this.languages = {
+          'py': 'python',
+          'js': 'javascript',
+          'c': 'c',
+          'cpp': 'cpp',
       }
   }
   componentDidMount(){
@@ -78,12 +86,46 @@ class TextEditor extends React.Component {
           language: 'python',
           theme: "vs-dark",
       })
+      this.editorModel = this.editor.getModel();
+      this.editorModel.onDidChangeContent(this.onEditorChange);
+      this.editor.onKeyDown(this.onEditorKeyDown);
   }
   onEditorResize(width, height) {
       // console.log(width, height)
       this.editor.layout({width, height});
       //this.tabList.current.style.width = width + "px"
   }
+  onEditorChange = (e) => {
+    this.setTabChanged(this.state.currentTab, true);
+  }
+  onEditorKeyDown = (e) => {
+    if (e.ctrlKey && e.code == 'KeyS') {
+        this.saveTab(this.currentTab);
+    }
+  }
+  setTabChanged = (path, changed) => {
+    let tab =  this.getTab(path);
+    if (tab) {
+        tab.changed += changed ? 1 : 0;
+        this.setState({tabs: this.state.tabs});
+        console.log(tab.path, "changed");
+    }
+  }
+
+  updateLanguage = () => {
+      const m = this.state.currentTab.match(/.*\.(.*?)$/);
+      const lang = m && this.languages[m[1]];
+      if (lang) {
+          this.setLanguage(lang);
+      }
+  }
+  setLanguage = (lang) => {
+    if (this.editorModel && lang) {
+        monaco.editor.setModelLanguage(this.editorModel, lang);
+        console.log("set language to:", lang);
+    }
+  }
+
   setEditorScroll(top, left) {
       this.editor.setScrollPosition({scrollTop: top, scrollLeft: left});
   }
@@ -149,7 +191,8 @@ class TextEditor extends React.Component {
           scroll: null,
           selections: null,
           cursor: null,
-          init: false
+          init: false,
+          changed: 0,
       };
       newTabs.push(tab);
 
@@ -162,9 +205,6 @@ class TextEditor extends React.Component {
   }
   closeTab(path) {
     console.log("close", path)
-
-    // 自動保存
-    this.props.save(path, this.getTabValue(path));
 
     //
       let tabId = this.getTabIndex(path);
@@ -210,6 +250,7 @@ class TextEditor extends React.Component {
   }
   saveTab = (path) => {
     this.props.save(path, this.getTabValue(path));
+    this.setTabChanged(path, false);
   }
   saveTabState(tab) {
       if (!tab) return;
@@ -256,6 +297,8 @@ class TextEditor extends React.Component {
           tab.init = true;
 
           this.showEditor();
+
+          this.updateLanguage();
       }).bind(this));
       
   }
@@ -330,6 +373,23 @@ class TextEditor extends React.Component {
       return this.content[path] || '';
   }
 
+
+  onClickCloseTab = path => {
+    const tab = this.getTab(path);
+    if (tab.changed > 1) {
+        let result = window.confirm('タブを保存しますか？');
+        if (result) {
+            this.saveTab(path);
+        } else {
+            result = window.confirm('変更を破棄しますか？');
+            if (!result) {
+                return;
+            }
+        }
+    }
+    this.closeTab(path); // e.currentTarget.dataset["tabpath"] は使えない
+  }
+
   outputToTerm = (text) => {
       this.term.current.getOutput(text);
   }
@@ -396,10 +456,10 @@ class TextEditor extends React.Component {
                     </span>
                     <span className={styles["window-tab-name"]}>{v.name}</span>
                     <span
-                        className={styles["window-tab-close"]}
+                        className={classNames(styles["window-tab-close"], v.changed > 1 ? styles["window-tab-edited"] : "")}
                         onClick={
                             ((e) => {
-                                this.closeTab(v.path); // e.currentTarget.dataset["tabpath"] は使えない
+                                this.onClickCloseTab(v.path);
                                 e.stopPropagation();
                             }).bind(this)
                         }

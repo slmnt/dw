@@ -199,7 +199,12 @@ class CourseGet extends Component {
                         
                         <div className={styles["slide-intro"]} style={{display: this.state.currentSlideId === -1 && !this.state.showAnswer ? "" : "none"}}>
                             <div className={styles["slide-intro-name"]}>
-                                チャプター {parseInt(this.state.chapterId)}: {this.state.chapterName}
+                                <span>
+                                    チャプター {parseInt(this.state.chapterId)}: 
+                                </span>
+                                <span style={{marginLeft: "2em"}}>
+                                    {this.state.chapterName}
+                                </span>
                             </div>
                             <div className={styles["slide-intro-desc"]}>
                                 {this.state.chapterDesc}
