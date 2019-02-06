@@ -132,7 +132,6 @@ class Forum extends Component {
         {name: "質問", id: "Question"},
         {name: "提案", id: "Proposal"},
         {name: "問題", id: "Challenge"},
-        {name: "質問", id: "Question"},
         {name: "コース作成について", id: "QNA"},
       ],
       posts: [
@@ -188,11 +187,13 @@ class Forum extends Component {
   
   load = () => {
     // console.log("search: ")
-    api.get(`/api/thread/?page=${1}&s=${20}&cat=${this.state.selectedCat}`).then(api.parseJson)
+    const kw = this.searchBox.current.value;
+    api.get(`/api/thread/?page=${1}&s=${20}&search=${kw}&cat=${this.state.selectedCat}`).then(api.parseJson)
     .then(response => {
       console.log(response)
       const posts = response.threads.map((v, i) => {
         return {
+          id: v.id,
           user: v.auth,
           title: v.title,
           text: v.context,

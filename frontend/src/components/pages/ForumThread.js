@@ -55,7 +55,7 @@ class ForumPost extends Component {
             {this.props.text}
           </div>
           <div className={styles["post-date"]}>
-            2019年 15月 58日
+            {this.props.date}
           </div>
         </div>
       </div>
@@ -68,13 +68,16 @@ class ForumThread extends Component {
     super(props);
     this.state = {
       id: this.props.match.params.id,
-      title: "test thread",
+      title: "",
       op: {
+        /*
         user: "Kang the conquerer",
         text: "I came, I saw, I conquererd",
         date: "",
+        */
       },
       comments: [
+        /*
         {
           user: "Kang the destroyer",
           text: "I praise the lord, then break the law",
@@ -83,11 +86,12 @@ class ForumThread extends Component {
           user: "Kang the savage",
           text: "I take what's mine, then take some more",
         }
+        */
       ]
     }
   }
   componentDidMount() {
-    api.get(`/api/thread/?id=${this.props.match.params.id}`).then(api.parseJson)
+    api.get(`/api/thread/?id=${this.state.id}`).then(api.parseJson)
     .then(response => {
       console.log(response)
       if (response) {
@@ -104,9 +108,18 @@ class ForumThread extends Component {
       console.log(e)
     }) 
 
-    api.get(`/api/threadcomment/?id=${this.props.match.params.id}`).then(api.parseJson)
+    api.get(`/api/threadcomment/?id=${this.state.id}`).then(api.parseJson)
     .then(response => {
       console.log(response)
+      if (!response) return;
+      const comments = response.map((v, i) => {
+        return {
+          user: v.auth,
+          text: v.comment,
+          date: this.convertdata(v.createat),
+        }
+      });
+      this.setState({comments: comments})
     }).catch(e => {
       console.log(e)
     }) 
@@ -115,11 +128,21 @@ class ForumThread extends Component {
   }
 
   PostCommnet = (e) => {
-    api.ex_post(`/api/threadcomment/?id=${this.props.match.params.id}`,{
+    api.ex_post(`/api/threadcomment/?id=${this.state.id}`,{
       text: e
     }).then(api.parseJson)
     .then(response => {
       console.log(response)
+      if (response) {
+        const comments = response.map((v, i) => {
+          return {
+            user: v.auth,
+            text: v.comment,
+            date: this.convertdata(v.createat),
+          }
+        });
+        this.setState({comments: comments})
+      }
     }).catch(e => {
       console.log(e)
     }) 
@@ -142,7 +165,7 @@ class ForumThread extends Component {
           </div>
           <div className={styles["thread-comments-container"]}>
             <div className={styles["thread-comments-title"]}>
-              {`${this.state.comments.length + 1} コメント`}
+              {`${this.state.comments.length} コメント`}
             </div>
             <div className={styles["thread-post-comment-container"]}>
               <CreatePost post={this.PostCommnet}/>
@@ -151,7 +174,7 @@ class ForumThread extends Component {
               this.state.comments.map((v, i) => {
                 return ( 
                   <div key={i} className={styles["thread-comment"]}>
-                    <ForumPost key={i} user={v.user} text={v.text} />
+                    <ForumPost key={i} user={v.user} text={v.text} date={v.date} />
                   </div>
                 )
               })

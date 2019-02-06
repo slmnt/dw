@@ -121,7 +121,7 @@ class UserThreadCommentSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()
     
     class Meta:
-        model = UserBoardAnswer
+        model = UserThreadComment
         fields = ('auth','comment','createat')
 
 class CategorySerializer(serializers.ModelSerializer):

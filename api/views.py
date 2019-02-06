@@ -1121,13 +1121,15 @@ class Userthread(viewsets.ModelViewSet):
             pass 
         try:
             search = request.GET['search']
+            if search == "":
+                raise Exception
             try:
                 category = request.GET['cat']
                 if category == "all":
                     objs = UserThread.objects.all().order_by('-updateat')
                 else:
                     cate = Category.objects.get(name=category)
-                    objs = UserThread.objects.filter( 
+                    objs = UserThread.objects.filter(
                         Q(category=cate) | Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
 
             except:
@@ -1197,7 +1199,8 @@ class UserThreadcomment(viewsets.ModelViewSet):
         target = UserThread.objects.get(id=int(id))
         queryset = UserThreadComment(root=target,auth=request.user,comment=context)
         queryset.save()
-        queryset = UserThreadComment.objects.all()
+        target = UserThread.objects.get(id=int(id))
+        queryset = UserThreadComment.objects.all().filter(root=target)
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
