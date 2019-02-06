@@ -193,6 +193,8 @@
 .review-list > div {
   padding: 1em 1em;
   border-bottom: 1px solid #1abc9c60;
+  background-color: white;
+  box-shadow: 0 0 2px #00000010;
 }
 .review-text {
   margin-top: 1em;

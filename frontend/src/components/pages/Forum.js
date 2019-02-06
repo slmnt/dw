@@ -298,7 +298,7 @@ class Forum extends Component {
             <div style={{width: "100%"}}>
               {
                 this.state.isCreating ?
-                  <CreateThread category={this.state.selectedCat} oanPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
+                  <CreateThread category={this.state.selectedCat} onPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
                 :
                   <button className={styles["create-btn"]} onClick={this.showCreatingForm}>スレッドを新規作成</button>
               }
@@ -328,7 +328,7 @@ class Forum extends Component {
               )
             })
           }
-          <div style={{height: "30em"}}></div>
+          <div style={{height: "0em"}}></div>
           <div className={styles["pagination-container"]}>
             <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
               onClickPrev={() => this.addToPage(-1)}
