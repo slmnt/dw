@@ -74,9 +74,12 @@ class CourseGet extends Component {
                 this.setState({
                     courseName: response.root,
                     chapterName: response.title,
-                    chapterDesc: response.description
+                    chapterDesc: response.description,
+                    answer: response.answer || "",
                 })
             }
+        }).catch(e => {
+            console.log(e);
         })
         
 

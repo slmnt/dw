@@ -6,8 +6,8 @@ import styles from './Editor.module.css';
 import FileEditor from '../FileEditor';
 import TestIFrame from '../TestIFrame';
 
-import 'highlight.js/styles/vs.css'
-import hljs from 'highlight.js';
+//import 'highlight.js/styles/vs.css'
+//import hljs from 'highlight.js';
 
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -38,11 +38,14 @@ import { ReactComponent as AnsIcon } from '../../img/spellcheck.svg';
 */
 
 // highlight.js
+/*
 window.hljs = hljs;
 hljs.configure({
   languages: ['javascript', 'ruby', 'python'],
   useBR: false,
 });
+*/
+
 //
 class TextBox extends React.Component {
   constructor(props) {
@@ -426,7 +429,7 @@ class Editor extends Component {
     u = `/chapter/?u=${this.state.id}`
     axios.get(u).then(response => {
       // chapters
-      chapters = response.data
+      chapters = response.data;
 
       let newChapters = [];
 
@@ -436,6 +439,7 @@ class Editor extends Component {
         let ch = {};
         ch.name = c.title;
         ch.desc = c.descriptoin;
+        ch.answer = c.answer;
         ch.slides = [];
         newChapters.push(ch);
     
@@ -466,6 +470,7 @@ class Editor extends Component {
           newChapters.push({
             name: "テストチャプター",
             desc: "テスト",
+            answer: "",
             slides: []
           })
         }
@@ -530,9 +535,10 @@ class Editor extends Component {
       //name, desc
       let c2 = await api.ex_post('/api/chapter/',{
         'id': this.state.id,
-        'cid':idx,
-        'title':c.name,
-        'desc':c.desc
+        'cid': idx,
+        'title': c.name,
+        'desc': c.desc,
+        'ans': ans,
       })
       
       for(let s of slides){
@@ -595,8 +601,8 @@ class Editor extends Component {
   openChapter = (chapter) => {
     if (!chapter) return;
     this.setState({currentChapter: chapter}, () => {
-      //this.chapterNameInput.current.value = chapter.name;
       this.setChapterNameText(chapter.name);
+      this.answerTextArea.current.value = chapter.answer;
 
       const c = this.getSlide(0);
       this.openSlide(c); // slide がない場合もそのまま
