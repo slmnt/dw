@@ -1112,8 +1112,9 @@ class Userthread(viewsets.ModelViewSet):
 
     def get(self, request):
         try:
-            id = request.GET['id']
-            queryset = UserThread.objects.get(id=int(id))
+            ids = request.GET['id']
+            print(ids)
+            queryset = UserThread.objects.get(id=ids)
             serializer = UserThreadSerializer(queryset)
             return Response(data=serializer.data,status=status.HTTP_200_OK)
         except:

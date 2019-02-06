@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './ForumThread.module.css';
+import api from '../../modules/api'
 
 class CreatePost extends Component {
   constructor(props) {
@@ -65,6 +66,7 @@ class ForumThread extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: this.props.match.params.id,
       title: "test thread",
       op: {
         user: "Kang the conquerer",
@@ -81,6 +83,15 @@ class ForumThread extends Component {
         }
       ]
     }
+  }
+  componentDidMount() {
+    api.get(`/api/thread/?id=${this.props.match.params.id}`).then(api.parseJson)
+    .then(response => {
+      console.log(response)
+    }).catch(e => {
+      console.log(e)
+    }) 
+
   }
   render(){
     return (

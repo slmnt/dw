@@ -365,11 +365,7 @@ class FileEditor extends React.Component {
   }
   remoteExec = (cmd, base_url, callback) => {
     let cmds = cmd.split(' ')
-
     switch(cmds[0]){
-      case "javac":
-      case "gcc":
-      case "ruby":
       case "python":
         //Upload Dir tree, Running this cmd
         this.uploadFiles(base_url)
@@ -384,32 +380,46 @@ class FileEditor extends React.Component {
           this.outputToTerm(response);
           if (callback) callback(response)
         })
+      case "javac":
+      case "gcc":
+      case "ruby":
       default:
+        this.outputToTerm("無効な入力です");
         break
     }
   }
   localExec = (cmd, callback) => {
     let parser = cmd.split(' ')
-    // console.log(parser)
-    
-    let arg = "/" + parser[1];
-    // console.log(this.state.files)
-    // console.log(arg)
-    // console.log(this.state.files[arg])
-    let text = this.window.current.getTabValue(arg) || this.state.files[arg];
-    if (!text) return;
+    switch(parser[0]){
+      case 'python':
+        // console.log(parser)
+        
+        let arg = "/" + parser[1];
+        // console.log(this.state.files)
+        // console.log(arg)
+        // console.log(this.state.files[arg])
+        let text = this.window.current.getTabValue(arg) || this.state.files[arg];
+        if (!text) return;
 
-    console.log(text)
+        console.log(text)
 
-    api.ex_post('/api/python/',{
-        contents: text 
-    }).then(api.parseJson).then(response => {
-        if (!response) return;
-        console.log(response)
+        api.ex_post('/api/python/',{
+            contents: text 
+        }).then(api.parseJson).then(response => {
+            if (!response) return;
+            console.log(response)
 
-        this.outputToTerm(response);
-        if (callback) callback(response);
-    });
+            this.outputToTerm(response);
+            if (callback) callback(response);
+        });
+        break;
+      case "javac":
+      case "gcc":
+      case "ruby":
+      default:
+        this.outputToTerm("無効な入力です");
+        break
+    }
   }
   outputToTerm = (text) => {
     this.window.current.outputToTerm(text);

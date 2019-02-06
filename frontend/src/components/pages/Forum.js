@@ -298,7 +298,7 @@ class Forum extends Component {
               return (
                 <div key={i} className={styles["post"]}>
                   <div className={styles["post-header"]}>
-                    <span className={styles["post-title"]}>{v.title}</span>
+                    <span className={styles["post-title"]}><Link to={`/forum/thread/${v.id}`}>{v.title}</Link></span>
                     <span>
                       <span className={styles["post-avatar"]}>{v.avatar}</span>
                       <span className={styles["post-user"]}>{v.auth}</span>
