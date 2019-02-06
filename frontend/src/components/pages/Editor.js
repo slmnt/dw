@@ -482,15 +482,6 @@ class Editor extends Component {
 
 
 
-    // dirtree
-    api.ex_post('/api/usercoursetree/',{
-      url: `/Course/${this.state.id}/`,
-    }).then(api.parseJson).then(response => {
-        if (!response) return;
-        console.log(response)
-        this.fileEditor.current.importFiles(response);
-        this.fileEditor.current.importDir(response);
-    });
 
 
   }
@@ -603,6 +594,19 @@ class Editor extends Component {
 
       const c = this.getSlide(0);
       this.openSlide(c); // slide がない場合もそのまま
+
+      // dirtree
+      const chapterId = this.state.chapters.indexOf(chapter) + 1;
+      api.ex_post('/api/usercoursetree/',{
+        courseId: this.state.id,
+        chapterId: chapterId,
+      }).then(api.parseJson).then(response => {
+          if (!response) return;
+          console.log(response)
+          this.fileEditor.current.importFiles(response);
+          this.fileEditor.current.importDir(response);
+      });
+
     });
   }
   openSlide = (slide) => {

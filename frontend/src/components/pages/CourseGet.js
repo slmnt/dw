@@ -39,6 +39,8 @@ class CourseGet extends Component {
             chapterName: "",
             chapterDesc: "",
 
+            chapters: [],
+
             showSlide: true,
             currentSlideId: -1,
             slides: [
@@ -59,7 +61,23 @@ class CourseGet extends Component {
     }
 
     componentDidMount(){
+        this.load();
+    }
+    componentDidUpdate() {
+        console.log("hyy", this.state.chapterId)
+        if (history.location.pathname != this.prevPath) {
+            this.prevPath = history.location.pathname;
+            this.setState({
+                courseId: this.props.match.params.id,
+                chapterId: this.props.match.params.ch,
+                author: this.props.match.params.name,    
+            }, () => {
+                this.load();
+            })
+        }
+    }
 
+    load = () => {
         this.showSlide();
 
 
@@ -85,7 +103,22 @@ class CourseGet extends Component {
         }).catch(e => {
             console.log(e);
         })
-        
+
+        // chapters
+        api.get(`/api/chapter/?u=${this.state.courseId}`).then(api.parseJson)
+        .then(response => {
+            if (response) {
+                const chapters = response.map(v => {
+                    return {
+                        id: v.cid,
+                        name: v.title,
+                        desc: v.descriptoin,
+                        answer: v.answer,
+                    }
+                })
+                this.setState({chapters: chapters});
+            }
+        });
 
         //slides
         //
@@ -105,16 +138,16 @@ class CourseGet extends Component {
 
         // dirtree
         api.ex_post('/api/usercoursetree/',{
-            url: `/Course/${this.state.courseId}/`,
+            courseId: this.state.courseId,
+            chapterId: this.state.chapterId,
         }).then(api.parseJson).then(response => {
-            if (!response) return;
             console.log(response)
+            if (!response) return;
             this.fileEditor.current.importFiles(response);
             this.fileEditor.current.importDir(response);
             this.setState({files: this.state.files})
         });
     }
-
 
 
     showSlide = () => {
@@ -158,8 +191,8 @@ class CourseGet extends Component {
     
     goToChaper = (v) => {
         let cid = parseInt(this.state.chapterId) + parseInt(v);
-        if (v >= 0) {
-            history.push(`/course/${this.context.uid}/${this.state.courseId}/${cid}`);
+        if (cid >= 0) {
+            history.push(`/course/${this.state.author}/${this.state.courseId}/${cid}`);
         }
     }
     showAnswer = (v) => {
@@ -180,8 +213,14 @@ class CourseGet extends Component {
                     </div>
                     <div className={styles["header-controls"]}>
                         <div className={styles["header-controls-ans"]} onClick={() => {this.showSlide(); this.showAnswer();}}>答えを見る</div>
-                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(-1)}>前のチャプター</div>
-                        <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(1)}>次のチャプター</div>
+                        {
+                            this.state.chapterId > 1 &&
+                            <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(-1)}>前のチャプター</div>
+                        }
+                        {
+                            this.state.chapterId < this.state.chapters.length &&
+                            <div className={styles["header-controls-btn"]} onClick={() => this.goToChaper(1)}>次のチャプター</div>
+                        }
                     </div>
                 </div>
 

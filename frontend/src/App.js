@@ -137,8 +137,8 @@ class App extends React.Component {
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
 
-    api.get('/api/category/').then(api.parseJson)
-    .then(response => console.log(response)).catch()
+    //api.get('/api/category/').then(api.parseJson)
+    //.then(response => console.log(response)).catch()
   }
   componentDidMount(){
 
@@ -336,7 +336,7 @@ class App extends React.Component {
                 {/*
                 <Route path="/getting-started" component={GettingStarted}/>
                 */}
-                <Route path="/getting-started" component={Main}/>
+                <Route path="/getting-started" render={() => <Main />}/>
                 <Route path="/terms" component={Terms}/>
                 <Route path="/privacy" component={Privacy}/>
 

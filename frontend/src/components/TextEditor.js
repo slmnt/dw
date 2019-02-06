@@ -54,7 +54,11 @@ class TextEditor extends React.Component {
     window.removeEventListener("resize", this.updateEditorSize);
   }
   updateEditorSize = (e) => {
-      if ( (e.timeStamp - this.lastSizeUpdate) < 500 ) return;
+      if ( (e.timeStamp - this.lastSizeUpdate) < 500 ) {
+        if (this.resizeTimer) window.clearTimeout(this.resizeTimer);
+        this.resizeTimer = window.setTimeout(this.resizeEditor, 500);
+        return;
+      }
       if (this.editor) {
           this.resizeEditor();
 
@@ -62,6 +66,8 @@ class TextEditor extends React.Component {
         }
     }
   resizeEditor = () => {
+    if (this.resizeTimer) window.clearTimeout(this.resizeTimer)
+
     let rect = this.editorContainer.getBoundingClientRect();
     this.onEditorResize(rect.width, rect.height);
     this.term.current.updateTerminalSize();

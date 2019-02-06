@@ -207,7 +207,9 @@
 
 /* collapsing slide */
 .slide-collapsed {
-  width: 4em;
+  flex: 0 0 auto;
+
+  width: 3em;
   top: 0;
   left: 0;
   background-color: var(--bg-color);

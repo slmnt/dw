@@ -2,8 +2,9 @@ import axios from 'axios';
 import cookie from 'cookie';
 
 /* API 要求 モジュール */
-const PROTOCOL = 'http';
-const HOST = process.env.NODE_ENV === 'production' ? '133.167.69.153' : 'localhost:8000';
+const isProduction = process.env.NODE_ENV === 'production';
+const PROTOCOL = isProduction ? 'https' : 'http';
+const HOST = isProduction ? 'studio-stair.com' : 'localhost:8000';
 const BASE_URL = PROTOCOL + '://' + HOST;
 
 function fetch_extend(method, url, option, nocookie) {

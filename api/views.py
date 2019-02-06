@@ -43,7 +43,7 @@ from Crypto.Hash import SHA256
 DOCKDIR = BASE_DIR + '//docker//python//'
 DOCKFILES = BASE_DIR + '//docker//'
 STATIC = BASE_DIR + '//static//'
-STORAGE = BASE_DIR + '//frontend//public//'
+STORAGE = BASE_DIR + '//frontend//public//users//'
 PAGESIZE = 20
 MAX_PAGESIZE = 20
 
@@ -779,7 +779,7 @@ class CreateSlide(viewsets.ModelViewSet):
         return Response(data=data,status=status.HTTP_200_OK)
 
     def get(self, request):
-        try:
+        #try:
             id = request.GET['id']
             cid = request.GET['cid']
             id = int(id)
@@ -789,8 +789,8 @@ class CreateSlide(viewsets.ModelViewSet):
             queryset = UserCourseContentIndex.objects.all().filter(root=target).order_by('sid')
             serializers = UserCourseContentIndexSerializer(queryset,many=True)
             return Response(data=serializers.data,status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        #except:
+        #    return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChapterSourceCodeCreate(viewsets.ModelViewSet):
@@ -902,8 +902,10 @@ class getUserTree(viewsets.ModelViewSet):
     #url: base_url
     def post(self, request):
         data = {}
-        target = request.data['url'] 
-        path = STORAGE + str(request.user)
+        target = request.data['courseId']
+        chapterId = request.data['chapterId']
+        print(target, chapterId)
+        path = os.path.join(STORAGE, str(request.user))
         try:
             for p in target.split('/'):
                 path = os.path.join(path,p)

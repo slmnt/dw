@@ -57,9 +57,9 @@ class Term extends React.Component {
           return;
       }
       this.termElement = element;
-      let rect = element.getBoundingClientRect();
-      element.style.width = rect.width + "px";
-      element.style.height = (this.props.height || rect.height) + "px";
+      //let rect = element.getBoundingClientRect();
+      //element.style.width = rect.width + "px";
+      //element.style.height = (this.props.height || rect.height) + "px";
 
       let term = new xterm.Terminal({
         cursorBlink: true
@@ -134,8 +134,8 @@ class Term extends React.Component {
           term.ix = term.x;
           term.iy = term.y;
           //console.log("prompt", term.x, term.y);
+          term.allowInput  = true;
         });
-        term.allowInput = true;
       };
       term.addLineBreak = () => {
         term.write2(ansiEscapes.cursorTo(term.mx - 1, term.my - 1));
@@ -320,6 +320,7 @@ class Term extends React.Component {
 
     updateTerminalSize() {
       if (!this.term) return;
+      /*
       const cols = this.term.cols;
       const rows = this.term.rows;
       const width = (cols * this.term._core.renderer.dimensions.actualCellWidth + this.term._core.viewport.scrollBarWidth).toString() + 'px';
@@ -327,7 +328,14 @@ class Term extends React.Component {
       const terminalContainer = this.termElement;
       terminalContainer.style.width = width;
       terminalContainer.style.height = height;
+      console.log(this.termElement)
+      */
+      //const terminalContainer = this.termElement.parentNode;
+      //const rect = terminalContainer.getBoundingClientRect();
+      //terminalContainer.style.width = rect.width + "px";
+      //terminalContainer.style.height = rect.height + "px";
       this.term.fit();
+
     }
     
     runCommand(text) {
@@ -341,9 +349,11 @@ class Term extends React.Component {
     render() {
         return (
           <div
+              id="terminal-container"
               style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}
               ref={this.termRef}
-          ></div>
+            >
+          </div>
         );
     }
 }

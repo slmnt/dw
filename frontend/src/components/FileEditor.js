@@ -305,13 +305,14 @@ class FileEditor extends React.Component {
     if (!this.props.allowUpload) return;
     if (!path) return;
 
-    console.log(this.props.courseId)
 
     const formData = new FormData();
     formData.append('path', `/Course/${this.props.courseId}/${path}/${files[0].name}`);
     //formData.append('path', `/Course/${this.state.id}/${path}`);
     for (var i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+      if (files[i].size < 1000000) { // 1MB 以下
+        formData.append('files', files[i]);
+      }
     }
 
     console.log(files)
@@ -366,18 +367,19 @@ class FileEditor extends React.Component {
   }
 
   // terminal
-  runTerminal = (cmd, base_url, callback) => {
-    /*
-    // local
-    */
-   this.localExec(cmd, callback);
+  runTerminal = (cmd, callback) => {
+    if (process.env.NODE_ENV === 'production') {
+      /*
+      // docker
+      */
+      let cmds = cmd.split(' ')
+      let base_url = `Course/${this.props.courseId}`
+      this.remoteExec(cmds, base_url, callback);
+    } else {
+      // local
+      this.localExec(cmd, callback);
+    }
 
-    /*
-    // docker
-    //let cmds = cmd.split(' ')
-    //let base_url = `Course/${this.props.courseId}`
-    //this.remoteExec(cmds, base_url, callback);
-    */
   }
   remoteExec = (cmd, base_url, callback) => {
     let cmds = cmd.split(' ')

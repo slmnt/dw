@@ -93,7 +93,7 @@ class UserCourseContentIndexSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = UserCourseContentIndex
-        fields = ('context','aid')
+        fields = ('context','sid')
 
 class UserBoardSerializer(serializers.ModelSerializer):
     auth = serializers.StringRelatedField()

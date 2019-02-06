@@ -40,6 +40,10 @@ body {
     background: #1abc9c70;
 }
 
+#terminal-container {
+    width: 100%;
+}
+
 /* root */
 #root {
     position: fixed;
