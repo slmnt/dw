@@ -45,6 +45,7 @@ class CourseGet extends Component {
             ],
 
             showAnswer: false,
+            answer: "",
 
             files: {
 
@@ -175,7 +176,7 @@ class CourseGet extends Component {
 
 
                 <div className={styles["editor-container"]}>
-                    <div className={styles["slide-collapsed"]} onClick={this.showSlide}>
+                    <div className={styles["slide-collapsed"]} style={{display: this.state.showSlide ? "none" : ""}} onClick={this.showSlide}>
                         <span className={styles["slide-collapsed-btn"]}><SlideIcon /></span>
                         <span>スライド</span>
                     </div>
@@ -187,7 +188,7 @@ class CourseGet extends Component {
                         </div>
 
                         <div className={styles["slide-answer"]} style={{display: this.state.showAnswer ? "" : "none"}}>
-                            <TestIFrame fontSize={1} content={this.state.slides && this.state.slides[this.state.currentSlideId] || ""} />
+                            <TestIFrame fontSize={1} content={this.state.answer || ""} />
                             <div className={styles["slide-answer-close"]} onClick={this.hideAnswer}>
                                 閉じる
                             </div>

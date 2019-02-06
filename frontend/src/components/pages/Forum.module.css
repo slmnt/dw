@@ -60,6 +60,7 @@
 .header {
   position: relative;
   top: 0em;
+  z-index: 2;
 }
 .search-header {
   position: relative;
@@ -278,6 +279,14 @@
   color: var(--nice-border-color);
 }
 
+
+/* pagination */
+.pagination-container {
+  padding: 3em 1em;
+}
+
+
+/* */
 @media (max-width: 800px) {
   .toolbar {
     padding: 0;

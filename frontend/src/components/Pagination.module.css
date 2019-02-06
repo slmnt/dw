@@ -1,7 +1,8 @@
 .main {
   margin: 0 auto;
   width: 25em;
-
+  max-width: 100%;
+  
   display: flex;
   justify-content: space-between;
   align-content: center;
@@ -31,13 +32,15 @@
   line-height: 2em;
   text-align: center;
 
+  margin: 0 0.2em;
+
   cursor: pointer;
   user-select: none;
 }
 .btn-selected {
   background-color: var(--main-color);
   color: white; 
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 .btn:hover {
   background-color: var(--main-color);

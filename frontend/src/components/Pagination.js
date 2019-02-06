@@ -54,7 +54,7 @@ class Pagination extends Component {
     let idx = 0;
     for (let i = min; i <= max; i++) {
       elems.push(
-        <div key={idx} className={classNames(styles.btn, i == current ? styles["btn-selected"] : "")} onClick={() => this.onClickPage(i)}>
+        <div key={idx} className={classNames(styles.btn, i == current ? styles["btn-selected"] : styles["btn"])} onClick={() => this.onClickPage(i)}>
           {i}
         </div>
       );
@@ -82,19 +82,19 @@ class Pagination extends Component {
   render() {
     return (
       <div className={styles.main}>
-        <span className={styles["icon-btn"]} onClick={this.onClickFirst}>
+        <span className={styles["icon-btn"]} onClick={this.onClickFirst} style={{marginLeft: "auto"}}>
           <FirstIcon />
         </span>
-        <span className={styles["icon-btn"]} onClick={this.onClickPrev} style={{marginRight: "-1em"}}>
+        <span className={styles["icon-btn"]} onClick={this.onClickPrev} style={{marginRight: "2em"}}>
           <PrevIcon />
         </span>
         {
           this.getButtons(this.props.first, this.props.last, this.props.maxButtons, this.props.currentPage)
         }
-        <span className={styles["icon-btn"]} onClick={this.onClickNext} style={{marginLeft: "-1em"}}>
+        <span className={styles["icon-btn"]} onClick={this.onClickNext} style={{marginLeft: "2em"}}>
           <NextIcon />
         </span>
-        <span className={styles["icon-btn"]} onClick={this.onClickLast}>
+        <span className={styles["icon-btn"]} onClick={this.onClickLast} style={{marginRight: "auto"}}>
           <LastIcon />
         </span>
       </div>

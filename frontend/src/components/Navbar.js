@@ -96,6 +96,7 @@ class NavBar extends React.Component {
         <div className={styles.rightMenu}>
           <div className={styles.navmenu}>
             <div><Link to="/getting-started">はじめる</Link></div>
+            <div><Link to="/forum">フォーラム</Link></div>
             <div><Link to="/search/course">コースを見る</Link></div>
             <div><span onClick={this.createCourse}>コースを作る</span></div>
           </div>
