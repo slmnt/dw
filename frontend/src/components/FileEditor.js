@@ -370,13 +370,12 @@ class FileEditor extends React.Component {
 
   // terminal
   runTerminal = (cmd, callback) => {
-    if (process.env.NODE_ENV === 'production') {
+    if (true || process.env.NODE_ENV === 'production') {
       /*
       // docker
       */
-      let cmds = cmd.split(' ')
       let base_url = '';
-      this.remoteExec(cmds, base_url, callback);
+      this.remoteExec(cmd, base_url, callback);
     } else {
       // local
       this.localExec(cmd, callback);
@@ -389,17 +388,17 @@ class FileEditor extends React.Component {
       case "python":
         //Upload Dir tree, Running this cmd
         this.uploadFiles(base_url)
-        let formData = new FormData();
-        formData.append('cmd',cmds[1])
-        formData.append('url',base_url)
-        api.post('/api/dockpy',{
-          body: formData
+        api.ex_post('/api/dockpy',{
+          cmd: cmds[1],
+          courseId: this.props.courseId,
+          chapterId: this.props.chapterId,
         }).then(api.parseJson).then(response => {
           if (!response) return;
 
           this.outputToTerm(response);
           if (callback) callback(response)
         })
+        break;
       case "javac":
       case "gcc":
       case "ruby":

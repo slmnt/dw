@@ -202,6 +202,10 @@ class CourseGet extends Component {
         this.setState({showAnswer: false});
     }
 
+    getChapterId = ch => {
+        return this.state.chapters.indexOf(ch) + 1;
+    }
+
     render() {
         return (
             <div className={styles["main"]}>
@@ -283,7 +287,7 @@ class CourseGet extends Component {
                     
                     </div>
                     
-                   <FileEditor ref={this.fileEditor} courseId={this.state.courseId} />
+                   <FileEditor ref={this.fileEditor} courseId={this.state.courseId} chapterId={this.getChapterId(this.state.currentChapter)} />
                 </div>  
             </div>
         );

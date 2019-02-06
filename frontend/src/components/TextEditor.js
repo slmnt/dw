@@ -71,7 +71,7 @@ class TextEditor extends React.Component {
     let rect = this.editorContainer.getBoundingClientRect();
     this.onEditorResize(rect.width, rect.height);
     this.term.current.updateTerminalSize();
-    console.log("resize: updateEditorSize", rect.width, rect.height)
+    //console.log("resize: updateEditorSize", rect.width, rect.height)
   }
   containerRef = element => {
       if (!element) {
@@ -80,7 +80,7 @@ class TextEditor extends React.Component {
       }
       this.editorContainer = element;
       let rect = element.getBoundingClientRect();
-      console.log(rect.width, rect.height)
+      //console.log(rect.width, rect.height)
       //element.style.width = rect.width + "px";
       //element.style.height = rect.height + "px";
       //this.onEditorResize(rect.width, rect.height);
@@ -117,7 +117,7 @@ class TextEditor extends React.Component {
     if (tab) {
         tab.changed = changed ? tab.changed + 1 : 0;
         this.setState({tabs: this.state.tabs});
-        console.log(tab.path, "changed");
+        //console.log(tab.path, "changed");
     }
   }
 
@@ -405,7 +405,7 @@ class TextEditor extends React.Component {
 
   onTermInit = (height) => {
     let rect = this.editorContainer.getBoundingClientRect();
-    console.log(rect.width, rect.height)
+    //console.log(rect.width, rect.height)
     this.onEditorResize(rect.width, rect.height);
   }
 

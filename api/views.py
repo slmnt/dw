@@ -424,6 +424,8 @@ class PythonByDocker(viewsets.ModelViewSet):
         try:
             if not os.path.exists(DOCKDIR):
                 os.makedirs(DOCKDIR)
+            if not os.path.exists(USER_STORAGE):
+                os.makedirs(USER_STORAGE)
         except:
             pass
 
