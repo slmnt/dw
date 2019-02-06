@@ -1126,7 +1126,8 @@ class Userthread(viewsets.ModelViewSet):
             try:
                 category = request.GET['cat']
                 if category == "all":
-                    objs = UserThread.objects.all().order_by('-updateat')
+                    objs = UserThread.objects.filter(
+                        Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
                 else:
                     cate = Category.objects.get(name=category)
                     objs = UserThread.objects.filter(
