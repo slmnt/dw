@@ -216,7 +216,10 @@ class Forum extends Component {
     this.setState({isCreating: false});
     this.load();
   }
-
+  convertdata(date){
+    var time = new Date(date)
+    return time.toLocaleString()
+  }
 
   clampPage = (v) => {
     return Math.max(1, v);
@@ -298,17 +301,16 @@ class Forum extends Component {
                     <span className={styles["post-title"]}>{v.title}</span>
                     <span>
                       <span className={styles["post-avatar"]}>{v.avatar}</span>
-                      <span className={styles["post-user"]}>{v.user}</span>
+                      <span className={styles["post-user"]}>{v.auth}</span>
                     </span>
                   </div>
                   <div>{v.text}</div>
                   <div className={styles["post-date"]}>
-                    <span>{v.context}</span>
                     <span>
-                      {v.cat}
+                      {v.category}
                     </span>
                     <span>
-                      {v.date}
+                      {this.convertdata(v.updateat)}
                     </span>
                   </div>
                 </div>

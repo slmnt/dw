@@ -22,3 +22,5 @@ docker load --input sendbox.tar
 
 docker run -it c /bin/bash
 docker run -it ubuntu /bin/bash
+
+docker run -itd <imagename>
