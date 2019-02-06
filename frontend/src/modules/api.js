@@ -51,15 +51,10 @@ function fetch_post(url,body,timeout=10000) {
 
 function parseJson(response) {
   if (!response.ok) {
-    console.log("api network error:", response.status, response.statusText, response);
-    return;
+    throw new Error ("api network error:", response.status, response.statusText, response);
   }
 
-  try {
-    return response.json();
-  } catch (e) {
-    console.log(e)
-  }
+  return response.json();
 }
 
 export default {

@@ -178,7 +178,9 @@ class Forum extends Component {
           date: "2119/98/92",
         },
       ]
-    }
+    };
+
+    this.searchBox = React.createRef();
   }
   componentDidMount() {
     this.selectCat('all');
@@ -192,11 +194,14 @@ class Forum extends Component {
       this.setState({
         posts: response.threads
       })
-    }).catch() 
+    }).catch(e => {
+      console.log(e)
+    }) 
   }
   search = (e) => {
     this.load();
-    this.setSearch(true);
+    this.setState({isSearching: true});
+    this.searchBox.current.blur();
   }
   selectCat = (catId) => {
     this.setState({selectedCat: catId}, () => {
@@ -209,7 +214,7 @@ class Forum extends Component {
   }
   hideCreatingForm = () => {
     this.setState({isCreating: false});
-    this.search()
+    this.load();
   }
   convertdata(date){
     var time = new Date(date)
@@ -260,7 +265,7 @@ class Forum extends Component {
               }}
             >気になることを探してみよう</span>
             <span className={styles["search-box-container"]}>
-              <input type="text" className={styles["search-box"]} maxLength={30} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
+              <input type="text" className={styles["search-box"]} maxLength={30} ref={this.searchBox} onKeyPress={(e) => e.nativeEvent.key === "Enter" && this.search(e)}  />
               <SearchIcon />
             </span>
           </div>
@@ -268,7 +273,7 @@ class Forum extends Component {
             <div className={styles["toolbar-left"]}>
               {
                 this.state.categories.map((v, i) => {
-                  return <div key={i} className={this.state.selectedCat === v.id && styles["toolbar-item-selected"]} onClick={() => {this.selectCat(v.id); this.setState({isSearching: true}); } }>
+                  return <div key={i} className={this.state.selectedCat === v.id ? styles["toolbar-item-selected"] : ""} onClick={() => {this.selectCat(v.id); this.setState({isSearching: true}); } }>
                     {v.name}
                   </div>
                 })
@@ -279,7 +284,7 @@ class Forum extends Component {
         <div className={styles.content}>
           {
             this.state.selectedCat !== 'all' &&
-            <div styles={{width: "100%"}}>
+            <div style={{width: "100%"}}>
               {
                 this.state.isCreating ?
                   <CreateThread category={this.state.selectedCat} oanPost={this.hideCreatingForm} onCancel={this.hideCreatingForm} />
@@ -312,7 +317,7 @@ class Forum extends Component {
               )
             })
           }
-          <div style={{height: "5em"}}></div>
+          <div style={{height: "15em"}}></div>
           <div className={styles["pagination-container"]}>
             <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
               onClickPrev={() => this.addToPage(-1)}

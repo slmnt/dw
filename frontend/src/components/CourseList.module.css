@@ -1,6 +1,9 @@
 /* container: course */
 .course-container {
   flex: 1 1 auto;
+  max-width: 40em;
+  width: 100%;
+  margin: auto;
 }
 .course-item {
   display: flex;

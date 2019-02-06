@@ -350,18 +350,18 @@ class FileEditor extends React.Component {
   }
 
   // terminal
-  runTerminal = (cmd, callback) => {
+  runTerminal = (cmd, base_url, callback) => {
     /*
     // local
-    this.localExec(cmd);
     */
+   this.localExec(cmd, callback);
 
     /*
     // docker
-    */
     //let cmds = cmd.split(' ')
     //let base_url = `Course/${this.props.courseId}`
     //this.remoteExec(cmds, base_url, callback);
+    */
   }
   remoteExec = (cmd, base_url, callback) => {
     let cmds = cmd.split(' ')
@@ -440,7 +440,7 @@ class FileEditor extends React.Component {
         <div className={styles["textditor-container"]}>
           <TextEditor
             ref={this.window}
-            run={this.remoteExec}
+            run={this.runTerminal}
             getContent={this.getContent}
             save={this.saveDir}
           />
