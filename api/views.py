@@ -129,7 +129,7 @@ class CreateUser(APIView):
             #print(u)
 
             # create user info
-            queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
+            queryset = UserInfo(root=new_user)
             queryset.save()
 
             v_user = authenticate(username=uname,password=pwd)

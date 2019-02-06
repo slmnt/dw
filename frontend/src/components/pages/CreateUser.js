@@ -68,8 +68,8 @@ class SignIn extends Component {
       email: this.state.email,
       fname: this.state.firstname,
       lname: this.state.lastname,
-      gen: this.genInput.current.value,
-      birth: this.birthInput.current.value,
+      gen: '',
+      birth: '',
     }
     this.context.createUser(data);
 
@@ -140,43 +140,6 @@ class SignIn extends Component {
               </div>
               <div>
                 <input onChange={this.handleChange('passwd2')} value={this.state.passwd2} type="password"></input>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>名(名前)</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('firstname')} value={this.state.firstname} type="text"></input>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>姓(苗字)</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('lastname')} value={this.state.lastname} type="text"></input>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>性別</label>
-              </div>
-              <div>
-                <select ref={this.genInput} >
-                  <option value="">---</option>
-                  <option value="M">男性</option>
-                  <option value="F">女性</option>
-                  <option value="X">わからない</option>
-                </select>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>年齢</label>
-              </div>
-              <div>
-                <input type="date" ref={this.birthInput}></input>
               </div>
             </div>
           <div className={styles.form_btn}>
