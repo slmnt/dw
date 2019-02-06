@@ -26,7 +26,8 @@
 .avatar {
   height: 15em;
   border-radius: 0.5em;
-  border: 1px solid black
+  border: 1px solid black;
+  background-color: white;
 }
 .avatar-img {
   width: 100%;

@@ -317,7 +317,7 @@ class Forum extends Component {
               )
             })
           }
-          <div style={{height: "15em"}}></div>
+          <div style={{height: "30em"}}></div>
           <div className={styles["pagination-container"]}>
             <Pagination first={1} last={this.state.totalPages} maxButtons={5} currentPage={this.state.page}
               onClickPrev={() => this.addToPage(-1)}
@@ -327,7 +327,9 @@ class Forum extends Component {
               onClickPage={(i) => this.goToPage(i)}
             />
           </div>
+          {/*
           <TopicList />
+          */}
         </div>
         <Footer />
       </div>
