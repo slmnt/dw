@@ -138,7 +138,10 @@ userthreadcomment = UserThreadcomment.as_view({
     'get': 'get',
     'post': 'post'    
 })
-
+usercoursechapteranswer = ChapterAnswer.as_view({
+    'get': 'get',
+    'post': 'post'    
+})
 urlpatterns = [
 #userinfo get,create
 
@@ -177,6 +180,7 @@ urlpatterns = [
     path('course/',createcourse),
     path('chapter/',createchapter),
     path('slide/',craeteslide),
+    path('answer/',usercoursechapteranswer),
     path('courseupload/',courseupload),
     path('usercoursetree/',getusertree),
 

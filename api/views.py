@@ -1198,6 +1198,49 @@ class UserThreadcomment(viewsets.ModelViewSet):
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
+class ChapterAnswer(viewsets.ModelViewSet):
+
+    #create chapter answer
+    #required
+    #user, courseid, chapterid,aid, context
+    def post(self, request):
+        # print("craete slide")
+        root = User.objects.get(username=request.user)
+        id = request.data['id']
+        cid = request.data['cid']
+        sid = request.data['aid']
+        text = request.data['context']
+        course = UserCourse.objects.get(id=id)
+        if root == course.root:
+            q = UserCourseContent.objects.all().filter(root=course,cid=cid)
+            if q:
+                chapter = q.get()
+                mod = UserChapterAnswer.objects.all().filter(root=chapter,aid=aid)
+                if mod:
+                    slide = mod.get()
+                    slide.context = text
+                    slide.save()
+                else:                    
+                    slides = UserChapterAnswer(root=chapter,context=text,aid=sid)
+                    slides.save()
+                    
+        data = {'ok':200}
+        return Response(data=data,status=status.HTTP_200_OK)
+
+    def get(self, request):
+        try:
+            id = request.GET['id']
+            cid = request.GET['cid']
+            id = int(id)
+            cid = int(cid)
+            course = UserCourse.objects.get(id=id)
+            target = UserCourseContent.objects.get(root=course,cid=cid)
+            queryset = UserChapterAnswer.objects.all().filter(root=target).order_by('aid')
+            serializers = UserChapterAnswerSerializer(queryset,many=True)
+            return Response(data=serializers.data,status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 #Remain apis
 # User Create api
 # User Review create
