@@ -1192,12 +1192,12 @@ class UserThreadcomment(viewsets.ModelViewSet):
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
     def post(self, request):
-        id = request.data['id']
+        id = request.GET['id']
         context = request.data['text']
         target = UserThread.objects.get(id=int(id))
-        queryset = UserThreadComment(root=target,auth=request.user,context=context)
+        queryset = UserThreadComment(root=target,auth=request.user,comment=context)
         queryset.save()
-        queryset = UserBoardAnswer.objects.all()
+        queryset = UserThreadComment.objects.all()
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 

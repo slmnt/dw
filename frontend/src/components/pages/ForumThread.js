@@ -13,6 +13,7 @@ class CreatePost extends Component {
   }
   onPost = e => {
     const text = this.textInput.current.value;
+    this.props.post(text)
   }
   onCancel = e => {
 
@@ -103,6 +104,26 @@ class ForumThread extends Component {
       console.log(e)
     }) 
 
+    api.get(`/api/threadcomment/?id=${this.props.match.params.id}`).then(api.parseJson)
+    .then(response => {
+      console.log(response)
+    }).catch(e => {
+      console.log(e)
+    }) 
+
+
+  }
+
+  PostCommnet = (e) => {
+    api.ex_post(`/api/threadcomment/?id=${this.props.match.params.id}`,{
+      text: e
+    }).then(api.parseJson)
+    .then(response => {
+      console.log(response)
+    }).catch(e => {
+      console.log(e)
+    }) 
+
   }
   convertdata(date){
     var time = new Date(date)
@@ -124,7 +145,7 @@ class ForumThread extends Component {
               {`${this.state.comments.length + 1} コメント`}
             </div>
             <div className={styles["thread-post-comment-container"]}>
-              <CreatePost />
+              <CreatePost post={this.PostCommnet}/>
             </div>
             {
               this.state.comments.map((v, i) => {
