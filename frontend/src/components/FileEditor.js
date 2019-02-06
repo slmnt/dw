@@ -60,45 +60,29 @@ class FileEditor extends React.Component {
   }
 
   // file
+  exportFiles = () => {
+    return Object.assign({}, this.state.files);
+  }
   uploadFiles = async (base_url) => {
+    if (!this.props.allowUpload) return;
+
     for (let path in this.state.files) {
       //var set = RegExp(/\w*\.\w*/);
       //if(set.test(path)){
       //}
       console.log("uploading", path)
-      const fixedPath = path.replace(/^\/*/, '');
 
-      let formData = new FormData();
-      formData.append('base_url', base_url)
-      formData.append(fixedPath, this.state.files[path])
-      await api.post('/api/courseupload/',{
-        body: formData
+      await api.ex_post('/api/courseupload/',{
+        courseId: this.props.courseId,
+        chapterId: this.props.chapterId,
+        base_url,
+        file: this.state.files[path],
+        path: path.replace(/^\/*/, ''),
       })
     }
   }
-  getDirtree = (root, path, base_url) => {
-    if (!root) root = this.state.directory;
-
-    var set = RegExp(/\w*\.\w*/);
-    if(set.test(path)){
-      let text = this.getTabValue(path)
-      if(text){
-        let formData = new FormData();
-        formData.append('base_url', base_url)
-        formData.append(path, text)
-        api.post('/api/courseupload/',{
-          body: formData
-        })
-      }
-    }
-
-    if(root.children){
-      for(let c of root.children){
-          this.getDirtree(c,path + '/' + c.name,base_url)
-      }
-    }
-  }
   importDir = (files) => {
+    this.state.directory = {name: '', children: []};
     let dirList = [];
     // ソート
     for (let path in files) {
@@ -130,6 +114,9 @@ class FileEditor extends React.Component {
   importFiles = (files) => {
     this.setState({files: files})
   }
+
+
+
   findFile = (path) => {
     //console.log("findfile", path)
     if (path == "/") { // root
@@ -226,10 +213,12 @@ class FileEditor extends React.Component {
     });
   }
   moveDir = (from, to) => {
+    if (this.isParent(from, to)) return;
+
     const file = this.findFile(from);
     const path = this.getDirPath(to);
     const dest = this.findFile(path);
-    console.log(from, to, path, dest)
+
     if (!file || !dest || path == this.getDirPath(from) || !dest.children) return;
 
     // remove
@@ -300,25 +289,38 @@ class FileEditor extends React.Component {
   sanitizeFileName = name => {
     return name.replace(/\//g, '');
   }
+  isParent = (target, el) => {
+    const p1 = target.split('/');
+    const p2 = el.split('/');
+    for (let i in p1) {
+      if (p1[i] != p2[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
 
   onUpload = (files, path) => {
     if (!this.props.allowUpload) return;
     if (!path) return;
 
 
-    const formData = new FormData();
-    formData.append('path', `/Course/${this.props.courseId}/${path}/${files[0].name}`);
-    //formData.append('path', `/Course/${this.state.id}/${path}`);
+    let file
     for (var i = 0; i < files.length; i++) {
       if (files[i].size < 1000000) { // 1MB 以下
-        formData.append('files', files[i]);
+        file = files[i];
       }
     }
 
-    console.log(files)
+    console.log(file)
 
-    api.post('/api/upload/', {
-      body: formData,
+    api.ex_post('/api/upload/', {
+      courseId: this.props.courseId,
+      chapterId: this.props.chapterId,
+      files: file,
+      name: files[0].name,
+      base_path: path,
     })
     .then(api.parseJson)
     .then(response => {
@@ -373,7 +375,7 @@ class FileEditor extends React.Component {
       // docker
       */
       let cmds = cmd.split(' ')
-      let base_url = `Course/${this.props.courseId}`
+      let base_url = '';
       this.remoteExec(cmds, base_url, callback);
     } else {
       // local

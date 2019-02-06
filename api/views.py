@@ -60,6 +60,33 @@ send_mail(
 )
 """
 
+def get_chapter_dir(re):
+    if re.method == 'GET':
+        return os.path.join(STORAGE, str(re.user), re.GET["course"], re.GET["chapter"]) 
+    else:
+        return os.path.join(STORAGE, str(re.user), re.data["courseId"], re.data["chapterId"])
+
+def get_user_dir(re):
+    return os.path.join(STORAGE, str(re.user))
+
+def is_descendant(target, parent):
+    try:
+        relative_path = pathlib.PurePath(target).relative_to(pathlib.PurePath(parent))
+        return True
+    except ValueError:
+        return False
+
+def clear_chapter_dir(re):
+    path = get_chapter_dir(re)
+    print(path, is_descendant(path, get_user_dir(re)))
+    if not is_descendant(path, get_user_dir(re)):
+        return
+    if os.path.isdir(path):
+        shutil.rmtree(path)
+        os.mkdir(path, mode=0o774)
+
+
+
 #required data
 # 'uid' 'pwd'
 class UserAuthentic(APIView):
@@ -391,9 +418,7 @@ class PythonByDocker(viewsets.ModelViewSet):
     #4 Send Client printed result
     def post(self, request):
         # print(request.data['cmd'])
-        name = str(request.user)
-        dump = os.path.join(STORAGE,name)
-        USER_STORAGE = os.path.join(dump,request.data['url'])
+        USER_STORAGE = get_chapter_dir(request)
         #USER_STORAGE = STORAGE + str(request.user)
         #Clear DOcker Folder
         try:
@@ -571,23 +596,18 @@ class Upload(viewsets.ModelViewSet):
         if request.user:
             name = str(request.user)
             p = request.FILES['files']
-            dir = request.data['path'].split('/')
-            dir = [name] + dir
-            path = STORAGE
             
-            for name in dir:
-                if name:
-                    path = os.path.join(path,name)
-                    if name == dir[-1]:
-                        pass
-                    else:
-                        if not os.path.exists(path):
-                            os.makedirs(path)
+            path = pathlib.PurePath(get_chapter_dir(request), request.data['base_url'], request.data['name'])
+            try:
+                relative_path = path.relative_to(get_user_dir(request)) # ここでエラー出たら storage の範囲外
+            
+                os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
+                with open(path, 'wb') as f:
+                    for line in p:
+                        f.write(line)
+            except ValueError:
+                print("CourseUpload error: invalid destination:", path.as_posix())
 
-            with open(path,mode='wb+') as f:
-                for line in p:
-                    f.write(line)
-            
         data = {'ok':200}
         return Response(data=data,status=status.HTTP_200_OK)
 
@@ -846,24 +866,18 @@ class CourseUpload(viewsets.ModelViewSet):
     #required
     #base_url,[files]
     def post(self, request):
-        name = str(request.user)
-        #1 Check URL,
-        #2 Make Files to base url
-        storage_path = pathlib.PurePath(STORAGE)
+        #clear_chapter_dir(request)
+        
 
-        for url in request.data:
-            if url == "base_url":
-                continue
-            
-            path = pathlib.PurePath(STORAGE, name, request.data['base_url'], url)
-            try:
-                relative_path = path.relative_to(storage_path) # ここでエラー出たら storage の範囲外
-            
-                os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
-                with open(path, 'wb') as f:
-                    f.write(request.data[url].encode('utf-8'))
-            except ValueError:
-                print("CourseUpload error: invalid destination:", path.as_posix())
+        path = pathlib.PurePath(get_chapter_dir(request), request.data['base_url'], request.data['path'])
+        try:
+            relative_path = path.relative_to(get_user_dir(request)) # ここでエラー出たら storage の範囲外
+        
+            os.makedirs(path.parent.as_posix(), mode=0o774, exist_ok=True)
+            with open(path, 'wb') as f:
+                f.write(request.data['file'].encode('utf-8'))
+        except ValueError:
+            print("CourseUpload error: invalid destination:", path.as_posix())
 
         data = {}
         data['key'] = 'value'
@@ -904,12 +918,9 @@ class getUserTree(viewsets.ModelViewSet):
         data = {}
         target = request.data['courseId']
         chapterId = request.data['chapterId']
-        print(target, chapterId)
-        path = os.path.join(STORAGE, str(request.user))
+        path = get_chapter_dir(request)
         try:
-            for p in target.split('/'):
-                path = os.path.join(path,p)
-            data = getTree(path,data,'')
+            data = getTree(path, data, '')
             json_data = json.dumps(data)
         except:
             return ""

@@ -437,8 +437,9 @@ class Editor extends Component {
         let ch = {};
         ch.name = c.title;
         ch.desc = c.descriptoin;
-        ch.answer = c.answer;
+        ch.answer = c.answer || '';
         ch.slides = [];
+        ch.files = {};
         newChapters.push(ch);
     
         //slides
@@ -462,21 +463,33 @@ class Editor extends Component {
         );
       }
 
-  
+      //
+      for(let ci in newChapters){
+        slidePms.push(
+          api.ex_post('/api/usercoursetree/',{
+            courseId: this.state.id,
+            chapterId: parseInt(ci) + 1,
+          }).then(api.parseJson).then(response => {
+              if (!response) {
+                response = {};
+              }
+              newChapters[ci].files = response;
+          })
+        )
+      }
       Promise.all(slidePms).then(response => {
         if (newChapters.length === 0) {
           newChapters.push({
             name: "テストチャプター",
             desc: "テスト",
             answer: "",
-            slides: []
+            slides: [],
+            files: {}
           })
         }
-        this.loadChapters(newChapters);
+        
         this.state.chapters = newChapters;
-        this.setState({chapters: this.state.chapters}, () => {
-          this.openChapter(this.state.chapters[0]);
-        });
+        this.loadChapters(newChapters);
       });
     }).catch(e => console.log(e))
 
@@ -493,17 +506,33 @@ class Editor extends Component {
   getTabValue = (path) => {
     return this.fileEditor.current.getTabValue(path);
   }
+
+  exportFiles = (clbk) => {
+    if (!this.state.currentChapter) return;
+    this.state.currentChapter.files = this.fileEditor.current.exportFiles();
+    this.setState({chapters: this.state.chapters}, clbk);
+  }
+  uploadFiles = async (chapter) => {
+    const chapterId = this.state.chapters.indexOf(chapter) + 1;
+    for (let path in chapter.files) {
+      await api.ex_post('/api/courseupload/',{
+        courseId: this.state.id,
+        chapterId: chapterId,
+        base_url: "",
+        file: chapter.files[path],
+        path: path.replace(/^\/*/, ''),
+      })
+    }
+  }
   
 
   onSave = async (e) => {
-    let base_url = "Course/" + this.state.id
-    var chapters = this.state.chapters
+    let base_url = '';
+    var chapters = this.state.chapters;
     
     // sort slides
     this.sortSlides();
 
-    // 答え
-    const ans = this.getAnswer();
 
     // course
     await api.ex_post('/api/updatecourse/',{
@@ -527,7 +556,7 @@ class Editor extends Component {
         'cid': idx,
         'title': c.name,
         'desc': c.desc,
-        'ans': ans,
+        'ans': c.answer,
       })
       for(let s of slides){
         //name, text,idx,jdx,id
@@ -540,9 +569,10 @@ class Editor extends Component {
             context: s.text          
         })
       }
+      await this.uploadFiles(c);
     }
 
-    await this.fileEditor.current.uploadFiles(base_url)
+    //await this.fileEditor.current.uploadFiles(base_url)
     
     history.push(`/course/${this.context.uid}/${this.state.id}`);
   }  
@@ -586,27 +616,39 @@ class Editor extends Component {
       slides[i].pos = parseInt(i);
     }
   }
-  openChapter = (chapter) => {
+  openChapter = async (chapter) => {
     if (!chapter) return;
-    this.setState({currentChapter: chapter}, () => {
+
+    const newState = {
+      currentChapter: chapter
+    };
+
+    // answer
+    if (this.state.currentChapter && this.answerText) {
+      this.state.currentChapter.answer = this.answerText;
+      newState.chapters = this.state.chapters;
+    }
+
+    //
+    // dirtree
+    this.exportFiles();
+
+    
+    //
+    this.setState(newState, () => {
+      console.log(this.state.chapters)
+      this.fileEditor.current.importFiles(chapter.files);
+      this.fileEditor.current.importDir(chapter.files);
+
       this.setChapterNameText(chapter.name);
       this.setAnswer(chapter.answer);
 
+      // answer
+      this.answerText = chapter.answer;
+
+      // slide
       const c = this.getSlide(0);
       this.openSlide(c); // slide がない場合もそのまま
-
-      // dirtree
-      const chapterId = this.state.chapters.indexOf(chapter) + 1;
-      api.ex_post('/api/usercoursetree/',{
-        courseId: this.state.id,
-        chapterId: chapterId,
-      }).then(api.parseJson).then(response => {
-          if (!response) return;
-          console.log(response)
-          this.fileEditor.current.importFiles(response);
-          this.fileEditor.current.importDir(response);
-      });
-
     });
   }
   openSlide = (slide) => {
@@ -663,7 +705,10 @@ class Editor extends Component {
   setCourseName = name => {
     if (!this.state.course) return;
     this.state.course.name = name;
-    this.setState({course: this.state.course});
+    console.log(1, this.state.currentChapter.answer, this.answerText)
+    this.setState({course: this.state.course}, () => {
+      console.log(1, this.state.currentChapter.answer)
+    });
   }
   setCourseData = (name, desc) => {
     this.state.course.name = name;
@@ -676,6 +721,9 @@ class Editor extends Component {
   // chapter
   getChapter = id => {
     return this.state.chapters[id];
+  }
+  getChapterId = ch => {
+    return this.state.chapters.indexOf(ch) + 1;
   }
   setChapterName = name => {
     if (!this.state.currentChapter) return;
@@ -1014,7 +1062,7 @@ class Editor extends Component {
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
               <div className={styles["file-editor-container"]}>
-                <FileEditor ref={this.fileEditor} courseId={this.state.id} allowUpload={true} />
+                <FileEditor ref={this.fileEditor} courseId={this.state.id} chapterId={this.getChapterId(this.state.currentChapter)} allowUpload={true} />
               </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >
@@ -1025,7 +1073,7 @@ class Editor extends Component {
                 <div className={styles["answer-textarea-container"]}>
                   <CKEditor
                     editor={ ClassicEditor }
-                    data={this.state.currentChapter && this.state.currentChapter.answer}
+                    data={this.answerText || ''}
                     config={{
                       height: "550px",
                       width: "100%",

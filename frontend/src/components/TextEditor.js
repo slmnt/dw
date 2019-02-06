@@ -109,13 +109,13 @@ class TextEditor extends React.Component {
   }
   onEditorKeyDown = (e) => {
     if (e.ctrlKey && e.code == 'KeyS') {
-        this.saveTab(this.currentTab);
+        this.saveTab(this.state.currentTab);
     }
   }
   setTabChanged = (path, changed) => {
     let tab =  this.getTab(path);
     if (tab) {
-        tab.changed += changed ? 1 : 0;
+        tab.changed = changed ? tab.changed + 1 : 0;
         this.setState({tabs: this.state.tabs});
         console.log(tab.path, "changed");
     }
