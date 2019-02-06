@@ -71,6 +71,7 @@ class ForumThread extends Component {
       op: {
         user: "Kang the conquerer",
         text: "I came, I saw, I conquererd",
+        date: "",
       },
       comments: [
         {
@@ -88,11 +89,26 @@ class ForumThread extends Component {
     api.get(`/api/thread/?id=${this.props.match.params.id}`).then(api.parseJson)
     .then(response => {
       console.log(response)
+      if (response) {
+        this.setState({
+          title: response.title,
+          op: {
+            user: response.auth,
+            text: response.context,
+            date: this.convertdata(response.createat),
+          }
+        })
+      }
     }).catch(e => {
       console.log(e)
     }) 
 
   }
+  convertdata(date){
+    var time = new Date(date)
+    return time.toLocaleString()
+  }
+
   render(){
     return (
       <div className={styles.main}>

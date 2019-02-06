@@ -130,11 +130,10 @@ class Forum extends Component {
       categories: [
         {name: "すべて", id: "all"},
         {name: "質問", id: "Question"},
-        {name: "がんくんへの質問", id: "gqa"},
         {name: "提案", id: "Proposal"},
-        {name: "コース作成について", id: "QNA"},
         {name: "問題", id: "Challenge"},
-        {name: "質問", id: "q"},
+        {name: "質問", id: "Question"},
+        {name: "コース作成について", id: "QNA"},
       ],
       posts: [
         {
@@ -191,8 +190,19 @@ class Forum extends Component {
     // console.log("search: ")
     api.get(`/api/thread/?page=${1}&s=${20}&cat=${this.state.selectedCat}`).then(api.parseJson)
     .then(response => {
+      console.log(response)
+      const posts = response.threads.map((v, i) => {
+        return {
+          user: v.auth,
+          title: v.title,
+          text: v.context,
+          avatar: "",
+          cat: v.category,
+          date: this.convertdata(v.createat),
+        }
+      });
       this.setState({
-        posts: response.threads
+        posts: posts
       })
     }).catch(e => {
       console.log(e)
@@ -301,7 +311,7 @@ class Forum extends Component {
                     <span className={styles["post-title"]}><Link to={`/forum/thread/${v.id}`}>{v.title}</Link></span>
                     <span>
                       <span className={styles["post-avatar"]}>{v.avatar}</span>
-                      <span className={styles["post-user"]}>{v.auth}</span>
+                      <span className={styles["post-user"]}>{v.user}</span>
                     </span>
                   </div>
                   <div>{v.text}</div>
@@ -310,7 +320,7 @@ class Forum extends Component {
                       {v.category}
                     </span>
                     <span>
-                      {this.convertdata(v.updateat)}
+                      {v.date}
                     </span>
                   </div>
                 </div>
