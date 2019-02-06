@@ -138,6 +138,9 @@ userthreadcomment = UserThreadcomment.as_view({
     'get': 'get',
     'post': 'post'    
 })
+categorys = CategoryGet.as_view({
+    'get': 'get'
+})
 urlpatterns = [
 #userinfo get,create
 
@@ -205,11 +208,9 @@ urlpatterns = [
     path('thread/',userthread),
     path('threadcomment/',userthreadcomment),
 
+    #category get
+    path('category/',categorys),
 
     #path('test',apitest),
     path('test/',apitest),
-
-
-    
-
 ]

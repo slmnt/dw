@@ -136,6 +136,9 @@ class App extends React.Component {
     document.addEventListener('mousewheel',this.onScroll)
     //this.updateLoginState(); // クッキーが存在 & 期限が切れていないとき
     this.loginWithCookie(); // クッキーが存在 & 期限が切れているとき
+
+    api.get('/api/category/').then(api.parseJson)
+    .then(response => console.log(response)).catch()
   }
   componentDidMount(){
 

@@ -1200,6 +1200,13 @@ class UserThreadcomment(viewsets.ModelViewSet):
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
+class CategoryGet(viewsets.ModelViewSet):
+
+    def get(self, request):
+        queryset = Category.objects.all()
+        serializers = CategorySerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
+
 
 #Remain apis
 # User Create api
