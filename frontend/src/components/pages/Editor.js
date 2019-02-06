@@ -540,7 +540,6 @@ class Editor extends Component {
         'desc': c.desc,
         'ans': ans,
       })
-      
       for(let s of slides){
         //name, text,idx,jdx,id
         jdx += 1

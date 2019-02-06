@@ -89,13 +89,6 @@ class UserCourseCommentSerializer(serializers.ModelSerializer):
         model = UserCourseComment
         fields = ('auth','comment','createat')
 
-class UserChapterAnswerSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = UserChapterAnswer
-        fields = ('context','aid')
-
-
 class UserCourseContentIndexSerializer(serializers.ModelSerializer):
     
     class Meta:
