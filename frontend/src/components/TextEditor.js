@@ -56,13 +56,16 @@ class TextEditor extends React.Component {
   updateEditorSize = (e) => {
       if ( (e.timeStamp - this.lastSizeUpdate) < 500 ) return;
       if (this.editor) {
-          let rect = this.editorContainer.getBoundingClientRect();
-          this.onEditorResize(rect.width, rect.height);
-          this.term.current.updateTerminalSize();
-          
+          this.resizeEditor();
+
           this.lastSizeUpdate = e.timeStamp;
-          console.log("resize: updateEditorSize", rect.width, rect.height)
+        }
     }
+  resizeEditor = () => {
+    let rect = this.editorContainer.getBoundingClientRect();
+    this.onEditorResize(rect.width, rect.height);
+    this.term.current.updateTerminalSize();
+    console.log("resize: updateEditorSize", rect.width, rect.height)
   }
   containerRef = element => {
       if (!element) {

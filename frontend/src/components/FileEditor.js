@@ -44,6 +44,21 @@ class FileEditor extends React.Component {
     window.print = this.outputToTerm; // test
   }
 
+  componentDidMount() {
+    window.addEventListener('keydown', this.onKeyDown);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onKeyDown);
+  }
+  onKeyDown = e => {
+    if (e.ctrlKey && e.key === 's') e.preventDefault();
+  }
+
+  //
+  resize = () => {
+    this.window.current.resizeEditor();
+  }
+
   // file
   uploadFiles = async (base_url) => {
     for (let path in this.state.files) {
@@ -287,6 +302,7 @@ class FileEditor extends React.Component {
   }
 
   onUpload = (files, path) => {
+    if (!this.props.allowUpload) return;
     if (!path) return;
 
     console.log(this.props.courseId)
@@ -444,6 +460,7 @@ class FileEditor extends React.Component {
             createNew={this.createNew}
 
             onUpload={this.onUpload}
+            allowUpload={this.props.allowUpload}
           />
 
         </div>

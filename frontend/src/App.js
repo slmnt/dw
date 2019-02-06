@@ -333,7 +333,10 @@ class App extends React.Component {
                 <Route path="/forum"  component={Forum}/>
 
                 <Route path="/about" component={About}/>
+                {/*
                 <Route path="/getting-started" component={GettingStarted}/>
+                */}
+                <Route path="/getting-started" component={Main}/>
                 <Route path="/terms" component={Terms}/>
                 <Route path="/privacy" component={Privacy}/>
 

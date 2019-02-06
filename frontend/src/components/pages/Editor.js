@@ -1010,7 +1010,7 @@ class Editor extends Component {
             </div>
             <div style={{zIndex: this.state.currentTab === 1 ? "1" : "-1"}} >
               <div className={styles["file-editor-container"]}>
-                <FileEditor ref={this.fileEditor} courseId={this.state.id} />
+                <FileEditor ref={this.fileEditor} courseId={this.state.id} allowUpload={true} />
               </div>
             </div>
             <div style={{zIndex: this.state.currentTab === 2 ? "1" : "-1"}} >

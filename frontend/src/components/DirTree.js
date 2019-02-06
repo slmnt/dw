@@ -146,7 +146,9 @@ class DirTree extends React.Component {
     e.dataTransfer.effectAllowed = 'copy'
     e.dataTransfer.setData("dragfile", e.currentTarget.dataset["filepath"]);
     console.log(e.dataTransfer.getData('dragfile'));
-    this.setState({draggingItem: true});
+    if (this.props.allowUpload) {
+      this.setState({draggingItem: true});
+    }
   }
   onDragEnd = e => {
     this.hideDropArea();
@@ -157,7 +159,7 @@ class DirTree extends React.Component {
   onDragEnter = e => {
     e.preventDefault();
     console.log(this.state.draggingItem)
-    if (!this.state.draggingItem) {
+    if (!this.state.draggingItem && this.props.allowUpload) {
       this.showDropArea();
     }
   }
@@ -184,11 +186,14 @@ class DirTree extends React.Component {
     }
 
     
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    
-    console.log("upload to:", path)
-    if (this.props.onUpload) this.props.onUpload(files, path);
+    if (this.props.allowUpload) {
+
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      
+      console.log("upload to:", path)
+      if (this.props.onUpload) this.props.onUpload(files, path);
+    }
 
   }
 

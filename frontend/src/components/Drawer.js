@@ -19,7 +19,7 @@ class Drawer extends Component {
             items: [
                 // [name, url] or [name & url]
                 ['トップ', '/'],
-                ['はじめる', '/getting-started'],
+                //['はじめる', '/getting-started'],
                 ['-'],
                 ['コース検索', '/search/course'],
                 ['ユーザ検索', '/search/user'],

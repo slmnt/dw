@@ -19,6 +19,7 @@
 .profile {
   flex: 0 0 auto;
   width: 15em;
+  margin: 0 auto 2em auto;
 }
 .profile > div {
   width: 100%;
@@ -94,6 +95,7 @@
 .overview {
   flex: 1 1 auto;
   margin-left: 3em;
+  margin-right: 3em;
 
   border: 1px solid var(--light-color);
 }
@@ -126,7 +128,9 @@
     padding: 0 1em;
   }
   .overview {
+    width: 100%;
     margin-left: 0;
+    margin-right: 0;
     margin-top: 5em;
     margin-bottom: 5em;
   }

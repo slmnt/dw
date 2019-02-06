@@ -16,7 +16,8 @@ a {
     --nice-border-color: #666666;
     --nice-text-color: #cccccc;
     --bg-color: white;
-    --nice-bg-color: #f2f7ff;
+    /*--nice-bg-color: #f2f7ff;*/
+    --nice-bg-color: #f9fbff;
     --gray-color: #868e96;
 
     --dark-lighter: #3c3c3c;

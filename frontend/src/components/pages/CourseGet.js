@@ -59,6 +59,10 @@ class CourseGet extends Component {
     }
 
     componentDidMount(){
+
+        this.showSlide();
+
+
         /**
          * Requirement
          *  CourseContent Rendering
@@ -114,10 +118,14 @@ class CourseGet extends Component {
 
 
     showSlide = () => {
-        this.setState({showSlide: true});
+        this.setState({showSlide: true}, () => {
+            this.fileEditor.current.resize();
+        });
     }
     hideSlide = () => {
-        this.setState({showSlide: false});
+        this.setState({showSlide: false}, () => {
+            this.fileEditor.current.resize();
+        });
     }
 
     onClickSlideHeader = e => {
