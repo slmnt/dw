@@ -93,10 +93,7 @@ class UserCourseContent(models.Model):
     title = models.CharField(max_length=50)
     descriptoin = models.CharField(max_length=500)
     createat = models.DateTimeField(default=timezone.now)    
-
-class UserChapterAnswer(models.Model):
-    root = models.ForeignKey('UserCourseContent',on_delete=models.CASCADE)
-    context = models.TextField()
+    answer = models.TextField(default="")
     
 ######
 # Coutse Chapter Slides

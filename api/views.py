@@ -706,6 +706,7 @@ class CreateChapter(viewsets.ModelViewSet):
         cid = request.data['cid']
         title = request.data['title']
         desc = request.data['desc']
+        ans = request.data['ans']
         course = UserCourse.objects.get(id=id)
         #Auth Check
         if root == course.root:
@@ -717,13 +718,14 @@ class CreateChapter(viewsets.ModelViewSet):
                 chapter = q.get()
                 chapter.title = title
                 chapter.descriptoin = desc
+                chapter.answer = ans
                 chapter.save()                
                 serializers = UserCourseContentSerializer(chapter)
                 return Response(data=serializers.data,status=status.HTTP_200_OK)
 
             #Create New Chapter
             else:
-                Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid)
+                Chapter = UserCourseContent(root=course,title=title,descriptoin=desc,cid=cid,answer=ans)
                 Chapter.save()
                 serializers = UserCourseContentSerializer(Chapter)
                 return Response(data=serializers.data,status=status.HTTP_200_OK)
@@ -1198,47 +1200,6 @@ class UserThreadcomment(viewsets.ModelViewSet):
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
 
-class ChapterAnswer(viewsets.ModelViewSet):
-
-    #create chapter answer
-    #required
-    #user, courseid, chapterid,aid, context
-    def post(self, request):
-        # print("craete slide")
-        root = User.objects.get(username=request.user)
-        id = request.data['id']
-        cid = request.data['cid']
-        text = request.data['context']
-        course = UserCourse.objects.get(id=id)
-        if root == course.root:
-            q = UserCourseContent.objects.all().filter(root=course,cid=cid)
-            if q:
-                chapter = q.get()
-                mod = UserChapterAnswer.objects.all().filter(root=chapter,aid=aid)
-                if mod:
-                    slide = mod.get()
-                    slide.context = text
-                    slide.save()
-                else:                    
-                    slides = UserChapterAnswer(root=chapter,context=text,aid=sid)
-                    slides.save()
-                    
-        data = {'ok':200}
-        return Response(data=data,status=status.HTTP_200_OK)
-
-    def get(self, request):
-        try:
-            id = request.GET['id']
-            cid = request.GET['cid']
-            id = int(id)
-            cid = int(cid)
-            course = UserCourse.objects.get(id=id)
-            target = UserCourseContent.objects.get(root=course,cid=cid)
-            queryset = UserChapterAnswer.objects.all().filter(root=target).order_by('aid')
-            serializers = UserChapterAnswerSerializer(queryset,many=True)
-            return Response(data=serializers.data,status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 #Remain apis
 # User Create api

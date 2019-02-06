@@ -532,12 +532,8 @@ class Editor extends Component {
         'id': this.state.id,
         'cid':idx,
         'title':c.name,
-        'desc':c.desc
-      })
-      await api.ex_post('/api/answer/',{
-        'id': this.state.id,
-        'cid':idx,
-        // 'context': <input answer value>
+        'desc':c.desc,
+      //'ans': <input answer value>
       })
       for(let s of slides){
         //name, text,idx,jdx,id
