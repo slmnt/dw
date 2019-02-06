@@ -123,3 +123,9 @@ class UserThreadCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserBoardAnswer
         fields = ('auth','comment','createat')
+
+class CategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Category
+        fields = ('__all__')

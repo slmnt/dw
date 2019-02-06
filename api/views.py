@@ -129,7 +129,7 @@ class CreateUser(APIView):
             #print(u)
 
             # create user info
-            queryset = UserInfo(root=new_user, gen=request.data['gen'], birth=request.data['birth'])
+            queryset = UserInfo(root=new_user)
             queryset.save()
 
             v_user = authenticate(username=uname,password=pwd)
@@ -1199,6 +1199,13 @@ class UserThreadcomment(viewsets.ModelViewSet):
         queryset = UserBoardAnswer.objects.all()
         serializer = UserThreadCommentSerializer(queryset,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+
+class CategoryGet(viewsets.ModelViewSet):
+
+    def get(self, request):
+        queryset = Category.objects.all()
+        serializers = CategorySerializer(queryset,many=True)
+        return Response(data=serializers.data,status=status.HTTP_200_OK)
 
 
 #Remain apis
