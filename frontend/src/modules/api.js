@@ -31,7 +31,7 @@ function fetch_timeout(method, url, option, nocookie,timeout=10000) {
   ]);
 }
 
-function fetch_post(url,body,timeout=10000) {
+function fetch_post(url,body,timeout=15000) {
   let cookies = cookie.parse(document.cookie);
   let formData = new FormData();
   for(let dict in body){

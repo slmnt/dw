@@ -1145,8 +1145,7 @@ class Userthread(viewsets.ModelViewSet):
                         Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
                 else:
                     cate = Category.objects.get(name=category)
-                    objs = UserThread.objects.filter(
-                        Q(category=cate) | Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
+                    objs = UserThread.objects.filter(category=cate,context__contains=search).order_by('-updateat')
 
             except:
                 objs = UserThread.objects.filter( 

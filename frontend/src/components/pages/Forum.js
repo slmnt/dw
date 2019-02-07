@@ -135,6 +135,7 @@ class Forum extends Component {
         {name: "コース作成について", id: "QNA"},
       ],
       posts: [
+        /*
         {
           title: "コースの作成について",
           text: "テスト",
@@ -174,7 +175,7 @@ class Forum extends Component {
           user: "Kang, an intellectual",
           cat: "test",
           date: "2119/98/92",
-        },
+        },*/
       ]
     };
 
@@ -188,7 +189,7 @@ class Forum extends Component {
   load = () => {
     // console.log("search: ")
     const kw = this.searchBox.current.value;
-    api.get(`/api/thread/?page=${1}&s=${20}&search=${kw}&cat=${this.state.selectedCat}`).then(api.parseJson)
+    api.get(`/api/thread/?page=${this.state.page}&s=${this.state.pageSize}&search=${kw}&cat=${this.state.selectedCat}`).then(api.parseJson)
     .then(response => {
       console.log(response)
       const posts = response.threads.map((v, i) => {
@@ -203,7 +204,8 @@ class Forum extends Component {
         }
       });
       this.setState({
-        posts: posts
+        posts: posts,
+        totalPages: response.pages || 1,
       })
     }).catch(e => {
       console.log(e)
