@@ -64,7 +64,6 @@ class FileEditor extends React.Component {
     return Object.assign({}, this.state.files);
   }
   uploadFiles = async (base_url) => {
-    if (!this.props.allowUpload) return;
 
     for (let path in this.state.files) {
       //var set = RegExp(/\w*\.\w*/);
