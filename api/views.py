@@ -599,7 +599,7 @@ class Upload(viewsets.ModelViewSet):
             name = str(request.user)
             p = request.FILES['files']
             
-            path = pathlib.PurePath(get_chapter_dir(request), request.data['base_url'], request.data['name'])
+            path = pathlib.PurePath(get_chapter_dir(request), request.data['name'])
             try:
                 relative_path = path.relative_to(get_user_dir(request)) # ここでエラー出たら storage の範囲外
             
@@ -871,7 +871,7 @@ class CourseUpload(viewsets.ModelViewSet):
         #clear_chapter_dir(request)
         
 
-        path = pathlib.PurePath(get_chapter_dir(request), request.data['base_url'], request.data['path'])
+        path = pathlib.PurePath(get_chapter_dir(request), request.data['path'])
         try:
             relative_path = path.relative_to(get_user_dir(request)) # ここでエラー出たら storage の範囲外
         
@@ -1145,7 +1145,8 @@ class Userthread(viewsets.ModelViewSet):
                         Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
                 else:
                     cate = Category.objects.get(name=category)
-                    objs = UserThread.objects.filter(category=cate,context__contains=search).order_by('-updateat')
+                    objs = UserThread.objects.filter(category=cate)
+                    objs = objs.filter(Q(title__contains=search) | Q(context__contains=search)).order_by('-updateat')
 
             except:
                 objs = UserThread.objects.filter( 

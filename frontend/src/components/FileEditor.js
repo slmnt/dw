@@ -235,6 +235,9 @@ class FileEditor extends React.Component {
     this.setState({directory: this.state.directory});
   }
   deleteDir = (path) => {
+    // close tab
+    this.window.current.closeTab(path);
+
     const file = this.findFile(path);
     console.log("close", path, file)
     if (!file || !file.parent || !file.parent.children) return;
@@ -242,8 +245,6 @@ class FileEditor extends React.Component {
     file.parent.children.splice(file.parent.children.indexOf(file), 1);
     this.setState({directory: this.state.directory});
 
-    // close tab
-    this.window.current.closeTab(path);
 
   }
   copyDir = (from, to) => {

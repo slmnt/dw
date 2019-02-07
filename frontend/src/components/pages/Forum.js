@@ -191,7 +191,7 @@ class Forum extends Component {
     const kw = this.searchBox.current.value;
     api.get(`/api/thread/?page=${this.state.page}&s=${this.state.pageSize}&search=${kw}&cat=${this.state.selectedCat}`).then(api.parseJson)
     .then(response => {
-      console.log(response)
+      //console.log(response)
       const posts = response.threads.map((v, i) => {
         return {
           id: v.id,

@@ -627,6 +627,7 @@ class Editor extends Component {
     if (this.state.currentChapter && this.answerText) {
       this.state.currentChapter.answer = this.answerText;
       newState.chapters = this.state.chapters;
+      console.log(this.answerText)
     }
 
     //
@@ -705,9 +706,9 @@ class Editor extends Component {
   setCourseName = name => {
     if (!this.state.course) return;
     this.state.course.name = name;
-    console.log(1, this.state.currentChapter.answer, this.answerText)
+    //console.log(1, this.state.currentChapter.answer, this.answerText)
     this.setState({course: this.state.course}, () => {
-      console.log(1, this.state.currentChapter.answer)
+      //console.log(1, this.state.currentChapter.answer)
     });
   }
   setCourseData = (name, desc) => {

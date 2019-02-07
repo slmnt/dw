@@ -14,9 +14,10 @@ class CreatePost extends Component {
   onPost = e => {
     const text = this.textInput.current.value;
     this.props.post(text)
+    this.textInput.current.value = '';
   }
   onCancel = e => {
-
+    this.textInput.current.value = '';
   }
   render(){
     return (

@@ -72,6 +72,7 @@ class UserInfo extends Component {
         this.descCfg = React.createRef();
     }    
     componentDidMount(){
+        if (!this.props.isMyPage && !this.props.match.params.id) return;
 
         api.get(`/api/userinfo/?user=${this.props.match.params.id}`).then(api.parseJson)
         .then(response => {
