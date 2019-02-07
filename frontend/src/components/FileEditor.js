@@ -370,7 +370,7 @@ class FileEditor extends React.Component {
 
   // terminal
   runTerminal = (cmd, callback) => {
-    if (true || process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
       /*
       // docker
       */
