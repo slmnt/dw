@@ -110,42 +110,18 @@ class SignIn extends Component {
             <div className={styles.form_title}>
               会員登録
             </div>
-            <div>
-              <div>
-                <label>ID</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('username')} value={this.state.username} type="text"></input>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>Email</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('email')} value={this.state.email} type="email"></input>
+
+            <div className={styles.form_input_container}>
+              <input className={styles.form_input} placeholder="ID" type="text" value={this.state.username} onChange={this.handleChange('username')}></input>
+              <input className={styles.form_input} placeholder="メールアドレス" type="email" value={this.state.email} onChange={this.handleChange('email')}></input>
+              <input className={styles.form_input} style={{marginTop: "1.5em"}} placeholder="パスワード" type="password" value={this.state.passwd} onChange={this.handleChange('passwd')}></input>
+              <input className={styles.form_input} placeholder="パスワード (再入力)" type="password" value={this.state.passwd2} onChange={this.handleChange('passwd2')}></input>
+              <a className={styles.form_btn} onClick={this.submit}>ユーザ登録</a>
+              <div className={styles.form_bottom_controls}>
+                <a onClick={(e) => this.goBack()}>キャンセル</a>
               </div>
             </div>
-            <div>
-              <div>
-                <label>パスワード</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('passwd')} value={this.state.passwd} type="password"></input>
-              </div>
-            </div>
-            <div>
-              <div>
-                <label>パスワード再入力</label>
-              </div>
-              <div>
-                <input onChange={this.handleChange('passwd2')} value={this.state.passwd2} type="password"></input>
-              </div>
-            </div>
-          <div className={styles.form_btn}>
-            <a className={styles.form_cancel} href="javascript:void(0)" onClick={(e) => this.goBack()} >キャンセル</a>
-            <a href="javascript:void(0)" onClick={this.submit} >登録</a>
-          </div>
+
           </div>
         </form>
         <br/>
