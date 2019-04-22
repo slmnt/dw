@@ -4,7 +4,7 @@ import cookie from 'cookie';
 /* API 要求 モジュール */
 const isProduction = process.env.NODE_ENV === 'production';
 const PROTOCOL = isProduction ? 'https' : 'http';
-const HOST = isProduction ? 'www.studio-stair.com' : 'localhost:8000';
+const HOST = location.hostname; //isProduction ? 'www.studio-stair.com' : 'localhost:8000';
 const BASE_URL = PROTOCOL + '://' + HOST;
 
 function fetch_extend(method, url, option, nocookie) {

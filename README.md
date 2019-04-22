@@ -24,7 +24,10 @@ https://www.google.com/doodles/celebrating-50-years-of-kids-coding
 
 `nginx -s quit`
 
-`gunicorn --daemon --workers 3 --bind unix:/home/kang/2018DW/back.sock back.wsgi`
+```
+gunicorn --daemon --workers 3 --bind unix:/home/kang/2018DW/back.sock back.wsgi
+gunicorn --daemon --workers 3 --bind unix:/home/kang/2018DW/back.sock back.wsgi --error-logfile ~/gunicorn-error.log
+```
 
        
 # FIX List   

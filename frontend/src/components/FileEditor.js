@@ -236,8 +236,8 @@ class FileEditor extends React.Component {
   }
   deleteDir = (path) => {
     // close tab
-    this.window.current.closeTab(path);
-
+    if (this.window.current.currentTab == path) this.window.current.closeTab(path);
+    
     const file = this.findFile(path);
     console.log("close", path, file)
     if (!file || !file.parent || !file.parent.children) return;
